@@ -4,11 +4,8 @@ namespace App\Http\Controllers\Cabinet;
 
 use App\Http\Controllers\Controller;
 use App\Models\Shop;
-use App\Support\Image;
 use Auth;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 

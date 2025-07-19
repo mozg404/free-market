@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\QueryBuilders\ProductQueryBuilder;
-use App\Support\Image;
+use App\Support\Filepond\Image;
 use App\Support\Phone;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -68,7 +68,7 @@ class Product extends Model
         }
 
         if ($image->isTemporary()) {
-            $image->save();
+            $image->publish();
         }
 
         $product = new Product();
@@ -86,7 +86,7 @@ class Product extends Model
     public function edit(string $name, float $price, Image $image, bool $isAvailable, float $priceDiscount = null): static
     {
         if ($image->isTemporary()) {
-            $image->save();
+            $image->publish();
         }
 
         $this->name = $name;

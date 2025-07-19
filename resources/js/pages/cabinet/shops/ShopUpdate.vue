@@ -2,7 +2,6 @@
 import { Modal, ModalLink } from '@inertiaui/modal-vue'
 import {Link, useForm} from "@inertiajs/vue3";
 import {ref} from "vue";
-import FilePond from "../../../components/FilePond.vue";
 import Input from "@/components/ui/input/Input.vue";
 import InputError from "@/components/ui/input/InputError.vue";
 import {Label} from "@/components/ui/label/index.js";

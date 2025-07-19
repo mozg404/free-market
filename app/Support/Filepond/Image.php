@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Support;
+namespace App\Support\Filepond;
 
 use ErrorException;
 use Illuminate\Http\UploadedFile;
@@ -30,27 +30,18 @@ class Image
         }
     }
 
-    public static function from(string $path): static|null
+    public static function from(string $path): static
+    {
+        return new self($path);
+    }
+
+    public static function createIfExists(string $path): static|false
     {
         try {
             return new self($path);
-        } catch (ErrorException $exception) {
-            return null;
+        } catch (ErrorException $e) {
+            return false;
         }
-    }
-
-    /**
-     * @throws ErrorException
-     */
-    public static function fromJson(string $json): static
-    {
-        $decoded = json_decode($json, true);
-
-        if (!isset($decoded)) {
-            throw new InvalidArgumentException('The JSON string must contain the required path parameter.');
-        }
-
-        return new self($decoded['path']);
     }
 
     public static function fromUploadedFile(UploadedFile $file): static
@@ -70,10 +61,14 @@ class Image
 
     public function isExists(): bool
     {
-        return Storage::disk(self::DISC)->exists($this->path);
+        return static::exists($this->path);
     }
 
-    public function save(): bool
+    /**
+     * @throws ErrorException
+     * @throws LogicException
+     */
+    public function publish(): static
     {
         if ($this->isPermanent()) {
             throw new LogicException("Image $this->path is not temporary");
@@ -82,12 +77,30 @@ class Image
         $newPath = str_replace(self::TEMPORARY_CATALOG, self::PERMANENT_CATALOG.DIRECTORY_SEPARATOR.date('Y-m'), $this->path);
 
         if (Storage::disk(self::DISC)->move($this->path, $newPath)) {
-            $this->path = $newPath;
+            $image = clone $this;
+            $image->path = $newPath;
 
-            return true;
+            return $image;
         }
 
-        return false;
+        throw new ErrorException("Image $this->path could not be published");
+    }
+
+    public function delete(): void
+    {
+        static::remove($this->path);
+    }
+
+    /**
+     * @throws ErrorException
+     */
+    public function publishIfTemporary(): static
+    {
+        try {
+            return $this->publish();
+        } catch (LogicException $e) {
+            return clone $this;
+        }
     }
 
     public function get(): string
@@ -135,5 +148,15 @@ class Image
             'size' => $this->getSize(),
             'type' => $this->getType(),
         ];
+    }
+
+    public static function exists(string $path): bool
+    {
+        return Storage::disk(self::DISC)->exists($path);
+    }
+
+    public static function remove(string $path): bool
+    {
+        return Storage::disk(self::DISC)->delete($path);
     }
 }

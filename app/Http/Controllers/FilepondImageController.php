@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Support\Image;
+use App\Support\Filepond\Image;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class FileUploadController extends Controller
+class FilepondImageController extends Controller
 {
     public function upload(Request $request)
     {
@@ -18,9 +19,9 @@ class FileUploadController extends Controller
         return Image::fromUploadedFile($request->file('filepond'))->path;
     }
 
-    public function delete(Request $request)
+    public function remove(Request $request)
     {
-        Storage::disk('public')->delete($request->getContent());
+        Image::remove($request->getContent());
 
         return response()->noContent();
     }

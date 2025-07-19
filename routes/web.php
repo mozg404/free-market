@@ -7,15 +7,16 @@ use App\Http\Controllers\Cabinet\ProfileController;
 use App\Http\Controllers\Cabinet\ShopController;
 use App\Http\Controllers\Cabinet\ProductController as CabinetProductController;
 use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\FilepondImageController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/uploader/upload', [FileUploadController::class, 'upload'])->name('uploader.upload');
-Route::delete('/uploader/delete', [FileUploadController::class, 'delete'])->name('uploader.delete');
-Route::get('/uploader/load', [FileUploadController::class, 'load'])->name('uploader.load');
+// FilePond
+Route::get('/filepond/image/load', [FilepondImageController::class, 'load'])->name('filepond.image.load');
+Route::post('/filepond/image/upload', [FilepondImageController::class, 'upload'])->name('filepond.image.upload');
+Route::delete('/filepond/image/remove', [FilepondImageController::class, 'remove'])->name('filepond.image.remove');
 
 Route::get('/test', [TestController::class, 'test']);
 
@@ -27,6 +28,10 @@ Route::post('/cabinet/shops/store', [ShopController::class, 'store'])->name('cab
 Route::get('/cabinet/shops/{shop}/edit', [ShopController::class, 'edit'])->name('cabinet.shops.edit');
 Route::post('/cabinet/shops/{shop}/update', [ShopController::class, 'update'])->name('cabinet.shops.update');
 Route::get('/cabinet/shops/{shop}', [ShopController::class, 'show'])->name('cabinet.shops.show');
+
+Route::get('/cabinet/products', [CabinetProductController::class, 'index'])->name('cabinet.products');
+Route::get('/cabinet/products/create', [CabinetProductController::class, 'create'])->name('cabinet.products.create');
+Route::post('/cabinet/products/store', [CabinetProductController::class, 'store'])->name('cabinet.products.store');
 
 Route::get('/cabinet/shops/{shop}/products', [CabinetProductController::class, 'index'])->name('cabinet.products');
 
