@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Data\ProductData;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+
+class IndexController extends Controller
+{
+    public function __invoke()
+    {
+        $products = Product::query()->withShop()->take(8)->get();
+
+        return Inertia::render('Index', [
+            'products' => ProductData::collect($products)
+        ]);
+    }
+}
