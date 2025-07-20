@@ -7,8 +7,10 @@ use App\Data\Products\ProductData;
 use App\Data\Products\UpdatingProductData;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Shop;
 use App\Services\ProductManager;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -19,7 +21,11 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::query()->withShop()->orderBy('id', 'desc')->paginate(10);
+        $products = Product::query()
+            ->withShop()
+            ->forUser(Auth::id())
+            ->orderBy('id', 'desc')
+            ->paginate(10);
 
         return Inertia::render('cabinet/products/ProductList', [
             'products' => ProductData::collect($products->items()),
@@ -29,27 +35,28 @@ class ProductController extends Controller
 
     public function create()
     {
-        return Inertia::render('cabinet/products/ProductCreate');
+        $shops = Shop::query()->forUser(Auth::id())->getNames();
+
+        return Inertia::render('cabinet/products/ProductCreate', [
+            'shops' => $shops,
+        ]);
     }
 
     public function store(Request $request)
     {
-        $preoduct = $this->products->create(CreatingProductData::validateAndCreate([
-            'shopId' => 1,
-            'name' => $request->input('name'),
-            'price' => $request->input('price'),
-            'priceDiscount' => $request->input('priceDiscount'),
-            'image' => $request->input('image'),
-            'isAvailable' => $request->input('isAvailable'),
-        ]));
+        $this->products->create(CreatingProductData::validateAndCreate($request->all()));
 
         return back();
     }
 
     public function edit(Product $product)
     {
+        $shops = Shop::query()->forUser(Auth::id())->getNames();
+
         return Inertia::render('cabinet/products/ProductUpdate', [
+            'shops' => $shops,
             'id' => $product->id,
+            'shopId' => $product->shop_id,
             'name' => $product->name,
             'slug' => $product->slug,
             'price' => $product->price,
@@ -61,15 +68,7 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $this->products->update($product, UpdatingProductData::validateAndCreate([
-            'shopId' => 1,
-            'name' => $request->input('name'),
-            'slug' => $request->input('slug'),
-            'price' => $request->input('price'),
-            'priceDiscount' => $request->input('priceDiscount'),
-            'image' => $request->input('image'),
-            'isAvailable' => $request->input('isAvailable'),
-        ]));
+        $this->products->update($product, UpdatingProductData::validateAndCreate($request->all()));
 
         return back();
     }

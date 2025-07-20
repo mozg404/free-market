@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\QueryBuilders\ShopQueryBuilder;
 use App\Support\Inn;
 use App\Support\Phone;
 use Database\Factories\ShopFactory;
@@ -27,19 +28,19 @@ use Illuminate\Support\Str;
  * @property-read int|null $products_count
  * @property-read \App\Models\User $user
  * @method static \Database\Factories\ShopFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop whereAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop whereInn($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Shop whereUserId($value)
+ * @method static ShopQueryBuilder<static>|Shop newModelQuery()
+ * @method static ShopQueryBuilder<static>|Shop newQuery()
+ * @method static ShopQueryBuilder<static>|Shop query()
+ * @method static ShopQueryBuilder<static>|Shop whereAddress($value)
+ * @method static ShopQueryBuilder<static>|Shop whereCreatedAt($value)
+ * @method static ShopQueryBuilder<static>|Shop whereDescription($value)
+ * @method static ShopQueryBuilder<static>|Shop whereId($value)
+ * @method static ShopQueryBuilder<static>|Shop whereInn($value)
+ * @method static ShopQueryBuilder<static>|Shop whereName($value)
+ * @method static ShopQueryBuilder<static>|Shop wherePhone($value)
+ * @method static ShopQueryBuilder<static>|Shop whereSlug($value)
+ * @method static ShopQueryBuilder<static>|Shop whereUpdatedAt($value)
+ * @method static ShopQueryBuilder<static>|Shop whereUserId($value)
  * @mixin \Eloquent
  */
 class Shop extends Model
@@ -124,6 +125,11 @@ class Shop extends Model
         }
 
         return $array;
+    }
+
+    public function newEloquentBuilder($query): ShopQueryBuilder
+    {
+        return new ShopQueryBuilder($query);
     }
 
     protected static function newFactory(): ShopFactory|\Illuminate\Database\Eloquent\Factories\Factory

@@ -10,8 +10,22 @@ import {Textarea} from '@/components/ui/textarea/index.js'
 import {useForm} from "@inertiajs/vue3";
 import FilePondImage from "@/components/FilePondImage.vue";
 import { Switch } from '@/components/ui/switch'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+
+const props = defineProps({
+  shops: Array,
+})
 
 const form = useForm({
+  shopId: null,
   name: null,
   price: '',
   priceDiscount: '',
@@ -34,6 +48,23 @@ const submit = () => form.post(route('cabinet.products.store'), {
 
     <form @submit.prevent="submit" class="flex flex-col gap-6">
       <div class="grid gap-6">
+        <div class="grid gap-2">
+          <Label for="shopId">Магазин <span class="text-red-600">*</span></Label>
+          <Select v-model="form.shopId">
+            <SelectTrigger class="w-[180px]">
+              <SelectValue placeholder="Укажите магазин" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem v-for="shop in props.shops" :key="shop.id" :value="shop.id">
+                  {{ shop.name }}
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <InputError :message="form.errors.shopId"/>
+        </div>
+
         <div class="grid gap-2">
           <Label for="name">Название <span class="text-red-600">*</span></Label>
           <Input id="name" type="text" autofocus :tabindex="1" autocomplete="name" v-model="form.name"/>

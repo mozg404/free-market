@@ -16,18 +16,12 @@ import {
 } from '@/components/ui/table'
 import {Link} from "@inertiajs/vue3";
 import Pagination from "@/components/Pagination.vue";
+import ConfirmDeleteDialog from "@/components/ConfirmDeleteDialog.vue";
 
 const props = defineProps({
   products: Array,
   links: Array,
 })
-
-for (const element of props.links) {
-  console.log(element);
-}
-
-console.log(props.links)
-
 </script>
 
 <template>
@@ -72,9 +66,17 @@ console.log(props.links)
                 <Settings class="w-4 h-4"/>
               </ModalLink>
 
-              <Link class="cursor-pointer" method="delete" :href="route('cabinet.products.delete', product.id)">
+              <ConfirmDeleteDialog
+                :route="route('cabinet.products.delete', product.id)"
+                title="Удалить товар?"
+                description="Вы уверены, что хотите удалить этот товар? Это действие нельзя отменить."
+              >
                 <Trash2 class="w-4 h-4"/>
-              </Link>
+              </ConfirmDeleteDialog>
+
+<!--              <Link class="cursor-pointer" method="delete" :href="route('cabinet.products.delete', product.id)">-->
+<!--                <Trash2 class="w-4 h-4"/>-->
+<!--              </Link>-->
             </div>
           </TableCell>
         </TableRow>
