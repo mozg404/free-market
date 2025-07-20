@@ -20,7 +20,7 @@ class CreatingProductData extends Data
         public float|null $priceDiscount = null
     ){
         if (is_string($image)) {
-            $this->image = new Image($image);
+            $this->image = Image::from($image);
         }
     }
 

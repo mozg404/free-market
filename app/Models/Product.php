@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\QueryBuilders\ProductQueryBuilder;
 use App\Support\Filepond\Image;
+use App\Support\Filepond\ImageStub;
 use App\Support\Phone;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -20,7 +21,7 @@ use Illuminate\Support\Carbon;
  * @property boolean $is_available
  * @property float $price
  * @property float $price_discount
- * @property Image|null $image
+ * @property Image|ImageStub|null $image
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read \App\Models\Shop $shop
@@ -102,8 +103,24 @@ class Product extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            get: fn (string|null $value) => is_string($value) ? Image::from($value) : $value,
-            set: fn (Phone|string|null $value) => is_string($value) ? Image::from($value) : $value,
+            get: static function (string|null $id) {
+                if (is_string($id) && Image::exists($id)) {
+                    return Image::from($id);
+                }
+
+                return new ImageStub();
+            },
+            set: static function (Image|ImageStub|string|null $id) {
+                if (is_a($id, Image::class)) {
+                    return $id;
+                }
+
+                if (is_string($id) && Image::exists($id)) {
+                    return Image::from($id);
+                }
+
+                return new ImageStub();
+            },
         );
     }
 

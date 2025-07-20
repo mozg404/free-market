@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Data;
 
+use App\Support\Filepond\Image;
+use App\Support\Filepond\ImageStub;
 use Illuminate\Support\Facades\Storage;
 use Spatie\LaravelData\Data;
 
@@ -17,10 +19,10 @@ class ProductData extends Data
         public string $name,
         public string $slug,
         public float $price,
-        public string $image,
+        public Image|ImageStub $image,
     )
     {
-        $this->imageUrl = Storage::url($this->image);
+        $this->imageUrl = $this->image->getUrl();
         $this->url = route('product.show', $this->id);
     }
 }

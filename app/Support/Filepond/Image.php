@@ -19,7 +19,7 @@ class Image
 
     public string $id;
 
-    private function __construct(string $id)
+    protected function __construct(string $id)
     {
         $this->id = $id;
     }

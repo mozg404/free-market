@@ -29,7 +29,7 @@ class FilepondImageController extends Controller
     public function load(Request $request)
     {
         try {
-            $image = new Image($request->input('path'));
+            $image = Image::from($request->input('path'));
         } catch (Exception $exception) {
             abort(404);
         }

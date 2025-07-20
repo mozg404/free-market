@@ -7,6 +7,7 @@ namespace App\Data\Products;
 use App\Attributes\FilepondImage;
 use App\Models\Shop;
 use App\Support\Filepond\Image;
+use App\Support\Filepond\ImageStub;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Support\Validation\ValidationContext;
 
@@ -20,7 +21,7 @@ class ProductData extends Data
         public float $price,
         public float|null $priceDiscount = null,
         public bool $isAvailable,
-        public Image|string $image,
+        public Image|ImageStub $image,
         public Shop $shop,
     ){
         $this->imageUrl = $this->image->getUrl();
