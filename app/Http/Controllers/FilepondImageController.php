@@ -16,7 +16,7 @@ class FilepondImageController extends Controller
             'filepond' => 'required|file|max:5120'
         ]);
 
-        return Image::fromUploadedFile($request->file('filepond'))->path;
+        return Image::createFromUploadedFile($request->file('filepond'))->id;
     }
 
     public function remove(Request $request)

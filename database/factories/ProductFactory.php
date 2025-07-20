@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Support\Filepond\Image;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -13,30 +14,31 @@ class ProductFactory extends Factory
     protected $model = Product::class;
 
     private array $images = [
-        'products/2025-03/7013559385.webp',
-        'products/2025-03/7144259611.webp',
-        'products/2025-03/7193086303.webp',
-        'products/2025-03/7378302240.webp',
-        'products/2025-03/7380478121.webp',
-        'products/2025-03/7417857989.webp',
-        'products/2025-03/7433850176.webp',
-        'products/2025-03/7466314066.webp',
-        'products/2025-03/7482027756.webp',
-        'products/2025-03/7490797120.webp',
-        'products/2025-04/7228947268.webp',
-        'products/2025-04/7266574605.webp',
-        'products/2025-04/7320936551.webp',
-        'products/2025-05/7433832542.webp',
-        'products/2025-05/7490796926.webp',
+        'demo/products_images/1.webp',
+        'demo/products_images/2.webp',
+        'demo/products_images/3.webp',
+        'demo/products_images/4.webp',
+        'demo/products_images/5.webp',
+        'demo/products_images/6.webp',
+        'demo/products_images/7.webp',
+        'demo/products_images/8.webp',
+        'demo/products_images/9.webp',
+        'demo/products_images/10.webp',
+        'demo/products_images/11.webp',
+        'demo/products_images/12.webp',
+        'demo/products_images/13.webp',
+        'demo/products_images/14.webp',
     ];
 
     public function definition(): array
     {
+        $imagePath = resource_path($this->images[rand(0, count($this->images) - 1)]);
+
         return [
             'name' => fake()->name(),
             'slug' => fake()->slug(),
             'price' => fake()->randomFloat(2, 10, 30),
-            'image' => $this->images[rand(0, count($this->images) - 1)],
+            'image' => Image::createFromPath($imagePath)->publish()->id,
         ];
     }
 }

@@ -73,10 +73,6 @@ const props = defineProps({
               >
                 <Trash2 class="w-4 h-4"/>
               </ConfirmDeleteDialog>
-
-<!--              <Link class="cursor-pointer" method="delete" :href="route('cabinet.products.delete', product.id)">-->
-<!--                <Trash2 class="w-4 h-4"/>-->
-<!--              </Link>-->
             </div>
           </TableCell>
         </TableRow>

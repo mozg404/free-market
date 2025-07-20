@@ -61,7 +61,7 @@ class ProductController extends Controller
             'slug' => $product->slug,
             'price' => $product->price,
             'priceDiscount' => $product->price_discount,
-            'image' => $product->image->path,
+            'image' => $product->image->id,
             'isAvailable' => $product->is_available,
         ]);
     }

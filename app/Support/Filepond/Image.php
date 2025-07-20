@@ -7,6 +7,7 @@ namespace App\Support\Filepond;
 use ErrorException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use LogicException;
 
@@ -16,23 +17,65 @@ class Image
     public const TEMPORARY_CATALOG = 'tmp';
     public const PERMANENT_CATALOG = 'images';
 
-    public string $path;
+    public string $id;
 
-    /**
-     * @throws ErrorException
-     */
-    public function __construct(string $path)
+    private function __construct(string $id)
     {
-        $this->path = $path;
-
-        if (!$this->isExists()) {
-            throw new ErrorException('Image is not exists');
-        }
+        $this->id = $id;
     }
 
-    public static function from(string $path): static
+    /**
+     * Создает объект из уже существующего файла по ID
+     *
+     * @param string $id
+     * @return static
+     * @throws ErrorException
+     */
+    public static function from(string $id): static
     {
-        return new self($path);
+        if (!static::exists($id)) {
+            throw new ErrorException('Image is not exists');
+        }
+
+        return new self($id);
+    }
+
+    /**
+     * Создает изображение из загруженного файла
+     *
+     * @param UploadedFile $file
+     * @return static
+     */
+    public static function createFromUploadedFile(UploadedFile $file): static
+    {
+        return new self($file->store(self::TEMPORARY_CATALOG, self::DISC));
+    }
+
+    /**
+     * Создает изображение, используя полный путь до файла
+     *
+     * @param string $fullPath
+     * @return $this
+     * @throws ErrorException
+     */
+    public static function createFromPath(string $fullPath): static
+    {
+        // Проверка на существование
+        if (!file_exists($fullPath)) {
+            throw new InvalidArgumentException('File not found: ' . $fullPath);
+        }
+
+        // Вычисление имени файла
+        $hash = sha1_file($fullPath);
+        $randomName = substr($hash, 0, 40) . Str::random(10);
+        $extension = pathinfo($fullPath, PATHINFO_EXTENSION);
+        $id = static::TEMPORARY_CATALOG.DIRECTORY_SEPARATOR.$randomName.'.'.$extension;
+
+        // Копирование файла в директорию TMP
+        Storage::disk(self::DISC)->put($id, file_get_contents($fullPath));
+
+        // Отдача объекта этого изображения
+        return new self($id);
     }
 
     public static function createIfExists(string $path): static|false
@@ -44,14 +87,9 @@ class Image
         }
     }
 
-    public static function fromUploadedFile(UploadedFile $file): static
-    {
-        return new self($file->store(self::TEMPORARY_CATALOG, self::DISC));
-    }
-
     public function isTemporary(): bool
     {
-        return str_contains($this->path, self::TEMPORARY_CATALOG.DIRECTORY_SEPARATOR);
+        return str_contains($this->id, self::TEMPORARY_CATALOG.DIRECTORY_SEPARATOR);
     }
 
     public function isPermanent(): bool
@@ -61,37 +99,37 @@ class Image
 
     public function isExists(): bool
     {
-        return static::exists($this->path);
+        return static::exists($this->id);
     }
 
     /**
+     * Публикует изображение в постоянное хранилище
+     *
      * @throws ErrorException
      * @throws LogicException
      */
     public function publish(): static
     {
         if ($this->isPermanent()) {
-            throw new LogicException("Image $this->path is not temporary");
+            throw new LogicException("Image $this->id is not temporary");
         }
 
-        $newPath = str_replace(self::TEMPORARY_CATALOG, self::PERMANENT_CATALOG.DIRECTORY_SEPARATOR.date('Y-m'), $this->path);
+        $newPath = str_replace(self::TEMPORARY_CATALOG, self::PERMANENT_CATALOG.DIRECTORY_SEPARATOR.date('Y-m'), $this->id);
 
-        if (Storage::disk(self::DISC)->move($this->path, $newPath)) {
+        if (Storage::disk(self::DISC)->move($this->id, $newPath)) {
             $image = clone $this;
-            $image->path = $newPath;
+            $image->id = $newPath;
 
             return $image;
         }
 
-        throw new ErrorException("Image $this->path could not be published");
-    }
-
-    public function delete(): void
-    {
-        static::remove($this->path);
+        throw new ErrorException("Image $this->id could not be published");
     }
 
     /**
+     * Публикует изображение в постоянное хранилище, если файл находится во временном
+     * Иначе просто возвращает объект существующего
+     *
      * @throws ErrorException
      */
     public function publishIfTemporary(): static
@@ -103,45 +141,55 @@ class Image
         }
     }
 
+    /**
+     * Удаляет изображение
+     *
+     * @return void
+     */
+    public function delete(): void
+    {
+        static::remove($this->id);
+    }
+
     public function get(): string
     {
-        return Storage::disk(self::DISC)->get($this->path);
+        return Storage::disk(self::DISC)->get($this->id);
     }
 
     public function getUrl(): string
     {
-        return Storage::disk(self::DISC)->url($this->path);
+        return Storage::disk(self::DISC)->url($this->id);
     }
 
     public function getGlobalPath(): string
     {
-        return 'storage'.DIRECTORY_SEPARATOR.$this->path;
+        return 'storage'.DIRECTORY_SEPARATOR.$this->id;
     }
 
     public function getName(): string
     {
-        return basename($this->path);
+        return basename($this->id);
     }
 
     public function getSize(): int
     {
-        return Storage::disk(self::DISC)->size($this->path);
+        return Storage::disk(self::DISC)->size($this->id);
     }
 
     public function getType(): string
     {
-        return Storage::disk(self::DISC)->mimeType($this->path);
+        return Storage::disk(self::DISC)->mimeType($this->id);
     }
 
     public function __toString(): string
     {
-        return $this->path;
+        return $this->id;
     }
 
     public function toArray(): array
     {
         return [
-            'path' => $this->path,
+            'path' => $this->id,
             'globalPath' => $this->getGlobalPath(),
             'url' => $this->getUrl(),
             'name' => $this->getName(),
@@ -150,13 +198,13 @@ class Image
         ];
     }
 
-    public static function exists(string $path): bool
+    public static function exists(string $id): bool
     {
-        return Storage::disk(self::DISC)->exists($path);
+        return Storage::disk(self::DISC)->exists($id);
     }
 
-    public static function remove(string $path): bool
+    public static function remove(string $id): bool
     {
-        return Storage::disk(self::DISC)->delete($path);
+        return Storage::disk(self::DISC)->delete($id);
     }
 }
