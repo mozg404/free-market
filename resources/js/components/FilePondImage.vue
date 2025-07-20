@@ -22,15 +22,11 @@ const config = {
 }
 
 const props = defineProps({
-  modelValue: [String, Array, File, null], // v-model значение
+  modelValue: [String, Array, File, null],
   allowMultiple: {
     type: Boolean,
     default: false
   },
-  inject: {
-    type: [Array, Object, null],
-    default: () => null
-  }
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -91,11 +87,11 @@ onMounted(() => {
     }
   });
 
-  if (!props.allowMultiple && props.inject) {
-    pond.addFile(props.inject.path, {
+  if (props.modelValue) {
+    pond.addFile(props.modelValue, {
         type: 'local',
     });
-    updateModelValue(props.inject.path)
+    updateModelValue(props.modelValue)
   }
 });
 

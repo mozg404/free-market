@@ -2,6 +2,7 @@ init: storage-unlink restart storage-link
 up: docker-up
 down: docker-down
 restart: down up migrate-refresh seed frontend-up
+start: up frontend-up
 
 docker-up:
 	./vendor/bin/sail up -d

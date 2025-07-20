@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Cabinet;
 
 use App\Data\Products\CreatingProductData;
 use App\Data\Products\ProductData;
+use App\Data\Products\UpdatingProductData;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Models\Shop;
 use App\Services\ProductManager;
-use App\Support\Filepond\Image;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -35,31 +33,44 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $this->products->create(CreatingProductData::validateAndCreate([
+        $preoduct = $this->products->create(CreatingProductData::validateAndCreate([
             'shopId' => 1,
             'name' => $request->input('name'),
             'price' => $request->input('price'),
-            'priceDiscount' => $request->input('price_discount'),
+            'priceDiscount' => $request->input('priceDiscount'),
             'image' => $request->input('image'),
-            'isAvailable' => true,
+            'isAvailable' => $request->input('isAvailable'),
         ]));
 
         return back();
     }
 
-    public function show(Product $product)
-    {
-        //
-    }
-
     public function edit(Product $product)
     {
-        //
+        return Inertia::render('cabinet/products/ProductUpdate', [
+            'id' => $product->id,
+            'name' => $product->name,
+            'slug' => $product->slug,
+            'price' => $product->price,
+            'priceDiscount' => $product->price_discount,
+            'image' => $product->image->path,
+            'isAvailable' => $product->is_available,
+        ]);
     }
 
     public function update(Request $request, Product $product)
     {
-        //
+        $this->products->update($product, UpdatingProductData::validateAndCreate([
+            'shopId' => 1,
+            'name' => $request->input('name'),
+            'slug' => $request->input('slug'),
+            'price' => $request->input('price'),
+            'priceDiscount' => $request->input('priceDiscount'),
+            'image' => $request->input('image'),
+            'isAvailable' => $request->input('isAvailable'),
+        ]));
+
+        return back();
     }
 
     public function destroy(Product $product)

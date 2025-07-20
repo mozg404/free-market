@@ -2,9 +2,9 @@
 import Cabinet from "@/layouts/Cabinet.vue";
 import {ModalLink} from "@inertiaui/modal-vue";
 import Heading from "@/components/Heading.vue";
-import {PlusIcon, PenIcon} from "lucide-vue-next";
+import {PlusIcon, Settings} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
-import FilePondImage from "../../../components/FilePondImage.vue";
+import { Badge } from '@/components/ui/badge'
 import {
   Table,
   TableBody,
@@ -40,7 +40,9 @@ defineProps({
           <TableHead>Название</TableHead>
           <TableHead>Изображение</TableHead>
           <TableHead>Магазин</TableHead>
+          <TableHead>Статус</TableHead>
           <TableHead>Цена</TableHead>
+          <TableHead></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -49,7 +51,16 @@ defineProps({
           <TableCell><img :src="product.imageUrl" class="w-[60px]"/></TableCell>
           <TableCell>{{ product.name }}</TableCell>
           <TableCell>{{ product.shop.name }}</TableCell>
+          <TableCell>
+            <div v-if="product.isAvailable"><Badge>В наличие</Badge></div>
+            <div v-else><Badge variant="destructive">Закончился</Badge></div>
+          </TableCell>
           <TableCell>{{ product.price }}</TableCell>
+          <TableCell class="text-end">
+            <ModalLink :href="route('cabinet.products.edit', product.id)">
+              <Settings class="w-4 h-4"/>
+            </ModalLink>
+          </TableCell>
         </TableRow>
       </TableBody>
     </Table>

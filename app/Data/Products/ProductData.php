@@ -15,12 +15,13 @@ class ProductData extends Data
     public string $imageUrl;
 
     public function __construct(
-        public Shop $shop,
+        public int $id,
         public string $name,
         public float $price,
-        public Image|string $image,
+        public float|null $priceDiscount = null,
         public bool $isAvailable,
-        public float|null $priceDiscount = null
+        public Image|string $image,
+        public Shop $shop,
     ){
         $this->imageUrl = $this->image->getUrl();
     }
