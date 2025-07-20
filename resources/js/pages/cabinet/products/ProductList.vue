@@ -2,7 +2,7 @@
 import Cabinet from "@/layouts/Cabinet.vue";
 import {ModalLink} from "@inertiaui/modal-vue";
 import Heading from "@/components/Heading.vue";
-import {PlusIcon, Settings} from "lucide-vue-next";
+import {PlusIcon, Settings, Trash2} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
 import { Badge } from '@/components/ui/badge'
 import {
@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import {Link} from "@inertiajs/vue3";
 defineProps({
   products: Array,
 })
@@ -57,9 +58,15 @@ defineProps({
           </TableCell>
           <TableCell>{{ product.price }}</TableCell>
           <TableCell class="text-end">
-            <ModalLink :href="route('cabinet.products.edit', product.id)">
-              <Settings class="w-4 h-4"/>
-            </ModalLink>
+            <div class="flex justify-around">
+              <ModalLink :href="route('cabinet.products.edit', product.id)">
+                <Settings class="w-4 h-4"/>
+              </ModalLink>
+
+              <Link class="cursor-pointer" method="delete" :href="route('cabinet.products.delete', product.id)">
+                <Trash2 class="w-4 h-4"/>
+              </Link>
+            </div>
           </TableCell>
         </TableRow>
       </TableBody>

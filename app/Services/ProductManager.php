@@ -61,7 +61,13 @@ class ProductManager
 
         return $product;
     }
-    
+
+    public function delete(Product $product): void
+    {
+        $product->delete();
+        $product->image->delete();
+    }
+
     public function getList(): Collection
     {
         return Product::query()->withShop()->orderBy('id', 'desc')->get();
