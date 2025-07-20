@@ -19,10 +19,11 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = $this->products->getList();
+        $products = Product::query()->withShop()->orderBy('id', 'desc')->paginate(10);
 
         return Inertia::render('cabinet/products/ProductList', [
-            'products' => ProductData::collect($products),
+            'products' => ProductData::collect($products->items()),
+            'links' => $products->toArray()['links'],
         ]);
     }
 

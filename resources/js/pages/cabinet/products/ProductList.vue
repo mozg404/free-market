@@ -15,9 +15,18 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import {Link} from "@inertiajs/vue3";
-defineProps({
+import Pagination from "@/components/Pagination.vue";
+
+const props = defineProps({
   products: Array,
+  links: Array,
 })
+
+for (const element of props.links) {
+  console.log(element);
+}
+
+console.log(props.links)
 
 </script>
 
@@ -71,6 +80,10 @@ defineProps({
         </TableRow>
       </TableBody>
     </Table>
+
+    <div class="pb-6">
+      <Pagination :links="props.links"/>
+    </div>
 
   </Cabinet>
 </template>
