@@ -5,7 +5,9 @@ import Heading from "@/components/Heading.vue";
 import {PlusIcon, Settings, Trash2, Search} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
 import {Badge} from '@/components/ui/badge'
-import Input from "@/components/ui/input/Input.vue";
+import { ref, watch } from 'vue';
+import { router } from '@inertiajs/vue3';
+import debounce from 'lodash/debounce';
 import {
   Table,
   TableBody,
@@ -15,14 +17,41 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import {Link} from "@inertiajs/vue3";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import Pagination from "@/components/Pagination.vue";
 import ConfirmDeleteDialog from "@/components/ConfirmDeleteDialog.vue";
+import Input from "@/components/ui/input/Input.vue";
 
 const props = defineProps({
   products: Array,
+  shops: Array,
   links: Array,
+  filters: Object,
 })
+const search = ref(props.filters.search);
+const shopId = ref(props.filters.shop_id);
+
+// Общая функция для обработки фильтров
+const applyFilters = debounce(() => {
+  router.get(route('cabinet.products'), {
+    search: search.value,
+    shop_id: shopId.value
+  }, {
+    preserveState: true,
+    replace: true,
+  });
+}, 300);
+
+// Наблюдаем за изменениями обоих фильтров
+watch([search, shopId], applyFilters);
 </script>
 
 <template>
@@ -40,22 +69,38 @@ const props = defineProps({
 
     <div class="py-5">
       <div class="relative w-full max-w-sm items-center">
-        <Input id="search" type="text" placeholder="Search..." class="pl-8" />
+        <Input id="search" type="text" placeholder="Search..." class="pl-8" v-model="search" />
         <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
           <Search class="size-4 text-muted-foreground" />
         </span>
       </div>
+
+
+      <Select v-model="shopId">
+        <SelectTrigger class="w-[180px]">
+          <SelectValue placeholder="Укажите магазин" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem v-for="shop in props.shops" :key="shop.id" :value="shop.id">
+              {{ shop.name }}
+            </SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+
     </div>
 
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead>ID</TableHead>
-          <TableHead>Название</TableHead>
           <TableHead>Изображение</TableHead>
+          <TableHead>Название</TableHead>
           <TableHead>Магазин</TableHead>
           <TableHead>Статус</TableHead>
           <TableHead>Цена</TableHead>
+          <TableHead>Скидка</TableHead>
           <TableHead></TableHead>
         </TableRow>
       </TableHeader>
@@ -69,7 +114,8 @@ const props = defineProps({
             <div v-if="product.isAvailable"><Badge>В наличие</Badge></div>
             <div v-else><Badge variant="destructive">Закончился</Badge></div>
           </TableCell>
-          <TableCell>{{ product.price }}</TableCell>
+          <TableCell>{{ product.price.base }}</TableCell>
+          <TableCell>{{ product.price.discount ?? '-' }}</TableCell>
           <TableCell class="text-end">
             <div class="flex justify-around">
               <ModalLink :href="route('cabinet.products.edit', product.id)">

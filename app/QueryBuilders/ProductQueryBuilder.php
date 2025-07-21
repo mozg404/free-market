@@ -12,11 +12,26 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class ProductQueryBuilder extends Builder
 {
-    public function forUser(int $id): static
+    public function whereUser(int $id): static
     {
         return $this->whereHas('shop', function (ShopQueryBuilder $query) use ($id) {
             return $query->forUser($id);
         });
+    }
+
+    public function whereShop(int $id): static
+    {
+        return $this->where('shop_id', $id);
+    }
+
+    /**
+     * Оставляет только те строки, подстрока $search содержится в названии
+     * @param string $search
+     * @return $this
+     */
+    public function searchByName(string $search): static
+    {
+        return $this->where('name', 'like', '%' . $search . '%');
     }
 
     /**

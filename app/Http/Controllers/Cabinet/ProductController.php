@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Cabinet;
 use App\Data\Products\CreatingProductData;
 use App\Data\Products\ProductData;
 use App\Data\Products\UpdatingProductData;
+use App\Data\Shops\ShopData;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Shop;
@@ -19,17 +20,28 @@ class ProductController extends Controller
         private readonly ProductManager $products,
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
         $products = Product::query()
             ->withShop()
-            ->forUser(Auth::id())
-            ->orderBy('id', 'desc')
-            ->paginate(10);
+            ->whereUser(Auth::id())
+            ->orderBy('id', 'desc');
+
+        if (!empty($request->search)) {
+            $products->searchByName($request->search);
+        }
+
+        if (!empty($request->shop_id)) {
+            $products->whereShop($request->shop_id);
+        }
+
+        $products = $products->paginate(10);
 
         return Inertia::render('cabinet/products/ProductList', [
+            'shops' => ShopData::collect(Shop::query()->forUser(Auth::id())->getNames()),
             'products' => ProductData::collect($products->items()),
             'links' => $products->toArray()['links'],
+            'filters' => $request->only(['search', 'shop_id']),
         ]);
     }
 
