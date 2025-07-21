@@ -2,12 +2,15 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Cart\CartManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
+    private CartManager $cart;
+
     /**
      * The root template that's loaded on the first page visit.
      *
@@ -16,6 +19,11 @@ class HandleInertiaRequests extends Middleware
      * @var string
      */
     protected $rootView = 'app';
+
+    public function __construct(CartManager $cart)
+    {
+        $this->cart = $cart;
+    }
 
     /**
      * Determines the current asset version.
@@ -43,6 +51,7 @@ class HandleInertiaRequests extends Middleware
                 'id' => Auth::id(),
                 'name' => Auth::user()?->name,
             ],
+            'cart' => $this->cart->all(),
         ];
     }
 }

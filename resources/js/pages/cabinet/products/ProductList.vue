@@ -52,7 +52,7 @@ const props = defineProps({
       <TableBody>
         <TableRow v-for="product in products" :key="product.id">
           <TableCell class="font-medium">{{ product.id }}</TableCell>
-          <TableCell><img :src="product.imageUrl" class="w-[60px]"/></TableCell>
+          <TableCell><img :src="product.previewImage.url" class="w-[60px]"/></TableCell>
           <TableCell>{{ product.name }}</TableCell>
           <TableCell>{{ product.shop.name }}</TableCell>
           <TableCell>

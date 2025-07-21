@@ -37,15 +37,13 @@ class TestController extends Controller
 
 
 
+        $product1 = Product::find(1);
+        $product2 = Product::find(2);
 
-
-//        $product1 = Product::find(1);
-//        $product2 = Product::find(2);
-
-//        $this->cart->add($product1);
-//        $this->cart->add($product1);
-//        $this->cart->add($product1);
-//        $this->cart->add($product2);
+        $this->cart->add($product1);
+        $this->cart->add($product1);
+        $this->cart->add($product1);
+        $this->cart->add($product2);
 
 //        $this->cart->clean();
 

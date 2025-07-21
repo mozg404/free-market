@@ -11,7 +11,7 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
-        $products = Product::query()->withShop()->take(8)->get();
+        $products = Product::query()->withShop()->take(10)->get();
 
         return Inertia::render('Index', [
             'products' => ProductData::collect($products)
