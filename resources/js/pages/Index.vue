@@ -13,10 +13,12 @@ defineProps({
 
 <template>
   <Main>
+
+    <div>
     <Wrapper class="mt-10">
-      <h2 class="text-2xl font-bold tracking-tight text-gray-900">Customers also purchased</h2>
-      <Button type="button" class="rounded-xl">Кнопка</Button>
       <ProductList :products="products" />
     </Wrapper>
+    </div>
+
   </Main>
 </template>

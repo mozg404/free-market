@@ -2,9 +2,10 @@
 import Cabinet from "@/layouts/Cabinet.vue";
 import {ModalLink} from "@inertiaui/modal-vue";
 import Heading from "@/components/Heading.vue";
-import {PlusIcon, Settings, Trash2} from "lucide-vue-next";
+import {PlusIcon, Settings, Trash2, Search} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
-import { Badge } from '@/components/ui/badge'
+import {Badge} from '@/components/ui/badge'
+import Input from "@/components/ui/input/Input.vue";
 import {
   Table,
   TableBody,
@@ -34,6 +35,15 @@ const props = defineProps({
             <PlusIcon class="w-4 h-4"/> Создать товар
           </ModalLink>
         </Button>
+      </div>
+    </div>
+
+    <div class="py-5">
+      <div class="relative w-full max-w-sm items-center">
+        <Input id="search" type="text" placeholder="Search..." class="pl-8" />
+        <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
+          <Search class="size-4 text-muted-foreground" />
+        </span>
       </div>
     </div>
 

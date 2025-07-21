@@ -38,6 +38,7 @@ class ProductFactory extends Factory
             'name' => fake()->name(),
             'slug' => fake()->slug(),
             'price_base' => random_int(300, 10000),
+            'is_available' => fake()->boolean(),
             'preview_image' => Image::createFromPath($imagePath)->id,
         ];
     }
