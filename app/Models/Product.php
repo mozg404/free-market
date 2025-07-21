@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Collections\ArticleCollection;
+use App\Collections\ProductCollection;
 use App\QueryBuilders\ProductQueryBuilder;
 use App\Support\Filepond\Image;
 use App\Support\Filepond\ImageStub;
 use App\Support\Phone;
+use App\Support\Price;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,13 +18,14 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
- * @property int $shop_id
+ * @property Product $shop_id
  * @property string $name
  * @property string $slug
  * @property boolean $is_available
- * @property float $price
- * @property float $price_discount
- * @property Image|ImageStub|null $image
+ * @property Price $price
+ * @property Product $price_base
+ * @property Product $price_discount
+ * @property Image|ImageStub|null $preview_image
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read \App\Models\Shop $shop
@@ -47,7 +51,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'slug',
-        'price',
+        'price_base',
         'price_discount',
         'is_available',
         'image',
@@ -56,51 +60,23 @@ class Product extends Model
     protected function casts(): array
     {
         return [
-            'price' => 'float',
-            'price_discount' => 'float',
+            'price_base' => 'int',
+            'price_discount' => 'int',
             'is_available' => 'boolean',
         ];
     }
 
-    public static function new(Shop|int $shop, string $name, float $price, Image $image, bool $isAvailable, float $priceDiscount = null): static
+    protected function price(): Attribute
     {
-        if (is_a($shop, Shop::class)) {
-            $shop = $shop->id;
-        }
-
-        if ($image->isTemporary()) {
-            $image->publish();
-        }
-
-        $product = new Product();
-        $product->shop_id = $shop;
-        $product->name = $name;
-        $product->price = $price;
-        $product->price_discount = $priceDiscount;
-        $product->is_available = $isAvailable;
-        $product->image = $image;
-        $product->save();
-
-        return $product;
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => new Price(
+                $attributes['price_base'],
+                $attributes['price_discount'],
+            ),
+        );
     }
 
-    public function edit(string $name, float $price, Image $image, bool $isAvailable, float $priceDiscount = null): static
-    {
-        if ($image->isTemporary()) {
-            $image->publish();
-        }
-
-        $this->name = $name;
-        $this->price = $price;
-        $this->price_discount = $priceDiscount;
-        $this->is_available = $isAvailable;
-        $this->image = $image;
-        $this->save();
-
-        return $this;
-    }
-
-    protected function image(): Attribute
+    protected function previewImage(): Attribute
     {
         return Attribute::make(
             get: static function (string|null $id) {
@@ -124,9 +100,22 @@ class Product extends Model
         );
     }
 
+    public function toArray(): array
+    {
+        $array = parent::toArray();
+        $array['price'] = $this->price->toArray();
+
+        return $array;
+    }
+
     public function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class);
+    }
+
+    public function newCollection(array $models = []): ProductCollection
+    {
+        return new ProductCollection($models);
     }
 
     public function newEloquentBuilder($query): ProductQueryBuilder

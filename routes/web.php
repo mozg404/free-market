@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Cabinet\ProfileController;
 use App\Http\Controllers\Cabinet\ShopController;
 use App\Http\Controllers\Cabinet\ProductController as CabinetProductController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\FilepondImageController;
 use App\Http\Controllers\IndexController;
@@ -37,6 +38,15 @@ Route::post('/cabinet/products/{product}/update', [CabinetProductController::cla
 Route::delete('/cabinet/products/{product}', [CabinetProductController::class, 'destroy'])->name('cabinet.products.delete');
 
 Route::get('/cabinet/shops/{shop}/products', [CabinetProductController::class, 'index'])->name('cabinet.products');
+
+
+// Корзина
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+Route::delete('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
+Route::delete('/cart/delete/{product}', [CartController::class, 'delete'])->name('cart.delete');
+Route::delete('/cart/clean', [CartController::class, 'clean'])->name('cart.clean');
+
 
 Route::get('/product/{product}', [ProductsController::class, 'show'])->name('product.show');
 Route::get('/catalog', [CatalogController::class, 'show'])->name('catalog');

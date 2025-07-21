@@ -2,24 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\UserRegisteringData;
+use App\Data\Products\ProductData;
 use App\Models\Product;
-use App\Models\Shop;
-use App\Models\User;
+use App\Services\Cart\CartManager;
 use App\Support\Filepond\Image;
-use App\Support\Inn;
-use App\Support\Phone;
-use function Amp\Dns\query;
+use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
-    public function test()
+
+    public function __construct(
+        private CartManager $cart,
+    )
     {
-//        dd(resource_path('demo/products_images/1.webp'));
+    }
 
-        $image = Image::createFromPath(resource_path('demo/products_images/1.webp'))->publish();
+    public function test(Request $request)
+    {
+//        $product = Product::first();
+//        $data = ProductData::from($product);
+//        dd($product->toArray(), $data->toArray());
 
-        dd($image->id);
+//        $products = Product::query()->take(10)->get();
+//        $data = ProductData::collect($products);
+//        dd($products->toArray(), $data->toArray());
+
+//
+//
+//        $image = Image::from('tmp/a527ec7229048f579adc6e99ce5ca4248b92d37c6sIcTeL15v.webp');
+//        dd($image->toArray());
+
+
+
+
+
+
+
+
+//        $product1 = Product::find(1);
+//        $product2 = Product::find(2);
+
+//        $this->cart->add($product1);
+//        $this->cart->add($product1);
+//        $this->cart->add($product1);
+//        $this->cart->add($product2);
+
+//        $this->cart->clean();
+
+
+//        dd($this->cart->totalPrice());
 
         return 'Тест';
     }

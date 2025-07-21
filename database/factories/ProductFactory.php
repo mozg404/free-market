@@ -37,8 +37,8 @@ class ProductFactory extends Factory
         return [
             'name' => fake()->name(),
             'slug' => fake()->slug(),
-            'price' => fake()->randomFloat(2, 10, 30),
-            'image' => Image::createFromPath($imagePath)->publish()->id,
+            'price_base' => random_int(300, 10000),
+            'preview_image' => Image::createFromPath($imagePath)->id,
         ];
     }
 }

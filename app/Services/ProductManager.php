@@ -21,15 +21,15 @@ class ProductManager
         $product->shop_id = $data->shopId;
         $product->name = $data->name;
         $product->slug = Str::slug($data->name);
-        $product->price = $data->price;
+        $product->price_base = $data->price;
         $product->price_discount = $data->priceDiscount;
         $product->is_available = $data->isAvailable;
-        $product->image = $data->image->publishIfTemporary();
+        $product->preview_image = $data->image->publishIfTemporary();
 
         try {
             $product->save();
         } catch (\Exception $exception) {
-            $product->image->delete();
+            $product->preview_image->delete();
 
             throw $exception;
         }
@@ -42,10 +42,10 @@ class ProductManager
         $product->shop_id = $data->shopId;
         $product->name = $data->name;
         $product->slug = $data->slug;
-        $product->price = $data->price;
+        $product->price_base = $data->price;
         $product->price_discount = $data->priceDiscount;
         $product->is_available = $data->isAvailable;
-        $product->image = $data->image->publishIfTemporary();
+        $product->preview_image = $data->image->publishIfTemporary();
 
         if (empty($data->slug)) {
             $product->slug = Str::slug($data->name);
@@ -54,7 +54,7 @@ class ProductManager
         try {
             $product->save();
         } catch (\Exception $exception) {
-            $product->image->delete();
+            $product->preview_image->delete();
 
             throw $exception;
         }
@@ -65,7 +65,7 @@ class ProductManager
     public function delete(Product $product): void
     {
         $product->delete();
-        $product->image->delete();
+        $product->preview_image->delete();
     }
 
     public function getList(): Collection

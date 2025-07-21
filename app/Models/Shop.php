@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 /**
- * @property int $id
- * @property int $user_id
+ * @property Product $id
+ * @property Product $user_id
  * @property string $name
  * @property string $slug
  * @property string $description
@@ -24,8 +24,8 @@ use Illuminate\Support\Str;
  * @property Phone|null $phone
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $products
- * @property-read int|null $products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<Product, \App\Models\Product> $products
+ * @property-read Product|null $products_count
  * @property-read \App\Models\User $user
  * @method static \Database\Factories\ShopFactory factory($count = null, $state = [])
  * @method static ShopQueryBuilder<static>|Shop newModelQuery()
@@ -116,11 +116,11 @@ class Shop extends Model
     {
         $array = parent::toArray();
 
-        if (key_exists('phone', $array)) {
+        if (array_key_exists('phone', $array)) {
             $array['phone'] = $this->phone?->number ?? null;
         }
 
-        if (key_exists('inn', $array)) {
+        if (array_key_exists('inn', $array)) {
             $array['inn'] = $this->inn?->number ?? null;
         }
 

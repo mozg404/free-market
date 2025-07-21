@@ -59,9 +59,9 @@ class ProductController extends Controller
             'shopId' => $product->shop_id,
             'name' => $product->name,
             'slug' => $product->slug,
-            'price' => $product->price,
+            'price' => $product->price_base,
             'priceDiscount' => $product->price_discount,
-            'image' => $product->image->id,
+            'image' => $product->preview_image->id,
             'isAvailable' => $product->is_available,
         ]);
     }

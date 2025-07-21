@@ -19,7 +19,7 @@ class ProductsController extends Controller
         return Inertia::render('ProductShow', [
             'id' => $product->id,
             'name' => $product->name,
-            'imageUrl' => Storage::url($product->image)
+            'imageUrl' => Storage::url($product->preview_image)
         ]);
     }
 }
