@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('shop_id')->constrained('shops')->onDelete('cascade');
             $table->string('name', 255);
             $table->string('slug', 255);
-            $table->float('price_base')->default(0);
-            $table->float('price_discount')->nullable();
+            $table->integer('price_base')->default(0);
+            $table->integer('price_discount')->nullable();
             $table->boolean('is_available')->default(false);
             $table->string('preview_image', 255)->nullable();
             $table->timestamps();

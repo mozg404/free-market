@@ -2,9 +2,10 @@
 import Main from "@/layouts/Main.vue";
 import Wrapper from "../components/Wrapper.vue";
 import CartItem from "@/components/cart/CartItem.vue";
-import {useForm, usePage} from '@inertiajs/vue3'
+import {Link, useForm, usePage} from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'
 import {computed} from "vue";
+import {ShoppingCart} from "lucide-vue-next";
 
 const page = usePage()
 const cart = computed(() => page.props.cart)
@@ -35,6 +36,12 @@ const form = useForm({})
                 <li>Всего товаров: {{cart.totalCount}}</li>
                 <li>Общая цена: {{cart.totalPrice}}</li>
               </ul>
+
+              <Button  class="rounded-3xl" as-child>
+                <Link :href="route('checkout')">
+                  Оформить заказ
+                </Link>
+              </Button>
 
             </aside>
           </div>

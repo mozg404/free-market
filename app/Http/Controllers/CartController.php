@@ -18,9 +18,6 @@ class CartController extends Controller
     public function index()
     {
         return Inertia::render('Cart');
-//        return Inertia::render('Cart', [
-//            'cart' => $this->cart->all(),
-//        ]);
     }
 
     public function add(Product $product)

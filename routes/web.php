@@ -8,10 +8,12 @@ use App\Http\Controllers\Cabinet\ShopController;
 use App\Http\Controllers\Cabinet\ProductController as CabinetProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\FilepondImageController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\TestController;
+use App\Http\Middleware\CheckoutAccess;
 use Illuminate\Support\Facades\Route;
 
 // FilePond
@@ -37,9 +39,6 @@ Route::get('/cabinet/products/{product}/edit', [CabinetProductController::class,
 Route::post('/cabinet/products/{product}/update', [CabinetProductController::class, 'update'])->name('cabinet.products.update');
 Route::delete('/cabinet/products/{product}', [CabinetProductController::class, 'destroy'])->name('cabinet.products.delete');
 
-//Route::get('/cabinet/shops/{shop}/products', [CabinetProductController::class, 'index'])->name('cabinet.products');
-
-
 // Корзина
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
@@ -47,10 +46,17 @@ Route::delete('/cart/remove/{product}', [CartController::class, 'remove'])->name
 Route::delete('/cart/delete/{product}', [CartController::class, 'delete'])->name('cart.delete');
 Route::delete('/cart/clean', [CartController::class, 'clean'])->name('cart.clean');
 
+// Оформление заказа
+Route::middleware(CheckoutAccess::class)->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+});
 
+// Каталог товаров
 Route::get('/product/{product}', [ProductsController::class, 'show'])->name('product.show');
 Route::get('/catalog', [CatalogController::class, 'show'])->name('catalog');
 
+// Авторизация
 Route::post('/registration/store', [RegistrationController::class, 'store'])->name('auth.registration.store');
 Route::get('/registration', [RegistrationController::class, 'show'])->name('auth.registration.show');
 Route::post('/login/store', [LoginController::class, 'store'])->name('login.store');
