@@ -20,7 +20,7 @@ class ProductData extends Data
         public bool      $isAvailable,
         public Price     $price,
         public ImageData $previewImage,
-        public ShopData  $shop,
+//        public ShopData  $shop,
     ){}
 
     public static function fromModel(Product $product): self
@@ -33,10 +33,10 @@ class ProductData extends Data
             previewImage: isset($product->preview_image)
                 ? new ImageData(true, $product->preview_image->getUrl())
                 : new ImageData(false),
-            shop: new ShopData(
-                $product->shop->id,
-                $product->shop->name,
-            )
+//            shop: new ShopData(
+//                $product->shop->id,
+//                $product->shop->name,
+//            )
         );
     }
 }

@@ -16,9 +16,9 @@ const items = [
     isCurrent: route().current('profile.show'),
   },
   {
-    name: 'Мои магазины',
-    url: route('cabinet.shops'),
-    isCurrent: route().current('cabinet.shops'),
+    name: 'Мои товары',
+    url: route('cabinet.products'),
+    isCurrent: route().current('cabinet.products'),
   },
 ]
 

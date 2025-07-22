@@ -25,12 +25,12 @@ Route::get('/test', [TestController::class, 'test']);
 
 Route::get('/cabinet/profile', [ProfileController::class, 'show'])->name('profile.show');
 
-Route::get('/cabinet/shops', [ShopController::class, 'index'])->name('cabinet.shops');
-Route::get('/cabinet/shops/create', [ShopController::class, 'create'])->name('cabinet.shops.create');
-Route::post('/cabinet/shops/store', [ShopController::class, 'store'])->name('cabinet.shops.store');
-Route::get('/cabinet/shops/{shop}/edit', [ShopController::class, 'edit'])->name('cabinet.shops.edit');
-Route::post('/cabinet/shops/{shop}/update', [ShopController::class, 'update'])->name('cabinet.shops.update');
-Route::get('/cabinet/shops/{shop}', [ShopController::class, 'show'])->name('cabinet.shops.show');
+//Route::get('/cabinet/shops', [ShopController::class, 'index'])->name('cabinet.shops');
+//Route::get('/cabinet/shops/create', [ShopController::class, 'create'])->name('cabinet.shops.create');
+//Route::post('/cabinet/shops/store', [ShopController::class, 'store'])->name('cabinet.shops.store');
+//Route::get('/cabinet/shops/{shop}/edit', [ShopController::class, 'edit'])->name('cabinet.shops.edit');
+//Route::post('/cabinet/shops/{shop}/update', [ShopController::class, 'update'])->name('cabinet.shops.update');
+//Route::get('/cabinet/shops/{shop}', [ShopController::class, 'show'])->name('cabinet.shops.show');
 
 Route::get('/cabinet/products', [CabinetProductController::class, 'index'])->name('cabinet.products');
 Route::get('/cabinet/products/create', [CabinetProductController::class, 'create'])->name('cabinet.products.create');

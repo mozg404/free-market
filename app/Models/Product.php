@@ -18,9 +18,9 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
- * @property Product $shop_id
+ * @property int $user_id
+ * @property-read User $user
  * @property string $name
- * @property string $slug
  * @property boolean $is_available
  * @property Price $price
  * @property Product $price_base
@@ -28,7 +28,6 @@ use Illuminate\Support\Carbon;
  * @property Image|ImageStub|null $preview_image
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Models\Shop $shop
  * @method static \Database\Factories\ProductFactory factory($count = null, $state = [])
  * @method static ProductQueryBuilder<static>|Product newModelQuery()
  * @method static ProductQueryBuilder<static>|Product newQuery()
@@ -50,7 +49,6 @@ class Product extends Model
 
     protected $fillable = [
         'name',
-        'slug',
         'price_base',
         'price_discount',
         'is_available',
@@ -95,7 +93,7 @@ class Product extends Model
                     return Image::from($id);
                 }
 
-                return new ImageStub();
+                return null;
             },
         );
     }
@@ -108,9 +106,9 @@ class Product extends Model
         return $array;
     }
 
-    public function shop(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Shop::class);
+        return $this->belongsTo(User::class);
     }
 
     public function newCollection(array $models = []): ProductCollection

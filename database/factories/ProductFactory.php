@@ -13,33 +13,56 @@ class ProductFactory extends Factory
 {
     protected $model = Product::class;
 
-    private array $images = [
-        'demo/products_images/1.webp',
-        'demo/products_images/2.webp',
-        'demo/products_images/3.webp',
-        'demo/products_images/4.webp',
-        'demo/products_images/5.webp',
-        'demo/products_images/6.webp',
-        'demo/products_images/7.webp',
-        'demo/products_images/8.webp',
-        'demo/products_images/9.webp',
-        'demo/products_images/10.webp',
-        'demo/products_images/11.webp',
-        'demo/products_images/12.webp',
-        'demo/products_images/13.webp',
-        'demo/products_images/14.webp',
+    private static array $images = [
+        'demo/products_images/1_win10.jpg',
+        'demo/products_images/2_office_professional.jpg',
+        'demo/products_images/3_win11.jpg',
+        'demo/products_images/4_adobe_creative.jpg',
+        'demo/products_images/5_jetbrains.jpg',
+        'demo/products_images/6_phpstorm.jpg',
+        'demo/products_images/7_webstorm.jpg',
+        'demo/products_images/8_itunes.jpg',
+        'demo/products_images/9_eset_nod32.jpg',
+        'demo/products_images/10_autocad.jpg',
+    ];
+
+    private static array $names = [
+        'Ключ Autodesk AutoCAD 2026',
+        'Windows 11 Pro (Профессиональная)',
+        'Windows 11 IoT Enterprise 2024 LTSC (Корпоративная)',
+        'Windows 10 Enterprise 2021 LTSC',
+        'Ключ активации Microsoft Windows 10 Pro, бессрочный (активация онлайн), виндовс 10 про бессрочный',
+        'Ключ активации Windows 10 Pro x32/64, электронный, мультиязычный, бессрочный',
+        'Выделенный ПРОКСИ Outline ключ НАВСЕГДА! Без скоростных ограничений по трафику',
+        'ПРОКСИ VLESS для защищенного доступа в интернет НАВСЕГДА (без ограничения скорости)',
+        'Подарочная карта Apple iTunes, Россия, 500 руб, электронный ключ',
+        'Подарочная карта Apple iTunes, Россия, 600 руб, электронный ключ',
+        'Microsoft Office 2019 Professional Plus LTSC / Электронный ключ активации / Бессрочная лицензия / Гарантия',
+        'Microsoft Office 2021 Professional Plus Retail | Электронный ключ | Бессрочный | 1 ПК | Без привязки к учетной записи',
+        'Microsoft Office 2024 Professional Plus LTSC Электронный ключ активации Бессрочная лицензия (без привязки к учетной записи)',
     ];
 
     public function definition(): array
     {
-        $imagePath = resource_path($this->images[rand(0, count($this->images) - 1)]);
-
         return [
-            'name' => fake()->name(),
-            'slug' => fake()->slug(),
+            'name' => static::randomFromArray(static::$names),
             'price_base' => random_int(300, 10000),
             'is_available' => fake()->boolean(),
-            'preview_image' => Image::createFromPath($imagePath)->id,
+            'preview_image' => null,
         ];
+    }
+
+    public function withImage(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'preview_image' => Image::createFromPath(resource_path(static::randomFromArray(static::$images)))->id,
+            ];
+        });
+    }
+
+    private static function randomFromArray(array $array): string
+    {
+        return $array[random_int(0, count($array) - 1)];
     }
 }

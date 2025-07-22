@@ -23,7 +23,6 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $products = Product::query()
-            ->withShop()
             ->whereUser(Auth::id())
             ->orderBy('id', 'desc');
 
@@ -31,14 +30,9 @@ class ProductController extends Controller
             $products->searchByName($request->search);
         }
 
-        if (!empty($request->shop_id)) {
-            $products->whereShop($request->shop_id);
-        }
-
         $products = $products->paginate(10);
 
         return Inertia::render('cabinet/products/ProductList', [
-            'shops' => ShopData::collect(Shop::query()->forUser(Auth::id())->getNames()),
             'products' => ProductData::collect($products->items()),
             'links' => $products->toArray()['links'],
             'filters' => $request->only(['search', 'shop_id']),

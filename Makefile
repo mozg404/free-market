@@ -1,4 +1,4 @@
-init: storage-unlink restart storage-link
+init: restart
 up: docker-up
 down: docker-down
 restart: down up migrate-refresh seed frontend-up

@@ -37,7 +37,7 @@ const props = defineProps({
   filters: Object,
 })
 const search = ref(props.filters.search);
-const shopId = ref(props.filters.shop_id);
+const shopId = '';
 
 // Общая функция для обработки фильтров
 const applyFilters = debounce(() => {
@@ -74,21 +74,6 @@ watch([search, shopId], applyFilters);
           <Search class="size-4 text-muted-foreground" />
         </span>
       </div>
-
-
-      <Select v-model="shopId">
-        <SelectTrigger class="w-[180px]">
-          <SelectValue placeholder="Укажите магазин" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem v-for="shop in props.shops" :key="shop.id" :value="shop.id">
-              {{ shop.name }}
-            </SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-
     </div>
 
     <Table>
@@ -97,7 +82,7 @@ watch([search, shopId], applyFilters);
           <TableHead>ID</TableHead>
           <TableHead>Изображение</TableHead>
           <TableHead>Название</TableHead>
-          <TableHead>Магазин</TableHead>
+          <TableHead>В наличие</TableHead>
           <TableHead>Статус</TableHead>
           <TableHead>Цена</TableHead>
           <TableHead>Скидка</TableHead>
@@ -109,7 +94,7 @@ watch([search, shopId], applyFilters);
           <TableCell class="font-medium">{{ product.id }}</TableCell>
           <TableCell><img :src="product.previewImage.url" class="w-[60px]"/></TableCell>
           <TableCell>{{ product.name }}</TableCell>
-          <TableCell>{{ product.shop.name }}</TableCell>
+          <TableCell>14</TableCell>
           <TableCell>
             <div v-if="product.isAvailable"><Badge>В наличие</Badge></div>
             <div v-else><Badge variant="destructive">Закончился</Badge></div>

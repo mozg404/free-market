@@ -14,14 +14,7 @@ class ProductQueryBuilder extends Builder
 {
     public function whereUser(int $id): static
     {
-        return $this->whereHas('shop', function (ShopQueryBuilder $query) use ($id) {
-            return $query->forUser($id);
-        });
-    }
-
-    public function whereShop(int $id): static
-    {
-        return $this->where('shop_id', $id);
+        return $this->where('user_id', $id);
     }
 
     /**
