@@ -14,11 +14,9 @@ defineProps({
 <template>
   <Main>
 
-    <div>
     <Wrapper class="mt-10">
       <ProductList :products="products" />
     </Wrapper>
-    </div>
 
   </Main>
 </template>

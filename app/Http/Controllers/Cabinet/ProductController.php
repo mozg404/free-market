@@ -26,8 +26,8 @@ class ProductController extends Controller
             ->whereUser(Auth::id())
             ->orderBy('id', 'desc');
 
-        if (!empty($request->search)) {
-            $products->searchByName($request->search);
+        if (!empty($request->input('search'))) {
+            $products->searchByName($request->input('search'));
         }
 
         $products = $products->paginate(10);
