@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\ProductData;
+use App\Data\Products\ProductData;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

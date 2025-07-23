@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Products\ProductData;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -17,9 +18,7 @@ class ProductsController extends Controller
     public function show(Product $product)
     {
         return Inertia::render('ProductShow', [
-            'id' => $product->id,
-            'name' => $product->name,
-            'imageUrl' => Storage::url($product->preview_image)
+            'product' => ProductData::from($product),
         ]);
     }
 }

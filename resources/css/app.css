@@ -1,10 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import 'tailwindcss';
 @import "tw-animate-css";
-
 @import 'filepond/dist/filepond.min.css';
 @import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
 @import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css';
+
+@plugin "@tailwindcss/typography";
 
 @source '../../node_modules/@inertiaui/modal-vue/src/**/*.{js,vue}';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -14,15 +16,26 @@
 @source '../**/*.vue';
 @custom-variant dark (&:is(.dark *));
 
+
+@utility container {
+    @variant 2xl {
+        max-width: 1210px !important;
+    }
+}
+
 @theme {
-    --font-display: "Roboto", sans-serif;
-    --font-sans: "Roboto", sans-serif;
+    --font-display: "Inter", sans-serif;
+    --font-sans: "Inter", sans-serif;
+    /*--font-display: "Roboto", sans-serif;*/
+    /*--font-sans: "Roboto", sans-serif;*/
 }
 
 @theme inline {
-    --font-sans:
-        Instrument Sans, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
-        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: "Inter", sans-serif;
+    --font-sans: "Inter", sans-serif;
+    /*--font-sans:*/
+    /*    Instrument Sans, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',*/
+    /*    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';*/
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
