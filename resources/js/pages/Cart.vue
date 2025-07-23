@@ -23,10 +23,7 @@ const form = useForm({})
             <main class="xl:col-span-9 p-4">
               <h2 class="text-xl font-bold tracking-tight text-gray-900 pb-8">Корзина</h2>
               <CartItem v-for="item in cart.items" :key="item.product.id"  :item="item" />
-
-
               <Button variant="destructive" @click="form.delete(route('cart.clean'))" :disabled="form.processing" :class="{ 'opacity-50': form.processing }">Очистить корзину</Button>
-
             </main>
 
             <aside class="xl:col-span-3 bg-gray-50 p-4">

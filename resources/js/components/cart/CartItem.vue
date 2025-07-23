@@ -18,7 +18,7 @@ const form = useForm({})
       </a>
       <div>
         <div class="font-bold">{{ item.product.name }}</div>
-        <div class="font-light">{{ item.product.shop.name }}</div>
+<!--        <div class="font-light">{{ item.product.shop.name }}</div>-->
       </div>
     </div>
     <div class="flex items-center">
