@@ -14,31 +14,36 @@ const inCart = (id) => Object.keys(page.props.cart.items).some(key => page.props
 </script>
 
 <template>
-<div class="group relative">
+<div class="relative">
   <Link :href="route('product.show', product.id)">
-    <img :src="product.previewImage.url" alt="Front of men&#039;s Basic Tee in black." class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto ">
+    <img :src="product.previewImage.url" class="aspect-square w-full rounded-md bg-gray-200 object-cover lg:aspect-auto ">
   </Link>
 
-  <div class="mt-4 flex justify-between">
-    <div>
-      <h3 class="text-sm text-gray-700">
-          {{ product.name }}
-      </h3>
-      <p class="mt-1 text-sm text-gray-500">123</p>
+  <div class="mt-3">
+    <div v-if="product.price.isDiscount">
+      <div class="flex items-center">
+        <div class="text-xl font-bold text-red-600 line-through mr-2">{{ product.price.base }}</div>
+        <div>{{ product.price.discount }} ₽</div>
+      </div>
     </div>
-    <p class="text-sm font-medium text-gray-900">{{ product.price.current }} ₽</p>
+    <div v-else class="text-lg font-bold">{{ product.price.current }} ₽</div>
   </div>
 
-  <div v-if="inCart(product.id)">
-    <Button disabled>
-      <ShoppingCart class="w-4 h-4 mr-1" /> В корзине
-    </Button>
-  </div>
-  <div v-else>
-    <Button @click="form.post(route('cart.add', product.id))" :disabled="form.processing" class="cursor-pointer">
-      <ShoppingCart class="w-4 h-4 mr-1" /> В корзину
-    </Button>
-  </div>
+  <div class="mt-1 text-sm  text-gray-400">В наличии: {{ product.itemsCount }}</div>
+  <div class="mt-1 line-clamp-2 leading-5" :title="product.name">{{ product.name }}</div>
+
+<!--  <div class="mt-1">-->
+<!--    <div v-if="inCart(product.id)">-->
+<!--      <Button disabled>-->
+<!--        <ShoppingCart class="w-4 h-4 mr-1" /> В корзине-->
+<!--      </Button>-->
+<!--    </div>-->
+<!--    <div v-else>-->
+<!--      <Button @click="form.post(route('cart.add', product.id))" :disabled="form.processing" class="cursor-pointer">-->
+<!--        <ShoppingCart class="w-4 h-4 mr-1" /> В корзину-->
+<!--      </Button>-->
+<!--    </div>-->
+<!--  </div>-->
 
 
 </div>

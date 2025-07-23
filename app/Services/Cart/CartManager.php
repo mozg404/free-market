@@ -45,7 +45,9 @@ class CartManager
         $items = [];
 
         // Получаем перечень товаров с ценами
-        $products = Product::query()->withShop()->whereIds(array_keys($cart))->get();
+        $products = Product::query()
+            ->whereIds(array_keys($cart))
+            ->get();
 
         // Перемножаем товары на количество и суммируем
         foreach ($cart as $id => $cartItems) {

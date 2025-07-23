@@ -18,6 +18,17 @@ class ProductQueryBuilder extends Builder
     }
 
     /**
+     * Включает количество доступных позиций
+     * @return $this
+     */
+    public function withAvailableItemsCount(): static
+    {
+        return $this->withCount(['items' => static function (Builder $builder) {
+            return $builder->where('status', 'available');
+        }]);
+    }
+
+    /**
      * Оставляет только те строки, подстрока $search содержится в названии
      * @param string $search
      * @return $this

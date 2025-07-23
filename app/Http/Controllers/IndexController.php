@@ -11,7 +11,10 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
-        $products = Product::query()->take(10)->get();
+        $products = Product::query()
+            ->withAvailableItemsCount()
+            ->take(10)
+            ->get();
 
         return Inertia::render('Index', [
             'products' => ProductData::collect($products)

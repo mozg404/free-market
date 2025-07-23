@@ -14,32 +14,44 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
+ * 
+ *
  * @property int $id
  * @property int $user_id
- * @property-read User $user
  * @property string $name
- * @property boolean $is_available
- * @property Price $price
- * @property Product $price_base
- * @property Product $price_discount
- * @property Image|ImageStub|null $preview_image
+ * @property int $price_base
+ * @property int|null $price_discount
+ * @property bool $is_available
+ * @property \App\Support\Filepond\Image|string|null|null $preview_image
+ * @property string|null $description
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read mixed $price
+ * @property-read \App\Models\User $user
+ * @method static ProductCollection<int, static> all($columns = ['*'])
  * @method static \Database\Factories\ProductFactory factory($count = null, $state = [])
+ * @method static ProductCollection<int, static> get($columns = ['*'])
+ * @method static ProductQueryBuilder<static>|Product getPrices()
  * @method static ProductQueryBuilder<static>|Product newModelQuery()
  * @method static ProductQueryBuilder<static>|Product newQuery()
  * @method static ProductQueryBuilder<static>|Product query()
+ * @method static ProductQueryBuilder<static>|Product searchByName(string $search)
  * @method static ProductQueryBuilder<static>|Product whereCreatedAt($value)
+ * @method static ProductQueryBuilder<static>|Product whereDescription($value)
  * @method static ProductQueryBuilder<static>|Product whereId($value)
- * @method static ProductQueryBuilder<static>|Product whereImage($value)
+ * @method static ProductQueryBuilder<static>|Product whereIds(array $ids)
+ * @method static ProductQueryBuilder<static>|Product whereIsAvailable($value)
  * @method static ProductQueryBuilder<static>|Product whereName($value)
- * @method static ProductQueryBuilder<static>|Product wherePrice($value)
- * @method static ProductQueryBuilder<static>|Product whereShopId($value)
- * @method static ProductQueryBuilder<static>|Product whereSlug($value)
+ * @method static ProductQueryBuilder<static>|Product wherePreviewImage($value)
+ * @method static ProductQueryBuilder<static>|Product wherePriceBase($value)
+ * @method static ProductQueryBuilder<static>|Product wherePriceDiscount($value)
  * @method static ProductQueryBuilder<static>|Product whereUpdatedAt($value)
+ * @method static ProductQueryBuilder<static>|Product whereUser(int $id)
+ * @method static ProductQueryBuilder<static>|Product whereUserId($value)
  * @method static ProductQueryBuilder<static>|Product withShop()
  * @mixin \Eloquent
  */
@@ -52,7 +64,7 @@ class Product extends Model
         'price_base',
         'price_discount',
         'is_available',
-        'image',
+        'preview_image',
     ];
 
     protected function casts(): array
@@ -82,9 +94,9 @@ class Product extends Model
                     return Image::from($id);
                 }
 
-                return new ImageStub();
+                return null;
             },
-            set: static function (Image|ImageStub|string|null $id) {
+            set: static function (Image|string|null $id) {
                 if (is_a($id, Image::class)) {
                     return $id;
                 }
@@ -109,6 +121,11 @@ class Product extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(ProductItem::class);
     }
 
     public function newCollection(array $models = []): ProductCollection

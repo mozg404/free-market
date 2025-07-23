@@ -44,9 +44,13 @@ class ProductFactory extends Factory
 
     public function definition(): array
     {
+        $price = random_int(300, 10000);
+        $priceDiscount = $price - floor($price * random_int(10, 40) / 100);
+
         return [
             'name' => static::randomFromArray(static::$names),
-            'price_base' => random_int(300, 10000),
+            'price_base' => $price,
+            'price_discount' => fake()->randomElement([null, $priceDiscount]),
             'is_available' => fake()->boolean(),
             'preview_image' => null,
         ];

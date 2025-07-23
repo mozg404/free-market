@@ -10,7 +10,9 @@ use Illuminate\Notifications\Notifiable;
 
 
 /**
- * @property Product $id
+ * 
+ *
+ * @property int $id
  * @property string $name
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
@@ -18,10 +20,8 @@ use Illuminate\Notifications\Notifiable;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<Product, \Illuminate\Notifications\DatabaseNotification> $notifications
- * @property-read Product|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection<Product, \App\Models\Shop> $shops
- * @property-read Product|null $shops_count
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
@@ -75,8 +75,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function shops(): HasMany
+    public function products(): HasMany
     {
-        return $this->hasMany(Shop::class);
+        return $this->hasMany(Product::class);
     }
 }

@@ -22,6 +22,12 @@ class TestController extends Controller
 
     public function test(Request $request)
     {
+        $products = Product::query()->whereUser(1)->withAvailableItemsCount()->take(10)->get();
+
+        return 123;
+//        dd($products->toArray());
+
+
 //        $order = $this->orders->create();
 //        $order->items;
 //        dd($order->toArray());
