@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-enum ProductItemStatus: string
+enum StockItemStatus: string
 {
     case AVAILABLE = 'available';
     case RESERVED = 'reserved';

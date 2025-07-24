@@ -3,10 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
-use App\Models\ProductItem;
+use App\Models\StockItem;
 use App\Models\Shop;
 use App\Models\User;
-use Database\Factories\ProductItemFactory;
+use Database\Factories\StockItemFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         Product::factory()
             ->withImage()
             ->count(10)
-            ->has(ProductItem::factory()->count(random_int(5,10)), 'items')
+            ->has(StockItem::factory()->count(random_int(5,10)))
             ->create(['user_id' => $user->id]);
 
         User::factory()
@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
                 Product::factory()
                     ->withImage()
                     ->count(random_int(0,3))
-                    ->has(ProductItem::factory()->count(random_int(0,3)), 'items')
+                    ->has(StockItem::factory()->count(random_int(0,3)))
             )
             ->count(3)
             ->create();

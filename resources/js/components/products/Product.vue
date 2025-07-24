@@ -29,7 +29,7 @@ const inCart = (id) => Object.keys(page.props.cart.items).some(key => page.props
     <div v-else class="text-lg font-bold">{{ product.price.current }} ₽</div>
   </div>
 
-  <div class="mt-1 text-sm  text-gray-400">В наличии: {{ product.itemsCount }}</div>
+  <div class="mt-1 text-sm  text-gray-400">В наличии: {{ product.stockItemsCount }}</div>
   <div class="mt-1 line-clamp-2 leading-5" :title="product.name">{{ product.name }}</div>
 
 <!--  <div class="mt-1">-->

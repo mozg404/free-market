@@ -15,12 +15,12 @@ class ProductData extends Data
     public string $imageUrl;
 
     public function __construct(
-        public int   $id,
+        public int       $id,
         public string    $name,
         public bool      $isAvailable,
         public Price     $price,
         public ImageData $previewImage,
-        public int       $itemsCount,
+        public int       $stockItemsCount,
 
     ){}
 
@@ -34,7 +34,7 @@ class ProductData extends Data
             previewImage: isset($product->preview_image)
                 ? new ImageData(true, $product->preview_image->getUrl())
                 : new ImageData(false),
-            itemsCount: $product->items_count ?? 0,
+            stockItemsCount: $product->stock_items_count ?? 0,
         );
     }
 }

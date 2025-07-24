@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\StockItemStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,11 +24,13 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('products_items', function (Blueprint $table) {
+        Schema::create('stock_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('status');
             $table->text('content');
+            $table->foreignId('buyer_id')->nullable()->constrained('users');
+            $table->timestamp('sold_at')->nullable(); // Когда куплен
             $table->timestamps();
         });
     }
@@ -37,7 +40,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products_items');
+        Schema::dropIfExists('stock_items');
         Schema::dropIfExists('products');
     }
 };

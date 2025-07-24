@@ -123,9 +123,9 @@ class Product extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function items(): HasMany
+    public function stockItems(): HasMany
     {
-        return $this->hasMany(ProductItem::class);
+        return $this->hasMany(StockItem::class);
     }
 
     public function newCollection(array $models = []): ProductCollection
