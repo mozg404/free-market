@@ -3,14 +3,13 @@
 namespace App\Http\Middleware;
 
 use App\Services\Cart\CartManager;
+use App\Services\Toaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
-    private CartManager $cart;
-
     /**
      * The root template that's loaded on the first page visit.
      *
@@ -20,10 +19,11 @@ class HandleInertiaRequests extends Middleware
      */
     protected $rootView = 'app';
 
-    public function __construct(CartManager $cart)
-    {
-        $this->cart = $cart;
-    }
+    public function __construct(
+        private readonly CartManager $cart,
+        private readonly Toaster $toaster,
+    )
+    {}
 
     /**
      * Determines the current asset version.
@@ -52,6 +52,7 @@ class HandleInertiaRequests extends Middleware
                 'name' => Auth::user()?->name,
             ],
             'cart' => $this->cart->all(),
+            'toasts' => $this->toaster->pull(),
         ];
     }
 }

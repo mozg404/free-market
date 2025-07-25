@@ -9,13 +9,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\StockItem;
 use App\Services\StockManager;
+use App\Services\Toaster;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class StockController extends Controller
 {
     public function __construct(
-        private StockManager $stock,
+        private readonly StockManager $stock,
+        private readonly Toaster      $toaster,
     )
     {}
 
@@ -40,7 +42,8 @@ class StockController extends Controller
             'content' => 'required|string|min:5',
         ]);
 
-        $this->stock->addItemTo($product, $data['content']);
+        $stockItem = $this->stock->addItemTo($product, $data['content']);
+        $this->toaster->success("Позиция успешно добавлена");
 
         return back();
     }
@@ -60,6 +63,7 @@ class StockController extends Controller
         ]);
 
         $this->stock->updateItem($stockItem, $data['content']);
+        $this->toaster->success("Позиция #$stockItem->id успешно изменена");
 
         return back();
     }
@@ -67,6 +71,7 @@ class StockController extends Controller
     public function destroy(StockItem $stockItem)
     {
         $this->stock->delete($stockItem);
+        $this->toaster->success("Позиция #$stockItem->id успешно удалена");
 
         return back();
     }

@@ -9,9 +9,6 @@ import {ShoppingCart} from "lucide-vue-next";
 
 const page = usePage()
 const cart = computed(() => page.props.cart)
-const props = defineProps({
-  cart: Object,
-})
 const form = useForm({})
 
 </script>
