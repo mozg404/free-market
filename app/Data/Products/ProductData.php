@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Data\Products;
 
 use App\Data\ImageData;
-use App\Data\Shops\ShopData;
 use App\Models\Product;
 use App\Support\Price;
 use Spatie\LaravelData\Data;

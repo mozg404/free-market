@@ -6,7 +6,7 @@ import {PlusIcon, Settings, Trash2, Search} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
 import {Badge} from '@/components/ui/badge'
 import { ref, watch } from 'vue';
-import { router } from '@inertiajs/vue3';
+import {Link, router} from '@inertiajs/vue3';
 import debounce from 'lodash/debounce';
 import {
   Table,
@@ -76,49 +76,45 @@ watch([search, shopId], applyFilters);
       </div>
     </div>
 
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead>Изображение</TableHead>
-          <TableHead>Название</TableHead>
-          <TableHead>В наличие</TableHead>
-          <TableHead>Статус</TableHead>
-          <TableHead>Цена</TableHead>
-          <TableHead>Скидка</TableHead>
-          <TableHead></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow v-for="product in products" :key="product.id">
-          <TableCell class="font-medium">{{ product.id }}</TableCell>
-          <TableCell><img :src="product.previewImage.url" class="w-[60px]"/></TableCell>
-          <TableCell>{{ product.name }}</TableCell>
-          <TableCell>14</TableCell>
-          <TableCell>
-            <div v-if="product.isAvailable"><Badge>В наличие</Badge></div>
-            <div v-else><Badge variant="destructive">Закончился</Badge></div>
-          </TableCell>
-          <TableCell>{{ product.price.base }}</TableCell>
-          <TableCell>{{ product.price.discount ?? '-' }}</TableCell>
-          <TableCell class="text-end">
-            <div class="flex justify-around">
-              <ModalLink :href="route('cabinet.products.edit', product.id)">
-                <Settings class="w-4 h-4"/>
-              </ModalLink>
 
-              <ConfirmDeleteDialog
-                :route="route('cabinet.products.delete', product.id)"
-                title="Удалить товар?"
-                description="Вы уверены, что хотите удалить этот товар? Это действие нельзя отменить."
-              >
-                <Trash2 class="w-4 h-4"/>
-              </ConfirmDeleteDialog>
-            </div>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <div class="p-4 border-2" v-for="product in products" :key="product.id">
+
+      <div class="grid grid-cols-12">
+        <div class="col-span-2">
+          <img :src="product.previewImage.url" class="w-[60px]" alt=""/>
+        </div>
+        <div class="col-span-10">
+          id: {{product.id}} <br>
+          Название: {{product.name}} <br>
+          Статус:
+          <Badge v-if="product.isAvailable">Доступен</Badge>
+          <Badge v-else variant="destructive">Недоступен</Badge>
+          <br>
+          Цена: {{product.price.base}} <br>
+          Цена по скидке: {{product.price.discount ?? '-'}} <br>
+
+          <br>
+          <Link :href="route('cabinet.stock.index', product.id)">Позиции</Link>
+
+          <br><br>
+          <div class="grid grid-cols-2 gap-2 w-[50px]">
+            <ModalLink :href="route('cabinet.products.edit', product.id)">
+              <Settings class="w-4 h-4"/>
+            </ModalLink>
+
+            <ConfirmDeleteDialog
+              :route="route('cabinet.products.delete', product.id)"
+              title="Удалить товар?"
+              description="Вы уверены, что хотите удалить этот товар? Это действие нельзя отменить."
+            >
+              <Trash2 class="w-4 h-4"/>
+            </ConfirmDeleteDialog>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
 
     <div class="pb-6">
       <Pagination :links="props.links"/>

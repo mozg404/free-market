@@ -5,12 +5,14 @@ namespace App\Models;
 use App\Collections\ArticleCollection;
 use App\Collections\ProductCollection;
 use App\QueryBuilders\ProductQueryBuilder;
+use App\QueryBuilders\StockItemQueryBuilder;
 use App\Support\Filepond\Image;
 use App\Support\Filepond\ImageStub;
 use App\Support\Phone;
 use App\Support\Price;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read mixed $price
+ * @property-read Collection|StockItem[] $stockItems
  * @property-read \App\Models\User $user
  * @method static ProductCollection<int, static> all($columns = ['*'])
  * @method static \Database\Factories\ProductFactory factory($count = null, $state = [])
@@ -123,7 +126,7 @@ class Product extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function stockItems(): HasMany
+    public function stockItems(): HasMany|StockItemQueryBuilder
     {
         return $this->hasMany(StockItem::class);
     }

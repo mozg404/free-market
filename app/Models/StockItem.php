@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enum\StockItemStatus;
+use App\QueryBuilders\StockItemQueryBuilder;
 use Database\Factories\StockItemFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,6 +36,8 @@ class StockItem extends Model
 
     protected $fillable = ['product_id', 'status', 'content'];
 
+    protected $hidden = ['content'];
+
     protected function casts(): array
     {
         return [
@@ -42,9 +45,29 @@ class StockItem extends Model
         ];
     }
 
+    public function isAvailable(): bool
+    {
+        return $this->status === StockItemStatus::AVAILABLE;
+    }
+
+    public function isReserved(): bool
+    {
+        return $this->status === StockItemStatus::RESERVED;
+    }
+
+    public function isSold(): bool
+    {
+        return $this->status === StockItemStatus::SOLD;
+    }
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function newEloquentBuilder($query): StockItemQueryBuilder
+    {
+        return new StockItemQueryBuilder($query);
     }
 
     protected static function newFactory(): StockItemFactory|\Illuminate\Database\Eloquent\Factories\Factory
