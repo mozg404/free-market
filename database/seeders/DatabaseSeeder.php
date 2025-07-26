@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         Product::factory()
             ->withImage()
             ->count(10)
-            ->has(StockItem::factory()->count(random_int(5,10)))
+            ->has(StockItem::factory()->available()->count(random_int(5,10)))
             ->create(['user_id' => $user->id]);
 
         User::factory()

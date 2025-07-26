@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Проверяет авторизован ли пользователь перед оформлением заказа
  * Если не авторизован - сохраняет в сессию пометку и перенаправляет на авторизацию
  */
-class CheckoutAccess
+class OrderCheckoutAccess
 {
     public const SESSION_KEY = 'checkout_process';
 

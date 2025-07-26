@@ -32,7 +32,7 @@ const form = useForm({})
               </ul>
 
               <Button  class="rounded-3xl" as-child>
-                <Link :href="route('checkout')">
+                <Link method="post" :href="route('order_checkout.store')">
                   Оформить заказ
                 </Link>
               </Button>

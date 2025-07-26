@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockItem whereProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockItem whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockItem whereUpdatedAt($value)
+ * @method static StockItemFactory factory($count = null, $state = [])
  * @mixin \Eloquent
  */
 class StockItem extends Model

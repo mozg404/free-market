@@ -9,12 +9,12 @@ use App\Http\Controllers\Cabinet\ProductController as CabinetProductController;
 use App\Http\Controllers\Cabinet\StockController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderCheckoutController;
 use App\Http\Controllers\FilepondImageController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\TestController;
-use App\Http\Middleware\CheckoutAccess;
+use App\Http\Middleware\OrderCheckoutAccess;
 use Illuminate\Support\Facades\Route;
 
 // FilePond
@@ -55,9 +55,10 @@ Route::delete('/cart/delete/{product}', [CartController::class, 'delete'])->name
 Route::delete('/cart/clean', [CartController::class, 'clean'])->name('cart.clean');
 
 // Оформление заказа
-Route::middleware(CheckoutAccess::class)->group(function () {
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::middleware(OrderCheckoutAccess::class)->group(function () {
+    Route::post('/order-checkout', [OrderCheckoutController::class, 'store'])->name('order_checkout.store');
+    Route::get('/order-checkout/payment/{order}', [OrderCheckoutController::class, 'payment'])->name('order_checkout.payment');
+    Route::post('/order-checkout/payment/{order}', [OrderCheckoutController::class, 'pay'])->name('order_checkout.pay');
 });
 
 // Каталог товаров

@@ -23,10 +23,8 @@ return new class extends Migration
         Schema::create('orders_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->integer('quantity')->default(1);
+            $table->foreignId('stock_item_id')->constrained()->cascadeOnDelete();
             $table->integer('price');
-            $table->timestamps();
         });
     }
 

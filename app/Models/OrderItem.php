@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Enum\OrderStatus;
+use App\QueryBuilders\StockItemQueryBuilder;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * /**
@@ -32,21 +34,23 @@ use Illuminate\Database\Eloquent\Model;
  */
 class OrderItem extends Model
 {
+    public $timestamps = false;
+
     protected $table = 'orders_items';
+
     protected $fillable = [
         'order_id',
-        'product_id',
-        'quantity',
+        'stock_item_id',
         'price',
     ];
 
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
-    public function product()
+    public function stockItem(): BelongsTo|StockItemQueryBuilder
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(StockItem::class);
     }
 }

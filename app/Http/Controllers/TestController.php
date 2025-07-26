@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Data\Products\ProductData;
+use App\Enum\OrderStatus;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Services\Cart\CartManager;
 use App\Services\OrderManager;
 use App\Services\StockManager;
 use App\Support\Filepond\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TestController extends Controller
 {
@@ -23,12 +27,14 @@ class TestController extends Controller
 
     public function test(Request $request)
     {
-        $product = Product::first();
+//        $order = $this->orders->create();
+//        $order->items;
 
-        $this->stock->addItemTo($product, 'Тестовый ключ');
+        $order = Order::find(1);
 
-        return $product->stockItems;
+        $this->orders->pay($order);
 
+        return $order;
 
 //        $products = Product::query()->with('stockItems')->whereUser(1)->take(10)->get();
 //        $products = Product::query()->withAvailableStockItemsCount()->whereUser(1)->take(10)->get();

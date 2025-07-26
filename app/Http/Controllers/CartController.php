@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Services\Cart\CartManager;
+use App\Services\Toaster;
 use Inertia\Inertia;
 
 class CartController extends Controller
 {
-    private CartManager $cart;
-
-    public function __construct(CartManager $cart)
-    {
-        $this->cart = $cart;
-    }
+    public function __construct(
+        private CartManager $cart,
+        private Toaster $toaster,
+    )
+    {}
 
     public function index()
     {
@@ -23,6 +23,7 @@ class CartController extends Controller
     public function add(Product $product)
     {
         $this->cart->add($product);
+        $this->toaster->success('Добавлено в корзину');
 
         return back();
     }
@@ -30,6 +31,7 @@ class CartController extends Controller
     public function remove(Product $product)
     {
         $this->cart->remove($product);
+        $this->toaster->success('Удалено из корзины');
 
         return back();
     }
@@ -37,6 +39,7 @@ class CartController extends Controller
     public function delete(Product $product)
     {
         $this->cart->delete($product);
+        $this->toaster->success('Удалено из корзины');
 
         return back();
     }

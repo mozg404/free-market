@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Если пользователь авторизован и в сессии есть ключ CheckoutAccess::SESSION_KEY
  * удаляет ключ из сессии и перенаправляет на продолжение оформления заказа
  */
-class CheckoutRedirectAfterAuth
+class OrderCheckoutRedirectAfterAuth
 {
     /**
      * Handle an incoming request.
@@ -21,8 +21,8 @@ class CheckoutRedirectAfterAuth
     {
         $response = $next($request);
 
-        if (auth()->check() && session()?->has(CheckoutAccess::SESSION_KEY)) {
-            session()?->forget(CheckoutAccess::SESSION_KEY);
+        if (auth()->check() && session()?->has(OrderCheckoutAccess::SESSION_KEY)) {
+            session()?->forget(OrderCheckoutAccess::SESSION_KEY);
 
             return redirect(route('checkout'));
         }
