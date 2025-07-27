@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enum\OrderStatus;
+use App\QueryBuilders\OrderQueryBuilder;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -21,16 +22,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Collection<int, \App\Models\OrderItem> $items
  * @property-read int|null $items_count
  * @property-read \App\Models\User $user
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Order newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Order newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Order query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Order wherePaidAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereTotalPrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereUserId($value)
+ * @method static OrderQueryBuilder<static>|Order newModelQuery()
+ * @method static OrderQueryBuilder<static>|Order newQuery()
+ * @method static OrderQueryBuilder<static>|Order query()
+ * @method static OrderQueryBuilder<static>|Order whereCreatedAt($value)
+ * @method static OrderQueryBuilder<static>|Order whereId($value)
+ * @method static OrderQueryBuilder<static>|Order wherePaidAt($value)
+ * @method static OrderQueryBuilder<static>|Order whereStatus($value)
+ * @method static OrderQueryBuilder<static>|Order whereTotalPrice($value)
+ * @method static OrderQueryBuilder<static>|Order whereUpdatedAt($value)
+ * @method static OrderQueryBuilder<static>|Order whereUserId($value)
  * @mixin \Eloquent
  */
 class Order extends Model
@@ -54,5 +55,10 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function newEloquentBuilder($query): OrderQueryBuilder
+    {
+        return new OrderQueryBuilder($query);
     }
 }

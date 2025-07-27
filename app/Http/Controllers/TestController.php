@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\ImageViewData;
 use App\Data\Products\ProductData;
 use App\Enum\OrderStatus;
 use App\Models\Order;
@@ -27,14 +28,18 @@ class TestController extends Controller
 
     public function test(Request $request)
     {
+
+//        $import = null;
+//        $import = 'tmp/b63c205d4cd5932dd32da0b462aa47c713832469l0vlzEdPtb.jpg';
+//        $import = Image::from('tmp/b63c205d4cd5932dd32da0b462aa47c713832469l0vlzEdPtb.jpg');
+//        return ImageViewData::from($import);
+
 //        $order = $this->orders->create();
 //        $order->items;
 
-        $order = Order::find(1);
-
-        $this->orders->pay($order);
-
-        return $order;
+//        $order = Order::find(1);
+//        $this->orders->pay($order);
+//        return $order;
 
 //        $products = Product::query()->with('stockItems')->whereUser(1)->take(10)->get();
 //        $products = Product::query()->withAvailableStockItemsCount()->whereUser(1)->take(10)->get();

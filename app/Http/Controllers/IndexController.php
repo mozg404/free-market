@@ -20,6 +20,7 @@ class IndexController extends Controller
     {
         $products = Product::query()
             ->withAvailableStockItemsCount()
+            ->orderByDesc('id')
             ->take(10)
             ->get();
 

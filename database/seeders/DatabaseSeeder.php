@@ -28,10 +28,10 @@ class DatabaseSeeder extends Seeder
             ->has(
                 Product::factory()
                     ->withImage()
-                    ->count(random_int(0,3))
-                    ->has(StockItem::factory()->count(random_int(0,3)))
+                    ->count(2)
+                    ->has(StockItem::factory()->available()->count(3))
             )
-            ->count(3)
+            ->count(7)
             ->create();
     }
 }

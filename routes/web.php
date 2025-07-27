@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Cabinet\ProfileController;
+use App\Http\Controllers\Cabinet\PurchaseController;
 use App\Http\Controllers\Cabinet\ShopController;
 use App\Http\Controllers\Cabinet\ProductController as CabinetProductController;
 use App\Http\Controllers\Cabinet\StockController;
@@ -33,6 +34,8 @@ Route::get('/cabinet/profile', [ProfileController::class, 'show'])->name('profil
 //Route::post('/cabinet/shops/{shop}/update', [ShopController::class, 'update'])->name('cabinet.shops.update');
 //Route::get('/cabinet/shops/{shop}', [ShopController::class, 'show'])->name('cabinet.shops.show');
 
+// Кабинет
+
 Route::get('/cabinet/products', [CabinetProductController::class, 'index'])->name('cabinet.products');
 Route::get('/cabinet/products/create', [CabinetProductController::class, 'create'])->name('cabinet.products.create');
 Route::post('/cabinet/products/store', [CabinetProductController::class, 'store'])->name('cabinet.products.store');
@@ -46,6 +49,10 @@ Route::post('/cabinet/products/{product}/stock', [StockController::class, 'store
 Route::get('/cabinet/stock/{stock_item}/edit', [StockController::class, 'edit'])->name('cabinet.stock.edit');
 Route::put('/cabinet/stock/{stock_item}', [StockController::class, 'update'])->name('cabinet.stock.update');
 Route::delete('/cabinet/stock/{stock_item}', [StockController::class, 'destroy'])->name('cabinet.stock.destroy');
+
+// Кабинет - Мои покупки
+Route::get('/cabinet/purchases', [PurchaseController::class, 'index'])->name('cabinet.purchases');
+
 
 // Корзина
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
