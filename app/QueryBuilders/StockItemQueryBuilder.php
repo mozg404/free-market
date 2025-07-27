@@ -29,12 +29,8 @@ class StockItemQueryBuilder extends Builder
         return $this->where('status', StockItemStatus::SOLD->value);
     }
 
-    public function whereUser(User|int $id): static
+    public function whereUser(int $id): static
     {
-        if (is_object($id)) {
-            $id = $id->id;
-        }
-
         return $this->whereHas('product', function (ProductQueryBuilder $query) use ($id) {
             $query->whereUser($id);
         });

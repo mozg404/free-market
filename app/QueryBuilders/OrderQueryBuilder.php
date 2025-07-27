@@ -11,15 +11,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @method Collection get(array|string $column = ['*'])
+ * @method OrderQueryBuilder whereUserId(int $id)
  */
 class OrderQueryBuilder extends Builder
 {
-    public function whereUser(User|int $id): static
+    public function whereUser(int $id): static
     {
-        if (is_object($id)) {
-            $id = $id->id;
-        }
-
         return $this->where('user_id', $id);
     }
 
@@ -31,5 +28,35 @@ class OrderQueryBuilder extends Builder
     public function isNew(): static
     {
         return $this->where('status', OrderStatus::NEW);
+    }
+
+    public function descOrder(): static
+    {
+        return $this->orderByDesc('id');
+    }
+
+    public function withUser(): static
+    {
+        return $this->with('user');
+    }
+
+    public function withItems(): static
+    {
+        return $this->with('items');
+    }
+
+    public function withItemsCount(): static
+    {
+        return $this->withCount('items');
+    }
+
+    public function withStockItems(): static
+    {
+        return $this->with('items.stockItem');
+    }
+
+    public function withProducts(): static
+    {
+        return $this->with('items.stockItem.product');
     }
 }

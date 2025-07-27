@@ -47,6 +47,16 @@ class Order extends Model
         'total_price',
     ];
 
+    public function isNew(): bool
+    {
+        return $this->status === OrderStatus::NEW;
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->status === OrderStatus::PAID;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

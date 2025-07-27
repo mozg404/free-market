@@ -14,23 +14,15 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class OrderItemQueryBuilder extends Builder
 {
-    public function whereUser(User|int $id): static
+    public function whereUser(int $id): static
     {
-        if (is_object($id)) {
-            $id = $id->id;
-        }
-
         return $this->whereHas('order', function (OrderQueryBuilder $query) use ($id) {
             $query->whereUser($id);
         });
     }
 
-    public function whereSeller(User|int $id): static
+    public function whereSeller(int $id): static
     {
-        if (is_object($id)) {
-            $id = $id->id;
-        }
-
         return $this->whereHas('stockItem', function (StockItemQueryBuilder $query) use ($id) {
             return $query->whereUser($id);
         });

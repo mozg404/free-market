@@ -13,6 +13,11 @@ const items = [
     isCurrent: route().current('profile.show'),
   },
   {
+    name: 'Мои заказы',
+    url: route('cabinet.orders'),
+    isCurrent: route().current('cabinet.orders'),
+  },
+  {
     name: 'Мои покупки',
     url: route('cabinet.purchases'),
     isCurrent: route().current('cabinet.purchases'),

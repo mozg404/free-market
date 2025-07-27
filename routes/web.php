@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegistrationController;
+use App\Http\Controllers\Cabinet\OrderController;
 use App\Http\Controllers\Cabinet\ProfileController;
 use App\Http\Controllers\Cabinet\PurchaseController;
 use App\Http\Controllers\Cabinet\SaleController;
@@ -51,7 +52,7 @@ Route::get('/cabinet/stock/{stock_item}/edit', [StockController::class, 'edit'])
 Route::put('/cabinet/stock/{stock_item}', [StockController::class, 'update'])->name('cabinet.stock.update');
 Route::delete('/cabinet/stock/{stock_item}', [StockController::class, 'destroy'])->name('cabinet.stock.destroy');
 
-// Кабинет - Мои покупки
+Route::get('/cabinet/orders', [OrderController::class, 'index'])->name('cabinet.orders');
 Route::get('/cabinet/purchases', [PurchaseController::class, 'index'])->name('cabinet.purchases');
 Route::get('/cabinet/sales', [SaleController::class, 'index'])->name('cabinet.sales');
 
