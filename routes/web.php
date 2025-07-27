@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Cabinet\ProfileController;
 use App\Http\Controllers\Cabinet\PurchaseController;
+use App\Http\Controllers\Cabinet\SaleController;
 use App\Http\Controllers\Cabinet\ShopController;
 use App\Http\Controllers\Cabinet\ProductController as CabinetProductController;
 use App\Http\Controllers\Cabinet\StockController;
@@ -52,7 +53,7 @@ Route::delete('/cabinet/stock/{stock_item}', [StockController::class, 'destroy']
 
 // Кабинет - Мои покупки
 Route::get('/cabinet/purchases', [PurchaseController::class, 'index'])->name('cabinet.purchases');
-
+Route::get('/cabinet/sales', [SaleController::class, 'index'])->name('cabinet.sales');
 
 // Корзина
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');

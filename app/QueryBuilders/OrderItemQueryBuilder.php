@@ -25,6 +25,17 @@ class OrderItemQueryBuilder extends Builder
         });
     }
 
+    public function whereSeller(User|int $id): static
+    {
+        if (is_object($id)) {
+            $id = $id->id;
+        }
+
+        return $this->whereHas('stockItem', function (StockItemQueryBuilder $query) use ($id) {
+            return $query->whereUser($id);
+        });
+    }
+    
     public function isPaid(): static
     {
         return $this->whereHas('order', function (OrderQueryBuilder $query) {

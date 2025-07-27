@@ -1,5 +1,4 @@
 <script setup>
-
 import {Link, usePage} from "@inertiajs/vue3";
 import Main from "./Main.vue";
 import {Button} from '@/components/ui/button'
@@ -7,8 +6,6 @@ import Wrapper from "@/components/Wrapper.vue";
 
 const page = usePage();
 const currentPath = page.props.ziggy?.location ? new URL(page.props.ziggy.location).pathname : '';
-
-
 const items = [
   {
     name: 'Профиль',
@@ -25,9 +22,12 @@ const items = [
     url: route('cabinet.products'),
     isCurrent: route().current('cabinet.products'),
   },
+  {
+    name: 'Мои продажи',
+    url: route('cabinet.sales'),
+    isCurrent: route().current('cabinet.sales'),
+  },
 ]
-
-
 </script>
 
 <template>
@@ -52,30 +52,6 @@ const items = [
         </section>
       </div>
     </Wrapper>
-
-
-<!--    <div class="container mx-auto p-6">-->
-<!--      <div class="flex align-top">-->
-<!--        <div class="w-1/4 pr-8">-->
-<!--          <div class="flex flex-col">-->
-<!--            <Link href="/cabinet/profile"-->
-<!--                  class="inline-flex align-middle items-center group whitespace-nowrap px-2.5 py-1.5 rounded-md transition-colors duration-200 hover:bg-gray-100 hover:text-blue-600">-->
-<!--              <span>Профиль</span>-->
-<!--            </Link>-->
-<!--            <Link href="/cabinet/profile"-->
-<!--                  class="inline-flex align-middle items-center group whitespace-nowrap px-2.5 py-1.5 rounded-md transition-colors duration-200 hover:bg-gray-100 hover:text-blue-600">-->
-<!--              <span>Мои заказы</span>-->
-<!--            </Link>-->
-
-<!--            <div class="font-bold text-xs text-gray-400 mt-4">Магазины</div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="w-full">-->
-<!--          <slot/>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
 
   </Main>
 </template>
