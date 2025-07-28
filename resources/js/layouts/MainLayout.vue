@@ -1,10 +1,13 @@
 <script setup>
+import AppLayout from "@/layouts/AppLayout.vue";
 import Header from "../components/Header.vue";
 </script>
 
 <template>
-  <Header/>
-  <slot/>
+  <AppLayout>
+    <Header/>
+    <slot/>
+  </AppLayout>
 </template>
 
 <script>

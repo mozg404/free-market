@@ -1,45 +1,48 @@
 <script setup>
-import MainLayout from "@/layouts/MainLayout.vue";
 import Wrapper from "../components/core/Wrapper.vue";
 import CartItem from "@/components/modules/cart/CartItem.vue";
 import {Link, useForm, usePage} from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'
 import {computed} from "vue";
-import {ShoppingCart} from "lucide-vue-next";
 
 const page = usePage()
 const cart = computed(() => page.props.cart)
 const form = useForm({})
-
 </script>
 
 <template>
-    <MainLayout>
-        <Wrapper class="mt-10">
-          <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
-            <main-layout class="xl:col-span-9 p-4">
-              <h2 class="text-xl font-bold tracking-tight text-gray-900 pb-8">Корзина</h2>
-              <CartItem v-for="item in cart.items" :key="item.product.id"  :item="item" />
-              <Button variant="destructive" @click="form.delete(route('cart.clean'))" :disabled="form.processing" :class="{ 'opacity-50': form.processing }">Очистить корзину</Button>
-            </main-layout>
+  <Wrapper class="mt-10">
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+      <div class="xl:col-span-9 p-4">
+        <h2 class="text-2xl font-medium tracking-tight text-gray-900 pb-8">Корзина</h2>
+        <CartItem v-for="item in cart.items" :key="item.product.id"  :item="item" />
+        <Button variant="destructive" @click="form.delete(route('cart.clean'))" :disabled="form.processing" :class="{ 'opacity-50': form.processing }">Очистить корзину</Button>
+      </div>
 
-            <aside class="xl:col-span-3 bg-gray-50 p-4">
-              <h2 class="text-xl font-bold tracking-tight text-gray-900 pb-8">Оформление</h2>
+      <aside class="xl:col-span-3 bg-gray-50 p-4">
+        <h2 class="text-xl font-bold tracking-tight text-gray-900 pb-8">Оформление</h2>
 
-              <ul class="space-y-2">
-                <li>Всего товаров: {{cart.totalCount}}</li>
-                <li>Общая цена: {{cart.totalPrice}}</li>
-              </ul>
+        <ul class="space-y-2">
+          <li>Всего товаров: {{cart.totalCount}}</li>
+          <li>Общая цена: {{cart.totalPrice}}</li>
+        </ul>
 
-              <Button  class="rounded-3xl" as-child>
-                <Link method="post" :href="route('order_checkout.store')">
-                  Оформить заказ
-                </Link>
-              </Button>
+        <Button  class="rounded-3xl" as-child>
+          <Link method="post" :href="route('order_checkout.store')">
+            Оформить заказ
+          </Link>
+        </Button>
 
-            </aside>
-          </div>
+      </aside>
+    </div>
 
-        </Wrapper>
-    </MainLayout>
+  </Wrapper>
 </template>
+
+<script>
+import MainLayout from "@/layouts/MainLayout.vue";
+
+export default {
+  layout: MainLayout,
+}
+</script>
