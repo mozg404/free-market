@@ -1,6 +1,6 @@
 <script setup>
 import {Link, useForm, usePage} from "@inertiajs/vue3";
-import {Button} from '@/components/ui/button'
+import {Button} from '@/components/ui/button/index.js'
 import {ShoppingCart} from 'lucide-vue-next';
 import {computed} from "vue";
 

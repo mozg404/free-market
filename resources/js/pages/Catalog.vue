@@ -1,5 +1,5 @@
 <template>
-    <Main>
+    <MainLayout>
         <Wrapper>
             <h2 class="text-2xl font-bold tracking-tight text-gray-900">Customers also purchased</h2>
 
@@ -24,13 +24,13 @@
             </div>
         </Wrapper>
 
-    </Main>
+    </MainLayout>
 </template>
 
 <script setup lang="ts">
-import Main from "../layouts/Main.vue";
+import MainLayout from "../layouts/MainLayout.vue";
 import { Link } from "@inertiajs/vue3";
-import Wrapper from "../components/Wrapper.vue";
+import Wrapper from "../components/core/Wrapper.vue";
 
 defineProps({
     products: Array,

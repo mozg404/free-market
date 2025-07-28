@@ -1,5 +1,5 @@
 <script setup>
-import Cabinet from "@/layouts/Cabinet.vue";
+import CabinetLayout from "@/layouts/CabinetLayout.vue";
 import {ModalLink} from "@inertiaui/modal-vue";
 import Heading from "@/components/Heading.vue";
 import {PlusIcon, Settings, Trash2, Search} from "lucide-vue-next";
@@ -26,8 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import Pagination from "@/components/Pagination.vue";
-import ConfirmDeleteDialog from "@/components/ConfirmDeleteDialog.vue";
+import Pagination from "@/components/support/Pagination.vue";
+import ConfirmDialog from "@/components/support/ConfirmDialog.vue";
 import Input from "@/components/ui/input/Input.vue";
 
 const props = defineProps({
@@ -55,7 +55,7 @@ watch([search, shopId], applyFilters);
 </script>
 
 <template>
-  <Cabinet>
+  <CabinetLayout>
     <div class="flex align-middle justify-between m-0">
       <Heading title="Мои товары"/>
       <div class="text-right">
@@ -102,13 +102,13 @@ watch([search, shopId], applyFilters);
               <Settings class="w-4 h-4"/>
             </ModalLink>
 
-            <ConfirmDeleteDialog
+            <ConfirmDialog
               :route="route('cabinet.products.delete', product.id)"
               title="Удалить товар?"
               description="Вы уверены, что хотите удалить этот товар? Это действие нельзя отменить."
             >
               <Trash2 class="w-4 h-4"/>
-            </ConfirmDeleteDialog>
+            </ConfirmDialog>
           </div>
         </div>
 
@@ -120,7 +120,7 @@ watch([search, shopId], applyFilters);
       <Pagination :links="props.links"/>
     </div>
 
-  </Cabinet>
+  </CabinetLayout>
 </template>
 
 <style scoped>

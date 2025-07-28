@@ -1,12 +1,12 @@
 <script setup>
-import Cabinet from "@/layouts/Cabinet.vue";
+import CabinetLayout from "@/layouts/CabinetLayout.vue";
 import {ModalLink} from "@inertiaui/modal-vue";
 import Heading from "@/components/Heading.vue";
 import {PlusIcon, Settings, Trash2, Search} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
 import { ref, watch } from 'vue';
 import {Badge} from '@/components/ui/badge'
-import ConfirmDeleteDialog from "@/components/ConfirmDeleteDialog.vue";
+import ConfirmDialog from "@/components/support/ConfirmDialog.vue";
 
 const props = defineProps({
   product: Object,
@@ -15,7 +15,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <Cabinet>
+  <CabinetLayout>
     <div class="flex align-middle justify-between m-0">
       <Heading title="Позиции товара"/>
 
@@ -45,17 +45,17 @@ const props = defineProps({
         <ModalLink :href="route('cabinet.stock.edit', item.id)">
           <Settings class="w-4 h-4"/>
         </ModalLink>
-        <ConfirmDeleteDialog
+        <ConfirmDialog
           :route="route('cabinet.stock.destroy', item.id)"
           title="Удалить позицию?"
           description="Вы уверены, что хотите удалить эту позицию? Это действие нельзя отменить."
         >
           <Trash2 class="w-4 h-4 cursor-pointer"/>
-        </ConfirmDeleteDialog>
+        </ConfirmDialog>
       </div>
     </div>
 
-  </Cabinet>
+  </CabinetLayout>
 </template>
 
 <style scoped>

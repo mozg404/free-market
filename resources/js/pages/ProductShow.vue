@@ -1,6 +1,6 @@
 <script setup>
-import Main from "@/layouts/Main.vue";
-import Wrapper from "../components/Wrapper.vue";
+import MainLayout from "@/layouts/MainLayout.vue";
+import Wrapper from "../components/core/Wrapper.vue";
 import {useForm, usePage} from "@inertiajs/vue3";
 import {computed} from "vue";
 import {Button} from '@/components/ui/button'
@@ -18,7 +18,7 @@ const inCart = (id) => Object.keys(page.props.cart.items).some(key => page.props
 </script>
 
 <template>
-<Main>
+<MainLayout>
   <Wrapper>
 
 
@@ -64,5 +64,5 @@ const inCart = (id) => Object.keys(page.props.cart.items).some(key => page.props
 
 
   </Wrapper>
-</Main>
+</MainLayout>
 </template>

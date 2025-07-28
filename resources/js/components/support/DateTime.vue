@@ -18,5 +18,4 @@ const formatted = computed(() => dayjs(props.value).format(props.format));
 </template>
 
 <style scoped>
-
 </style>

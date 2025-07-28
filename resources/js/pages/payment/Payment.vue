@@ -1,6 +1,6 @@
 <script setup>
-import Main from "@/layouts/Main.vue";
-import Wrapper from "@/components/Wrapper.vue";
+import MainLayout from "@/layouts/MainLayout.vue";
+import Wrapper from "@/components/core/Wrapper.vue";
 import {Link, useForm, usePage} from '@inertiajs/vue3'
 import {computed} from "vue";
 import {Button} from "@/components/ui/button/index.js";
@@ -12,7 +12,7 @@ const form = useForm({})
 </script>
 
 <template>
-    <Main>
+    <MainLayout>
         <Wrapper class="mt-10">
           <div>Тут должен быть функционал пополнения счета</div>
 
@@ -23,5 +23,5 @@ const form = useForm({})
           </Button>
 
         </Wrapper>
-    </Main>
+    </MainLayout>
 </template>

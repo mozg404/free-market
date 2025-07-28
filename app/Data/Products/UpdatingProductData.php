@@ -28,7 +28,7 @@ class UpdatingProductData extends Data
     public static function rules(ValidationContext $context): array
     {
         return [
-            'shopId' => 'required|int|exists:App\Models\Shop,id',
+            'shopId' => 'required|int|exists:AppLayout\Models\Shop,id',
             'name' => 'required|string|min:3|max:255',
             'slug' => 'nullable|string|max:255',
             'price' => ['required', 'numeric'],

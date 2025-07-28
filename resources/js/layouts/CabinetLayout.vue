@@ -1,8 +1,8 @@
 <script setup>
 import {Link, usePage} from "@inertiajs/vue3";
-import Main from "./Main.vue";
+import MainLayout from "./MainLayout.vue";
 import {Button} from '@/components/ui/button'
-import Wrapper from "@/components/Wrapper.vue";
+import Wrapper from "@/components/core/Wrapper.vue";
 
 const page = usePage();
 const currentPath = page.props.ziggy?.location ? new URL(page.props.ziggy.location).pathname : '';
@@ -36,7 +36,7 @@ const items = [
 </script>
 
 <template>
-  <Main>
+  <MainLayout>
 
     <Wrapper>
       <div class="flex mt-10">
@@ -58,7 +58,7 @@ const items = [
       </div>
     </Wrapper>
 
-  </Main>
+  </MainLayout>
 </template>
 
 <style scoped>

@@ -1,7 +1,7 @@
 <script setup>
-import Cabinet from "@/layouts/Cabinet.vue";
+import CabinetLayout from "@/layouts/CabinetLayout.vue";
 import Heading from "@/components/Heading.vue";
-import DateTime from "@/components/DateTime.vue";
+import DateTime from "@/components/support/DateTime.vue";
 import {Badge} from "@/components/ui/badge/index.js";
 
 const props = defineProps({
@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <Cabinet>
+  <CabinetLayout>
     <div class="flex align-middle justify-between m-0">
       <Heading title="Заказы"/>
     </div>
@@ -28,7 +28,7 @@ const props = defineProps({
       </div>
     </div>
 
-  </Cabinet>
+  </CabinetLayout>
 </template>
 
 <style scoped>

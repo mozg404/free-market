@@ -21,5 +21,4 @@ defineProps({
 </template>
 
 <style scoped>
-
 </style>

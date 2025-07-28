@@ -9,13 +9,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
+} from '@/components/ui/alert-dialog/index.js'
 import { useForm } from '@inertiajs/vue3'
 
 const props = defineProps({
   route: {
     type: String,
     required: true
+  },
+  method: {
+    type: String,
+    default: 'delete',
   },
   title: {
     type: String,
@@ -52,7 +56,7 @@ const form = useForm({})
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>{{ cancelText }}</AlertDialogCancel>
-        <AlertDialogAction @click="form.delete(route)" :disabled="form.processing" :class="{ 'opacity-50': form.processing }">
+        <AlertDialogAction @click="form.submit(method, route)" :disabled="form.processing" :class="{ 'opacity-50': form.processing }">
           {{ confirmText }}
         </AlertDialogAction>
       </AlertDialogFooter>
@@ -61,5 +65,4 @@ const form = useForm({})
 </template>
 
 <style scoped>
-
 </style>

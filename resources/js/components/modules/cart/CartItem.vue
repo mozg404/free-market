@@ -1,5 +1,5 @@
 <script setup>
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button/index.js'
 import { useForm } from '@inertiajs/vue3'
 import {Minus,Plus} from 'lucide-vue-next'
 

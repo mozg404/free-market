@@ -8,7 +8,7 @@ import Input from "@/components/ui/input/Input.vue";
 import {Button} from '@/components/ui/button/index.js'
 import {Textarea} from '@/components/ui/textarea/index.js'
 import {useForm} from "@inertiajs/vue3";
-import FilePondImage from "@/components/FilePondImage.vue";
+import FilePondImage from "@/components/support/FilePondImage.vue";
 import { Switch } from '@/components/ui/switch'
 import {
   Select,

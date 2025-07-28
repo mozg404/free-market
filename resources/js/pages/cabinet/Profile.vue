@@ -1,6 +1,6 @@
 <script setup>
 import {Link} from '@inertiajs/vue3'
-import Cabinet from "@/layouts/Cabinet.vue";
+import CabinetLayout from "@/layouts/CabinetLayout.vue";
 import Heading from "@/components/Heading.vue";
 
 defineProps({
@@ -13,7 +13,7 @@ defineProps({
 </script>
 
 <template>
-  <Cabinet>
+  <CabinetLayout>
     <Heading title="Профиль" />
 
         <div class="flow-root">
@@ -46,5 +46,5 @@ defineProps({
         </div>
 
         <div><Link href="/logout">Выйти</Link></div>
-    </Cabinet>
+    </CabinetLayout>
 </template>
