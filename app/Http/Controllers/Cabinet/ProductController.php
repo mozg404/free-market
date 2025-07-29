@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Services\ProductManager;
+use App\Services\Toaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -18,6 +19,7 @@ class ProductController extends Controller
 {
     public function __construct(
         private readonly ProductManager $products,
+        private readonly Toaster $toaster,
     ) {}
 
     public function index(Request $request)
@@ -41,48 +43,46 @@ class ProductController extends Controller
 
     public function create()
     {
-        $shops = Shop::query()->forUser(Auth::id())->getNames();
-
-        return Inertia::render('cabinet/products/ProductCreate', [
-            'shops' => $shops,
-        ]);
+        return Inertia::render('cabinet/products/ProductCreate');
     }
 
     public function store(Request $request)
     {
-        $this->products->create(CreatingProductData::validateAndCreate($request->all()));
+        $this->products->create(CreatingProductData::validateAndCreate([
+            ...$request->all(),
+            'userId' => Auth::id(),
+        ]));
+        $this->toaster->success('Товар успешно создан');
 
-        return back();
+        return redirect()->route('cabinet.products');
     }
 
     public function edit(Product $product)
     {
-        $shops = Shop::query()->forUser(Auth::id())->getNames();
-
         return Inertia::render('cabinet/products/ProductUpdate', [
-            'shops' => $shops,
             'id' => $product->id,
-            'shopId' => $product->shop_id,
             'name' => $product->name,
-            'slug' => $product->slug,
             'price' => $product->price_base,
             'priceDiscount' => $product->price_discount,
-            'image' => $product->preview_image->id,
+            'previewImage' => $product->preview_image->id,
             'isAvailable' => $product->is_available,
+            'description' => $product->description,
         ]);
     }
 
     public function update(Request $request, Product $product)
     {
         $this->products->update($product, UpdatingProductData::validateAndCreate($request->all()));
+        $this->toaster->success('Товар успешно изменен');
 
-        return back();
+        return redirect()->route('cabinet.products');
     }
 
     public function destroy(Product $product)
     {
         $this->products->delete($product);
+        $this->toaster->success('Товар успешно удален');
 
-        return back();
+        return redirect()->route('cabinet.products');
     }
 }

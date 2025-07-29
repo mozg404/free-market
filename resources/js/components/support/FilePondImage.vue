@@ -78,12 +78,16 @@ onMounted(() => {
       }
     },
     onprocessfile: (error, file) => {
+      console.log(file)
       if (!error) {
         updateModelValue(file.serverId);
       }
     },
     onremovefile: () => {
         updateModelValue(props.allowMultiple ? [] : null);
+    },
+    onerror: (error) => {
+      console.log(error)
     }
   });
 
@@ -97,6 +101,7 @@ onMounted(() => {
 
 // Обновление v-model
 const updateModelValue = (value) => {
+
   if (props.allowMultiple) {
     const currentFiles = Array.isArray(props.modelValue) ? props.modelValue : [];
     emit('update:modelValue', [...currentFiles, value]);

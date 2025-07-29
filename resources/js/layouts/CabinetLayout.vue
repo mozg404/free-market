@@ -61,6 +61,3 @@ const items = [
   </MainLayout>
 </template>
 
-<style scoped>
-
-</style>

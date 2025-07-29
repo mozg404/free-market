@@ -42,7 +42,7 @@ Route::get('/cabinet/products', [CabinetProductController::class, 'index'])->nam
 Route::get('/cabinet/products/create', [CabinetProductController::class, 'create'])->name('cabinet.products.create');
 Route::post('/cabinet/products/store', [CabinetProductController::class, 'store'])->name('cabinet.products.store');
 Route::get('/cabinet/products/{product}/edit', [CabinetProductController::class, 'edit'])->name('cabinet.products.edit');
-Route::post('/cabinet/products/{product}/update', [CabinetProductController::class, 'update'])->name('cabinet.products.update');
+Route::put('/cabinet/products/{product}/update', [CabinetProductController::class, 'update'])->name('cabinet.products.update');
 Route::delete('/cabinet/products/{product}', [CabinetProductController::class, 'destroy'])->name('cabinet.products.delete');
 
 Route::get('/cabinet/products/{product}/stock', [StockController::class, 'index'])->name('cabinet.stock.index');

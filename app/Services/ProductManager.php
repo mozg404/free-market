@@ -18,13 +18,13 @@ class ProductManager
     public function create(CreatingProductData $data): Product
     {
         $product = new Product();
-        $product->shop_id = $data->shopId;
+        $product->user_id = $data->userId;
         $product->name = $data->name;
-        $product->slug = Str::slug($data->name);
         $product->price_base = $data->price;
         $product->price_discount = $data->priceDiscount;
         $product->is_available = $data->isAvailable;
-        $product->preview_image = $data->image->publishIfTemporary();
+        $product->preview_image = $data->previewImage->publishIfTemporary();
+        $product->description = $data->description;
 
         try {
             $product->save();
@@ -39,17 +39,12 @@ class ProductManager
 
     public function update(Product $product, UpdatingProductData $data): Product
     {
-        $product->shop_id = $data->shopId;
         $product->name = $data->name;
-        $product->slug = $data->slug;
         $product->price_base = $data->price;
         $product->price_discount = $data->priceDiscount;
         $product->is_available = $data->isAvailable;
-        $product->preview_image = $data->image->publishIfTemporary();
-
-        if (empty($data->slug)) {
-            $product->slug = Str::slug($data->name);
-        }
+        $product->preview_image = $data->previewImage->publishIfTemporary();
+        $product->description = $data->description;
 
         try {
             $product->save();

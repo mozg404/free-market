@@ -199,3 +199,17 @@
 }
 
 
+
+
+
+
+
+/*.quill-editor .ql-toolbar {*/
+/*    @apply border-gray-300 rounded-t-lg bg-gray-50;*/
+/*}*/
+/*.quill-editor .ql-container {*/
+/*    @apply border-gray-300 rounded-b-lg min-h-[200px] bg-white;*/
+/*}*/
+/*.quill-editor .ql-editor {*/
+/*    @apply prose max-w-none; !* Поддержка Tailwind Typography *!*/
+/*}*/

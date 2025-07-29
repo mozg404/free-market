@@ -60,9 +60,9 @@ watch([search, shopId], applyFilters);
       <Heading title="Мои товары"/>
       <div class="text-right">
         <Button variant="outline" class="rounded-3xl" as-child>
-          <ModalLink :href="route('cabinet.products.create')">
+          <Link :href="route('cabinet.products.create')">
             <PlusIcon class="w-4 h-4"/> Создать товар
-          </ModalLink>
+          </Link>
         </Button>
       </div>
     </div>
@@ -98,9 +98,9 @@ watch([search, shopId], applyFilters);
 
           <br><br>
           <div class="grid grid-cols-2 gap-2 w-[50px]">
-            <ModalLink :href="route('cabinet.products.edit', product.id)">
+            <Link :href="route('cabinet.products.edit', product.id)">
               <Settings class="w-4 h-4"/>
-            </ModalLink>
+            </Link>
 
             <ConfirmDialog
               :route="route('cabinet.products.delete', product.id)"

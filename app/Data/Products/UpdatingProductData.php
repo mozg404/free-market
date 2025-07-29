@@ -12,27 +12,24 @@ use Spatie\LaravelData\Support\Validation\ValidationContext;
 class UpdatingProductData extends Data
 {
     public function __construct(
-        public int $shopId,
-        public string $name,
-        public string|null $slug,
-        public float $price,
-        public Image|string $image,
-        public bool $isAvailable,
-        public float|null $priceDiscount = null
+        public string       $name,
+        public float        $price,
+        public Image|string|null $previewImage,
+        public bool         $isAvailable,
+        public float|null   $priceDiscount = null,
+        public string|null  $description,
     ){
-        if (is_string($image)) {
-            $this->image = Image::from($image);
+        if (is_string($previewImage)) {
+            $this->previewImage = Image::from($previewImage);
         }
     }
 
     public static function rules(ValidationContext $context): array
     {
         return [
-            'shopId' => 'required|int|exists:AppLayout\Models\Shop,id',
             'name' => 'required|string|min:3|max:255',
-            'slug' => 'nullable|string|max:255',
             'price' => ['required', 'numeric'],
-            'image' => ['required', new FilepondImage],
+            'previewImage' => ['required', new FilepondImage],
             'isAvailable' => 'required|bool',
         ];
     }

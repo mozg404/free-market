@@ -16,6 +16,10 @@ class FilepondImageController extends Controller
             'filepond' => 'required|file|max:5120'
         ]);
 
+        if (config('app.env') === 'local') {
+            \Barryvdh\Debugbar\Facades\Debugbar::disable();
+        }
+
         return Image::createFromUploadedFile($request->file('filepond'))->id;
     }
 
