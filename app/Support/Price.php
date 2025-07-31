@@ -39,7 +39,7 @@ class Price implements Arrayable
      */
     public function calculateDiscountPercent(): int
     {
-        return floor($this->discount / $this->base * 100);
+        return floor(100 - ($this->discount / $this->base * 100));
     }
 
     /**
@@ -52,6 +52,50 @@ class Price implements Arrayable
         return $this->getCurrent() * $quantity;
     }
 
+    public function calculateBenefit(): int
+    {
+        return $this->isDiscount() ? $this->base - $this->discount : 0;
+    }
+
+    /**
+     * Умножает на количество $quantity
+     * @param int $quantity
+     * @return $this
+     */
+    public function multiply(int $quantity): static
+    {
+        $price = clone $this;
+        $price->base *= $quantity;
+        if ($price->isDiscount()) {
+            $price->discount *= $quantity;
+        }
+
+        return $price;
+    }
+
+    public function sumWith(self $price): static
+    {
+        $base = $this->base;
+        $discount = $this->discount;
+
+        if ($this->isDiscount() && $price->isDiscount()) {
+            $discount += $price->discount;
+        } elseif ($this->isDiscount()) {
+            $discount += $price->base;
+        } elseif ($price->isDiscount()) {
+            $discount = $base + $price->discount;
+        }
+
+        $base += $price->base;
+
+        return new self($base, $discount);
+    }
+
+    public function clone(): static
+    {
+        return clone $this;
+    }
+
     public function toArray(): array
     {
         return [
@@ -60,6 +104,7 @@ class Price implements Arrayable
             'discount' => $this->discount,
             'discountPercent' => $this->calculateDiscountPercent(),
             'isDiscount' => $this->isDiscount(),
+            'benefit' => $this->calculateBenefit(),
         ];
     }
 }

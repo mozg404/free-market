@@ -54,7 +54,7 @@ const cart = computed(() => page.props.cart)
 
             <Button variant="outline" class="rounded-3xl" as-child>
               <Link :href="route('cart.index')">
-                <ShoppingCart class="w-4 h-4"/> {{ cart.totalPrice }}
+                <ShoppingCart class="w-4 h-4"/> {{ cart.count }}
               </Link>
             </Button>
 

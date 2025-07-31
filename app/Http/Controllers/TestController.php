@@ -6,6 +6,7 @@ use App\Services\Cart\CartManager;
 use App\Services\OrderManager;
 use App\Services\PaymentManager;
 use App\Services\StockManager;
+use App\Support\Price;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,9 +21,14 @@ class TestController extends Controller
 
     public function test(Request $request)
     {
-//        $this->payments->topUpBalance(Auth::user(), 1000);
+//        $price1 = new Price(900);
+//        $price2 = new Price(50, 100);
+//        $price3 = $price1->sumWith($price2);
+//        dd($price1, $price2, $price3->toArray());
 
-//        dd(Auth::user()->balance);
+
+        dd(new Price(1000, 900)->toArray());
+
 
         return 'Тест';
     }

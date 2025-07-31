@@ -37,7 +37,7 @@ class OrderManager
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'status' => OrderStatus::NEW,
-                'total_price' => $cart->totalPrice,
+                'total_price' => $cart->amount,
             ]);
 
             // Создание позиций заказа и резервирование позиций на складе

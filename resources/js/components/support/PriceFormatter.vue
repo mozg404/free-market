@@ -1,0 +1,22 @@
+<script setup>
+import { computed } from 'vue';
+
+const props = defineProps({
+  value: {
+    type: [Number, String],
+    required: true
+  }
+});
+
+const formattedPrice = computed(() => {
+  const num = typeof props.value === 'string'
+    ? parseFloat(props.value.replace(/\s/g, ''))
+    : props.value;
+
+  return new Intl.NumberFormat('ru-RU').format(num);
+});
+</script>
+
+<template>
+  <span>{{ formattedPrice }}</span>
+</template>

@@ -13,7 +13,7 @@ const form = useForm({})
 <template>
 
 
-  <Card class="py-4 mb-6">
+  <Card class="py-4 mb-6 shadow-none">
     <CardContent class="px-4">
       <div class="grid grid-cols-12 items-center">
         <div class="col-span-7">
@@ -52,37 +52,6 @@ const form = useForm({})
       </div>
     </CardContent>
   </Card>
-
-
-
-
-<!--  <div class="pb-6 mb-6 border-b-2 flex justify-between">-->
-<!--    <div class="flex">-->
-<!--      <a href="#" class="mr-3">-->
-<!--        <img :src="item.product.previewImage.url" class="w-[80px]"/>-->
-<!--      </a>-->
-<!--      <div>-->
-<!--        <div class="font-bold">{{ item.product.name }}</div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="flex items-center">-->
-<!--      <Button variant="outline" class="rounded-3xl cursor-pointer" @click="form.delete(route('cart.remove', item.product.id))" :disabled="form.processing">-->
-<!--        <Minus class="w-4 h-4"/>-->
-<!--      </Button>-->
-
-<!--      <div class="font-bold px-4">{{ item.quantity }}</div>-->
-
-<!--      <Button variant="outline" class="rounded-3xl cursor-pointer" @click="form.post(route('cart.add', item.product.id))" :disabled="form.processing" :class="{ 'opacity-50': form.processing }">-->
-<!--        <Plus class="w-4 h-4"/>-->
-<!--      </Button>-->
-<!--    </div>-->
-<!--    <div>-->
-<!--      <span class="font-bold text-green-700">{{ item.product.price.current }}</span> ₽-->
-<!--    </div>-->
-<!--  </div>-->
-
-
-
 
 </template>
 
