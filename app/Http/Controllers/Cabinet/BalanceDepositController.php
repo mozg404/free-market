@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Cabinet;
 
 use App\Data\TransactionViewData;
+use App\Enum\PaymentSource;
 use App\Http\Controllers\Controller;
+use App\Services\Billing\BillingService;
 use App\Services\PaymentManager;
 use App\Services\Toaster;
 use Illuminate\Http\Request;
@@ -13,7 +15,7 @@ use Inertia\Inertia;
 class BalanceDepositController extends Controller
 {
     public function __construct(
-        private PaymentManager $payments,
+        private BillingService $billing,
         private Toaster $toaster,
     )
     {}
@@ -29,9 +31,8 @@ class BalanceDepositController extends Controller
             'amount' => 'required|numeric'
         ]);
 
-        $this->payments->topUpBalance(Auth::user(), $date['amount']);
-        $this->toaster->success('Счет успешно пополнен');
+        $externalPayment = $this->billing->createExternalReplenishmentPayment(Auth::user(), $date['amount']);
 
-        return redirect()->route('cabinet.balance');
+        return redirect($externalPayment->toPayUrl);
     }
 }

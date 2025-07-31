@@ -6,15 +6,21 @@ use App\Enum\OrderStatus;
 use App\QueryBuilders\OrderItemQueryBuilder;
 use App\QueryBuilders\OrderQueryBuilder;
 use App\QueryBuilders\StockItemQueryBuilder;
+use App\Support\Price;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
+ *
  * @property int $id
  * @property int $order_id
  * @property int $stock_item_id
- * @property int $price
+ * @property int $price_base
+ * @property int $price_discount
+ * @property-read Price $price
  * @property-read \App\Models\Order $order
  * @property-read \App\Models\StockItem $stockItem
  * @method static OrderItemQueryBuilder<static>|OrderItem descOrder()
@@ -40,11 +46,22 @@ class OrderItem extends Model
 
     protected $table = 'orders_items';
 
-    protected $fillable = [
-        'order_id',
-        'stock_item_id',
-        'price',
+    protected $fillable = ['order_id', 'stock_item_id', 'price_base', 'price_discount'];
+
+    protected $casts = [
+        'price_base' => 'int',
+        'price_discount' => 'int',
     ];
+
+    protected function price(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => new Price(
+                $attributes['price_base'],
+                $attributes['price_discount'],
+            ),
+        );
+    }
 
     public function order(): BelongsTo|OrderQueryBuilder
     {

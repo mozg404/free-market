@@ -17,7 +17,9 @@ use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\OrderCheckoutController;
 use App\Http\Controllers\FilepondImageController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\SandboxController;
 use App\Http\Controllers\TestController;
 use App\Http\Middleware\OrderCheckoutAccess;
 use Illuminate\Support\Facades\Route;
@@ -79,6 +81,14 @@ Route::middleware(OrderCheckoutAccess::class)->group(function () {
 // Каталог товаров
 Route::get('/product/{product}', [ProductsController::class, 'show'])->name('product.show');
 Route::get('/catalog', [CatalogController::class, 'show'])->name('catalog');
+
+// Платежи
+Route::post('/payments/success', [PaymentController::class, 'success'])->name('payments.success');
+Route::post('/payments/fail', [PaymentController::class, 'fail'])->name('payments.fail');
+
+
+// Эмуляция кассы
+Route::get('/sandbox/{hash}', [SandboxController::class, 'index'])->name('sandbox');
 
 // Авторизация
 Route::post('/registration/store', [RegistrationController::class, 'store'])->name('auth.registration.store');

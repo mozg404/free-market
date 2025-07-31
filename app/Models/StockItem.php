@@ -66,9 +66,31 @@ class StockItem extends Model
         return $this->status === StockItemStatus::RESERVED;
     }
 
+    /**
+     * Резервирует позицию
+     * @return void
+     */
+    public function reserve(): void
+    {
+        $this->status = StockItemStatus::RESERVED;
+        $this->save();
+    }
+
     public function isSold(): bool
     {
         return $this->status === StockItemStatus::SOLD;
+    }
+
+    /**
+     * Помечает позицию, как проданную
+     * @param User $user
+     * @return void
+     */
+    public function sold(User $user): void
+    {
+        $this->status = StockItemStatus::SOLD;
+        $this->buyer_id = $user->id;
+        $this->save();
     }
 
     public function product(): BelongsTo

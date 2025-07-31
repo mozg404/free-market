@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\QueryBuilders;
 
 use App\Enum\StockItemStatus;
+use App\Models\StockItem;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
- * @method Collection get(array|string $column = ['*'])
+ * @method Collection|StockItem[] get(array|string $column = ['*'])
  */
 class StockItemQueryBuilder extends Builder
 {

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Services\Billing\BillingService;
+use App\Services\Cart\CartManager;
 use App\Services\OrderManager;
 use App\Services\Toaster;
 use Illuminate\Http\Request;
@@ -12,6 +14,8 @@ class OrderCheckoutController extends Controller
 {
     public function __construct(
         private readonly OrderManager $orders,
+        private readonly CartManager  $cart,
+        private readonly BillingService $billing,
         private readonly Toaster $toaster,
     )
     {}
@@ -21,13 +25,26 @@ class OrderCheckoutController extends Controller
      */
     public function store(Request $request)
     {
-        $order = $this->orders->create();
+        $user = \Auth::user();
 
-//        $order = $this->orders->create();
-//        $order = Order::first();
-//        dd($order->toArray());
+        // Создаем заказ
+        $order = $this->orders->create($user, $this->cart->all());
 
-        return redirect()->route('order_checkout.payment', $order->id);
+        // Очищаем корзину
+        $this->cart->clean();
+
+        // Если на счету достаточно средств - выполняем оплату
+        if ($this->billing->hasEnoughBalanceFor($order)) {
+            $this->billing->processOrderPayment($order);
+            $this->toaster->success('Заказ успешно оплачен');
+
+            return redirect()->route('cabinet.orders');
+        }
+
+        // Если на счету недостаточно средств - создаем внешний платеж
+        $externalPayment = $this->billing->createExternalOrderPayment($order);
+
+        return redirect($externalPayment->toPayUrl);
     }
 
     /**

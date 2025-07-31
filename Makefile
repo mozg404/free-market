@@ -27,3 +27,6 @@ frontend-up:
 
 project-init:
 	./vendor/bin/sail php artisan project:init
+
+models-phpdoc:
+	./vendor/bin/sail php artisan ide-helper:models -RW

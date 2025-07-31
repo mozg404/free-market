@@ -5,6 +5,14 @@ const props = defineProps({
   value: {
     type: [Number, String],
     required: true
+  },
+  withoutCurrency: {
+    type: Boolean,
+    default: false
+  },
+  currency: {
+    type: String,
+    default: '₽'
   }
 });
 
@@ -18,5 +26,5 @@ const formattedPrice = computed(() => {
 </script>
 
 <template>
-  <span>{{ formattedPrice }}</span>
+  <span>{{ formattedPrice }} <template v-if="!withoutCurrency">{{currency}}</template></span>
 </template>

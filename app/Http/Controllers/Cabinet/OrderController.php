@@ -20,10 +20,6 @@ class OrderController extends Controller
             ->descOrder()
             ->get();
 
-//        return 123;
-//        return $items;
-//        return OrderViewData::collect($items);
-
         return Inertia::render('cabinet/OrderList', [
             'items' => OrderViewData::collect($items),
         ]);
