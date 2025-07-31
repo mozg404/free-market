@@ -13,7 +13,7 @@ const cart = computed(() => page.props.cart)
 </script>
 
 <template>
-  <header>
+  <header class="border-b-1">
     <Wrapper>
       <div class="flex items-center justify-between py-5" aria-label="Global">
 
