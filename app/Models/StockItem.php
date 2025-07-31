@@ -10,23 +10,33 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
+ *
  * @property int $id
  * @property int $product_id
  * @property StockItemStatus $status
  * @property string $content
+ * @property int|null $buyer_id
+ * @property string|null $sold_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Product $product
- * @method static \Illuminate\Database\Eloquent\Builder<static>|StockItem newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|StockItem newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|StockItem query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|StockItem whereContent($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|StockItem whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|StockItem whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|StockItem whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|StockItem whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|StockItem whereUpdatedAt($value)
- * @method static StockItemFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\StockItemFactory factory($count = null, $state = [])
+ * @method static StockItemQueryBuilder<static>|StockItem isAvailable()
+ * @method static StockItemQueryBuilder<static>|StockItem isReserved()
+ * @method static StockItemQueryBuilder<static>|StockItem isSold()
+ * @method static StockItemQueryBuilder<static>|StockItem newModelQuery()
+ * @method static StockItemQueryBuilder<static>|StockItem newQuery()
+ * @method static StockItemQueryBuilder<static>|StockItem query()
+ * @method static StockItemQueryBuilder<static>|StockItem whereBuyerId($value)
+ * @method static StockItemQueryBuilder<static>|StockItem whereContent($value)
+ * @method static StockItemQueryBuilder<static>|StockItem whereCreatedAt($value)
+ * @method static StockItemQueryBuilder<static>|StockItem whereId($value)
+ * @method static StockItemQueryBuilder<static>|StockItem whereProductId($value)
+ * @method static StockItemQueryBuilder<static>|StockItem whereSoldAt($value)
+ * @method static StockItemQueryBuilder<static>|StockItem whereStatus($value)
+ * @method static StockItemQueryBuilder<static>|StockItem whereUpdatedAt($value)
+ * @method static StockItemQueryBuilder<static>|StockItem whereUser(int $id)
  * @mixin \Eloquent
  */
 class StockItem extends Model

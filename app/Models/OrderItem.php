@@ -11,27 +11,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * /**
- *
  * @property int $id
  * @property int $order_id
  * @property int $stock_item_id
  * @property int $price
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Order $order
- * @property-read \App\Models\Product $product
  * @property-read \App\Models\StockItem $stockItem
+ * @method static OrderItemQueryBuilder<static>|OrderItem descOrder()
+ * @method static OrderItemQueryBuilder<static>|OrderItem isNew()
+ * @method static OrderItemQueryBuilder<static>|OrderItem isPaid()
  * @method static OrderItemQueryBuilder<static>|OrderItem newModelQuery()
  * @method static OrderItemQueryBuilder<static>|OrderItem newQuery()
  * @method static OrderItemQueryBuilder<static>|OrderItem query()
- * @method static OrderItemQueryBuilder<static>|OrderItem whereCreatedAt($value)
  * @method static OrderItemQueryBuilder<static>|OrderItem whereId($value)
  * @method static OrderItemQueryBuilder<static>|OrderItem whereOrderId($value)
  * @method static OrderItemQueryBuilder<static>|OrderItem wherePrice($value)
- * @method static OrderItemQueryBuilder<static>|OrderItem whereProductId($value)
- * @method static OrderItemQueryBuilder<static>|OrderItem whereQuantity($value)
- * @method static OrderItemQueryBuilder<static>|OrderItem whereUpdatedAt($value)
+ * @method static OrderItemQueryBuilder<static>|OrderItem whereSeller(int $id)
+ * @method static OrderItemQueryBuilder<static>|OrderItem whereStockItemId($value)
+ * @method static OrderItemQueryBuilder<static>|OrderItem whereUser(int $id)
+ * @method static OrderItemQueryBuilder<static>|OrderItem withOrder(bool $withUser = true)
+ * @method static OrderItemQueryBuilder<static>|OrderItem withProduct(bool $withUser = true)
+ * @method static OrderItemQueryBuilder<static>|OrderItem withStockItem()
  * @mixin \Eloquent
  */
 class OrderItem extends Model

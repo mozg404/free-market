@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegistrationController;
+use App\Http\Controllers\Cabinet\BalanceController;
+use App\Http\Controllers\Cabinet\BalanceDepositController;
 use App\Http\Controllers\Cabinet\OrderController;
 use App\Http\Controllers\Cabinet\ProfileController;
 use App\Http\Controllers\Cabinet\PurchaseController;
@@ -55,6 +57,10 @@ Route::delete('/cabinet/stock/{stock_item}', [StockController::class, 'destroy']
 Route::get('/cabinet/orders', [OrderController::class, 'index'])->name('cabinet.orders');
 Route::get('/cabinet/purchases', [PurchaseController::class, 'index'])->name('cabinet.purchases');
 Route::get('/cabinet/sales', [SaleController::class, 'index'])->name('cabinet.sales');
+
+Route::get('/cabinet/balance', [BalanceController::class, 'index'])->name('cabinet.balance');
+Route::get('/cabinet/balance/deposit', [BalanceDepositController::class, 'index'])->name('cabinet.balance.deposit');
+Route::post('/cabinet/balance/deposit', [BalanceDepositController::class, 'store'])->name('cabinet.balance.deposit.store');
 
 // Корзина
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');

@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Collection<int, \App\Models\OrderItem> $items
  * @property-read int|null $items_count
  * @property-read \App\Models\User $user
+ * @method static OrderQueryBuilder<static>|Order descOrder()
+ * @method static OrderQueryBuilder<static>|Order isNew()
+ * @method static OrderQueryBuilder<static>|Order isPaid()
  * @method static OrderQueryBuilder<static>|Order newModelQuery()
  * @method static OrderQueryBuilder<static>|Order newQuery()
  * @method static OrderQueryBuilder<static>|Order query()
@@ -31,7 +34,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static OrderQueryBuilder<static>|Order whereStatus($value)
  * @method static OrderQueryBuilder<static>|Order whereTotalPrice($value)
  * @method static OrderQueryBuilder<static>|Order whereUpdatedAt($value)
+ * @method static OrderQueryBuilder<static>|Order whereUser(int $id)
  * @method static OrderQueryBuilder<static>|Order whereUserId($value)
+ * @method static OrderQueryBuilder<static>|Order withItems()
+ * @method static OrderQueryBuilder<static>|Order withItemsCount()
+ * @method static OrderQueryBuilder<static>|Order withProducts()
+ * @method static OrderQueryBuilder<static>|Order withStockItems()
+ * @method static OrderQueryBuilder<static>|Order withUser()
  * @mixin \Eloquent
  */
 class Order extends Model

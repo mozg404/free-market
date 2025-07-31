@@ -4,7 +4,7 @@ import {computed} from "vue";
 import Wrapper from "./core/Wrapper.vue";
 import logoUrl from "./../../img/logo.svg";
 import {Button} from "@/components/ui/button/index.js";
-import {User2Icon,ShoppingCart,LogIn} from 'lucide-vue-next'
+import {User2Icon,ShoppingCart,LogIn,RussianRuble} from 'lucide-vue-next'
 
 const page = usePage()
 const isAuth = computed(() => page.props.isAuth)
@@ -45,8 +45,13 @@ const cart = computed(() => page.props.cart)
 
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
 
+          <div class="flex gap-2">
+            <Button variant="outline" class="rounded-3xl" v-if="isAuth" as-child>
+              <Link :href="route('cabinet.balance')">
+                <RussianRuble class="w-4 h-4"/> {{ user.balance }}
+              </Link>
+            </Button>
 
-          <div class="grid grid-cols-2 gap-2">
             <Button variant="outline" class="rounded-3xl" as-child>
               <Link :href="route('cart.index')">
                 <ShoppingCart class="w-4 h-4"/> {{ cart.totalPrice }}

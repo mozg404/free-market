@@ -33,7 +33,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read mixed $price
- * @property-read Collection|StockItem[] $stockItems
+ * @property-read Collection<int, \App\Models\StockItem> $stockItems
+ * @property-read int|null $stock_items_count
  * @property-read \App\Models\User $user
  * @method static ProductCollection<int, static> all($columns = ['*'])
  * @method static \Database\Factories\ProductFactory factory($count = null, $state = [])
@@ -55,6 +56,7 @@ use Illuminate\Support\Carbon;
  * @method static ProductQueryBuilder<static>|Product whereUpdatedAt($value)
  * @method static ProductQueryBuilder<static>|Product whereUser(int $id)
  * @method static ProductQueryBuilder<static>|Product whereUserId($value)
+ * @method static ProductQueryBuilder<static>|Product withAvailableStockItemsCount()
  * @method static ProductQueryBuilder<static>|Product withShop()
  * @mixin \Eloquent
  */

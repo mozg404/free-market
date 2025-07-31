@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Data\UserData;
 use App\Services\Cart\CartManager;
 use App\Services\Toaster;
 use Illuminate\Http\Request;
@@ -47,10 +48,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'isAuth' => Auth::check(),
-            'user' => [
-                'id' => Auth::id(),
-                'name' => Auth::user()?->name,
-            ],
+            'user' => Auth::check() ? UserData::from(Auth::user()) : null,
             'cart' => $this->cart->all(),
             'toasts' => $this->toaster->pull(),
         ];
