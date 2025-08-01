@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Carbon|null $paid_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read Collection<int, \App\Models\OrderItem>|OrderItem[] $items
+ * @property-read Collection<int, \App\Models\OrderItem> $items
  * @property-read int|null $items_count
  * @property-read \App\Models\User $user
  * @method static OrderQueryBuilder<static>|Order descOrder()
@@ -35,11 +35,11 @@ use Illuminate\Support\Facades\DB;
  * @method static OrderQueryBuilder<static>|Order newModelQuery()
  * @method static OrderQueryBuilder<static>|Order newQuery()
  * @method static OrderQueryBuilder<static>|Order query()
+ * @method static OrderQueryBuilder<static>|Order whereAmount($value)
  * @method static OrderQueryBuilder<static>|Order whereCreatedAt($value)
  * @method static OrderQueryBuilder<static>|Order whereId($value)
  * @method static OrderQueryBuilder<static>|Order wherePaidAt($value)
  * @method static OrderQueryBuilder<static>|Order whereStatus($value)
- * @method static OrderQueryBuilder<static>|Order whereTotalPrice($value)
  * @method static OrderQueryBuilder<static>|Order whereUpdatedAt($value)
  * @method static OrderQueryBuilder<static>|Order whereUser(int $id)
  * @method static OrderQueryBuilder<static>|Order whereUserId($value)

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Cabinet;
 
+use App\Data\Products\BaseProductData;
 use App\Data\Products\CreatingProductData;
 use App\Data\Products\ProductData;
 use App\Data\Products\UpdatingProductData;
 use App\Data\Shops\ShopData;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Services\ProductManager;
@@ -43,15 +45,18 @@ class ProductController extends Controller
 
     public function create()
     {
-        return Inertia::render('cabinet/products/ProductCreate');
+        $categories = Category::query()
+            ->withFeatures()
+            ->get();
+
+        return Inertia::render('cabinet/products/ProductEdit', [
+            'categories' => $categories,
+        ]);
     }
 
     public function store(Request $request)
     {
-        $this->products->create(CreatingProductData::validateAndCreate([
-            ...$request->all(),
-            'userId' => Auth::id(),
-        ]));
+        Product::new(Auth::user(), BaseProductData::validateAndCreate($request));
         $this->toaster->success('Товар успешно создан');
 
         return redirect()->route('cabinet.products');
@@ -59,20 +64,21 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        return Inertia::render('cabinet/products/ProductUpdate', [
+        $categories = Category::query()
+            ->withFeatures()
+            ->get();
+
+        return Inertia::render('cabinet/products/ProductEdit', [
+            'categories' => $categories,
+            'isEdit' => true,
             'id' => $product->id,
-            'name' => $product->name,
-            'price' => $product->price_base,
-            'priceDiscount' => $product->price_discount,
-            'previewImage' => $product->preview_image->id,
-            'isAvailable' => $product->is_available,
-            'description' => $product->description,
+            'data' => BaseProductData::from($product),
         ]);
     }
 
     public function update(Request $request, Product $product)
     {
-        $this->products->update($product, UpdatingProductData::validateAndCreate($request->all()));
+        $product->edit(BaseProductData::validateAndCreate($request));
         $this->toaster->success('Товар успешно изменен');
 
         return redirect()->route('cabinet.products');

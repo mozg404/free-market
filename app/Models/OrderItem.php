@@ -19,9 +19,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $order_id
  * @property int $stock_item_id
  * @property int $price_base
- * @property int $price_discount
- * @property-read Price $price
+ * @property int|null $price_discount
  * @property-read \App\Models\Order $order
+ * @property-read mixed $price
  * @property-read \App\Models\StockItem $stockItem
  * @method static OrderItemQueryBuilder<static>|OrderItem descOrder()
  * @method static OrderItemQueryBuilder<static>|OrderItem isNew()
@@ -31,7 +31,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static OrderItemQueryBuilder<static>|OrderItem query()
  * @method static OrderItemQueryBuilder<static>|OrderItem whereId($value)
  * @method static OrderItemQueryBuilder<static>|OrderItem whereOrderId($value)
- * @method static OrderItemQueryBuilder<static>|OrderItem wherePrice($value)
+ * @method static OrderItemQueryBuilder<static>|OrderItem wherePriceBase($value)
+ * @method static OrderItemQueryBuilder<static>|OrderItem wherePriceDiscount($value)
  * @method static OrderItemQueryBuilder<static>|OrderItem whereSeller(int $id)
  * @method static OrderItemQueryBuilder<static>|OrderItem whereStockItemId($value)
  * @method static OrderItemQueryBuilder<static>|OrderItem whereUser(int $id)

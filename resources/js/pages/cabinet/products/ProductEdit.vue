@@ -6,7 +6,6 @@ import Input from "@/components/ui/input/Input.vue";
 import {Button} from '@/components/ui/button/index.js'
 import {useForm} from "@inertiajs/vue3";
 import FilePondImage from "@/components/support/FilePondImage.vue";
-import { Switch } from '@/components/ui/switch'
 import QuillEditor from "@/components/support/QuillEditor.vue";
 import { ref, computed } from 'vue'
 import {
@@ -14,23 +13,31 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
 
 const props = defineProps({
+  isEdit: {
+    type: Boolean,
+    default: false,
+  },
+  id: Number,
+  data: {
+    type: Object,
+    default: () => ({}),
+  },
   categories: Array,
 })
+
 const form = useForm({
-  name: null,
-  categoryId: props.categories[0].id,
-  priceBase: '',
-  priceDiscount: '',
-  description: '',
-  previewImage: null,
-  isAvailable: false,
-  features: [],
+  name: props.data.name,
+  categoryId: props.data.categoryId ?? props.categories[0].id,
+  priceBase: props.data.priceBase,
+  priceDiscount: props.data.priceDiscount,
+  description: props.data.description,
+  previewImage: props.data.previewImage,
+  features: props.data.features,
 })
 
 // Доступные характеристики для выбранной категории
@@ -48,7 +55,13 @@ const featureFields = computed(() => {
   }))
 })
 
-
+const submit = () => {
+  if (props.isEdit) {
+    form.put(route('cabinet.products.update', props.id))
+  } else {
+    form.post(route('cabinet.products.store'))
+  }
+}
 </script>
 
 <template>
@@ -58,7 +71,7 @@ const featureFields = computed(() => {
 
   <h2 class="mb-6 text-lg font-semibold tracking-tight text-pretty text-gray-900 sm:text-3xl">Новый товар</h2>
 
-  <form @submit.prevent="form.post(route('cabinet.products.store'))" class="flex flex-col gap-6">
+  <form @submit.prevent="submit" class="flex flex-col gap-6">
     <div class="grid gap-6">
       <div class="grid gap-2">
         <Label for="categoryId">Категория <span class="text-red-600">*</span></Label>
@@ -93,14 +106,6 @@ const featureFields = computed(() => {
           <Input id="priceDiscount" type="text" autofocus :tabindex="1" autocomplete="priceDiscount" v-model="form.priceDiscount"/>
           <InputError :message="form.errors.priceDiscount"/>
         </div>
-      </div>
-
-      <div class="grid gap-2">
-        <div class="flex items-center space-x-2">
-          <Switch id="airplane-mode" v-model="form.isAvailable" />
-          <Label for="airplane-mode">В наличие</Label>
-        </div>
-        <InputError :message="form.errors.isAvailable"/>
       </div>
 
       <div class="grid gap-2">

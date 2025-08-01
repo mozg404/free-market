@@ -10,18 +10,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $user_id
- * @property string $external_id
+ * @property string|null $external_id
  * @property int $amount
  * @property PaymentStatus $status
- * @property PaymentSource $source
+ * @property PaymentSource|null $source
  * @property int|null $source_id
- * @property-read  User $user
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment query()
@@ -29,6 +29,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereExternalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereSourceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereUserId($value)

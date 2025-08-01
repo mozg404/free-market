@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Collections\ArticleCollection;
 use App\Collections\ProductCollection;
+use App\Data\Products\BaseProductData;
 use App\QueryBuilders\ProductQueryBuilder;
 use App\QueryBuilders\StockItemQueryBuilder;
 use App\Support\Filepond\Image;
@@ -16,8 +17,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * 
@@ -32,7 +35,12 @@ use Illuminate\Support\Carbon;
  * @property string|null $description
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read mixed $price
+ * @property int|null $category_id
+ * @property Price $price
+ * @property-read \App\Models\Category|null $category
+ * @property-read \App\Models\ProductFeatureValue|null $pivot
+ * @property-read Collection<int, \App\Models\Feature>|Feature[] $features
+ * @property-read int|null $features_count
  * @property-read Collection<int, \App\Models\StockItem> $stockItems
  * @property-read int|null $stock_items_count
  * @property-read \App\Models\User $user
@@ -44,6 +52,7 @@ use Illuminate\Support\Carbon;
  * @method static ProductQueryBuilder<static>|Product newQuery()
  * @method static ProductQueryBuilder<static>|Product query()
  * @method static ProductQueryBuilder<static>|Product searchByName(string $search)
+ * @method static ProductQueryBuilder<static>|Product whereCategoryId($value)
  * @method static ProductQueryBuilder<static>|Product whereCreatedAt($value)
  * @method static ProductQueryBuilder<static>|Product whereDescription($value)
  * @method static ProductQueryBuilder<static>|Product whereId($value)
@@ -70,6 +79,7 @@ class Product extends Model
         'price_discount',
         'is_available',
         'preview_image',
+        'category_id',
     ];
 
     protected function casts(): array
@@ -88,6 +98,10 @@ class Product extends Model
                 $attributes['price_base'],
                 $attributes['price_discount'],
             ),
+            set: fn (Price $price) => [
+                'price_base' => $price->base,
+                'price_discount' => $price->discount,
+            ],
         );
     }
 
@@ -115,6 +129,50 @@ class Product extends Model
         );
     }
 
+    public static function new(User $user, BaseProductData $data): Product
+    {
+        return DB::transaction(function () use ($user, $data) {
+            $model = new static();
+            $model->user_id = $user->id;
+            $model->saturate($data);
+            $model->save();
+            $model->featuresAttachFrom($data->features ?? []);
+
+            return $model;
+        });
+    }
+
+    public function edit(BaseProductData $data): void
+    {
+        DB::transaction(function () use ($data) {
+            $this->saturate($data);
+            $this->save();
+            $this->features()->detach();
+            $this->featuresAttachFrom($data->features ?? []);
+        });
+    }
+
+    private function featuresAttachFrom(array $features): void
+    {
+        foreach ($features as $id => $value) {
+            if (isset($value)) {
+                $this->features()->attach($id, ['value' => $value]);
+            }
+        }
+    }
+
+    private function saturate(BaseProductData $data): void
+    {
+        $this->name = $data->name;
+        $this->category_id = $data->categoryId;
+        $this->price = new Price($data->priceBase, $data->priceDiscount);
+        $this->description = $data->description;
+
+        if (isset($data->previewImage)) {
+            $this->preview_image = $data->previewImage;
+        }
+    }
+
     public function toArray(): array
     {
         $array = parent::toArray();
@@ -126,6 +184,18 @@ class Product extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function features(): BelongsToMany
+    {
+        return $this->belongsToMany(Feature::class, ProductFeatureValue::TABLE)
+            ->withPivot('value')
+            ->using(ProductFeatureValue::class);
     }
 
     public function stockItems(): HasMany|StockItemQueryBuilder
