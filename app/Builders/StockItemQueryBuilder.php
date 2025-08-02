@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\QueryBuilders;
+namespace App\Builders;
 
 use App\Enum\StockItemStatus;
 use App\Models\StockItem;
@@ -33,7 +33,7 @@ class StockItemQueryBuilder extends Builder
     public function whereUser(int $id): static
     {
         return $this->whereHas('product', function (ProductQueryBuilder $query) use ($id) {
-            $query->whereUser($id);
+            $query->forUser($id);
         });
     }
 }

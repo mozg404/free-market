@@ -3,23 +3,49 @@
 namespace App\Http\Controllers;
 
 use App\Data\Products\ProductData;
+use App\Http\Requests\CatalogRequest;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CatalogController extends Controller
 {
-    public function show()
+    public function index(CatalogRequest $request)
     {
-        $products = Product::query()->withShop()->orderBy('id', 'desc')->get();
+        $filters = $request->all();
+        $categories = Category::query()->get();
+        $products = Product::query()
+            ->filterFromArray($filters)
+            ->withAvailableStockItemsCount()
+            ->descOrder()
+            ->get();
 
-        return Inertia::render('Catalog', [
+        return Inertia::render('catalog/Catalog', [
+            'filters' => $filters,
+            'categories' => $categories,
             'products' => ProductData::collect($products)
         ]);
     }
 
-    public function showProduct($id)
+    public function category(Category $category, Request $request)
     {
-        $product = Product::query()->find($id);
+        $filters = $request->all();
+        $categories = Category::query()->get();
+        $products = Product::query()
+            ->filterFromArray($filters)
+            ->withAvailableStockItemsCount()
+            ->descOrder()
+            ->for($category)
+            ->get();
+
+        return Inertia::render('catalog/Catalog', [
+            'isCategory' => true,
+            'filters' => $filters,
+            'category' => $category,
+            'categories' => $categories,
+            'products' => ProductData::collect($products)
+        ]);
     }
 }

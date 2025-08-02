@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Database\Factories\ProductFeatureValueFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
@@ -29,5 +31,6 @@ class ProductFeatureValue extends Pivot
     public const TABLE = 'product_feature_values';
 
     protected $table = self::TABLE;
+
     protected $fillable = ['value'];
 }

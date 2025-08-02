@@ -5,8 +5,8 @@ namespace App\Models;
 use App\Collections\ArticleCollection;
 use App\Collections\ProductCollection;
 use App\Data\Products\BaseProductData;
-use App\QueryBuilders\ProductQueryBuilder;
-use App\QueryBuilders\StockItemQueryBuilder;
+use App\Builders\ProductQueryBuilder;
+use App\Builders\StockItemQueryBuilder;
 use App\Support\Filepond\Image;
 use App\Support\Filepond\ImageStub;
 use App\Support\Phone;
@@ -152,7 +152,7 @@ class Product extends Model
         });
     }
 
-    private function featuresAttachFrom(array $features): void
+    public function featuresAttachFrom(array $features): void
     {
         foreach ($features as $id => $value) {
             if (isset($value)) {

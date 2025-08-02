@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Contracts\Transactionable;
 use App\Enum\PaymentSource;
 use App\Enum\PaymentStatus;
-use App\QueryBuilders\UserQueryBuilder;
+use App\Builders\UserQueryBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

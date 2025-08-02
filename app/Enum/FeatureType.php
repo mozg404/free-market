@@ -18,4 +18,15 @@ enum FeatureType: string
             self::CHECK->value => 'Да/Нет',
         ];
     }
+
+    public static function values(): array
+    {
+        $values = [];
+
+        foreach (self::cases() as $case) {
+            $values[] = $case->value;
+        }
+
+        return $values;
+    }
 }

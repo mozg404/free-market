@@ -78,9 +78,10 @@ Route::middleware(OrderCheckoutAccess::class)->group(function () {
     Route::post('/order-checkout/payment/{order}', [OrderCheckoutController::class, 'pay'])->name('order_checkout.pay');
 });
 
-// Каталог товаров
+// Каталог
 Route::get('/product/{product}', [ProductsController::class, 'show'])->name('product.show');
-Route::get('/catalog', [CatalogController::class, 'show'])->name('catalog');
+Route::get('/catalog/category/{category:slug}', [CatalogController::class, 'category'])->name('catalog.category');
+Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog');
 
 // Платежи
 Route::post('/payments/success', [PaymentController::class, 'success'])->name('payments.success');

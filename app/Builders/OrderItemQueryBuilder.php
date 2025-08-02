@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\QueryBuilders;
+namespace App\Builders;
 
 use App\Enum\OrderStatus;
 use App\Models\User;

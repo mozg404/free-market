@@ -74,9 +74,9 @@ const items = [
           </nav>
         </aside>
 
-        <section class="space-y-12 w-full">
+        <div class="space-y-12 w-full">
           <slot />
-        </section>
+        </div>
       </div>
     </Wrapper>
 

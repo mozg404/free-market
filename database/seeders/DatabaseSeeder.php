@@ -2,36 +2,78 @@
 
 namespace Database\Seeders;
 
+use App\Enum\FeatureType;
+use App\Models\Category;
+use App\Models\Feature;
 use App\Models\Product;
 use App\Models\StockItem;
-use App\Models\Shop;
 use App\Models\User;
-use Database\Factories\StockItemFactory;
+use Database\Factories\ProductFeatureValueFactory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
+use Random\RandomException;
 
 class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     * @throws RandomException
      */
     public function run(): void
     {
-        $user = User::factory()->create(['email' => 'user@gmail.com']);
+        // Создаем главного пользователя
+        $mainUser = User::factory()->create(['email' => 'user@gmail.com']);
 
-        Product::factory()
-            ->withImage()
-            ->count(10)
-            ->has(StockItem::factory()->available()->count(random_int(5,10)))
-            ->create(['user_id' => $user->id]);
+        // Создаем рандомных 5 пользователей
+        $users = User::factory(5)->create();
 
-        User::factory()
-            ->has(
-                Product::factory()
-                    ->withImage()
-                    ->count(2)
-                    ->has(StockItem::factory()->available()->count(3))
-            )
-            ->count(7)
+        // Создаем 3 категории
+        $categories = Category::factory(5)
+            ->has(Feature::factory(7), 'features')
             ->create();
+
+        // Для каждой категории создаем 10 товаров
+        $categories->each(function ($category) use ($mainUser, $users) {
+            // 5 товаров от главного пользователя
+            $products = Product::factory(5)
+                ->withImage()
+                ->for($category)
+                ->for($mainUser)
+                ->create();
+
+            // 10 товаров от рандомных пользователей
+            $products = $products->merge(
+                Product::factory(20)
+                    ->withImage()
+                    ->for($category)
+                    ->for($users->random())
+                    ->create()
+            );
+
+            // Используем существующую связь features()
+            $products->each(function ($product) use ($category) {
+                $attachments = [];
+
+                foreach ($category->features as $feature) {
+                    $attachments[$feature->id] = $this->generateFeatureValue($feature);
+                }
+
+                $product->featuresAttachFrom($attachments);
+            });
+
+            // Создаем позиции
+            $products->each(fn($p) => StockItem::factory(random_int(3,5))->for($p)->create());
+        });
+    }
+
+    protected function generateFeatureValue(Feature $feature)
+    {
+        return match($feature->type) {
+            FeatureType::TEXT => fake()->word(),
+            FeatureType::NUMBER => fake()->randomNumber(2),
+            FeatureType::SELECT => fake()->randomElement($feature->options),
+            FeatureType::CHECK => fake()->boolean(),
+            default => 'DEFAULT',
+        };
     }
 }

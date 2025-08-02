@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enum\StockItemStatus;
-use App\QueryBuilders\StockItemQueryBuilder;
+use App\Builders\StockItemQueryBuilder;
 use Database\Factories\StockItemFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

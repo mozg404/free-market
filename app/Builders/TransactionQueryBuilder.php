@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\QueryBuilders;
+namespace App\Builders;
 
 use Illuminate\Database\Eloquent\Builder;
 

@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Enum\OrderStatus;
-use App\QueryBuilders\OrderItemQueryBuilder;
-use App\QueryBuilders\OrderQueryBuilder;
-use App\QueryBuilders\StockItemQueryBuilder;
+use App\Builders\OrderItemQueryBuilder;
+use App\Builders\OrderQueryBuilder;
+use App\Builders\StockItemQueryBuilder;
 use App\Support\Price;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;

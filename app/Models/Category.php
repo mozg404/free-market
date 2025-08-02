@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-use App\QueryBuilders\CategoryQueryBuilder;
+use App\Builders\CategoryQueryBuilder;
+use Database\Factories\CategoryFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -26,6 +28,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Category extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['name', 'slug'];
 
     public function features(): HasMany
@@ -36,6 +40,11 @@ class Category extends Model
     public function newEloquentBuilder($query): CategoryQueryBuilder
     {
         return new CategoryQueryBuilder($query);
+    }
+
+    protected static function newFactory(): CategoryFactory|\Illuminate\Database\Eloquent\Factories\Factory
+    {
+        return CategoryFactory::new();
     }
 
     // Автогенерация slug

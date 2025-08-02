@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Enum\TransactionType;
-use App\QueryBuilders\TransactionQueryBuilder;
-use App\QueryBuilders\UserQueryBuilder;
+use App\Builders\TransactionQueryBuilder;
+use App\Builders\UserQueryBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;

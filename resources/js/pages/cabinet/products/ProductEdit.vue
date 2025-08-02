@@ -47,6 +47,7 @@ const currentFeatures = computed(() => {
 })
 
 // Генерация полей для характеристик
+
 const featureFields = computed(() => {
   return currentFeatures.value.map(feature => ({
     ...feature,
@@ -124,7 +125,7 @@ const submit = () => {
 
     <div class="grid gap-6" v-if="form.categoryId">
 
-      <div v-for="field in featureFields" :key="field.id" class="grid gap-2">
+      <div v-if="featureFields" v-for="field in featureFields" :key="field.id" class="grid gap-2">
         <Label :for="field.key">{{ field.name }} <span v-if="field.is_required" class="text-red-600">*</span></Label>
 
         <!-- Текстовое поле -->
