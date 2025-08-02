@@ -38,7 +38,11 @@ const form = useForm({
 })
 
 const filtersApply = () => {
-  form.get(route('catalog'))
+  if (props.isCategory) {
+    form.get(route('catalog.category', props.category.slug))
+  } else {
+    form.get(route('catalog'))
+  }
 }
 </script>
 
@@ -52,6 +56,7 @@ const filtersApply = () => {
           <div class="font-semibold mb-4">Категории:</div>
           <nav>
             <ul>
+              <li><Link :href="route('catalog')">Все</Link></li>
               <li v-for="categoryItem in categories" :key="categoryItem.id">
                 <Link :href="route('catalog.category', categoryItem.slug)">
                   {{ categoryItem.name }}

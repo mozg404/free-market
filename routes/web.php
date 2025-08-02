@@ -80,7 +80,7 @@ Route::middleware(OrderCheckoutAccess::class)->group(function () {
 
 // Каталог
 Route::get('/product/{product}', [ProductsController::class, 'show'])->name('product.show');
-Route::get('/catalog/category/{category:slug}', [CatalogController::class, 'category'])->name('catalog.category');
+Route::get('/catalog/{category:slug}', [CatalogController::class, 'category'])->name('catalog.category');
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog');
 
 // Платежи
