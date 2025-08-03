@@ -52,6 +52,7 @@ class BaseProductData extends Data
             'priceDiscount' => ['sometimes', 'nullable', 'numeric'],
             'categoryId' => ['sometimes', 'int', 'exists:categories,id'],
             'previewImage' => ['sometimes', 'nullable', new FilepondImage],
+            'features' => ['sometimes', 'array'],
         ];
     }
 }

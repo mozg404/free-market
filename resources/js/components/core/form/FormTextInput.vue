@@ -1,12 +1,21 @@
 <script setup>
 import { useVModel } from "@vueuse/core";
 import { cn } from "@/lib/utils";
+import { inject, computed } from 'vue'
+import {Input} from "@/components/ui/input/index.js";
 
 const props = defineProps({
+  id: String,
   defaultValue: { type: [String, Number], required: false },
   modelValue: { type: [String, Number], required: false },
   class: { type: null, required: false },
 });
+
+// Получаем ID из родительского FormField (если есть)
+const parentId = inject('fieldId', null)
+
+// Финальный ID: слот > пропс > инжект
+const finalId = computed(() => props.id || parentId?.value || undefined)
 
 const emits = defineEmits(["update:modelValue"]);
 
@@ -18,6 +27,7 @@ const modelValue = useVModel(props, "modelValue", emits, {
 
 <template>
   <input
+    :id="finalId"
     v-model="modelValue"
     data-slot="input"
     :class="

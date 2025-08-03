@@ -16,6 +16,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import FormField from "@/components/core/form/FormField.vue";
+import FormNumberInput from "@/components/core/form/FormNumberInput.vue";
+import FormSelect from "@/components/core/form/FormSelect.vue";
+import FormTextInput from "@/components/core/form/FormTextInput.vue";
+import {forEach} from "lodash";
+import FormSwitch from "@/components/core/form/FormSwitch.vue";
+import {Switch} from "@/components/ui/switch/index.js";
 
 const props = defineProps({
   isEdit: {
@@ -37,7 +44,7 @@ const form = useForm({
   priceDiscount: props.data.priceDiscount,
   description: props.data.description,
   previewImage: props.data.previewImage,
-  features: props.data.features,
+  features: props.data.features ?? [],
 })
 
 // Доступные характеристики для выбранной категории
@@ -47,7 +54,6 @@ const currentFeatures = computed(() => {
 })
 
 // Генерация полей для характеристик
-
 const featureFields = computed(() => {
   return currentFeatures.value.map(feature => ({
     ...feature,
@@ -55,6 +61,19 @@ const featureFields = computed(() => {
     fieldValue: form.features[feature.id] || ''
   }))
 })
+
+const selectValuesFormatted = (values) => {
+  let result = []
+
+  for (let key in values) {
+    result.push({
+      id: key,
+      name: values[key],
+    })
+  }
+
+  return result
+}
 
 const submit = () => {
   if (props.isEdit) {
@@ -75,37 +94,27 @@ const submit = () => {
   <form @submit.prevent="submit" class="flex flex-col gap-6">
     <div class="grid gap-6">
       <div class="grid gap-2">
-        <Label for="categoryId">Категория <span class="text-red-600">*</span></Label>
-        <Select v-model="form.categoryId">
-          <SelectTrigger>
-            <SelectValue placeholder="Выбрать категорию" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem v-for="category in props.categories" :key="category.id" :value="category.id">{{ category.name }}</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        <InputError :message="form.errors.categoryId"/>
+        <FormField label="Категория" :required="true" :error="form.errors.categoryId">
+          <FormSelect :options="categories" v-model="form.categoryId" />
+        </FormField>
       </div>
 
       <div class="grid gap-2">
-        <Label for="name">Название <span class="text-red-600">*</span></Label>
-        <Input id="name" type="text" autofocus :tabindex="1" autocomplete="name" v-model="form.name"/>
-        <InputError :message="form.errors.name"/>
+        <FormField label="Название" :required="true" :error="form.errors.name">
+          <FormTextInput v-model="form.name" />
+        </FormField>
       </div>
 
       <div class="grid grid-cols-2 gap-6">
         <div class="grid gap-2">
-          <Label for="priceBase">Цена <span class="text-red-600">*</span></Label>
-          <Input id="priceBase" type="text" autofocus :tabindex="1" autocomplete="priceBase" v-model="form.priceBase"/>
-          <InputError :message="form.errors.priceBase"/>
+          <FormField label="Цена" :required="true" :error="form.errors.priceBase">
+            <FormNumberInput  v-model="form.priceBase" />
+          </FormField>
         </div>
-
         <div class="grid gap-2">
-          <Label for="priceDiscount">Цена по скидке <span class="text-red-600">*</span></Label>
-          <Input id="priceDiscount" type="text" autofocus :tabindex="1" autocomplete="priceDiscount" v-model="form.priceDiscount"/>
-          <InputError :message="form.errors.priceDiscount"/>
+          <FormField label="Цена по скидке" :error="form.errors.priceDiscount">
+            <FormNumberInput v-model="form.priceDiscount" />
+          </FormField>
         </div>
       </div>
 
@@ -122,50 +131,37 @@ const submit = () => {
       </div>
     </div>
 
-
     <div class="grid gap-6" v-if="form.categoryId">
-
       <div v-if="featureFields" v-for="field in featureFields" :key="field.id" class="grid gap-2">
-        <Label :for="field.key">{{ field.name }} <span v-if="field.is_required" class="text-red-600">*</span></Label>
+        <template v-if="field.type === 'text'">
+          <FormField :label="field.name">
+            <FormTextInput v-model="form.features[field.id]" />
+          </FormField>
+        </template>
 
-        <!-- Текстовое поле -->
-        <Input v-if="field.type === 'text'" :id="field.key" type="text" autofocus />
+        <template v-else-if="field.type === 'select'">
+          <FormField :label="field.name">
+            <FormSelect :empty-option="true" :options="selectValuesFormatted(field.options)" v-model="form.features[field.id]" />
+          </FormField>
+        </template>
 
-        <!-- Выпадающий список -->
-        <Select v-else-if="field.type === 'select'" v-model="form.features[field.id]">
-          <SelectTrigger>
-            <SelectValue placeholder="Выбрать категорию" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem v-for="(option, optionKey) in field.options" :key="optionKey" :value="optionKey">{{ option }}</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <template v-else-if="field.type === 'number'">
+          <FormField :label="field.name">
+            <FormNumberInput v-model="form.features[field.id]" />
+          </FormField>
+        </template>
 
-        <!-- Числовое поле -->
-        <Input v-if="field.type === 'number'" :id="field.key" type="number" />
-
-        <!-- Чекбокс -->
-        <div v-else-if="field.type === 'checkbox'" class="flex items-center gap-2">
-          <input
-            v-model="form.features[field.id]"
-            type="checkbox"
-            :required="field.is_required"
-            class="checkbox"
-          >
-          <span>Да</span>
-        </div>
+        <template v-else-if="field.type === 'check'">
+          <FormSwitch v-model="form.features[field.id]" :label="field.name" />
+        </template>
       </div>
     </div>
 
     <div>
-      <div>
-        <Button type="submit" tabindex="6" :disabled="form.processing" class="cursor-pointer">
-          <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin"/>
-          Создать
-        </Button>
-      </div>
+      <Button type="submit" tabindex="6" :disabled="form.processing" class="cursor-pointer">
+        <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin"/>
+        Создать
+      </Button>
     </div>
   </form>
 </template>

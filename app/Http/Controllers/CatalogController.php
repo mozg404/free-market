@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class CatalogController extends Controller
@@ -29,7 +30,7 @@ class CatalogController extends Controller
         ]);
     }
 
-    public function category(Category $category, Request $request)
+    public function category(Category $category, CatalogRequest $request)
     {
         $filters = $request->all();
         $categories = Category::query()->get();
@@ -42,8 +43,9 @@ class CatalogController extends Controller
 
         return Inertia::render('catalog/Catalog', [
             'isCategory' => true,
-            'filters' => $filters,
             'category' => $category,
+            'features' => $category->features,
+            'filters' => $filters,
             'categories' => $categories,
             'products' => ProductData::collect($products)
         ]);

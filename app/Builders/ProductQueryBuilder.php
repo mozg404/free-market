@@ -15,6 +15,31 @@ use Illuminate\Support\Facades\DB;
  */
 class ProductQueryBuilder extends Builder
 {
+    /**
+     * Выполняет поиск по характеристикам
+     * Формат: [feature_id => [value1, value2, ...]]
+     * @param array $filters
+     * @return $this
+     */
+    public function whereFeatureValues(array $filters): self
+    {
+        foreach ($filters as $featureId => $values) {
+            if (empty($values)) {
+                continue;
+            }
+
+            if (!is_array($values)) {
+                $values = [$values];
+            }
+
+            $this->whereHas('features', function ($query) use ($featureId, $values) {
+                $query->where('features.id', $featureId)->whereIn('product_feature_values.value', (array)$values);
+            });
+        }
+
+        return $this;
+    }
+
     public function filterFromArray(array $data): self
     {
         if (isset($data['priceMin'])) {
@@ -27,6 +52,10 @@ class ProductQueryBuilder extends Builder
 
         if (isset($data['onlyDiscounted']) && in_array($data['onlyDiscounted'], ['true', '1', 1, true], true)) {
             $this->onlyDiscounted();
+        }
+
+        if (isset($data['features'])) {
+            $this->whereFeatureValues($data['features']);
         }
 
         return $this;
@@ -120,6 +149,11 @@ class ProductQueryBuilder extends Builder
         }
 
         return $this;
+    }
+
+    public function withFeatures(): static
+    {
+        return $this->with('features');
     }
 
     /**

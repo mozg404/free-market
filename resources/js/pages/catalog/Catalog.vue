@@ -3,15 +3,7 @@ import MainLayout from "../../layouts/MainLayout.vue";
 import Wrapper from "../../components/core/Wrapper.vue";
 import Headline from "@/components/core/Headline.vue";
 import Product from "@/components/modules/products/Product.vue";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {Link, useForm} from "@inertiajs/vue3";
+import {Link, useForm, router} from "@inertiajs/vue3";
 import Input from "@/components/ui/input/Input.vue";
 import InputError from "@/components/ui/input/InputError.vue";
 import {Label} from "@/components/ui/label/index.js";
@@ -19,6 +11,8 @@ import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import {LoaderCircle} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
+import FormField from "@/components/core/form/FormField.vue";
+import FormSelect from "@/components/core/form/FormSelect.vue";
 
 const props = defineProps({
   isCategory: {
@@ -27,6 +21,10 @@ const props = defineProps({
   },
   category: Object,
   categories: Array,
+  features: {
+    type: [Array, null],
+    default: null,
+  },
   products: Array,
   filters: Object,
 })
@@ -35,21 +33,55 @@ const form = useForm({
   priceMin: props.filters.priceMin ?? null,
   priceMax: props.filters.priceMax ?? null,
   onlyDiscounted: props.filters.onlyDiscounted ?? false,
+  features: props.filters.features ?? [],
 })
 
-const filtersApply = () => {
-  if (props.isCategory) {
-    form.get(route('catalog.category', props.category.slug))
-  } else {
-    form.get(route('catalog'))
+const selectValuesFormatted = (values) => {
+  let result = []
+
+  for (let key in values) {
+    result.push({
+      id: key,
+      name: values[key],
+    })
   }
+
+  return result
 }
+
+const filtersApply = () => {
+  const params = new URLSearchParams();
+
+  // Добавляем features с сохранением ключей
+  for (const [featureKey, value] of Object.entries(form.features)) {
+    if (value) {
+      params.append(`features[${featureKey}]`, value);
+    }
+  }
+
+  // Добавляем остальные параметры
+  if (form.priceMin) params.append('priceMin', form.priceMin);
+  if (form.priceMax) params.append('priceMax', form.priceMax);
+
+  const url = props.isCategory
+    ? route('catalog.category', props.category.slug)
+    : route('catalog');
+
+  router.get(`${url}?${params.toString()}`);
+}
+
+// const filtersApply = () => {
+//   if (props.isCategory) {
+//     form.get(route('catalog.category', props.category.slug))
+//   } else {
+//     form.get(route('catalog'))
+//   }
+// }
 </script>
 
 <template>
   <MainLayout>
     <Wrapper>
-
       <div class="flex">
         <aside class="w-64 py-6 pr-6 border-r-1 bg-white sticky top-0 h-screen">
 
@@ -86,6 +118,16 @@ const filtersApply = () => {
                 <InputError :message="form.errors.priceMax"/>
               </div>
             </div>
+
+            <template v-if="features">
+              <template v-for="feature in features" :key="feature">
+                <div class="grid gap-2 mb-6" v-if="feature.type === 'select'">
+                  <FormField :label="feature.name">
+                    <FormSelect :options="selectValuesFormatted(feature.options)" v-model="form.features[feature.id]" />
+                  </FormField>
+                </div>
+              </template>
+            </template>
 
             <Button type="submit" tabindex="6" :disabled="form.processing" class="cursor-pointer">
               <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin"/>

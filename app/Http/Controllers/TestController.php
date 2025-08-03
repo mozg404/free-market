@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Data\Products\CreatingProductData;
 use App\Models\Payment;
+use App\Models\Product;
 use App\Services\Cart\CartManager;
 use App\Services\OrderManager;
 use App\Services\PaymentManager;
@@ -21,9 +22,17 @@ class TestController extends Controller
 
     public function test(Request $request)
     {
+        $featuresValues = [
+            37  => 'item_3',
+        ];
 
-        dd(CreatingProductData::from($request));
+        $products = Product::query()
+            ->whereFeatureValues($featuresValues)
+//            ->withFeatures()
+            ->get();
 
-        return 123;
+
+//        return 123;
+        return $products->toArray();
     }
 }

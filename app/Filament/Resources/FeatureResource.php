@@ -36,7 +36,7 @@ class FeatureResource extends Resource
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255)
-                    ->regex('/^[a-z_]+$/') // Только латиница и подчёркивания
+                    ->regex('/^[a-z0-9_]+$/') // Только латиница и подчёркивания
                     ->hint('Например: edition_type'),
 
                 Forms\Components\Select::make('type')
@@ -59,6 +59,10 @@ class FeatureResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Категория')
                     ->sortable(),
