@@ -1,5 +1,4 @@
 <script setup>
-import MainLayout from "../../layouts/MainLayout.vue";
 import Wrapper from "../../components/core/Wrapper.vue";
 import Headline from "@/components/core/Headline.vue";
 import Product from "@/components/modules/products/Product.vue";
@@ -86,8 +85,12 @@ const filtersApply = () => {
 </script>
 
 <template>
-  <MainLayout>
     <Wrapper>
+
+
+
+
+
       <div class="flex">
         <aside class="w-64 py-6 pr-6 border-r-1 bg-white top-0 h-screen">
 
@@ -153,7 +156,12 @@ const filtersApply = () => {
         </main>
       </div>
     </Wrapper>
-  </MainLayout>
 </template>
 
+<script>
+import MainLayout from "@/layouts/MainLayout.vue";
 
+export default {
+  layout: MainLayout,
+}
+</script>

@@ -13,6 +13,7 @@ use App\Support\Price;
 use App\Support\Sandbox;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class TestController extends Controller
 {
@@ -34,5 +35,15 @@ class TestController extends Controller
 
 //        return 123;
         return $products->toArray();
+    }
+
+    public function testPage()
+    {
+        return Inertia::render('TestPage');
+    }
+
+    public function testPage2()
+    {
+        return Inertia::render('TestPage2');
     }
 }

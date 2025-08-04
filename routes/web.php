@@ -30,6 +30,8 @@ Route::post('/filepond/image/upload', [FilepondImageController::class, 'upload']
 Route::delete('/filepond/image/remove', [FilepondImageController::class, 'remove'])->name('filepond.image.remove');
 
 Route::get('/test', [TestController::class, 'test']);
+Route::get('/test-page', [TestController::class, 'testPage']);
+Route::get('/test-page2', [TestController::class, 'testPage2']);
 
 Route::get('/cabinet/profile', [ProfileController::class, 'show'])->name('profile.show');
 
