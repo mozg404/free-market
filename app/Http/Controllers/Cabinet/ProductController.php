@@ -51,11 +51,13 @@ class ProductController extends Controller
 
         return Inertia::render('cabinet/products/ProductEdit', [
             'categories' => $categories,
+            'testChecks' => ['on1' => 'Значение 1', 'on2' => 'Значение 2', 'on3' => 'Значение 3'],
         ]);
     }
 
     public function store(Request $request)
     {
+        dd($request->all());
         Product::new(Auth::user(), BaseProductData::validateAndCreate($request));
         $this->toaster->success('Товар успешно создан');
 

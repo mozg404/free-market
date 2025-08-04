@@ -12,7 +12,9 @@ import { Switch } from '@/components/ui/switch'
 import {LoaderCircle} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
 import FormField from "@/components/core/form/FormField.vue";
-import FormSelect from "@/components/core/form/FormSelect.vue";
+import FormMultipleCheckboxList from "@/components/core/form/FormMultipleCheckboxList.vue";
+import {normalizeKeyValuePairs} from "@/lib/support.js";
+import NavArrowLink from "@/components/core/navigation/NavArrowLink.vue";
 
 const props = defineProps({
   isCategory: {
@@ -33,68 +35,73 @@ const form = useForm({
   priceMin: props.filters.priceMin ?? null,
   priceMax: props.filters.priceMax ?? null,
   onlyDiscounted: props.filters.onlyDiscounted ?? false,
-  features: props.filters.features ?? [],
+  features: {
+    // Для select-полей: берем значение из filters или инициализируем []
+    ...Object.fromEntries(
+      (props.features || [])
+        .filter(f => f.type === 'select')
+        .map(f => [f.id, props.filters.features?.[f.id] || []])
+    ),
+    // Для остальных полей берем как есть из filters
+    ...(props.filters.features || {})
+  },
 })
-
-const selectValuesFormatted = (values) => {
-  let result = []
-
-  for (let key in values) {
-    result.push({
-      id: key,
-      name: values[key],
-    })
-  }
-
-  return result
-}
 
 const filtersApply = () => {
   const params = new URLSearchParams();
 
-  // Добавляем features с сохранением ключей
-  for (const [featureKey, value] of Object.entries(form.features)) {
-    if (value) {
-      params.append(`features[${featureKey}]`, value);
-    }
-  }
+  // Рекурсивная функция для добавления параметров
+  const addToParams = (data, prefix = '') => {
+    Object.entries(data).forEach(([key, value]) => {
+      // Пропускаем пустые значения
+      if (value === null || value === undefined || value === '') return;
 
-  // Добавляем остальные параметры
-  if (form.priceMin) params.append('priceMin', form.priceMin);
-  if (form.priceMax) params.append('priceMax', form.priceMax);
+      const paramKey = prefix ? `${prefix}[${key}]` : key;
 
-  const url = props.isCategory
+      if (Array.isArray(value)) {
+        // Обработка массивов (например features)
+        value.forEach(item => {
+          if (item) params.append(paramKey + '[]', item);
+        });
+      } else if (typeof value === 'object') {
+        // Рекурсия для вложенных объектов
+        addToParams(value, paramKey);
+      } else {
+        // Простые значения
+        params.append(paramKey, value);
+      }
+    });
+  };
+
+  // Обрабатываем все данные формы
+  addToParams(form.data());
+
+  // Формируем URL
+  const baseUrl = props.isCategory
     ? route('catalog.category', props.category.slug)
     : route('catalog');
 
-  router.get(`${url}?${params.toString()}`);
+  router.get(baseUrl + '?' + params)
 }
-
-// const filtersApply = () => {
-//   if (props.isCategory) {
-//     form.get(route('catalog.category', props.category.slug))
-//   } else {
-//     form.get(route('catalog'))
-//   }
-// }
 </script>
 
 <template>
   <MainLayout>
     <Wrapper>
       <div class="flex">
-        <aside class="w-64 py-6 pr-6 border-r-1 bg-white sticky top-0 h-screen">
+        <aside class="w-64 py-6 pr-6 border-r-1 bg-white top-0 h-screen">
 
           <div class="font-semibold mb-4">Категории:</div>
           <nav>
-            <ul>
-              <li><Link :href="route('catalog')">Все</Link></li>
-              <li v-for="categoryItem in categories" :key="categoryItem.id">
-                <Link :href="route('catalog.category', categoryItem.slug)">
-                  {{ categoryItem.name }}
-                </Link>
-              </li>
-            </ul>
+            <NavArrowLink :as="Link" :is-active="route().current('catalog')" :href="route('catalog')">Все</NavArrowLink>
+            <NavArrowLink
+              v-for="categoryItem in categories"
+              :key="categoryItem.id"
+              :as="Link"
+              :is-active="route().current('catalog.category', categoryItem.slug)"
+              :href="route('catalog.category', categoryItem.slug)"
+              class="mt-2"
+            >{{ categoryItem.name }}</NavArrowLink>
           </nav>
 
           <Separator class="my-6" />
@@ -123,7 +130,7 @@ const filtersApply = () => {
               <template v-for="feature in features" :key="feature">
                 <div class="grid gap-2 mb-6" v-if="feature.type === 'select'">
                   <FormField :label="feature.name">
-                    <FormSelect :options="selectValuesFormatted(feature.options)" v-model="form.features[feature.id]" />
+                    <FormMultipleCheckboxList v-model="form.features[feature.id]" :options="normalizeKeyValuePairs(feature.options)"  class="mt-1" />
                   </FormField>
                 </div>
               </template>

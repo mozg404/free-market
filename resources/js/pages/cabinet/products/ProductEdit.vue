@@ -23,6 +23,9 @@ import FormTextInput from "@/components/core/form/FormTextInput.vue";
 import {forEach} from "lodash";
 import FormSwitch from "@/components/core/form/FormSwitch.vue";
 import {Switch} from "@/components/ui/switch/index.js";
+import FormMultipleCheckbox from "@/components/core/form/FormMultipleCheckbox.vue";
+import FormMultipleCheckboxList from "@/components/core/form/FormMultipleCheckboxList.vue";
+import {normalizeKeyValuePairs} from "@/lib/support.js";
 
 const props = defineProps({
   isEdit: {
@@ -35,6 +38,7 @@ const props = defineProps({
     default: () => ({}),
   },
   categories: Array,
+  testChecks: Array,
 })
 
 const form = useForm({
@@ -45,6 +49,9 @@ const form = useForm({
   description: props.data.description,
   previewImage: props.data.previewImage,
   features: props.data.features ?? [],
+
+  test: ['on1', 'on3'],
+  test2: ['on2'],
 })
 
 // Доступные характеристики для выбранной категории
@@ -82,6 +89,8 @@ const submit = () => {
     form.post(route('cabinet.products.store'))
   }
 }
+
+
 </script>
 
 <template>
@@ -102,6 +111,22 @@ const submit = () => {
       <div class="grid gap-2">
         <FormField label="Название" :required="true" :error="form.errors.name">
           <FormTextInput v-model="form.name" />
+        </FormField>
+      </div>
+
+
+      <div class="grid gap-2">
+        <FormField label="Тест чекбокса">
+          <FormMultipleCheckbox v-model="form.test" value="on1" label="Вариант чекбокса 1" />
+          <FormMultipleCheckbox v-model="form.test" value="on2" label="Вариант чекбокса 2" />
+          <FormMultipleCheckbox v-model="form.test" value="on3" label="Вариант чекбокса 3" />
+          <FormMultipleCheckbox v-model="form.test" value="on4" label="Вариант чекбокса 4" />
+        </FormField>
+      </div>
+
+      <div class="grid gap-2">
+        <FormField label="Тест списка чекбоксов">
+          <FormMultipleCheckboxList v-model="form.test2" :options="normalizeKeyValuePairs(testChecks)" class="mt-1" />
         </FormField>
       </div>
 

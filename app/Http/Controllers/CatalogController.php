@@ -41,6 +41,8 @@ class CatalogController extends Controller
             ->for($category)
             ->get();
 
+        Log::debug($request->all());
+
         return Inertia::render('catalog/Catalog', [
             'isCategory' => true,
             'category' => $category,
