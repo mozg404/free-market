@@ -9,7 +9,6 @@ use App\Http\Controllers\Cabinet\OrderController;
 use App\Http\Controllers\Cabinet\ProfileController;
 use App\Http\Controllers\Cabinet\PurchaseController;
 use App\Http\Controllers\Cabinet\SaleController;
-use App\Http\Controllers\Cabinet\ShopController;
 use App\Http\Controllers\Cabinet\ProductController as CabinetProductController;
 use App\Http\Controllers\Cabinet\StockController;
 use App\Http\Controllers\CartController;
@@ -29,42 +28,39 @@ Route::get('/filepond/image/load', [FilepondImageController::class, 'load'])->na
 Route::post('/filepond/image/upload', [FilepondImageController::class, 'upload'])->name('filepond.image.upload');
 Route::delete('/filepond/image/remove', [FilepondImageController::class, 'remove'])->name('filepond.image.remove');
 
-Route::get('/test', [TestController::class, 'test']);
-Route::get('/test-page', [TestController::class, 'testPage']);
-Route::get('/test-page2', [TestController::class, 'testPage2']);
+if (config('app.env') === 'local') {
+    Route::get('/test', [TestController::class, 'test']);
+    Route::get('/test-page', [TestController::class, 'testPage']);
+    Route::get('/test-page2', [TestController::class, 'testPage2']);
+}
 
-Route::get('/cabinet/profile', [ProfileController::class, 'show'])->name('profile.show');
+Route::middleware('auth')->group(function () {
+    // Профиль
+    Route::get('/cabinet/profile', [ProfileController::class, 'show'])->name('profile.show');
 
-//Route::get('/cabinet/shops', [ShopController::class, 'index'])->name('cabinet.shops');
-//Route::get('/cabinet/shops/create', [ShopController::class, 'create'])->name('cabinet.shops.create');
-//Route::post('/cabinet/shops/store', [ShopController::class, 'store'])->name('cabinet.shops.store');
-//Route::get('/cabinet/shops/{shop}/edit', [ShopController::class, 'edit'])->name('cabinet.shops.edit');
-//Route::post('/cabinet/shops/{shop}/update', [ShopController::class, 'update'])->name('cabinet.shops.update');
-//Route::get('/cabinet/shops/{shop}', [ShopController::class, 'show'])->name('cabinet.shops.show');
+    // Товары и позиции товаров
+    Route::get('/cabinet/products', [CabinetProductController::class, 'index'])->name('cabinet.products');
+    Route::get('/cabinet/products/create', [CabinetProductController::class, 'create'])->name('cabinet.products.create');
+    Route::post('/cabinet/products/store', [CabinetProductController::class, 'store'])->name('cabinet.products.store');
+    Route::get('/cabinet/products/{product}/edit', [CabinetProductController::class, 'edit'])->name('cabinet.products.edit');
+    Route::put('/cabinet/products/{product}/update', [CabinetProductController::class, 'update'])->name('cabinet.products.update');
+    Route::delete('/cabinet/products/{product}', [CabinetProductController::class, 'destroy'])->name('cabinet.products.delete');
+    Route::get('/cabinet/products/{product}/stock', [StockController::class, 'index'])->name('cabinet.stock.index');
+    Route::get('/cabinet/products/{product}/stock/create', [StockController::class, 'create'])->name('cabinet.stock.create');
+    Route::post('/cabinet/products/{product}/stock', [StockController::class, 'store'])->name('cabinet.stock.store');
+    Route::get('/cabinet/stock/{stock_item}/edit', [StockController::class, 'edit'])->name('cabinet.stock.edit');
+    Route::put('/cabinet/stock/{stock_item}', [StockController::class, 'update'])->name('cabinet.stock.update');
+    Route::delete('/cabinet/stock/{stock_item}', [StockController::class, 'destroy'])->name('cabinet.stock.destroy');
 
-// Кабинет
+    Route::get('/cabinet/orders', [OrderController::class, 'index'])->name('cabinet.orders');
+    Route::get('/cabinet/purchases', [PurchaseController::class, 'index'])->name('cabinet.purchases');
+    Route::get('/cabinet/sales', [SaleController::class, 'index'])->name('cabinet.sales');
 
-Route::get('/cabinet/products', [CabinetProductController::class, 'index'])->name('cabinet.products');
-Route::get('/cabinet/products/create', [CabinetProductController::class, 'create'])->name('cabinet.products.create');
-Route::post('/cabinet/products/store', [CabinetProductController::class, 'store'])->name('cabinet.products.store');
-Route::get('/cabinet/products/{product}/edit', [CabinetProductController::class, 'edit'])->name('cabinet.products.edit');
-Route::put('/cabinet/products/{product}/update', [CabinetProductController::class, 'update'])->name('cabinet.products.update');
-Route::delete('/cabinet/products/{product}', [CabinetProductController::class, 'destroy'])->name('cabinet.products.delete');
-
-Route::get('/cabinet/products/{product}/stock', [StockController::class, 'index'])->name('cabinet.stock.index');
-Route::get('/cabinet/products/{product}/stock/create', [StockController::class, 'create'])->name('cabinet.stock.create');
-Route::post('/cabinet/products/{product}/stock', [StockController::class, 'store'])->name('cabinet.stock.store');
-Route::get('/cabinet/stock/{stock_item}/edit', [StockController::class, 'edit'])->name('cabinet.stock.edit');
-Route::put('/cabinet/stock/{stock_item}', [StockController::class, 'update'])->name('cabinet.stock.update');
-Route::delete('/cabinet/stock/{stock_item}', [StockController::class, 'destroy'])->name('cabinet.stock.destroy');
-
-Route::get('/cabinet/orders', [OrderController::class, 'index'])->name('cabinet.orders');
-Route::get('/cabinet/purchases', [PurchaseController::class, 'index'])->name('cabinet.purchases');
-Route::get('/cabinet/sales', [SaleController::class, 'index'])->name('cabinet.sales');
-
-Route::get('/cabinet/balance', [BalanceController::class, 'index'])->name('cabinet.balance');
-Route::get('/cabinet/balance/deposit', [BalanceDepositController::class, 'index'])->name('cabinet.balance.deposit');
-Route::post('/cabinet/balance/deposit', [BalanceDepositController::class, 'store'])->name('cabinet.balance.deposit.store');
+    // Баланс
+    Route::get('/cabinet/balance', [BalanceController::class, 'index'])->name('cabinet.balance');
+    Route::get('/cabinet/balance/deposit', [BalanceDepositController::class, 'index'])->name('cabinet.balance.deposit');
+    Route::post('/cabinet/balance/deposit', [BalanceDepositController::class, 'store'])->name('cabinet.balance.deposit.store');
+});
 
 // Корзина
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -85,19 +81,22 @@ Route::get('/product/{product}', [ProductsController::class, 'show'])->name('pro
 Route::get('/catalog/{category:slug}', [CatalogController::class, 'category'])->name('catalog.category');
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog');
 
+// Эмуляция кассы
+Route::get('/sandbox/{hash}', [SandboxController::class, 'index'])->name('sandbox');
+
 // Платежи
 Route::post('/payments/success', [PaymentController::class, 'success'])->name('payments.success');
 Route::post('/payments/fail', [PaymentController::class, 'fail'])->name('payments.fail');
 
-
-// Эмуляция кассы
-Route::get('/sandbox/{hash}', [SandboxController::class, 'index'])->name('sandbox');
-
 // Авторизация
-Route::post('/registration/store', [RegistrationController::class, 'store'])->name('auth.registration.store');
-Route::get('/registration', [RegistrationController::class, 'show'])->name('auth.registration.show');
-Route::post('/login/store', [LoginController::class, 'store'])->name('login.store');
-Route::get('/login', [LoginController::class, 'show'])->name('login');
-Route::get('/logout', LogoutController::class)->name('logout');
+Route::middleware('guest')->group(function () {
+    Route::post('/registration/store', [RegistrationController::class, 'store'])->name('auth.registration.store');
+    Route::get('/registration', [RegistrationController::class, 'show'])->name('auth.registration.show');
+    Route::post('/login/store', [LoginController::class, 'store'])->name('login.store');
+    Route::get('/login', [LoginController::class, 'show'])->name('login');
+});
+Route::get('/logout', LogoutController::class)
+    ->middleware('auth')
+    ->name('logout');
 
 Route::get('/', IndexController::class)->name('index');
