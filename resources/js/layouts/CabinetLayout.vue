@@ -2,7 +2,7 @@
 import {Link, usePage} from "@inertiajs/vue3";
 import MainLayout from "./MainLayout.vue";
 import {Button} from '@/components/ui/button'
-import Wrapper from "@/components/core/Wrapper.vue";
+import Wrapper from "@/components/core/layout/Wrapper.vue";
 import Icon from "@/components/core/Icon.vue";
 
 const page = usePage();

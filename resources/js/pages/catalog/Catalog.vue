@@ -1,7 +1,7 @@
 <script setup>
-import Wrapper from "../../components/core/Wrapper.vue";
-import Headline from "@/components/core/Headline.vue";
-import Product from "@/components/modules/products/Product.vue";
+import Wrapper from "../../components/core/layout/Wrapper.vue";
+import MainTitle from "@/components/core/layout/MainTitle.vue";
+import Product from "@/components/products/Product.vue";
 import {Link, useForm, router} from "@inertiajs/vue3";
 import Input from "@/components/ui/input/Input.vue";
 import InputError from "@/components/ui/input/InputError.vue";
@@ -147,8 +147,8 @@ const filtersApply = () => {
         </aside>
 
         <main class="flex-1 py-6 ml-6">
-          <Headline v-if="isCategory" class="pb-6">{{ category.name }}</Headline>
-          <Headline v-else class="pb-6">Товары</Headline>
+          <MainTitle v-if="isCategory" class="pb-6">{{ category.name }}</MainTitle>
+          <MainTitle v-else class="pb-6">Товары</MainTitle>
 
           <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             <Product v-for="product in products" :key="product.id" :product="product" />

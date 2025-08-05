@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\FeatureData;
+use App\Data\Products\ProductShowData;
 use App\Data\Products\ProductData;
 use App\Http\Requests\CatalogRequest;
 use App\Models\Category;
@@ -41,8 +43,6 @@ class CatalogController extends Controller
             ->for($category)
             ->get();
 
-        Log::debug($request->all());
-
         return Inertia::render('catalog/Catalog', [
             'isCategory' => true,
             'category' => $category,
@@ -50,6 +50,16 @@ class CatalogController extends Controller
             'filters' => $filters,
             'categories' => $categories,
             'products' => ProductData::collect($products)
+        ]);
+    }
+
+    public function show(Product $product)
+    {
+//        return FeatureData::collect($product->features);
+//        return ProductShowData::from($product);
+
+        return Inertia::render('ProductShow', [
+            'product' => ProductShowData::from($product),
         ]);
     }
 }

@@ -9,11 +9,3 @@ import Header from "../components/Header.vue";
     <slot/>
   </AppLayout>
 </template>
-
-<script>
-import AppLayout from "@/layouts/AppLayout.vue";
-
-export default {
-  layout: AppLayout,
-}
-</script>

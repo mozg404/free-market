@@ -1,19 +1,15 @@
 <script setup>
-import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { AspectRatio } from '@/components/ui/aspect-ratio/index.js';
 import { ImageOff } from 'lucide-vue-next';
 
 defineProps({
-  src: {
-    type: String,
-    default: '',
-  },
-  isExist: {
-    type: Boolean,
-    default: false,
+  image: {
+    type: Object,
+    required: true ,
   },
   alt: {
     type: String,
-    default: 'Product image',
+    default: 'Изображение товара',
   },
 });
 </script>
@@ -21,8 +17,8 @@ defineProps({
 <template>
   <AspectRatio :ratio="3 / 4" class="bg-muted rounded-md">
     <img
-      v-if="isExist && src"
-      :src="src"
+      v-if="image.isExists"
+      :src="image.url"
       :alt="alt"
       class="object-cover rounded-md w-full h-full"
     />

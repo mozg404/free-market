@@ -52,6 +52,7 @@ class ProductFactory extends Factory
             'price_base' => $price,
             'price_discount' => fake()->randomElement([null, $priceDiscount]),
             'is_available' => fake()->boolean(),
+            'description' => $this->htmlText(),
             'preview_image' => null,
         ];
     }
@@ -63,6 +64,18 @@ class ProductFactory extends Factory
                 'preview_image' => Image::createFromPath(resource_path(static::randomFromArray(static::$images)))->id,
             ];
         });
+    }
+
+    public function htmlText(): string
+    {
+        $paragraphs = $this->faker->paragraphs(random_int(2, 6));
+        $text = "";
+
+        foreach ($paragraphs as $para) {
+            $text .= "<p>{$para}</p>";
+        }
+
+        return $text;
     }
 
     private static function randomFromArray(array $array): string

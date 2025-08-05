@@ -1,10 +1,10 @@
 <script setup>
-import Wrapper from "../components/core/Wrapper.vue";
+import Wrapper from "../components/core/layout/Wrapper.vue";
 import CartItem from "@/components/modules/cart/CartItem.vue";
 import {Link, useForm, usePage} from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'
 import {computed} from "vue";
-import Headline from "@/components/core/Headline.vue";
+import MainTitle from "@/components/core/layout/MainTitle.vue";
 import {
   Card,
   CardContent,
@@ -27,10 +27,10 @@ const form = useForm({})
 
     <template v-if="cart.count > 0">
 
-      <Headline class="py-10 flex items-center">
+      <MainTitle class="py-10 flex items-center">
         Корзина
         <Badge variant="secondary" class="ml-4 py-1.5 px-2.5">{{ cart.count }}</Badge>
-      </Headline>
+      </MainTitle>
 
       <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
         <div class="xl:col-span-9 mr-2">
@@ -86,7 +86,7 @@ const form = useForm({})
 
     <template v-else>
       <div class="text-center pt-10">
-        <Headline class="pb-5">Корзина пустая</Headline>
+        <MainTitle class="pb-5">Корзина пустая</MainTitle>
         <Button :as="Link" :href="route('catalog')">К покупкам!</Button>
       </div>
     </template>

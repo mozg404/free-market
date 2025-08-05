@@ -5,7 +5,7 @@ namespace App\Data;
 use App\Support\Filepond\Image;
 use Spatie\LaravelData\Data;
 
-class ImageViewData extends Data
+class ImageData extends Data
 {
     public function __construct(
         public bool $isExists,

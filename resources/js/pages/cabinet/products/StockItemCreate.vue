@@ -7,7 +7,7 @@ import {LoaderCircle} from 'lucide-vue-next';
 import {Button} from '@/components/ui/button/index.js'
 import {Textarea} from '@/components/ui/textarea/index.js'
 import {useForm} from "@inertiajs/vue3";
-import product from "@/components/modules/products/Product.vue";
+import product from "@/components/products/Product.vue";
 
 const props = defineProps({
   product: Object,

@@ -3,8 +3,8 @@ import {Link, useForm, usePage} from "@inertiajs/vue3";
 import {Button} from '@/components/ui/button/index.js'
 import {ShoppingCart} from 'lucide-vue-next';
 import {computed} from "vue";
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import ProductPreviewImage from "@/components/core/media/ProductPreviewImage.vue";
+import { AspectRatio } from "@/components/ui/aspect-ratio/index.js"
+import ProductImage from "@/components/products/ProductImage.vue";
 
 const page = usePage()
 const cart = computed(() => page.props.cart)
@@ -17,10 +17,9 @@ const inCart = (id) => Object.keys(page.props.cart.items).some(key => page.props
 
 <template>
 <div class="relative">
-  <Link :href="route('product.show', product.id)">
-    <ProductPreviewImage
-      :src="product.previewImage.url"
-      :is-exist="product.previewImage.isExists"
+  <Link :href="route('catalog.product', product.id)">
+    <ProductImage
+      :image="product.previewImage"
       :alt="product.name"
     />
   </Link>

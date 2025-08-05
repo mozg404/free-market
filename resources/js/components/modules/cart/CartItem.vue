@@ -4,7 +4,7 @@ import {Link, useForm} from '@inertiajs/vue3'
 import {Minus,Plus,Trash} from 'lucide-vue-next'
 import {Card, CardContent} from "@/components/ui/card/index.js";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
-import ProductPreviewImage from "@/components/core/media/ProductPreviewImage.vue";
+import ProductImage from "@/components/products/ProductImage.vue";
 
 const props = defineProps({
   item: Object,
@@ -19,10 +19,9 @@ const form = useForm({})
         <div class="col-span-10">
           <div class="flex items-center min-w-0">
             <div class="w-20 shrink-0 mr-4">
-              <Link :href="route('product.show', item.product.id)" class="block">
-                <ProductPreviewImage
-                  :src="item.product.previewImage.url"
-                  :is-exist="item.product.previewImage.isExists"
+              <Link :href="route('catalog.product', item.product.id)" class="block">
+                <ProductImage
+                  :image="item.product.previewImage"
                   :alt="item.product.name"
                 />
               </Link>
