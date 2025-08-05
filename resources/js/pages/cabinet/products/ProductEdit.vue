@@ -38,7 +38,6 @@ const props = defineProps({
     default: () => ({}),
   },
   categories: Array,
-  testChecks: Array,
 })
 
 const form = useForm({
@@ -49,9 +48,6 @@ const form = useForm({
   description: props.data.description,
   previewImage: props.data.previewImage,
   features: props.data.features ?? [],
-
-  test: ['on1', 'on3'],
-  test2: ['on2'],
 })
 
 // Доступные характеристики для выбранной категории
@@ -94,10 +90,6 @@ const submit = () => {
 </script>
 
 <template>
-<!--  <pre>-->
-<!--    {{featureFields}}-->
-<!--  </pre>-->
-
   <h2 class="mb-6 text-lg font-semibold tracking-tight text-pretty text-gray-900 sm:text-3xl">Новый товар</h2>
 
   <form @submit.prevent="submit" class="flex flex-col gap-6">
@@ -111,22 +103,6 @@ const submit = () => {
       <div class="grid gap-2">
         <FormField label="Название" :required="true" :error="form.errors.name">
           <FormTextInput v-model="form.name" />
-        </FormField>
-      </div>
-
-
-      <div class="grid gap-2">
-        <FormField label="Тест чекбокса">
-          <FormMultipleCheckbox v-model="form.test" value="on1" label="Вариант чекбокса 1" />
-          <FormMultipleCheckbox v-model="form.test" value="on2" label="Вариант чекбокса 2" />
-          <FormMultipleCheckbox v-model="form.test" value="on3" label="Вариант чекбокса 3" />
-          <FormMultipleCheckbox v-model="form.test" value="on4" label="Вариант чекбокса 4" />
-        </FormField>
-      </div>
-
-      <div class="grid gap-2">
-        <FormField label="Тест списка чекбоксов">
-          <FormMultipleCheckboxList v-model="form.test2" :options="normalizeKeyValuePairs(testChecks)" class="mt-1" />
         </FormField>
       </div>
 

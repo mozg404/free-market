@@ -51,7 +51,6 @@ class ProductController extends Controller
 
         return Inertia::render('cabinet/products/ProductEdit', [
             'categories' => $categories,
-            'testChecks' => ['on1' => 'Значение 1', 'on2' => 'Значение 2', 'on3' => 'Значение 3'],
         ]);
     }
 

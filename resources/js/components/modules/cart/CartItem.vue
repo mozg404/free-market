@@ -1,9 +1,10 @@
 <script setup>
 import { Button } from '@/components/ui/button/index.js'
-import { useForm } from '@inertiajs/vue3'
+import {Link, useForm} from '@inertiajs/vue3'
 import {Minus,Plus,Trash} from 'lucide-vue-next'
 import {Card, CardContent} from "@/components/ui/card/index.js";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
+import ProductPreviewImage from "@/components/core/media/ProductPreviewImage.vue";
 
 const props = defineProps({
   item: Object,
@@ -12,16 +13,20 @@ const form = useForm({})
 </script>
 
 <template>
-
-
   <Card class="py-4 mb-6 shadow-none">
     <CardContent class="px-4">
       <div class="grid grid-cols-12 items-center">
         <div class="col-span-10">
           <div class="flex items-center min-w-0">
-            <a href="#" class="block mr-4 shrink-0">
-              <img :src="item.product.previewImage.url" class="w-[80px]" alt=""/>
-            </a>
+            <div class="w-20 shrink-0 mr-4">
+              <Link :href="route('product.show', item.product.id)" class="block">
+                <ProductPreviewImage
+                  :src="item.product.previewImage.url"
+                  :is-exist="item.product.previewImage.isExists"
+                  :alt="item.product.name"
+                />
+              </Link>
+            </div>
             <div>
               <div>{{ item.product.name }}</div>
 
@@ -84,7 +89,3 @@ const form = useForm({})
   </Card>
 
 </template>
-
-<style scoped>
-
-</style>
