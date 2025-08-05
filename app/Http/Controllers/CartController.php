@@ -23,7 +23,7 @@ class CartController extends Controller
     public function add(Product $product)
     {
         $this->cart->add($product);
-        $this->toaster->success('Добавлено в корзину');
+        $this->toaster->success('Позиция добавлена в корзину');
 
         return back();
     }
@@ -31,7 +31,7 @@ class CartController extends Controller
     public function remove(Product $product)
     {
         $this->cart->remove($product);
-        $this->toaster->success('Удалено из корзины');
+        $this->toaster->info('Позиция убрана из корзины');
 
         return back();
     }
@@ -39,7 +39,7 @@ class CartController extends Controller
     public function delete(Product $product)
     {
         $this->cart->delete($product);
-        $this->toaster->success('Удалено из корзины');
+        $this->toaster->info('Товар удален из корзины');
 
         return back();
     }

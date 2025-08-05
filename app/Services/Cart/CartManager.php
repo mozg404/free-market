@@ -47,6 +47,7 @@ class CartManager
         // Получаем перечень товаров с ценами
         $products = Product::query()
             ->whereIds(array_keys($cart))
+            ->withAvailableStockItemsCount()
             ->get();
 
         // Перемножаем товары на количество и суммируем
