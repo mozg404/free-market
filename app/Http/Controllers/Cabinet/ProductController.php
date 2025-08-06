@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\Cabinet;
 
-use App\Data\Products\BaseProductData;
-use App\Data\Products\CreatingProductData;
+use App\Data\Products\ProductEditableData;
 use App\Data\Products\ProductData;
-use App\Data\Products\UpdatingProductData;
-use App\Data\Shops\ShopData;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Shop;
 use App\Services\ProductManager;
 use App\Services\Toaster;
 use Illuminate\Http\Request;
@@ -57,7 +53,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         dd($request->all());
-        Product::new(Auth::user(), BaseProductData::validateAndCreate($request));
+        Product::new(Auth::user(), ProductEditableData::validateAndCreate($request));
         $this->toaster->success('Товар успешно создан');
 
         return redirect()->route('cabinet.products');
@@ -73,13 +69,13 @@ class ProductController extends Controller
             'categories' => $categories,
             'isEdit' => true,
             'id' => $product->id,
-            'data' => BaseProductData::from($product),
+            'data' => ProductEditableData::from($product),
         ]);
     }
 
     public function update(Request $request, Product $product)
     {
-        $product->edit(BaseProductData::validateAndCreate($request));
+        $product->edit(ProductEditableData::validateAndCreate($request));
         $this->toaster->success('Товар успешно изменен');
 
         return redirect()->route('cabinet.products');

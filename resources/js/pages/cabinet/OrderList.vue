@@ -3,9 +3,10 @@ import CabinetLayout from "@/layouts/CabinetLayout.vue";
 import Heading from "@/components/Heading.vue";
 import DateTime from "@/components/support/DateTime.vue";
 import {Badge} from "@/components/ui/badge/index.js";
+import OrderCart from "@/components/orders/OrderCart.vue";
 
 const props = defineProps({
-  items: Array,
+  orders: Array,
 })
 </script>
 
@@ -16,18 +17,8 @@ const props = defineProps({
     </div>
 
     <div>
-      <div class="p-4 border-2 mb-4" v-for="item in items" :key="item.id">
-        ID заказа: {{item.id}} <br>
-        Цена: {{item.price}} <br>
-        Позиций: {{item.itemsCount}}шт <br>
-        Статус:
-        <Badge v-if="item.isNew" variant="secondary">Новый</Badge>
-        <Badge v-else-if="item.isPaid">Оплачен</Badge><br>
-        Дата: <DateTime :value="item.purchasedAt" format="DD-MM-YYYY"/><br>
-        Время: <DateTime :value="item.purchasedAt" format="HH:MM"/>
-      </div>
+      <OrderCart v-for="order in orders" :key="order.id" :order="order" />
     </div>
-
   </CabinetLayout>
 </template>
 

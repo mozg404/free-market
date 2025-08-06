@@ -1,7 +1,7 @@
 <script setup>
 import Wrapper from "../../components/core/layout/Wrapper.vue";
 import MainTitle from "@/components/core/layout/MainTitle.vue";
-import Product from "@/components/products/Product.vue";
+import ProductCard from "@/components/products/ProductCard.vue";
 import {Link, useForm, router} from "@inertiajs/vue3";
 import Input from "@/components/ui/input/Input.vue";
 import InputError from "@/components/ui/input/InputError.vue";
@@ -151,7 +151,7 @@ const filtersApply = () => {
           <MainTitle v-else class="pb-6">Товары</MainTitle>
 
           <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-            <Product v-for="product in products" :key="product.id" :product="product" />
+            <ProductCard v-for="product in products" :key="product.id" :product="product" />
           </div>
         </main>
       </div>

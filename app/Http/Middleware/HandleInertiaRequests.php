@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Data\UserData;
+use App\Data\User\UserData;
 use App\Services\Cart\CartManager;
 use App\Services\Toaster;
 use Illuminate\Http\Request;

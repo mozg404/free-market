@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Data\FeatureData;
-use App\Data\Products\ProductShowData;
+use App\Data\Products\ProductDetailedData;
 use App\Data\Products\ProductData;
 use App\Http\Requests\CatalogRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\Cart\CartManager;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -56,12 +57,8 @@ class CatalogController extends Controller
 
     public function show(Product $product)
     {
-//        return FeatureData::collect($product->features);
-//        return ProductShowData::from($product);
-//        return app(CartManager::class)->all();
-
         return Inertia::render('ProductShow', [
-            'product' => ProductShowData::from($product),
+            'product' => ProductDetailedData::from($product),
         ]);
     }
 }

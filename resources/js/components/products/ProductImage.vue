@@ -17,7 +17,7 @@ defineProps({
 <template>
   <AspectRatio :ratio="3 / 4" class="bg-muted rounded-md">
     <img
-      v-if="image.isExists"
+      v-if="image.is_exists"
       :src="image.url"
       :alt="alt"
       class="object-cover rounded-md w-full h-full"

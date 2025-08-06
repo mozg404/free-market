@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Support\Validation\ValidationContext;
 
-class BaseProductData extends Data
+class ProductEditableData extends Data
 {
     public function __construct(
         public string      $name,
@@ -35,8 +35,8 @@ class BaseProductData extends Data
 
         return new static(
             name: $product->name,
-            priceBase: $product->price_base,
-            priceDiscount: $product->price_discount,
+            priceBase: $product->price->getBasePrice(),
+            priceDiscount: $product->price->getDiscountPrice(),
             categoryId: $product->category_id,
             previewImage: $product->preview_image?->id,
             description: $product->description,

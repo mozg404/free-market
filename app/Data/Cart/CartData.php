@@ -27,7 +27,7 @@ class CartData extends Data
 
         foreach ($items as $item) {
             if (!isset($this->amount)) {
-                $this->amount = $item->amount->clone();
+                $this->amount = $item->amount;
             } else {
                 $this->amount = $this->amount->sumWith($item->amount);
             }

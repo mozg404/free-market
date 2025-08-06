@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use App\Enum\OrderStatus;
 use App\Builders\OrderItemQueryBuilder;
 use App\Builders\OrderQueryBuilder;
 use App\Builders\StockItemQueryBuilder;
 use App\Support\Price;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,8 +16,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $order_id
  * @property int $stock_item_id
- * @property int $price_base
- * @property int|null $price_discount
+ * @property int $base_price
+ * @property int $current_price
  * @property-read \App\Models\Order $order
  * @property-read mixed $price
  * @property-read \App\Models\StockItem $stockItem
@@ -47,20 +45,24 @@ class OrderItem extends Model
 
     protected $table = 'orders_items';
 
-    protected $fillable = ['order_id', 'stock_item_id', 'price_base', 'price_discount'];
+    protected $fillable = ['order_id', 'stock_item_id', 'base_price', 'current_price'];
 
     protected $casts = [
-        'price_base' => 'int',
-        'price_discount' => 'int',
+        'current_price' => 'int',
+        'base_price' => 'int',
     ];
 
     protected function price(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => new Price(
-                $attributes['price_base'],
-                $attributes['price_discount'],
+            get: fn() => new Price(
+                $this->base_price,
+                $this->current_price
             ),
+            set: fn(Price $price) => [
+                'base_price' => $price->getBasePrice(),
+                'current_price' => $price->getCurrentPrice()
+            ]
         );
     }
 

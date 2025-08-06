@@ -16,8 +16,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('name', 255);
-            $table->integer('price_base')->default(0);
-            $table->integer('price_discount')->nullable();
+            $table->integer('current_price');
+            $table->integer('base_price');
             $table->boolean('is_available')->default(false);
             $table->string('preview_image', 255)->nullable();
             $table->text('description')->nullable();

@@ -1,6 +1,6 @@
 <script setup>
 import Wrapper from "../components/core/layout/Wrapper.vue";
-import CartItem from "@/components/modules/cart/CartItem.vue";
+import CartItemCard from "@/components/cart/CartItemCard.vue";
 import {Link} from '@inertiajs/vue3'
 import {Button} from '@/components/ui/button'
 import MainTitle from "@/components/core/layout/MainTitle.vue";
@@ -31,7 +31,7 @@ const { cart, clearCart, form } = useCart()
 
       <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
         <div class="xl:col-span-9 mr-2">
-          <CartItem v-for="item in cart.items" :key="item.product.id"  :item="item" />
+          <CartItemCard v-for="item in cart.items" :key="item.product.id"  :item="item" />
           <Button
             variant="destructive"
             class="cursor-pointer"

@@ -8,7 +8,7 @@ use Spatie\LaravelData\Data;
 class ImageData extends Data
 {
     public function __construct(
-        public bool $isExists,
+        public bool $is_exists,
         public string|null $url = null,
     ) {}
 

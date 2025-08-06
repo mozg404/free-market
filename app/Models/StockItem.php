@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $sold_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Product $product
+ * @property-read \App\Models\Product $ProductCard
  * @method static \Database\Factories\StockItemFactory factory($count = null, $state = [])
  * @method static StockItemQueryBuilder<static>|StockItem isAvailable()
  * @method static StockItemQueryBuilder<static>|StockItem isReserved()

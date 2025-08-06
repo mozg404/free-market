@@ -6,26 +6,23 @@ import {computed} from "vue";
 import { AspectRatio } from "@/components/ui/aspect-ratio/index.js"
 import ProductImage from "@/components/products/ProductImage.vue";
 
-const page = usePage()
-const cart = computed(() => page.props.cart)
 const props = defineProps({
   product: Object,
 })
-const form = useForm({})
-const inCart = (id) => Object.keys(page.props.cart.items).some(key => page.props.cart.items[key].product.id === id)
+
 </script>
 
 <template>
 <div class="relative">
   <Link :href="route('catalog.product', product.id)">
     <ProductImage
-      :image="product.previewImage"
+      :image="product.preview_image"
       :alt="product.name"
     />
   </Link>
 
   <div class="mt-3">
-    <div v-if="product.price.isDiscount">
+    <div v-if="product.price.has_discount">
       <div class="flex items-center">
         <div class="text-xl font-bold text-red-600 line-through mr-2">{{ product.price.base }}</div>
         <div>{{ product.price.discount }} ₽</div>
@@ -34,7 +31,7 @@ const inCart = (id) => Object.keys(page.props.cart.items).some(key => page.props
     <div v-else class="text-lg font-bold">{{ product.price.current }} ₽</div>
   </div>
 
-  <div class="mt-1 text-sm  text-gray-400">В наличии: {{ product.stockItemsCount }}</div>
+  <div class="mt-1 text-sm  text-gray-400">В наличии: {{ product.stock_items_count }}</div>
   <div class="mt-1 line-clamp-2 leading-5" :title="product.name">{{ product.name }}</div>
 
 </div>

@@ -64,9 +64,9 @@ class OrderItemQueryBuilder extends Builder
     public function withProduct(bool $withUser = true): static
     {
         if ($withUser) {
-            return $this->with(['stockItem.product', 'stockItem.product.user']);
+            return $this->with(['stockItem.ProductCard', 'stockItem.ProductCard.user']);
         }
 
-        return $this->with('stockItem.product');
+        return $this->with('stockItem.ProductCard');
     }
 }

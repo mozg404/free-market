@@ -14,6 +14,6 @@ class CartItemData extends Data
         public ProductData $product,
         public int $quantity,
     ) {
-        $this->amount = $product->price->clone()->multiply($this->quantity);
+        $this->amount = $product->price->multiply($this->quantity);
     }
 }

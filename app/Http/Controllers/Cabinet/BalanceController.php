@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Cabinet;
 
-use App\Data\OrderViewData;
 use App\Data\TransactionViewData;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;

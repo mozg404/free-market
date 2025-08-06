@@ -24,8 +24,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
             $table->foreignId('stock_item_id')->constrained()->cascadeOnDelete();
-            $table->integer('price_base');
-            $table->integer('price_discount')->nullable();
+            $table->integer('current_price');
+            $table->integer('base_price');
         });
     }
 

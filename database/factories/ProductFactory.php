@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Product;
 use App\Support\Filepond\Image;
+use App\Support\Price;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -44,13 +45,12 @@ class ProductFactory extends Factory
 
     public function definition(): array
     {
-        $price = random_int(300, 10000);
-        $priceDiscount = $price - floor($price * random_int(10, 40) / 100);
+        $price = Price::random();
 
         return [
             'name' => static::randomFromArray(static::$names),
-            'price_base' => $price,
-            'price_discount' => fake()->randomElement([null, $priceDiscount]),
+            'current_price' => $price->getCurrentPrice(),
+            'base_price' => $price->getBasePrice(),
             'is_available' => fake()->boolean(),
             'description' => $this->htmlText(),
             'preview_image' => null,

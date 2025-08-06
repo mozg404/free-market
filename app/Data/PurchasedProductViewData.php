@@ -2,9 +2,8 @@
 
 namespace App\Data;
 
-use App\Data\Products\ProductData;
+use App\Data\User\UserData;
 use App\Models\OrderItem;
-use App\Models\User;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Data;
 

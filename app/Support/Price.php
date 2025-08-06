@@ -4,107 +4,165 @@ namespace App\Support;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-class Price implements Arrayable
+class Price implements Arrayable, \JsonSerializable
 {
-    public function __construct(
-        public int $base = 0,
-        public int|null $discount = null
-    ){
+    private int $base;
+    private int $current;
+
+    public function __construct(int $base, ?int $current = null)
+    {
+        $this->base = $base;
+        $this->current = $current ?? $base;
+
+        if ($this->current > $this->base) {
+            throw new \InvalidArgumentException('Current price cannot be higher than base');
+        }
+    }
+
+    /**
+     * Статическое создание объекта
+     * @param int $base
+     * @param int|null $current
+     * @return static
+     */
+    public static function make(int $base, ?int $current = null): static
+    {
+        return new static($base, $current);
+    }
+
+    /**
+     * Создает объект из базовой цены и цены по скидке
+     * @param int $base
+     * @param int|null $discount
+     * @return Price
+     */
+    public static function fromBaseAndDiscount(int $base, int|null $discount = null): static
+    {
         if (isset($discount) && $discount >= $base) {
             throw new \InvalidArgumentException('Discount not must be greater than base price');
         }
+
+        return new static($base, $discount ?? $base);
     }
 
     /**
-     * Возвращает TRUE, если товар со скидкой
+     * Создаем случайную цену
+     * @param int $minBase
+     * @param int $maxBase
+     * @param int $maxDiscountPercent
+     * @return static
+     * @throws \Random\RandomException
+     */
+    public static function random(int $minBase = 200, int $maxBase = 10000, int $maxDiscountPercent = 50): static
+    {
+        $original = random_int($minBase, $maxBase);
+
+        // Применяем скидки с 30% вероятностью
+        if (random_int(1, 100) <= 30) {
+            $discountPercent = random_int(5, $maxDiscountPercent);
+            $discount = $original - (int) round($original * ($discountPercent / 100));
+            return new static($original, $discount);
+        }
+
+        return new static($original);
+    }
+
+    /**
+     * Возвращает текущую цену
+     * @return int
+     */
+    public function getCurrentPrice(): int
+    {
+        return $this->current;
+    }
+
+    /**
+     * Возвращает оригинальную цену (без скидки)
+     * @return int
+     */
+    public function getBasePrice(): int
+    {
+        return $this->base;
+    }
+
+    /**
+     * Возвращает цену по скидке
+     * @return int|null
+     */
+    public function getDiscountPrice(): ?int
+    {
+        return $this->hasDiscount() ? $this->current : null;
+    }
+
+    /**
+     * Имеется ли скидка
      * @return bool
      */
-    public function isDiscount(): bool
+    public function hasDiscount(): bool
     {
-        return !empty($this->discount);
+        return $this->current < $this->base;
     }
 
     /**
-     * Возвращает текущую цену (с учетом скидки, если есть)
+     * Возвращает размер скидки
      * @return int
      */
-    public function getCurrent(): int
+    public function getDiscountAmount(): int
     {
-        return $this->isDiscount() ? $this->discount : $this->base;
+        return $this->base - $this->current;
     }
 
     /**
-     * Рассчитывает процент скидки
+     * Возвращает размер скидки в процентах
      * @return int
      */
-    public function calculateDiscountPercent(): int
+    public function getDiscountPercent(): int
     {
-        return floor(100 - ($this->discount / $this->base * 100));
+        return $this->hasDiscount()
+            ? (int) round(100 - ($this->current / $this->base * 100))
+            : 0;
     }
 
     /**
-     * Рассчитывает текущую цену исходя из указанного количества
+     * Выводит цену за $quantity раз
      * @param int $quantity
-     * @return int
+     * @return self
      */
-    public function calculatePriceByQuantity(int $quantity): int
+    public function multiply(int $quantity): self
     {
-        return $this->getCurrent() * $quantity;
-    }
-
-    public function calculateBenefit(): int
-    {
-        return $this->isDiscount() ? $this->base - $this->discount : 0;
+        return new static(
+            base: $this->base * $quantity,
+            current: $this->current * $quantity
+        );
     }
 
     /**
-     * Умножает на количество $quantity
-     * @param int $quantity
-     * @return $this
+     * Суммирует с другой ценой
+     * @param Price $price
+     * @return self
      */
-    public function multiply(int $quantity): static
+    public function sumWith(self $price): self
     {
-        $price = clone $this;
-        $price->base *= $quantity;
-        if ($price->isDiscount()) {
-            $price->discount *= $quantity;
-        }
-
-        return $price;
-    }
-
-    public function sumWith(self $price): static
-    {
-        $base = $this->base;
-        $discount = $this->discount;
-
-        if ($this->isDiscount() && $price->isDiscount()) {
-            $discount += $price->discount;
-        } elseif ($this->isDiscount()) {
-            $discount += $price->base;
-        } elseif ($price->isDiscount()) {
-            $discount = $base + $price->discount;
-        }
-
-        $base += $price->base;
-
-        return new self($base, $discount);
-    }
-
-    public function clone(): static
-    {
-        return clone $this;
+        return new static(
+            base: $this->base + $price->base,
+            current: $this->current + $price->current
+        );
     }
 
     public function toArray(): array
     {
         return [
-            'current' => $this->getCurrent(),
-            'base' => $this->base,
-            'discount' => $this->discount,
-            'discountPercent' => $this->calculateDiscountPercent(),
-            'isDiscount' => $this->isDiscount(),
-            'benefit' => $this->calculateBenefit(),
+            'current' => $this->getCurrentPrice(),
+            'base' => $this->getBasePrice(),
+            'discount' => $this->getDiscountPrice(),
+            'discount_amount' => $this->getDiscountAmount(),
+            'discount_percent' => $this->getDiscountPercent(),
+            'has_discount' => $this->hasDiscount(),
         ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

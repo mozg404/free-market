@@ -24,7 +24,7 @@ class StockController extends Controller
     public function index(Product $product)
     {
         return Inertia::render('cabinet/products/StockItemList', [
-            'product' => ProductData::from($product),
+            'ProductCard' => ProductData::from($product),
             'stockItems' => StockItemFullData::collect($product->stockItems()->orderByDesc('id')->get()),
         ]);
     }
@@ -32,7 +32,7 @@ class StockController extends Controller
     public function create(Product $product, Request $request)
     {
         return Inertia::render('cabinet/products/StockItemCreate', [
-            'product' => ProductData::from($product),
+            'ProductCard' => ProductData::from($product),
         ]);
     }
 

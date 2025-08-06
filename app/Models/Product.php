@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Collections\ArticleCollection;
 use App\Collections\ProductCollection;
-use App\Data\Products\BaseProductData;
+use App\Data\Products\ProductEditableData;
 use App\Builders\ProductQueryBuilder;
 use App\Builders\StockItemQueryBuilder;
 use App\Support\Filepond\Image;
@@ -28,8 +28,8 @@ use Illuminate\Support\Facades\DB;
  * @property int $id
  * @property int $user_id
  * @property string $name
- * @property int $price_base
- * @property int|null $price_discount
+ * @property int $base_price
+ * @property int $current_price
  * @property bool $is_available
  * @property \App\Support\Filepond\Image|string|null|null $preview_image
  * @property string|null $description
@@ -76,8 +76,8 @@ class Product extends Model
 
     protected $fillable = [
         'name',
-        'price_base',
-        'price_discount',
+        'current_price',
+        'base_price',
         'is_available',
         'preview_image',
         'category_id',
@@ -86,8 +86,8 @@ class Product extends Model
     protected function casts(): array
     {
         return [
-            'price_base' => 'int',
-            'price_discount' => 'int',
+            'current_price' => 'int',
+            'base_price' => 'int',
             'is_available' => 'boolean',
         ];
     }
@@ -95,14 +95,14 @@ class Product extends Model
     protected function price(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => new Price(
-                $attributes['price_base'],
-                $attributes['price_discount'],
+            get: fn() => new Price(
+                $this->base_price,
+                $this->current_price
             ),
-            set: fn (Price $price) => [
-                'price_base' => $price->base,
-                'price_discount' => $price->discount,
-            ],
+            set: fn(Price $price) => [
+                'base_price' => $price->getBasePrice(),
+                'current_price' => $price->getCurrentPrice()
+            ]
         );
     }
 
@@ -130,7 +130,7 @@ class Product extends Model
         );
     }
 
-    public static function new(User $user, BaseProductData $data): Product
+    public static function new(User $user, ProductEditableData $data): Product
     {
         return DB::transaction(function () use ($user, $data) {
             $model = new static();
@@ -143,7 +143,7 @@ class Product extends Model
         });
     }
 
-    public function edit(BaseProductData $data): void
+    public function edit(ProductEditableData $data): void
     {
         DB::transaction(function () use ($data) {
             $this->saturate($data);
@@ -162,11 +162,11 @@ class Product extends Model
         }
     }
 
-    private function saturate(BaseProductData $data): void
+    private function saturate(ProductEditableData $data): void
     {
         $this->name = $data->name;
         $this->category_id = $data->categoryId;
-        $this->price = new Price($data->priceBase, $data->priceDiscount);
+        $this->price = Price::fromBaseAndDiscount($data->priceBase, $data->priceDiscount);
         $this->description = $data->description;
 
         if (isset($data->previewImage)) {

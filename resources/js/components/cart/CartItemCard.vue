@@ -22,7 +22,7 @@ const { addToCart, decreaseQuantity, deleteFromCart, form } = useCart()
             <div class="w-20 shrink-0 mr-4">
               <Link :href="route('catalog.product', item.product.id)" class="block">
                 <ProductImage
-                  :image="item.product.previewImage"
+                  :image="item.product.preview_image"
                   :alt="item.product.name"
                 />
               </Link>
@@ -59,13 +59,13 @@ const { addToCart, decreaseQuantity, deleteFromCart, form } = useCart()
                     class="rounded-3xl cursor-pointer hover:bg-primary hover:text-primary-foreground hover:border-primary"
                     size="icon"
                     @click="addToCart(item.product.id)"
-                    :disabled="form.processing || item.quantity >= item.product.stockItemsCount"
+                    :disabled="form.processing || item.quantity >= item.product.stock_items_count"
                   >
                     <Plus class="w-4 h-4"/>
                   </Button>
                 </div>
 
-                <span class="text-muted-foreground text-sm">В наличии: {{ item.product.stockItemsCount }}</span>
+                <span class="text-muted-foreground text-sm">В наличии: {{ item.product.stock_items_count }}</span>
               </div>
             </div>
           </div>

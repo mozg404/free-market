@@ -59,4 +59,9 @@ class OrderQueryBuilder extends Builder
     {
         return $this->with('items.stockItem.product');
     }
+
+    public function withProductSellers()
+    {
+        return $this->with('items.stockItem.product.user');
+    }
 }

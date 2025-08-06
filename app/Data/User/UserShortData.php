@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\User;
 
 use App\Models\User;
 use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 
-class UserData extends Data
+class UserShortData extends Data
 {
     public function __construct(
         public int $id,
         public string $name,
-        public int $balance,
         public Carbon $registeredAt,
     ) {}
 
@@ -20,7 +19,6 @@ class UserData extends Data
         return new self(
             id: $user->id,
             name: $user->name,
-            balance: $user->balance,
             registeredAt: $user->created_at,
         );
     }
