@@ -5,11 +5,14 @@ import Wrapper from "./core/layout/Wrapper.vue";
 import logoUrl from "./../../img/logo.svg";
 import {Button} from "@/components/ui/button/index.js";
 import {User2Icon,ShoppingCart,LogIn,RussianRuble} from 'lucide-vue-next'
+import { useCart } from '@/composables/useCart'
 
 const page = usePage()
 const isAuth = computed(() => page.props.isAuth)
 const user = computed(() => page.props.user)
-const cart = computed(() => page.props.cart)
+const { cart } = useCart()
+
+
 </script>
 
 <template>
@@ -54,7 +57,7 @@ const cart = computed(() => page.props.cart)
 
             <Button variant="outline" class="rounded-3xl" as-child>
               <Link :href="route('cart.index')">
-                <ShoppingCart class="w-4 h-4"/> {{ cart.count }}
+                <ShoppingCart class="w-4 h-4"/> {{ cart.quantity }}
               </Link>
             </Button>
 

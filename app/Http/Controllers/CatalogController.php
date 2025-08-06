@@ -9,6 +9,7 @@ use App\Http\Requests\CatalogRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
+use App\Services\Cart\CartManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -57,6 +58,7 @@ class CatalogController extends Controller
     {
 //        return FeatureData::collect($product->features);
 //        return ProductShowData::from($product);
+//        return app(CartManager::class)->all();
 
         return Inertia::render('ProductShow', [
             'product' => ProductShowData::from($product),

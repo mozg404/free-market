@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\Cart\NotEnoughStockException;
 use App\Models\Product;
 use App\Services\Cart\CartManager;
 use App\Services\Toaster;
@@ -20,15 +21,21 @@ class CartController extends Controller
         return Inertia::render('Cart');
     }
 
-    public function add(Product $product)
+    public function store(Product $product)
     {
-        $this->cart->add($product);
-        $this->toaster->success('Позиция добавлена в корзину');
+        try {
+            $this->cart->add($product);
+            $this->toaster->success('Добавлено в корзину');
 
-        return back();
+            return back();
+        } catch (NotEnoughStockException $e) {
+            $this->toaster->error($e->getMessage());
+
+            return back();
+        }
     }
 
-    public function remove(Product $product)
+    public function decrease(Product $product)
     {
         $this->cart->remove($product);
         $this->toaster->info('Позиция убрана из корзины');
@@ -36,7 +43,7 @@ class CartController extends Controller
         return back();
     }
 
-    public function delete(Product $product)
+    public function destroy(Product $product)
     {
         $this->cart->delete($product);
         $this->toaster->info('Товар удален из корзины');

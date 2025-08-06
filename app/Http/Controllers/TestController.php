@@ -23,18 +23,10 @@ class TestController extends Controller
 
     public function test(Request $request)
     {
-        $featuresValues = [
-            37  => 'item_3',
-        ];
-
-        $products = Product::query()
-            ->whereFeatureValues($featuresValues)
-//            ->withFeatures()
-            ->get();
+        dd(Product::find(2)->stockItems()->isAvailable()->count());
 
 
-//        return 123;
-        return $products->toArray();
+        return Product::first();
     }
 
     public function testPage()

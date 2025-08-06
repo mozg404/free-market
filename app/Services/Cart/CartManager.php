@@ -4,6 +4,7 @@ namespace App\Services\Cart;
 
 use App\Data\Cart\CartData;
 use App\Data\Cart\CartItemData;
+use App\Exceptions\Cart\NotEnoughStockException;
 use App\Models\Product;
 
 class CartManager
@@ -15,8 +16,12 @@ class CartManager
         $this->cart = $cart;
     }
 
-    public function add(Product $product)
+    public function add(Product $product): void
     {
+        if (!$product->hasEnoughStockItems($this->getQuantityFor($product) + 1)) {
+            throw new NotEnoughStockException();
+        }
+
         $this->cart->add($product->id);
     }
 
@@ -33,6 +38,13 @@ class CartManager
     public function clean()
     {
         $this->cart->clean();
+    }
+
+    public function getQuantityFor(Product $product): int
+    {
+        $cart = $this->cart->all();
+
+        return $cart[$product->id]['quantity'] ?? 0;
     }
 
     /**

@@ -5,7 +5,7 @@ import {Link, useForm, usePage} from "@inertiajs/vue3";
 import {computed} from "vue";
 import {Button} from '@/components/ui/button'
 import {Badge} from '@/components/ui/badge'
-import {ShoppingBasket, ShoppingCart} from 'lucide-vue-next';
+import {Minus, Plus, ShoppingBasket, ShoppingCart} from 'lucide-vue-next';
 import ProductImage from "@/components/products/ProductImage.vue";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
 import MainTitle from "@/components/core/layout/MainTitle.vue";
@@ -19,15 +19,12 @@ import {
 } from '@/components/core/description'
 import Section from "@/components/core/layout/Section.vue";
 import SectionTitle from "@/components/core/layout/SectionTitle.vue";
+import { useCart } from '@/composables/useCart'
 
-const page = usePage()
-const cart = computed(() => page.props.cart)
 const props = defineProps({
   product: Object,
 })
-
-const form = useForm({})
-const inCart = (id) => Object.keys(page.props.cart.items).some(key => page.props.cart.items[key].product.id === id)
+const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCart()
 </script>
 
 <template>
@@ -41,8 +38,8 @@ const inCart = (id) => Object.keys(page.props.cart.items).some(key => page.props
           <div class="lg:sticky lg:top-6 lg:self-start lg:w-1/3">
             <ProductImage :image="product.previewImage" :alt="product.name"/>
 
-            <div class="my-4">
-              <div class="flex items-center space-x-2" v-if="product.price.isDiscount">
+            <div class="my-4 text-center">
+              <div class="flex items-center justify-center space-x-2" v-if="product.price.isDiscount">
                 <div class="text-2xl font-bold">
                   <PriceFormatter :value="product.price.discount"/>
                 </div>
@@ -55,9 +52,41 @@ const inCart = (id) => Object.keys(page.props.cart.items).some(key => page.props
               </div>
             </div>
 
+            <div v-if="inCart(product.id)">
+              <div class="flex justify-center space-x-4">
+                <div class="bg-gray-100 rounded-3xl flex items-center gap-3">
+                  <Button
+                    variant="outline"
+                    class="rounded-3xl cursor-pointer hover:bg-destructive hover:text-destructive-foreground hover:border-destructive"
+                    size="icon"
+                    :disabled="form.processing"
+                    @click="decreaseQuantity(product.id)"
+                  >
+                    <Minus class="w-4 h-4"/>
+                  </Button>
+
+                  <div>{{getCartItemQuantity(product.id)}}</div>
+
+                  <Button
+                    variant="outline"
+                    class="rounded-3xl cursor-pointer hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                    size="icon"
+                    @click="addToCart(product.id)"
+                    :disabled="form.processing"
+                  >
+                    <Plus class="w-4 h-4"/>
+                  </Button>
+                </div>
+                <Button :as="Link" :href="route('cart.index')" class="rounded-3xl cursor-pointer">
+                  <ShoppingCart class="w-4 h-4"/>
+                  Перейти в корзину
+                </Button>
+              </div>
+            </div>
             <Button
+              v-else
               class="w-full cursor-pointer py-6"
-              @click="form.post(route('cart.add', product.id))"
+              @click="addToCart(product.id)"
               :disabled="form.processing"
             >
               <ShoppingCart class="w-4 h-4"/>

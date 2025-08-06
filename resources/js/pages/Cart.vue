@@ -1,13 +1,11 @@
 <script setup>
 import Wrapper from "../components/core/layout/Wrapper.vue";
 import CartItem from "@/components/modules/cart/CartItem.vue";
-import {Link, useForm, usePage} from '@inertiajs/vue3'
-import { Button } from '@/components/ui/button'
-import {computed} from "vue";
+import {Link} from '@inertiajs/vue3'
+import {Button} from '@/components/ui/button'
 import MainTitle from "@/components/core/layout/MainTitle.vue";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -16,10 +14,9 @@ import {
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
 import {Trash,ShoppingBasket} from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
+import {useCart} from "@/composables/useCart.js";
 
-const page = usePage()
-const cart = computed(() => page.props.cart)
-const form = useForm({})
+const { cart, clearCart, form } = useCart()
 </script>
 
 <template>
@@ -38,7 +35,7 @@ const form = useForm({})
           <Button
             variant="destructive"
             class="cursor-pointer"
-            @click="form.delete(route('cart.clean'))"
+            @click="clearCart()"
             :disabled="form.processing"
             :class="{ 'opacity-50': form.processing }"
           >

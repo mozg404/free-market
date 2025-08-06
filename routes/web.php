@@ -64,10 +64,10 @@ Route::middleware('auth')->group(function () {
 
 // Корзина
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
-Route::delete('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
-Route::delete('/cart/delete/{product}', [CartController::class, 'delete'])->name('cart.delete');
-Route::delete('/cart/clean', [CartController::class, 'clean'])->name('cart.clean');
+Route::delete('/cart', [CartController::class, 'clean'])->name('cart.clean');
+Route::post('/cart/items/{product}', [CartController::class, 'store'])->name('cart.items.store');
+Route::post('/cart/items/{product}/decrease', [CartController::class, 'decrease'])->name('cart.items.decrease');
+Route::delete('/cart/items/{product}', [CartController::class, 'destroy'])->name('cart.items.destroy');
 
 // Оформление заказа
 Route::middleware(OrderCheckoutAccess::class)->group(function () {

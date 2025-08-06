@@ -51,6 +51,7 @@ use Illuminate\Support\Facades\DB;
  * @method static ProductQueryBuilder<static>|Product newModelQuery()
  * @method static ProductQueryBuilder<static>|Product newQuery()
  * @method static ProductQueryBuilder<static>|Product query()
+ * @method static Product find|null(int $id)
  * @method static ProductQueryBuilder<static>|Product searchByName(string $search)
  * @method static ProductQueryBuilder<static>|Product whereCategoryId($value)
  * @method static ProductQueryBuilder<static>|Product whereCreatedAt($value)
@@ -171,6 +172,25 @@ class Product extends Model
         if (isset($data->previewImage)) {
             $this->preview_image = $data->previewImage;
         }
+    }
+
+    /**
+     * Проверяет достаточно ли доступных позиций для продажи
+     * @param int $amount
+     * @return bool
+     */
+    public function hasEnoughStockItems(int $amount): bool
+    {
+        return $this->getAvailableStockItemsCount() >= $amount;
+    }
+
+    /**
+     * Возвращает количество доступных позиций для продажи
+     * @return int
+     */
+    public function getAvailableStockItemsCount(): int
+    {
+        return $this->stockItems()->isAvailable()->count();
     }
 
     public function toArray(): array

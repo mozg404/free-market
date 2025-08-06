@@ -5,11 +5,12 @@ import {Minus,Plus,Trash} from 'lucide-vue-next'
 import {Card, CardContent} from "@/components/ui/card/index.js";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
 import ProductImage from "@/components/products/ProductImage.vue";
+import {useCart} from "@/composables/useCart.js";
 
 const props = defineProps({
   item: Object,
 })
-const form = useForm({})
+const { addToCart, decreaseQuantity, deleteFromCart, form } = useCart()
 </script>
 
 <template>
@@ -35,7 +36,7 @@ const form = useForm({})
                   size="icon"
                   class="rounded-3xl cursor-pointer hover:bg-destructive hover:text-destructive-foreground hover:border-destructive"
                   :disabled="form.processing"
-                  @click="form.delete(route('cart.delete', item.product.id))"
+                  @click="deleteFromCart(item.product.id)"
                 >
                   <Trash class="w-4 h-4" />
                 </Button>
@@ -46,7 +47,7 @@ const form = useForm({})
                     class="rounded-3xl cursor-pointer hover:bg-destructive hover:text-destructive-foreground hover:border-destructive"
                     size="icon"
                     :disabled="form.processing || item.quantity < 2"
-                    @click="form.delete(route('cart.remove', item.product.id))"
+                    @click="decreaseQuantity(item.product.id)"
                   >
                     <Minus class="w-4 h-4"/>
                   </Button>
@@ -57,7 +58,7 @@ const form = useForm({})
                     variant="outline"
                     class="rounded-3xl cursor-pointer hover:bg-primary hover:text-primary-foreground hover:border-primary"
                     size="icon"
-                    @click="form.post(route('cart.add', item.product.id))"
+                    @click="addToCart(item.product.id)"
                     :disabled="form.processing || item.quantity >= item.product.stockItemsCount"
                   >
                     <Plus class="w-4 h-4"/>
