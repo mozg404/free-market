@@ -1,7 +1,7 @@
 <script setup>
 import {Link, usePage} from "@inertiajs/vue3";
 import {computed} from "vue";
-import Wrapper from "./core/layout/Wrapper.vue";
+import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import logoUrl from "./../../img/logo.svg";
 import {Button} from "@/components/ui/button/index.js";
 import {User2Icon,ShoppingCart,LogIn,RussianRuble} from 'lucide-vue-next'

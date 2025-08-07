@@ -2,8 +2,8 @@
 import {Link, usePage} from "@inertiajs/vue3";
 import MainLayout from "./MainLayout.vue";
 import {Button} from '@/components/ui/button'
-import Wrapper from "@/components/core/layout/Wrapper.vue";
-import Icon from "@/components/core/Icon.vue";
+import Wrapper from "@/components/shared/layout/Wrapper.vue";
+import Icon from "@/components/shared/Icon.vue";
 
 const page = usePage();
 const currentPath = page.props.ziggy?.location ? new URL(page.props.ziggy.location).pathname : '';

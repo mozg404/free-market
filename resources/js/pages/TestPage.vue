@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-vue-next"
-import Wrapper from "@/components/core/layout/Wrapper.vue";
+import Wrapper from "@/components/shared/layout/Wrapper.vue";
 
 // Menu items.
 const items = [

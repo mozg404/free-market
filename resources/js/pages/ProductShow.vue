@@ -1,6 +1,6 @@
 <script setup>
 import MainLayout from "@/layouts/MainLayout.vue";
-import Wrapper from "../components/core/layout/Wrapper.vue";
+import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {Link, useForm, usePage} from "@inertiajs/vue3";
 import {computed} from "vue";
 import {Button} from '@/components/ui/button'
@@ -8,17 +8,17 @@ import {Badge} from '@/components/ui/badge'
 import {Minus, Plus, ShoppingBasket, ShoppingCart} from 'lucide-vue-next';
 import ProductImage from "@/components/products/ProductImage.vue";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
-import MainTitle from "@/components/core/layout/MainTitle.vue";
-import Main from "@/components/core/layout/Main.vue";
+import MainTitle from "@/components/shared/layout/MainTitle.vue";
+import Main from "@/components/shared/layout/Main.vue";
 import {
   DescriptionList,
   DescriptionItem,
   DescriptionTitle,
   DescriptionValue,
   DescriptionSeparator
-} from '@/components/core/description'
-import Section from "@/components/core/layout/Section.vue";
-import SectionTitle from "@/components/core/layout/SectionTitle.vue";
+} from '@/components/shared/description'
+import Section from "@/components/shared/layout/Section.vue";
+import SectionTitle from "@/components/shared/layout/SectionTitle.vue";
 import { useCart } from '@/composables/useCart'
 
 const props = defineProps({

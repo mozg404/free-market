@@ -1,6 +1,6 @@
 <script setup>
 import MainLayout from "@/layouts/MainLayout.vue";
-import Wrapper from "@/components/core/layout/Wrapper.vue";
+import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {Link, useForm, usePage} from '@inertiajs/vue3'
 import {computed} from "vue";
 import {Button} from "@/components/ui/button/index.js";

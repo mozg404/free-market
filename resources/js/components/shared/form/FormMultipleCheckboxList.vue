@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script setup>
-import FormMultipleCheckbox from "@/components/core/form/FormMultipleCheckbox.vue";
+import FormMultipleCheckbox from "@/components/shared/form/FormMultipleCheckbox.vue";
 import {computed} from "vue";
 
 const props = defineProps({

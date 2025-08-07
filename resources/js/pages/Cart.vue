@@ -1,9 +1,9 @@
 <script setup>
-import Wrapper from "../components/core/layout/Wrapper.vue";
+import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import CartItemCard from "@/components/cart/CartItemCard.vue";
 import {Link} from '@inertiajs/vue3'
 import {Button} from '@/components/ui/button'
-import MainTitle from "@/components/core/layout/MainTitle.vue";
+import MainTitle from "@/components/shared/layout/MainTitle.vue";
 import {
   Card,
   CardDescription,

@@ -1,6 +1,6 @@
 <script setup>
-import Wrapper from "../../components/core/layout/Wrapper.vue";
-import MainTitle from "@/components/core/layout/MainTitle.vue";
+import Wrapper from "@/components/shared/layout/Wrapper.vue";
+import MainTitle from "@/components/shared/layout/MainTitle.vue";
 import ProductCard from "@/components/products/ProductCard.vue";
 import {Link, useForm, router} from "@inertiajs/vue3";
 import Input from "@/components/ui/input/Input.vue";
@@ -10,10 +10,10 @@ import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import {LoaderCircle} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
-import FormField from "@/components/core/form/FormField.vue";
-import FormMultipleCheckboxList from "@/components/core/form/FormMultipleCheckboxList.vue";
+import FormField from "@/components/shared/form/FormField.vue";
+import FormMultipleCheckboxList from "@/components/shared/form/FormMultipleCheckboxList.vue";
 import {normalizeKeyValuePairs} from "@/lib/support.js";
-import NavArrowLink from "@/components/core/navigation/NavArrowLink.vue";
+import NavArrowLink from "@/components/shared/navigation/NavArrowLink.vue";
 
 const props = defineProps({
   isCategory: {

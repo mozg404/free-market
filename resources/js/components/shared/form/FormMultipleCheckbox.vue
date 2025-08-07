@@ -6,7 +6,7 @@ export default {
 
 <script setup>
 import { Checkbox } from '@/components/ui/checkbox'
-import FormLabel from '@/components/core/form/FormLabel.vue'
+import FormLabel from '@/components/shared/form/FormLabel.vue'
 import { computed, useAttrs, ref, watch } from 'vue'
 import {cn} from "@/lib/utils.js";
 import {generateUniqueId} from "@/lib/support.js";

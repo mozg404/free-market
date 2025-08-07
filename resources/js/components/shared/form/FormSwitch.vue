@@ -6,7 +6,7 @@ export default {
 
 <script setup>
 import { Switch } from '@/components/ui/switch'
-import FormLabel from '@/components/core/form/FormLabel.vue'
+import FormLabel from '@/components/shared/form/FormLabel.vue'
 import { computed, useAttrs, ref, watch } from 'vue'
 import {cn} from "@/lib/utils.js";
 

@@ -1,5 +1,5 @@
 <script setup>
-import Wrapper from "../components/core/layout/Wrapper.vue";
+import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import ProductList from "@/components/products/ProductList.vue";
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-vue-next"
 

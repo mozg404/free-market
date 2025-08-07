@@ -1,7 +1,7 @@
 <script setup>
 import { computed, useAttrs, provide } from 'vue'
 import ErrorMessage from "@/components/support/ErrorMessage.vue";
-import FormLabel from "@/components/core/form/FormLabel.vue";
+import FormLabel from "@/components/shared/form/FormLabel.vue";
 import { cn } from '@/lib/utils'
 
 const props = defineProps({

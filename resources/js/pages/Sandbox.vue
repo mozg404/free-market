@@ -1,6 +1,6 @@
 <script setup>
-import Wrapper from "../components/core/layout/Wrapper.vue";
-import MainTitle from "@/components/core/layout/MainTitle.vue";
+import Wrapper from "@/components/shared/layout/Wrapper.vue";
+import MainTitle from "@/components/shared/layout/MainTitle.vue";
 import sandboxImage from "../../img/sandbox.jpg";
 import {Link, useForm} from "@inertiajs/vue3";
 import {Button} from "@/components/ui/button/index.js";

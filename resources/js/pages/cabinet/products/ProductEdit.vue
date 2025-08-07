@@ -16,15 +16,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import FormField from "@/components/core/form/FormField.vue";
-import FormNumberInput from "@/components/core/form/FormNumberInput.vue";
-import FormSelect from "@/components/core/form/FormSelect.vue";
-import FormTextInput from "@/components/core/form/FormTextInput.vue";
+import FormField from "@/components/shared/form/FormField.vue";
+import FormNumberInput from "@/components/shared/form/FormNumberInput.vue";
+import FormSelect from "@/components/shared/form/FormSelect.vue";
+import FormTextInput from "@/components/shared/form/FormTextInput.vue";
 import {forEach} from "lodash";
-import FormSwitch from "@/components/core/form/FormSwitch.vue";
+import FormSwitch from "@/components/shared/form/FormSwitch.vue";
 import {Switch} from "@/components/ui/switch/index.js";
-import FormMultipleCheckbox from "@/components/core/form/FormMultipleCheckbox.vue";
-import FormMultipleCheckboxList from "@/components/core/form/FormMultipleCheckboxList.vue";
+import FormMultipleCheckbox from "@/components/shared/form/FormMultipleCheckbox.vue";
+import FormMultipleCheckboxList from "@/components/shared/form/FormMultipleCheckboxList.vue";
 import {normalizeKeyValuePairs} from "@/lib/support.js";
 
 const props = defineProps({

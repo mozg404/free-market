@@ -1,6 +1,6 @@
 <script setup>
 import { SidebarProvider, SidebarTrigger, Sidebar } from '@/components/ui/sidebar'
-import Wrapper from "@/components/core/layout/Wrapper.vue";
+import Wrapper from "@/components/shared/layout/Wrapper.vue";
 </script>
 
 <template>

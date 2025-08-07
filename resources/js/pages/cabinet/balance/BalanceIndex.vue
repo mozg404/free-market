@@ -2,9 +2,9 @@
 import {PlusIcon} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
 import MainLayout from "@/layouts/MainLayout.vue";
-import Main from "@/components/core/layout/Main.vue";
-import MainTitle from "@/components/core/layout/MainTitle.vue";
-import Wrapper from "@/components/core/layout/Wrapper.vue";
+import Main from "@/components/shared/layout/Main.vue";
+import MainTitle from "@/components/shared/layout/MainTitle.vue";
+import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {
   Table,
   TableBody,
@@ -19,12 +19,12 @@ import {
 } from '@/components/ui/card'
 import DateTime from "@/components/support/DateTime.vue";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
-import FormNumberInput from "@/components/core/form/FormNumberInput.vue";
+import FormNumberInput from "@/components/shared/form/FormNumberInput.vue";
 import {useForm} from "@inertiajs/vue3";
 import ErrorMessage from "@/components/support/ErrorMessage.vue";
 import { useUser } from '@/composables/useUser'
-import {Pagination} from "@/components/ui/pagination/index.js";
 import LaravelPagination from "@/components/support/LaravelPagination.vue";
+import TableBordered from "@/components/shared/table/TableBordered.vue";
 
 const { user } = useUser()
 const form = useForm({
@@ -68,34 +68,33 @@ const props = defineProps({
           </aside>
 
           <div class="xl:col-span-9 mr-2">
-            <Card class="py-1 shadow-none">
-              <CardContent class="px-4">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead class="w-[150px]"> Дата</TableHead>
-                      <TableHead>Описание</TableHead>
-                      <TableHead class="text-right">Сумма</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow v-for="transaction in pagination.data" :key="transaction.id">
-                      <TableCell class="w-[150px] pr-4">
-                        <DateTime :value="transaction.created_at" format="DD-MM-YYYY в HH:mm"/>
-                      </TableCell>
-                      <TableCell class="font-medium">
-                        <div v-if="transaction.type === 'replenishment'">Пополнение баланса</div>
-                        <div v-else>Оплата заказа #{{ transaction.transactionable_id }}</div>
-                      </TableCell>
-                      <TableCell class="text-right">
-                        <PriceFormatter v-if="transaction.type === 'replenishment'" class="text-primary" :value="transaction.amount" />
-                        <PriceFormatter v-else class="text-destructive" :value="transaction.amount" />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+
+            <TableBordered>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead class="w-[150px]"> Дата</TableHead>
+                    <TableHead>Описание</TableHead>
+                    <TableHead class="text-right">Сумма</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow v-for="transaction in pagination.data" :key="transaction.id">
+                    <TableCell class="w-[150px] pr-4">
+                      <DateTime :value="transaction.created_at" format="DD-MM-YYYY в HH:mm"/>
+                    </TableCell>
+                    <TableCell class="font-medium">
+                      <div v-if="transaction.type === 'replenishment'">Пополнение баланса</div>
+                      <div v-else>Оплата заказа #{{ transaction.transactionable_id }}</div>
+                    </TableCell>
+                    <TableCell class="text-right">
+                      <PriceFormatter v-if="transaction.type === 'replenishment'" class="text-primary" :value="transaction.amount" />
+                      <PriceFormatter v-else class="text-destructive" :value="transaction.amount" />
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableBordered>
 
             <LaravelPagination class="mt-6" :pagination="pagination" />
           </div>
