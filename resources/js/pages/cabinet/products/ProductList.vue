@@ -26,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import Pagination from "@/components/support/Pagination.vue";
+import LaravelPagination from "@/components/support/LaravelPagination.vue";
 import ConfirmDialog from "@/components/support/ConfirmDialog.vue";
 import Input from "@/components/ui/input/Input.vue";
 
@@ -117,7 +117,7 @@ watch([search, shopId], applyFilters);
 
 
     <div class="pb-6">
-      <Pagination :links="props.links"/>
+      <LaravelPagination :links="props.links"/>
     </div>
 
   </CabinetLayout>

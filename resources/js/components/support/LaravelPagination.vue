@@ -1,14 +1,19 @@
 <script setup>
 import { Link } from '@inertiajs/vue3'
+import {cn} from "@/lib/utils.js";
 
-defineProps({
-  links: Object
+const props = defineProps({
+  pagination: Object,
+  class: {
+    type: String,
+    default: ''
+  }
 })
 </script>
 
 <template>
-  <nav class="relative flex justify-center">
-    <template v-for="link in links" :key="link.label">
+  <nav v-if="pagination.last_page > 1" :class="cn('relative flex justify-center', props.class)">
+    <template v-for="link in pagination.links" :key="link.label">
       <Link
         preserve-scroll
         :href="link.url ?? ''"

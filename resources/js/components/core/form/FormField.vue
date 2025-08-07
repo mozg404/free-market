@@ -2,6 +2,7 @@
 import { computed, useAttrs, provide } from 'vue'
 import ErrorMessage from "@/components/support/ErrorMessage.vue";
 import FormLabel from "@/components/core/form/FormLabel.vue";
+import { cn } from '@/lib/utils'
 
 const props = defineProps({
   label: {
@@ -16,6 +17,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  class: {
+    type: String,
+    default: ''
+  },
   name: String // Новый пропс для связи
 });
 
@@ -29,7 +34,9 @@ provide('fieldId', fieldId)
 </script>
 
 <template>
-  <FormLabel v-if="label" :for="fieldId">{{ label }} <span v-if="required" class="text-red-600">*</span></FormLabel>
-  <slot :id="fieldId" />
-  <ErrorMessage v-if="error" :message="error"/>
+  <div :class="cn('grid gap-2', props.class)">
+    <FormLabel v-if="label" :for="fieldId">{{ label }} <span v-if="required" class="text-red-600">*</span></FormLabel>
+    <slot :id="fieldId" />
+    <ErrorMessage v-if="error" :message="error"/>
+  </div>
 </template>

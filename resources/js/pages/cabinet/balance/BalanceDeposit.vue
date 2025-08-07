@@ -12,7 +12,7 @@ const form = useForm({
   amount: null,
 })
 const modalRef = ref(null)
-const submit = () => form.post(route('cabinet.balance.deposit.store'), {
+const submit = () => form.post(route('balance.deposit.store'), {
   onSuccess: () => modalRef.value.close(),
   onError: (errors) => {
     console.log(errors)

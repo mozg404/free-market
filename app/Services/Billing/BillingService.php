@@ -73,7 +73,7 @@ class BillingService
             // Пополняем баланс пользователя из платежа
             $payment->user->deposit(
                 amount: $payment->amount,
-                type: TransactionType::INFLOW,
+                type: TransactionType::REPLENISHMENT,
                 transactionable: $payment
             );
 
@@ -107,7 +107,7 @@ class BillingService
             // Списываем со счета пользователя сумму заказа
             $order->user->withdraw(
                 amount: $order->amount,
-                type: TransactionType::OUTFLOW,
+                type: TransactionType::ORDER_PAYMENT,
                 transactionable: $order
             );
 

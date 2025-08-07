@@ -57,9 +57,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/cabinet/sales', [SaleController::class, 'index'])->name('cabinet.sales');
 
     // Баланс
-    Route::get('/cabinet/balance', [BalanceController::class, 'index'])->name('cabinet.balance');
-    Route::get('/cabinet/balance/deposit', [BalanceDepositController::class, 'index'])->name('cabinet.balance.deposit');
-    Route::post('/cabinet/balance/deposit', [BalanceDepositController::class, 'store'])->name('cabinet.balance.deposit.store');
+    Route::get('/balance', [BalanceController::class, 'index'])->name('balance');
+    Route::post('/balance/deposit', [BalanceController::class, 'deposit'])->name('balance.deposit');
 });
 
 // Корзина
@@ -72,8 +71,6 @@ Route::delete('/cart/items/{product}', [CartController::class, 'destroy'])->name
 // Оформление заказа
 Route::middleware(OrderCheckoutAccess::class)->group(function () {
     Route::post('/order-checkout', [OrderCheckoutController::class, 'store'])->name('order_checkout.store');
-    Route::get('/order-checkout/payment/{order}', [OrderCheckoutController::class, 'payment'])->name('order_checkout.payment');
-    Route::post('/order-checkout/payment/{order}', [OrderCheckoutController::class, 'pay'])->name('order_checkout.pay');
 });
 
 // Каталог

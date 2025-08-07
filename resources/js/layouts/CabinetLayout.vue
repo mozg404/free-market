@@ -14,12 +14,12 @@ const items = [
     isCurrent: route().current('profile.show'),
     icon: 'UserPen',
   },
-  {
-    name: 'Мой баланс',
-    url: route('cabinet.balance'),
-    isCurrent: route().current('cabinet.balance'),
-    icon: 'Wallet',
-  },
+  // {
+  //   name: 'Мой баланс',
+  //   url: route('cabinet.balance'),
+  //   isCurrent: route().current('cabinet.balance'),
+  //   icon: 'Wallet',
+  // },
   {
     name: 'Мои заказы',
     url: route('cabinet.orders'),

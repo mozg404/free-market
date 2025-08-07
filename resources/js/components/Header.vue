@@ -50,7 +50,7 @@ const { cart } = useCart()
 
           <div class="flex gap-2">
             <Button variant="outline" class="rounded-3xl" v-if="isAuth" as-child>
-              <Link :href="route('cabinet.balance')">
+              <Link :href="route('balance')">
                 <RussianRuble class="w-4 h-4"/> {{ user.balance }}
               </Link>
             </Button>

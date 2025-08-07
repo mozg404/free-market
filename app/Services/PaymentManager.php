@@ -23,7 +23,7 @@ class PaymentManager
      */
     public function topUpBalance(User $user, int $amount): Transaction
     {
-        return $user->deposit($amount, TransactionType::INFLOW);
+        return $user->deposit($amount, TransactionType::REPLENISHMENT);
     }
 
     /**
@@ -58,7 +58,7 @@ class PaymentManager
             // Пополняем баланс пользователя из платежа
             $payment->user->deposit(
                 amount: $payment->amount,
-                type: TransactionType::INFLOW,
+                type: TransactionType::REPLENISHMENT,
                 transactionable: $payment
             );
 
@@ -72,7 +72,7 @@ class PaymentManager
             // Списываем со счета пользователя сумму заказа
             $order->user->deposit(
                 amount: $order->amount,
-                type: TransactionType::OUTFLOW,
+                type: TransactionType::ORDER_PAYMENT,
                 transactionable: $order
             );
 
