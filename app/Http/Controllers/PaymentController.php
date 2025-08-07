@@ -46,7 +46,7 @@ class PaymentController extends Controller
             $this->billing->processOrderPayment($order);
             $this->toaster->success('Заказ успешно оплачен');
 
-            return redirect()->route('cabinet.orders');
+            return redirect()->route('orders.show', $order->id);
         }
 
         return 'Беда';

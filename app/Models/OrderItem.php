@@ -5,14 +5,13 @@ namespace App\Models;
 use App\Builders\OrderItemQueryBuilder;
 use App\Builders\OrderQueryBuilder;
 use App\Builders\StockItemQueryBuilder;
+use App\Collections\OrderItemCollection;
 use App\Support\Price;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property int $id
  * @property int $order_id
  * @property int $stock_item_id
@@ -74,6 +73,11 @@ class OrderItem extends Model
     public function stockItem(): BelongsTo|StockItemQueryBuilder
     {
         return $this->belongsTo(StockItem::class);
+    }
+
+    public function newCollection(array $models = []): OrderItemCollection
+    {
+        return new OrderItemCollection($models);
     }
 
     public function newEloquentBuilder($query): OrderItemQueryBuilder

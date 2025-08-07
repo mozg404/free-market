@@ -18,7 +18,7 @@ const props = defineProps({
     data-slot="button"
     :as="as"
     :as-child="asChild"
-    :class="cn(buttonVariants({ variant, size }), props.class)"
+    :class="cn(buttonVariants({ variant, size }) + ' cursor-pointer', props.class)"
   >
     <slot />
   </Primitive>

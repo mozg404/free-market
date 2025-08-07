@@ -18,7 +18,6 @@
     "dependencies": {
         "@inertiajs/vue3": "^2.0.8",
         "@inertiaui/modal-vue": "^0.21.0",
-        "@primeuix/themes": "^1.1.1",
         "@tanstack/vue-table": "^8.21.3",
         "@vitejs/plugin-vue": "^5.2.3",
         "@vueup/vue-quill": "^1.2.0",
@@ -34,7 +33,6 @@
         "filepond-plugin-image-transform": "^3.8.7",
         "lodash": "^4.17.21",
         "lucide-vue-next": "^0.510.0",
-        "primevue": "^4.3.4",
         "quill": "^2.0.3",
         "reka-ui": "^2.4.1",
         "tailwind-merge": "^3.3.0",

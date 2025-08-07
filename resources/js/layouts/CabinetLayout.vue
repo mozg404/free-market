@@ -20,12 +20,12 @@ const items = [
   //   isCurrent: route().current('cabinet.balance'),
   //   icon: 'Wallet',
   // },
-  {
-    name: 'Мои заказы',
-    url: route('cabinet.orders'),
-    isCurrent: route().current('cabinet.orders'),
-    icon: 'ShoppingCart',
-  },
+  // {
+  //   name: 'Мои заказы',
+  //   url: route('cabinet.orders'),
+  //   isCurrent: route().current('cabinet.orders'),
+  //   icon: 'ShoppingCart',
+  // },
   {
     name: 'Мои покупки',
     url: route('cabinet.purchases'),

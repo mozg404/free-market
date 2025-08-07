@@ -14,9 +14,7 @@ class OrderData extends Data
         public int $id,
         public int $amount,
         public OrderStatus $status,
-        /** @var OrderItemData[] */
-        public array $items,
-        public int $items_count,
+        public ?int $items_count  = null,
         public Carbon $created_at,
     ) {
     }

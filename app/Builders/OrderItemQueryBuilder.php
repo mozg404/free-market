@@ -4,21 +4,45 @@ declare(strict_types=1);
 
 namespace App\Builders;
 
-use App\Enum\OrderStatus;
+use App\Collections\OrderItemCollection;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
- * @method Collection get(array|string $column = ['*'])
+ * @method OrderItemCollection get(array|string $column = ['*'])
  */
 class OrderItemQueryBuilder extends Builder
 {
-    public function whereUser(int $id): static
+    public function forUser(User|int $user): static
     {
-        return $this->whereHas('order', function (OrderQueryBuilder $query) use ($id) {
-            $query->whereUser($id);
+        if (is_object($user)) {
+            $user = $user->id;
+        }
+
+        return $this->whereHas('order', function (OrderQueryBuilder $query) use ($user) {
+            $query->whereUser($user);
         });
+    }
+
+    public function forOrder(Order|int $order): static
+    {
+        if (is_object($order)) {
+            $order = $order->id;
+        }
+
+        return $this->where('order_id', $order);
+    }
+
+    public function for(Order|User $model): static
+    {
+        if (is_a($model, Order::class)) {
+            return $this->forOrder($model);
+        }
+
+        if (is_a($model, User::class)) {
+            return $this->forUser($model);
+        }
     }
 
     public function whereSeller(int $id): static
@@ -47,13 +71,14 @@ class OrderItemQueryBuilder extends Builder
         return $this->orderByDesc('id');
     }
 
-    public function withOrder(bool $withUser = true): static
+    public function withOrder(): static
     {
-        if ($withUser) {
-            return $this->with(['order', 'order.user']);
-        }
-
         return $this->with('order');
+    }
+
+    public function withOrderUser(): static
+    {
+        return $this->with('order.user');
     }
 
     public function withStockItem(): static
@@ -61,12 +86,13 @@ class OrderItemQueryBuilder extends Builder
         return $this->with('stockItem');
     }
 
-    public function withProduct(bool $withUser = true): static
+    public function withProduct(): static
     {
-        if ($withUser) {
-            return $this->with(['stockItem.ProductCard', 'stockItem.ProductCard.user']);
-        }
+        return $this->with('stockItem.product');
+    }
 
-        return $this->with('stockItem.ProductCard');
+    public function withProductUser(): static
+    {
+        return $this->with('stockItem.product.user');
     }
 }

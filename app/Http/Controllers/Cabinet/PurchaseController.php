@@ -17,7 +17,7 @@ class PurchaseController extends Controller
             ->withStockItem()
             ->withProduct()
             ->isPaid()
-            ->whereUser(Auth::id())
+            ->forUser(Auth::id())
             ->descOrder()
             ->get();
 

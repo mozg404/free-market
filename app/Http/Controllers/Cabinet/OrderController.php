@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Cabinet;
 
 use App\Data\Orders\OrderData;
+use App\Data\Orders\OrderItemData;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -14,15 +16,29 @@ class OrderController extends Controller
     {
         $orders = Order::query()
             ->whereUser(Auth::id())
-            ->withProductSellers()
             ->withItemsCount()
-            ->withItems()
-            ->withProducts()
             ->descOrder()
+            ->paginate(10);
+
+        return Inertia::render('orders/OrderIndex', [
+            'pagination' => OrderData::collect($orders),
+        ]);
+    }
+
+    public function show(Order $order)
+    {
+        // Получаем список всех позиций заказа
+        $items = OrderItem::query()
+            ->for($order)
+            ->withProduct()
+            ->withProductUser()
             ->get();
 
-        return Inertia::render('cabinet/OrderList', [
-            'orders' => OrderData::collect($orders),
+        return Inertia::render('orders/OrderShow', [
+            'order' => OrderData::from($order),
+            'items' => OrderItemData::collect($items),
+            'totalAmount' => $items->getTotalAmount(),
+            'totalCount' => $items->count(),
         ]);
     }
 }
