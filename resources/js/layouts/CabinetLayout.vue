@@ -8,12 +8,12 @@ import Icon from "@/components/shared/Icon.vue";
 const page = usePage();
 const currentPath = page.props.ziggy?.location ? new URL(page.props.ziggy.location).pathname : '';
 const items = [
-  {
-    name: 'Профиль',
-    url: route('profile.show'),
-    isCurrent: route().current('profile.show'),
-    icon: 'UserPen',
-  },
+  // {
+  //   name: 'Профиль',
+  //   url: route('profile.show'),
+  //   isCurrent: route().current('profile.show'),
+  //   icon: 'UserPen',
+  // },
   // {
   //   name: 'Мой баланс',
   //   url: route('cabinet.balance'),
@@ -26,24 +26,24 @@ const items = [
   //   isCurrent: route().current('cabinet.orders'),
   //   icon: 'ShoppingCart',
   // },
-  {
-    name: 'Мои покупки',
-    url: route('cabinet.purchases'),
-    isCurrent: route().current('cabinet.purchases'),
-    icon: 'UserPen',
-  },
-  {
-    name: 'Мои товары',
-    url: route('cabinet.products'),
-    isCurrent: route().current('cabinet.products'),
-    icon: 'ShoppingBasket',
-  },
-  {
-    name: 'Мои продажи',
-    url: route('cabinet.sales'),
-    isCurrent: route().current('cabinet.sales'),
-    icon: 'UserPen',
-  },
+  // {
+  //   name: 'Мои покупки',
+  //   url: route('cabinet.purchases'),
+  //   isCurrent: route().current('cabinet.purchases'),
+  //   icon: 'UserPen',
+  // },
+  // {
+  //   name: 'Мои товары',
+  //   url: route('cabinet.products'),
+  //   isCurrent: route().current('cabinet.products'),
+  //   icon: 'ShoppingBasket',
+  // },
+  // {
+  //   name: 'Мои продажи',
+  //   url: route('cabinet.sales'),
+  //   isCurrent: route().current('cabinet.sales'),
+  //   icon: 'UserPen',
+  // },
 ]
 </script>
 

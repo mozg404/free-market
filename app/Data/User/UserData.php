@@ -11,17 +11,8 @@ class UserData extends Data
     public function __construct(
         public int $id,
         public string $name,
+        public string $email,
         public int $balance,
-        public Carbon $registeredAt,
+        public Carbon $created_at,
     ) {}
-
-    public static function fromModel(User $user): self
-    {
-        return new self(
-            id: $user->id,
-            name: $user->name,
-            balance: $user->balance,
-            registeredAt: $user->created_at,
-        );
-    }
 }

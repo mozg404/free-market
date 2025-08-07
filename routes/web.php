@@ -36,7 +36,7 @@ if (config('app.env') === 'local') {
 
 Route::middleware('auth')->group(function () {
     // Профиль
-    Route::get('/cabinet/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 
     // Товары и позиции товаров
     Route::get('/cabinet/products', [CabinetProductController::class, 'index'])->name('cabinet.products');

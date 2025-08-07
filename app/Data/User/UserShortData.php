@@ -11,6 +11,7 @@ class UserShortData extends Data
     public function __construct(
         public int $id,
         public string $name,
+        public string $email,
         public Carbon $registeredAt,
     ) {}
 
@@ -19,6 +20,7 @@ class UserShortData extends Data
         return new self(
             id: $user->id,
             name: $user->name,
+            email: $user->email,
             registeredAt: $user->created_at,
         );
     }

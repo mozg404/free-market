@@ -9,7 +9,7 @@ use Inertia\Inertia;
 
 class ProfileController extends Controller
 {
-    public function show()
+    public function index()
     {
         $user = Auth::user();
 
