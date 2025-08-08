@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Data\User\UserData;
+use App\Services\BreadcrumbsManager;
 use App\Services\Cart\CartManager;
 use App\Services\Toaster;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ class HandleInertiaRequests extends Middleware
     public function __construct(
         private readonly CartManager $cart,
         private readonly Toaster $toaster,
+        private readonly BreadcrumbsManager $breadcrumbs,
     )
     {}
 
@@ -51,6 +53,7 @@ class HandleInertiaRequests extends Middleware
             'user' => Auth::check() ? UserData::from(Auth::user()) : null,
             'cart' => $this->cart->all(),
             'toasts' => $this->toaster->pull(),
+            'breadcrumbs' => $this->breadcrumbs->generateFromRequest($request)
         ];
     }
 }

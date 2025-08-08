@@ -55,7 +55,7 @@ watch([search, shopId], applyFilters);
 </script>
 
 <template>
-  <MainLayout>
+  <MainLayout :with-breadcrumbs="false">
     <Wrapper>
       <Main>
         <MainTitle>Мои товары</MainTitle>

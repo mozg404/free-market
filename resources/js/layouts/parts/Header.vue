@@ -1,11 +1,11 @@
 <script setup>
 import {Link, usePage} from "@inertiajs/vue3";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
-import logoUrl from "./../../img/logo.svg";
+import logoUrl from "../../../img/logo.svg";
 import {Button} from "@/components/ui/button/index.js";
 import {User2Icon, ShoppingCart, LogIn, RussianRuble} from 'lucide-vue-next'
-import {useCart} from '@/composables/useCart'
-import {useUser} from '@/composables/useUser'
+import {useCart} from '@/composables/useCart.js'
+import {useUser} from '@/composables/useUser.js'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from '@/components/ui/dropdown-menu/index.js'
 
 const {cart} = useCart()
 const {user, isAuth} = useUser()
@@ -25,14 +25,14 @@ const {user, isAuth} = useUser()
       <div class="flex items-center justify-between py-5" aria-label="Global">
 
         <div class="flex items-center gap-x-6">
-          <Link href="/" class="-m-1.5 p-1.5">
+          <Link href="/public" class="-m-1.5 p-1.5">
             <span class="sr-only">Your Company</span>
             <img class="h-14 w-auto" :src="logoUrl" alt="">
           </Link>
 
           <div class="hidden lg:flex lg:gap-x-2">
             <Button variant="ghost" class="rounded-3xl" as-child>
-              <Link href="/">Главная</Link>
+              <Link href="/public">Главная</Link>
             </Button>
 
             <Button variant="ghost" class="rounded-3xl" as-child>
