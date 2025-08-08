@@ -82,13 +82,16 @@ const {user, isAuth} = useUser()
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator/>
                   <DropdownMenuItem>
-                    <Link :href="route('profile')" class="block w-full h-full">Профиль</Link>
+                    <Link :href="route('my.profile')" class="block w-full h-full">Профиль</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link :href="route('balance')" class="block w-full h-full">Баланс</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link :href="route('orders')" class="block w-full h-full">Покупки</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link :href="route('my.products')" class="block w-full h-full">Товары</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator/>
                   <DropdownMenuItem>

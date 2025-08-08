@@ -25,12 +25,12 @@ class CatalogController extends Controller
             ->filterFromArray($filters)
             ->withAvailableStockItemsCount()
             ->descOrder()
-            ->get();
+            ->paginate(5);
 
         return Inertia::render('catalog/Catalog', [
             'filters' => $filters,
             'categories' => $categories,
-            'products' => ProductData::collect($products)
+            'productsPaginate' => ProductData::collect($products)
         ]);
     }
 

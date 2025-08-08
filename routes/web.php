@@ -10,7 +10,7 @@ use App\Http\Controllers\Cabinet\ProfileController;
 use App\Http\Controllers\Cabinet\PurchaseController;
 use App\Http\Controllers\Cabinet\SaleController;
 use App\Http\Controllers\Cabinet\ProductController as CabinetProductController;
-use App\Http\Controllers\Cabinet\StockController;
+use App\Http\Controllers\Cabinet\ProductStockItemsController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\OrderCheckoutController;
@@ -34,23 +34,49 @@ if (config('app.env') === 'local') {
     Route::get('/test-page2', [TestController::class, 'testPage2']);
 }
 
+// Товары
+Route::middleware('auth')->prefix('/my')->group(function () {
+    Route::get('/products', [CabinetProductController::class, 'index'])->name('my.products');
+    Route::get('/products/create', [CabinetProductController::class, 'create'])->name('my.products.create');
+    Route::post('/products', [CabinetProductController::class, 'store'])->name('my.products.store');
+    Route::get('/products/{product}', [CabinetProductController::class, 'show'])->name('my.products.show');
+    Route::get('/products/{product}/edit', [CabinetProductController::class, 'edit'])->name('my.products.edit');
+    Route::put('/products/{product}', [CabinetProductController::class, 'update'])->name('my.products.update');
+    Route::delete('/products/{product}', [CabinetProductController::class, 'destroy'])->name('my.products.delete');
+
+    Route::prefix('/products/{product}')->group(function () {
+        Route::get('/stock-items/create', [ProductStockItemsController::class, 'create'])->name('my.products.stock-items.create');
+        Route::post('/stock-items', [ProductStockItemsController::class, 'store'])->name('my.products.stock-items.store');
+        Route::get('/stock-items/{stock_item}/edit', [ProductStockItemsController::class, 'edit'])->name('my.products.stock-items.edit');
+        Route::put('/stock-items/{stock_item}', [ProductStockItemsController::class, 'update'])->name('my.products.stock-items.update');
+    });
+});
+
 Route::middleware('auth')->group(function () {
     // Профиль
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/my/profile', [ProfileController::class, 'index'])->name('my.profile');
 
-    // Товары и позиции товаров
-    Route::get('/cabinet/products', [CabinetProductController::class, 'index'])->name('cabinet.products');
-    Route::get('/cabinet/products/create', [CabinetProductController::class, 'create'])->name('cabinet.products.create');
-    Route::post('/cabinet/products/store', [CabinetProductController::class, 'store'])->name('cabinet.products.store');
-    Route::get('/cabinet/products/{product}/edit', [CabinetProductController::class, 'edit'])->name('cabinet.products.edit');
-    Route::put('/cabinet/products/{product}/update', [CabinetProductController::class, 'update'])->name('cabinet.products.update');
-    Route::delete('/cabinet/products/{product}', [CabinetProductController::class, 'destroy'])->name('cabinet.products.delete');
-    Route::get('/cabinet/products/{product}/stock', [StockController::class, 'index'])->name('cabinet.stock.index');
-    Route::get('/cabinet/products/{product}/stock/create', [StockController::class, 'create'])->name('cabinet.stock.create');
-    Route::post('/cabinet/products/{product}/stock', [StockController::class, 'store'])->name('cabinet.stock.store');
-    Route::get('/cabinet/stock/{stock_item}/edit', [StockController::class, 'edit'])->name('cabinet.stock.edit');
-    Route::put('/cabinet/stock/{stock_item}', [StockController::class, 'update'])->name('cabinet.stock.update');
-    Route::delete('/cabinet/stock/{stock_item}', [StockController::class, 'destroy'])->name('cabinet.stock.destroy');
+    // Товары и
+//    Route::get('/my/products', [CabinetProductController::class, 'index'])->name('my.products');
+//    Route::get('/my/products/create', [CabinetProductController::class, 'create'])->name('my.products.create');
+//    Route::post('/my/products', [CabinetProductController::class, 'store'])->name('my.products.store');
+//    Route::get('/my/products/{product}', [CabinetProductController::class, 'show'])->name('my.products.show');
+//    Route::get('/my/products/{product}/edit', [CabinetProductController::class, 'edit'])->name('my.products.edit');
+//    Route::put('/my/products/{product}', [CabinetProductController::class, 'update'])->name('my.products.update');
+//    Route::delete('/my/products/{product}', [CabinetProductController::class, 'destroy'])->name('my.products.delete');
+
+
+//    Route::prefix('/my/products/{product}')->group(function () {
+//        Route::get('/stock-items/create', [ProductStockItemsController::class, 'create'])->name('my.products.stock-items.create');
+//    });
+
+
+    // Позиции товара
+//    Route::get('/my/products/{product}/stock/create', [ProductStockController::class, 'create'])->name('my.products.stock.add');
+//    Route::post('/cabinet/products/{product}/stock', [ProductStockController::class, 'store'])->name('cabinet.stock.store');
+//    Route::get('/cabinet/stock/{stock_item}/edit', [ProductStockController::class, 'edit'])->name('cabinet.stock.edit');
+//    Route::put('/cabinet/stock/{stock_item}', [ProductStockController::class, 'update'])->name('cabinet.stock.update');
+//    Route::delete('/cabinet/stock/{stock_item}', [ProductStockController::class, 'destroy'])->name('cabinet.stock.destroy');
 
     Route::get('/cabinet/purchases', [PurchaseController::class, 'index'])->name('cabinet.purchases');
     Route::get('/cabinet/sales', [SaleController::class, 'index'])->name('cabinet.sales');

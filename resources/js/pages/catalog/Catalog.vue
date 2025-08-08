@@ -14,6 +14,7 @@ import FormField from "@/components/shared/form/FormField.vue";
 import FormMultipleCheckboxList from "@/components/shared/form/FormMultipleCheckboxList.vue";
 import {normalizeKeyValuePairs} from "@/lib/support.js";
 import NavArrowLink from "@/components/shared/navigation/NavArrowLink.vue";
+import LaravelPagination from "@/components/support/LaravelPagination.vue";
 
 const props = defineProps({
   isCategory: {
@@ -26,7 +27,7 @@ const props = defineProps({
     type: [Array, null],
     default: null,
   },
-  products: Array,
+  productsPaginate: Array,
   filters: Object,
 })
 
@@ -86,10 +87,6 @@ const filtersApply = () => {
 
 <template>
     <Wrapper>
-
-
-
-
 
       <div class="flex">
         <aside class="w-64 py-6 pr-6 border-r-1 bg-white top-0 h-screen">
@@ -151,8 +148,11 @@ const filtersApply = () => {
           <MainTitle v-else class="pb-6">Товары</MainTitle>
 
           <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-            <ProductCard v-for="product in products" :key="product.id" :product="product" />
+            <ProductCard v-for="product in productsPaginate.data" :key="product.id" :product="product" />
           </div>
+
+          <LaravelPagination :pagination="productsPaginate"/>
+
         </main>
       </div>
     </Wrapper>

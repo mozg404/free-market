@@ -1,26 +1,22 @@
 <script setup>
 import {Modal} from '@inertiaui/modal-vue'
 import {ref} from "vue";
-import InputError from "@/components/ui/input/InputError.vue";
 import {Label} from "@/components/ui/label/index.js";
 import {LoaderCircle} from 'lucide-vue-next';
 import {Button} from '@/components/ui/button/index.js'
 import {Textarea} from '@/components/ui/textarea/index.js'
 import {useForm} from "@inertiajs/vue3";
-import ProductCard from "@/components/products/ProductCard.vue";
+import ErrorMessage from "@/components/support/ErrorMessage.vue";
 
 const props = defineProps({
   product: Object,
 })
 const form = useForm({
-  content: null,
+  content: '',
 })
 const modalRef = ref(null)
-const submit = () => form.post(route('cabinet.stock.store', props.product.id), {
-  onSuccess: () => modalRef.value.close(),
-  onError: (errors) => {
-    console.log(errors)
-  }
+const submit = () => form.post(route('my.products.stock-items.store', props.product.id), {
+  onSuccess: () => modalRef.value.close()
 })
 
 </script>
@@ -35,7 +31,7 @@ const submit = () => form.post(route('cabinet.stock.store', props.product.id), {
         <div class="grid gap-2">
           <Label for="content">Содержимое</Label>
           <Textarea id="content" v-model="form.content" />
-          <InputError :message="form.errors.content"/>
+          <ErrorMessage :message="form.errors.content"/>
         </div>
 
         <div>
@@ -49,6 +45,3 @@ const submit = () => form.post(route('cabinet.stock.store', props.product.id), {
 
   </Modal>
 </template>
-
-<style scoped>
-</style>

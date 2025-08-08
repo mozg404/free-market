@@ -12,29 +12,37 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
+ *
  * @property int $id
  * @property int $order_id
  * @property int $stock_item_id
- * @property int $base_price
  * @property int $current_price
+ * @property int $base_price
  * @property-read \App\Models\Order $order
- * @property-read mixed $price
+ * @property Price $price
  * @property-read \App\Models\StockItem $stockItem
+ * @method static OrderItemCollection<int, static> all($columns = ['*'])
  * @method static OrderItemQueryBuilder<static>|OrderItem descOrder()
+ * @method static OrderItemQueryBuilder<static>|OrderItem for(\App\Models\Order|\App\Models\User $model)
+ * @method static OrderItemQueryBuilder<static>|OrderItem forOrder(\App\Models\Order|int $order)
+ * @method static OrderItemQueryBuilder<static>|OrderItem forUser(\App\Models\User|int $user)
+ * @method static OrderItemCollection<int, static> get($columns = ['*'])
  * @method static OrderItemQueryBuilder<static>|OrderItem isNew()
  * @method static OrderItemQueryBuilder<static>|OrderItem isPaid()
  * @method static OrderItemQueryBuilder<static>|OrderItem newModelQuery()
  * @method static OrderItemQueryBuilder<static>|OrderItem newQuery()
  * @method static OrderItemQueryBuilder<static>|OrderItem query()
+ * @method static OrderItemQueryBuilder<static>|OrderItem whereBasePrice($value)
+ * @method static OrderItemQueryBuilder<static>|OrderItem whereCurrentPrice($value)
  * @method static OrderItemQueryBuilder<static>|OrderItem whereId($value)
  * @method static OrderItemQueryBuilder<static>|OrderItem whereOrderId($value)
- * @method static OrderItemQueryBuilder<static>|OrderItem wherePriceBase($value)
- * @method static OrderItemQueryBuilder<static>|OrderItem wherePriceDiscount($value)
  * @method static OrderItemQueryBuilder<static>|OrderItem whereSeller(int $id)
  * @method static OrderItemQueryBuilder<static>|OrderItem whereStockItemId($value)
- * @method static OrderItemQueryBuilder<static>|OrderItem whereUser(int $id)
- * @method static OrderItemQueryBuilder<static>|OrderItem withOrder(bool $withUser = true)
- * @method static OrderItemQueryBuilder<static>|OrderItem withProduct(bool $withUser = true)
+ * @method static OrderItemQueryBuilder<static>|OrderItem withOrder()
+ * @method static OrderItemQueryBuilder<static>|OrderItem withOrderUser()
+ * @method static OrderItemQueryBuilder<static>|OrderItem withProduct()
+ * @method static OrderItemQueryBuilder<static>|OrderItem withProductUser()
  * @method static OrderItemQueryBuilder<static>|OrderItem withStockItem()
  * @mixin \Eloquent
  */

@@ -48,7 +48,7 @@ class OrderItemQueryBuilder extends Builder
     public function whereSeller(int $id): static
     {
         return $this->whereHas('stockItem', function (StockItemQueryBuilder $query) use ($id) {
-            return $query->whereUser($id);
+            return $query->forUser($id);
         });
     }
     

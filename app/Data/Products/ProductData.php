@@ -8,6 +8,7 @@ use App\Data\ImageData;
 use App\Data\User\UserShortData;
 use App\Models\Product;
 use App\Support\Price;
+use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Data;
 
 class ProductData extends Data
@@ -18,7 +19,11 @@ class ProductData extends Data
         public Price $price,
         public ImageData $preview_image,
         public ?UserShortData $user = null,
+        public Carbon $created_at,
         public ?int $stock_items_count = null,
+        public ?int $available_stock_items_count = null,
+        public ?int $sold_stock_items_count = null,
+        public ?int $reserved_stock_items_count = null,
     ) {
     }
 }

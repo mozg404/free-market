@@ -16,6 +16,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $slug
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Feature> $features
+ * @property-read int|null $features_count
+ * @method static \Database\Factories\CategoryFactory factory($count = null, $state = [])
  * @method static CategoryQueryBuilder<static>|Category newModelQuery()
  * @method static CategoryQueryBuilder<static>|Category newQuery()
  * @method static CategoryQueryBuilder<static>|Category query()
@@ -24,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static CategoryQueryBuilder<static>|Category whereName($value)
  * @method static CategoryQueryBuilder<static>|Category whereSlug($value)
  * @method static CategoryQueryBuilder<static>|Category whereUpdatedAt($value)
+ * @method static CategoryQueryBuilder<static>|Category withFeatures()
  * @mixin \Eloquent
  */
 class Category extends Model

@@ -32,7 +32,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  id: Number,
+  id: {
+    type: Number,
+    default: 0,
+  },
   data: {
     type: Object,
     default: () => ({}),

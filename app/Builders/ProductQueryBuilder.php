@@ -157,13 +157,44 @@ class ProductQueryBuilder extends Builder
     }
 
     /**
+     * Включает количество позиций
+     * @return $this
+     */
+    public function withStockItemsCount(): static
+    {
+        return $this->withCount('stockItems');
+    }
+
+    /**
      * Включает количество доступных позиций
      * @return $this
      */
     public function withAvailableStockItemsCount(): static
     {
-        return $this->withCount(['stockItems' => static function (Builder $builder) {
-            return $builder->where('status', 'available');
+        return $this->withCount(['stockItems as available_stock_items_count' => static function (StockItemQueryBuilder $builder) {
+            return $builder->isAvailable();
+        }]);
+    }
+
+    /**
+     * Включает количество проданных позиций
+     * @return $this
+     */
+    public function withSoldStockItemsCount(): static
+    {
+        return $this->withCount(['stockItems as sold_stock_items_count' => static function (StockItemQueryBuilder $builder) {
+            return $builder->isSold();
+        }]);
+    }
+
+    /**
+     * Включает количество зарезервированных позиций
+     * @return $this
+     */
+    public function withReservedStockItemsCount(): static
+    {
+        return $this->withCount(['stockItems as reserved_stock_items_count' => static function (StockItemQueryBuilder $builder) {
+            return $builder->isReserved();
         }]);
     }
 

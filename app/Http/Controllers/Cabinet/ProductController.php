@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Cabinet;
 
+use App\Data\Products\ProductDetailedData;
 use App\Data\Products\ProductEditableData;
 use App\Data\Products\ProductData;
+use App\Data\Products\StockItemData;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
@@ -24,6 +26,8 @@ class ProductController extends Controller
     {
         $products = Product::query()
             ->forUser(Auth::id())
+            ->withStockItemsCount()
+            ->withAvailableStockItemsCount()
             ->orderBy('id', 'desc');
 
         if (!empty($request->input('search'))) {
@@ -32,10 +36,21 @@ class ProductController extends Controller
 
         $products = $products->paginate(10);
 
-        return Inertia::render('cabinet/products/ProductList', [
+        return Inertia::render('cabinet/products/ProductIndex', [
             'products' => ProductData::collect($products->items()),
             'links' => $products->toArray()['links'],
             'filters' => $request->only(['search', 'shop_id']),
+        ]);
+    }
+
+    public function show(Product $product, Request $request)
+    {
+        return Inertia::render('cabinet/products/ProductShow', [
+            'product' => ProductDetailedData::from($product),
+            'itemsPaginated' => StockItemData::collect($product->stockItems()->orderByDesc('id')->paginate(10)),
+            'availableItemsCount' => $product->stockItems()->isAvailable()->count(),
+            'soldItemsCount' => $product->stockItems()->isSold()->count(),
+            'reservedItemsCount' => $product->stockItems()->isReserved()->count(),
         ]);
     }
 

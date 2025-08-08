@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Carbon|null $paid_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read Collection<int, \App\Models\OrderItem> $items
+ * @property-read \App\Collections\OrderItemCollection<int, \App\Models\OrderItem> $items
  * @property-read int|null $items_count
  * @property-read \App\Models\User $user
  * @method static OrderQueryBuilder<static>|Order descOrder()
@@ -45,6 +45,7 @@ use Illuminate\Support\Facades\DB;
  * @method static OrderQueryBuilder<static>|Order whereUserId($value)
  * @method static OrderQueryBuilder<static>|Order withItems()
  * @method static OrderQueryBuilder<static>|Order withItemsCount()
+ * @method static OrderQueryBuilder<static>|Order withProductSellers()
  * @method static OrderQueryBuilder<static>|Order withProducts()
  * @method static OrderQueryBuilder<static>|Order withStockItems()
  * @method static OrderQueryBuilder<static>|Order withUser()

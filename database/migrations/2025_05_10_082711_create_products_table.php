@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('name', 255);
             $table->integer('current_price');
             $table->integer('base_price');
-            $table->boolean('is_available')->default(false);
+            $table->boolean('is_publish')->default(false);
+            $table->boolean('is_available')->default(true);
             $table->string('preview_image', 255)->nullable();
             $table->text('description')->nullable();
+            $table->text('activation_instruction')->nullable();
             $table->timestamps();
         });
 
@@ -28,9 +30,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('status');
-            $table->text('content');
-            $table->foreignId('buyer_id')->nullable()->constrained('users');
-            $table->timestamp('sold_at')->nullable(); // Когда куплен
+            $table->string('content');
+            $table->foreignId('pinned_user_id')->nullable()->constrained('users');
+            $table->timestamp('pinned_at')->nullable();
             $table->timestamps();
         });
     }

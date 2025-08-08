@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Category $category
+ * @method static \Database\Factories\FeatureFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature query()

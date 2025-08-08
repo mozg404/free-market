@@ -7,21 +7,24 @@ import {LoaderCircle} from 'lucide-vue-next';
 import {Button} from '@/components/ui/button/index.js'
 import {Textarea} from '@/components/ui/textarea/index.js'
 import {useForm} from "@inertiajs/vue3";
-import ProductCard from "@/components/products/ProductCard.vue";
+import ErrorMessage from "@/components/support/ErrorMessage.vue";
 
 const props = defineProps({
-  id: Number,
-  content: String,
+  product: {
+    type: Object,
+    required: true,
+  },
+  stockItem: {
+    type: Object,
+    required: true,
+  },
 })
 const form = useForm({
-  content: props.content,
+  content: props.stockItem.content,
 })
 const modalRef = ref(null)
-const submit = () => form.put(route('cabinet.stock.update', props.id), {
+const submit = () => form.put(route('my.products.stock-items.update', [props.product.id, props.stockItem.id]), {
   onSuccess: () => modalRef.value.close(),
-  onError: (errors) => {
-    console.log(errors)
-  }
 })
 
 </script>
@@ -36,7 +39,7 @@ const submit = () => form.put(route('cabinet.stock.update', props.id), {
         <div class="grid gap-2">
           <Label for="content">Содержимое</Label>
           <Textarea id="content" v-model="form.content" />
-          <InputError :message="form.errors.content"/>
+          <ErrorMessage :message="form.errors.content"/>
         </div>
 
         <div>
@@ -50,6 +53,3 @@ const submit = () => form.put(route('cabinet.stock.update', props.id), {
 
   </Modal>
 </template>
-
-<style scoped>
-</style>

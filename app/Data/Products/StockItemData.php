@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Data\Products;
 
 use App\Data\ImageData;
+use App\Data\User\UserData;
 use App\Enum\OrderStatus;
 use App\Enum\StockItemStatus;
 use App\Models\Product;
@@ -17,26 +18,11 @@ class StockItemData extends Data
 {
     public function __construct(
         public int $id,
-        public int $productId,
+        public int $product_id,
         public StockItemStatus $status,
-        public bool $isAvailable,
-        public bool $isReserved,
-        public bool $isSold,
-        public Carbon $createdAt,
-        public Carbon $updatedAt,
+        public string $content,
+        public ?UserData $pinnedUser = null,
+        public Carbon $created_at,
+        public Carbon $updated_at,
     ){}
-
-    public static function fromModel(StockItem $stockItem): self
-    {
-        return new self(
-            id: $stockItem->id,
-            productId: $stockItem->product_id,
-            status: $stockItem->status,
-            isAvailable: $stockItem->isAvailable(),
-            isReserved: $stockItem->isReserved(),
-            isSold: $stockItem->isSold(),
-            createdAt: $stockItem->created_at,
-            updatedAt: $stockItem->updated_at,
-        );
-    }
 }

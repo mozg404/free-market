@@ -16,11 +16,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $product_id
  * @property StockItemStatus $status
  * @property string $content
- * @property int|null $buyer_id
- * @property string|null $sold_at
+ * @property int|null $pinned_user_id
+ * @property string|null $pinned_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Product $ProductCard
+ * @property-read \App\Models\Product $product
  * @method static \Database\Factories\StockItemFactory factory($count = null, $state = [])
  * @method static StockItemQueryBuilder<static>|StockItem isAvailable()
  * @method static StockItemQueryBuilder<static>|StockItem isReserved()
@@ -53,7 +53,20 @@ class StockItem extends Model
     {
         return [
             'status' => StockItemStatus::class,
+            'pinned_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Переводит статус к "Доступно"
+     * @return void
+     */
+    public function toAvailable(): void
+    {
+        $this->status = StockItemStatus::AVAILABLE;
+        $this->pinned_user_id = null;
+        $this->pinned_at = null;
+        $this->save();
     }
 
     public function isAvailable(): bool
@@ -61,24 +74,22 @@ class StockItem extends Model
         return $this->status === StockItemStatus::AVAILABLE;
     }
 
-    public function isReserved(): bool
-    {
-        return $this->status === StockItemStatus::RESERVED;
-    }
-
     /**
-     * Резервирует позицию
+     * Резервирует позицию за пользователем
+     * @param User $user
      * @return void
      */
-    public function reserve(): void
+    public function reserve(User $user): void
     {
         $this->status = StockItemStatus::RESERVED;
+        $this->pinned_user_id = $user->id;
+        $this->pinned_at = now();
         $this->save();
     }
 
-    public function isSold(): bool
+    public function isReserved(): bool
     {
-        return $this->status === StockItemStatus::SOLD;
+        return $this->status === StockItemStatus::RESERVED;
     }
 
     /**
@@ -89,13 +100,49 @@ class StockItem extends Model
     public function sold(User $user): void
     {
         $this->status = StockItemStatus::SOLD;
-        $this->buyer_id = $user->id;
+        $this->pinned_user_id = $user->id;
+        $this->pinned_at = now();
+        $this->save();
+    }
+
+    public function isSold(): bool
+    {
+        return $this->status === StockItemStatus::SOLD;
+    }
+
+    /**
+     * Создает новую позицию
+     * @param Product $product
+     * @param string $content
+     * @return StockItem
+     */
+    public static function new(Product $product, string $content): StockItem
+    {
+        return $product->stockItems()->create([
+            'content' => $content,
+            'status' => StockItemStatus::AVAILABLE,
+        ]);
+    }
+
+    /**
+     * Изменяет содержимое позиции
+     * @param string $content
+     * @return void
+     */
+    public function edit(string $content): void
+    {
+        $this->content = $content;
         $this->save();
     }
 
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function pinnedUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'pinned_user_id');
     }
 
     public function newEloquentBuilder($query): StockItemQueryBuilder
