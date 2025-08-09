@@ -14,7 +14,7 @@ class IndexController extends Controller
     {
         $products = Product::query()
             ->withAvailableStockItemsCount()
-            //            ->with('user')
+            ->hasAvailableStockItems()
             ->orderByDesc('id')
             ->take(10)
             ->get();

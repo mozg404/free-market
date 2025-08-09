@@ -24,6 +24,7 @@ class CatalogController extends Controller
         $products = Product::query()
             ->filterFromArray($filters)
             ->withAvailableStockItemsCount()
+            ->hasAvailableStockItems()
             ->descOrder()
             ->paginate(5);
 
@@ -41,6 +42,7 @@ class CatalogController extends Controller
         $products = Product::query()
             ->filterFromArray($filters)
             ->withAvailableStockItemsCount()
+            ->hasAvailableStockItems()
             ->descOrder()
             ->for($category)
             ->get();

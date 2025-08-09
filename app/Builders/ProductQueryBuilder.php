@@ -62,56 +62,47 @@ class ProductQueryBuilder extends Builder
     }
 
     /**
-     * Фильтр по минимальной цене (с учетом скидки)
+     * Фильтр по минимальной цене (current_price)
      */
-    public function wherePriceMin(int $minPrice): self
+    public function wherePriceMin(float $minPrice): self
     {
-        return $this->where(function($query) use ($minPrice) {
-            $query->where(function($q) use ($minPrice) {
-                $q->whereNotNull('price_discount')
-                    ->where('price_discount', '>=', $minPrice);
-            })->orWhere(function($q) use ($minPrice) {
-                $q->whereNull('price_discount')
-                    ->where('price_base', '>=', $minPrice);
-            });
-        });
+        return $this->where('current_price', '>=', $minPrice);
     }
 
     /**
-     * Фильтр по максимальной цене (с учетом скидки)
+     * Фильтр по максимальной цене (current_price)
      */
-    public function wherePriceMax(int $maxPrice): self
+    public function wherePriceMax(float $maxPrice): self
     {
-        return $this->where(function($query) use ($maxPrice) {
-            $query->where(function($q) use ($maxPrice) {
-                $q->whereNotNull('price_discount')
-                    ->where('price_discount', '<=', $maxPrice);
-            })->orWhere(function($q) use ($maxPrice) {
-                $q->whereNull('price_discount')
-                    ->where('price_base', '<=', $maxPrice);
-            });
-        });
+        return $this->where('current_price', '<=', $maxPrice);
     }
 
     /**
-     * Фильтр по диапазону цен (с учетом скидки)
-     */
-    public function wherePriceBetween(?int $minPrice, ?int $maxPrice): self
-    {
-        return $this
-            ->when($minPrice, fn($q) => $q->wherePriceMin($minPrice))
-            ->when($maxPrice, fn($q) => $q->wherePriceMax($maxPrice));
-    }
-
-    /**
-     * Только со скидками
+     * Только товары со скидкой (current_price < base_price)
      */
     public function onlyDiscounted(): self
     {
-        return $this->whereNotNull('price_discount')
-            ->where('price_discount', '<', DB::raw('price_base'));
+        return $this->whereColumn('current_price', '<', 'base_price');
     }
 
+    /**
+     * Имеет доступные для продажи позиции
+     */
+    public function hasAvailableStockItems(): self
+    {
+        return $this->whereHas('stockItems', fn (StockItemQueryBuilder $builder) =>
+            $builder->isAvailable()
+        );
+    }
+
+    /**
+     * Имеет позиции на складе
+     */
+    public function hasStockItems(): self
+    {
+        return $this->whereHas('stockItems');
+    }
+    
     /**
      * Сортировка по актуальной цене
      */
@@ -120,7 +111,7 @@ class ProductQueryBuilder extends Builder
         return $this->orderByRaw('COALESCE(price_discount, price_base) ' . $direction);
     }
 
-    public function forUser(User|int $user): static
+    public function forUser(User|int $user): self
     {
         if (is_object($user)) {
             $user = $user->id;
@@ -129,7 +120,7 @@ class ProductQueryBuilder extends Builder
         return $this->where('user_id', $user);
     }
 
-    public function forCategory(Category|int $category): static
+    public function forCategory(Category|int $category): self
     {
         if (is_object($category)) {
             $category = $category->id;
@@ -138,7 +129,7 @@ class ProductQueryBuilder extends Builder
         return $this->where('category_id', $category);
     }
 
-    public function for(User|Category $object): static
+    public function for(User|Category $object): self
     {
         if (is_a($object, User::class)) {
             return $this->forUser($object);
@@ -151,7 +142,7 @@ class ProductQueryBuilder extends Builder
         return $this;
     }
 
-    public function withFeatures(): static
+    public function withFeatures(): self
     {
         return $this->with('features');
     }
@@ -160,7 +151,7 @@ class ProductQueryBuilder extends Builder
      * Включает количество позиций
      * @return $this
      */
-    public function withStockItemsCount(): static
+    public function withStockItemsCount(): self
     {
         return $this->withCount('stockItems');
     }
@@ -169,7 +160,7 @@ class ProductQueryBuilder extends Builder
      * Включает количество доступных позиций
      * @return $this
      */
-    public function withAvailableStockItemsCount(): static
+    public function withAvailableStockItemsCount(): self
     {
         return $this->withCount(['stockItems as available_stock_items_count' => static function (StockItemQueryBuilder $builder) {
             return $builder->isAvailable();
@@ -180,7 +171,7 @@ class ProductQueryBuilder extends Builder
      * Включает количество проданных позиций
      * @return $this
      */
-    public function withSoldStockItemsCount(): static
+    public function withSoldStockItemsCount(): self
     {
         return $this->withCount(['stockItems as sold_stock_items_count' => static function (StockItemQueryBuilder $builder) {
             return $builder->isSold();
@@ -191,7 +182,7 @@ class ProductQueryBuilder extends Builder
      * Включает количество зарезервированных позиций
      * @return $this
      */
-    public function withReservedStockItemsCount(): static
+    public function withReservedStockItemsCount(): self
     {
         return $this->withCount(['stockItems as reserved_stock_items_count' => static function (StockItemQueryBuilder $builder) {
             return $builder->isReserved();
@@ -202,7 +193,7 @@ class ProductQueryBuilder extends Builder
      * Сортировка по ID в обратном порядке
      * @return $this
      */
-    public function descOrder(): static
+    public function descOrder(): self
     {
         return $this->orderByDesc('id');
     }
@@ -212,7 +203,7 @@ class ProductQueryBuilder extends Builder
      * @param string $search
      * @return $this
      */
-    public function searchByName(string $search): static
+    public function searchByName(string $search): self
     {
         return $this->where('name', 'like', '%' . $search . '%');
     }
@@ -231,7 +222,7 @@ class ProductQueryBuilder extends Builder
      * @param array $ids
      * @return $this
      */
-    public function whereIds(array $ids): static
+    public function whereIds(array $ids): self
     {
         return $this->whereIn('id', $ids);
     }
