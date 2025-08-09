@@ -117,7 +117,7 @@ const submit = () => {
 
       <div class="grid gap-2">
         <Label>Описание <span class="text-red-600">*</span></Label>
-        <QuillEditor v-model="form.description" placeholder="Начните писать"/>
+        <QuillEditor v-model="form.description"/>
         <InputError :message="form.errors.description"/>
       </div>
     </div>
