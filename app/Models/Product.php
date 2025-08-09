@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
+use App\Builders\ProductQueryBuilder;
+use App\Builders\StockItemQueryBuilder;
+use App\Casts\ImageCast;
 use App\Collections\ArticleCollection;
 use App\Collections\ProductCollection;
 use App\Data\Products\ProductEditableData;
-use App\Builders\ProductQueryBuilder;
-use App\Builders\StockItemQueryBuilder;
-use App\Support\Filepond\Image;
-use App\Support\Filepond\ImageStub;
-use App\Support\Phone;
+use App\Support\Image;
 use App\Support\Price;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -32,7 +31,7 @@ use Illuminate\Support\Facades\DB;
  * @property int $base_price
  * @property bool $is_publish
  * @property bool $is_available
- * @property \App\Support\Filepond\Image|string|null|null $preview_image
+ * @property \App\Support\Image|string|null|null $preview_image
  * @property string|null $description
  * @property string|null $activation_instruction
  * @property Carbon|null $created_at
@@ -106,6 +105,7 @@ class Product extends Model
             'current_price' => 'int',
             'base_price' => 'int',
             'is_available' => 'boolean',
+            'preview_image' => ImageCast::class,
         ];
     }
 
@@ -120,30 +120,6 @@ class Product extends Model
                 'base_price' => $price->getBasePrice(),
                 'current_price' => $price->getCurrentPrice()
             ]
-        );
-    }
-
-    protected function previewImage(): Attribute
-    {
-        return Attribute::make(
-            get: static function (string|null $id) {
-                if (is_string($id) && Image::exists($id)) {
-                    return Image::from($id);
-                }
-
-                return null;
-            },
-            set: static function (Image|string|null $id) {
-                if (is_a($id, Image::class)) {
-                    return $id;
-                }
-
-                if (is_string($id) && Image::exists($id)) {
-                    return Image::from($id);
-                }
-
-                return null;
-            },
         );
     }
 
@@ -182,12 +158,12 @@ class Product extends Model
     private function saturate(ProductEditableData $data): void
     {
         $this->name = $data->name;
-        $this->category_id = $data->categoryId;
-        $this->price = Price::fromBaseAndDiscount($data->priceBase, $data->priceDiscount);
+        $this->category_id = $data->category_id;
+        $this->price = Price::fromBaseAndDiscount($data->price_base, $data->price_discount);
         $this->description = $data->description;
 
-        if (isset($data->previewImage)) {
-            $this->preview_image = $data->previewImage;
+        if (isset($data->preview_image)) {
+            $this->preview_image = $data->preview_image;
         }
     }
 

@@ -16,7 +16,7 @@ const props = defineProps({
 <div class="relative">
   <Link :href="route('catalog.product', product.id)">
     <ProductImage
-      :image="product.preview_image"
+      :src="product.preview_image"
       :alt="product.name"
     />
   </Link>

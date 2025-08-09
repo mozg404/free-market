@@ -3,10 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Casts\ImageCast;
 use App\Contracts\Transactionable;
 use App\Enum\TransactionType;
+use App\Support\Image;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +23,7 @@ use Illuminate\Support\Facades\DB;
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
+ * @property Image|null $avatar
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -70,7 +73,20 @@ class User extends Authenticatable
             'balance' => 'int',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'avatar' => ImageCast::class,
         ];
+    }
+
+    /**
+     * Изменяет аватар пользователя
+     * @param Image $image
+     * @return void
+     * @throws \ErrorException
+     */
+    public function changeAvatar(Image $image): void
+    {
+        $this->avatar = $image->publishIfTemporary();
+        $this->save();
     }
 
     /**
@@ -107,6 +123,14 @@ class User extends Authenticatable
                 'created_at' => now()->toDateTimeString(),
             ]);
         });
+    }
+
+    public function toArray(): array
+    {
+        $arr = parent::toArray();
+        $arr['avatar'] = $this->avatar?->getUrl();
+
+        return $arr;
     }
 
     public function hasEnoughBalance(int $amount): bool

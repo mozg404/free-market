@@ -2,7 +2,6 @@
 
 namespace App\Data\User;
 
-use App\Models\User;
 use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 
@@ -13,6 +12,8 @@ class UserData extends Data
         public string $name,
         public string $email,
         public int $balance,
+        public ?string $avatar,
         public Carbon $created_at,
-    ) {}
+    ) {
+    }
 }

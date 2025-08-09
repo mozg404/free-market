@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Support\Image;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,10 +15,19 @@ class TestController extends Controller
 
     public function test(Request $request)
     {
-        dd(Product::find(2)->stockItems()->isAvailable()->count());
+
+//        "id": "tmp/FK8wKTILSG2DyN3Y7l4HfzCc0J2u10eAyJNNVRSm.jpg",
+//        "uri": "/storage/tmp/FK8wKTILSG2DyN3Y7l4HfzCc0J2u10eAyJNNVRSm.jpg",
+//        "url": "http://localhost:8080/storage/tmp/FK8wKTILSG2DyN3Y7l4HfzCc0J2u10eAyJNNVRSm.jpg",
+//        "name": "FK8wKTILSG2DyN3Y7l4HfzCc0J2u10eAyJNNVRSm.jpg",
+//        "size": 35437,
+//        "type": "image/jpeg"
 
 
-        return Product::first();
+
+        $image = Image::from('http://localhost:8080/storage/tmp/FK8wKTILSG2DyN3Y7l4HfzCc0J2u10eAyJNNVRSm.jpg');
+
+        return $image;
     }
 
     public function testPage()

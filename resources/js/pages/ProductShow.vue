@@ -36,7 +36,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
         <div class="flex flex-col lg:flex-row gap-8">
           <!-- Левый (плавающий) блок -->
           <div class="lg:sticky lg:top-6 lg:self-start lg:w-1/3">
-            <ProductImage :image="product.preview_image" :alt="product.name"/>
+            <ProductImage :src="product.preview_image" :alt="product.name"/>
 
             <div class="my-4 text-center">
               <div class="flex items-center justify-center space-x-2" v-if="product.price.has_discount">

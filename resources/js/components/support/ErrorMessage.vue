@@ -6,7 +6,7 @@
 
 <template>
     <div v-show="message">
-        <p class="text-xs text-red-600 dark:text-red-500">
+        <p class="text-xs text-destructive whitespace-normal">
             {{ message }}
         </p>
     </div>

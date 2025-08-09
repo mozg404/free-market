@@ -17,7 +17,7 @@ const props = defineProps({
           <div class="w-20 shrink-0 mr-4">
             <Link :href="route('catalog.product', item.product.id)" class="block">
               <ProductImage
-                :image="item.product.preview_image"
+                :src="item.product.preview_image"
                 :alt="item.product.name"
               />
             </Link>

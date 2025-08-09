@@ -7,7 +7,7 @@ import {Button} from '@/components/ui/button/index.js'
 import {useForm} from "@inertiajs/vue3";
 import FilePondImage from "@/components/support/FilePondImage.vue";
 import QuillEditor from "@/components/support/QuillEditor.vue";
-import { ref, computed } from 'vue'
+import { ref, computed,watch } from 'vue'
 import {
   Select,
   SelectContent,
@@ -26,6 +26,7 @@ import {Switch} from "@/components/ui/switch/index.js";
 import FormMultipleCheckbox from "@/components/shared/form/FormMultipleCheckbox.vue";
 import FormMultipleCheckboxList from "@/components/shared/form/FormMultipleCheckboxList.vue";
 import {normalizeKeyValuePairs} from "@/lib/support.js";
+import ImageUploader from "@/components/shared/ImageUploader.vue";
 
 const props = defineProps({
   isEdit: {
@@ -45,18 +46,19 @@ const props = defineProps({
 
 const form = useForm({
   name: props.data.name,
-  categoryId: props.data.categoryId ?? props.categories[0].id,
-  priceBase: props.data.priceBase,
-  priceDiscount: props.data.priceDiscount,
+  category_id: props.data.category_id ?? props.categories[0].id,
+  price_base: props.data.price_base,
+  price_discount: props.data.price_discount,
   description: props.data.description,
-  previewImage: props.data.previewImage,
+  preview_image: props.data.preview_image,
   features: props.data.features ?? [],
+  _method: props.isEdit ? 'PUT' : 'GET', // Method spoofing
 })
 
 // Доступные характеристики для выбранной категории
 const currentFeatures = computed(() => {
-  if (!form.categoryId) return []
-  return props.categories.find(c => c.id === form.categoryId)?.features || []
+  if (!form.category_id) return []
+  return props.categories.find(c => c.id === form.category_id)?.features || []
 })
 
 // Генерация полей для характеристик
@@ -83,13 +85,13 @@ const selectValuesFormatted = (values) => {
 
 const submit = () => {
   if (props.isEdit) {
-    form.put(route('cabinet.products.update', props.id))
+    form.post(route('my.products.update', props.id), {
+      forceFormData: true,
+    })
   } else {
-    form.post(route('cabinet.products.store'))
+    form.post(route('my.products.store'))
   }
 }
-
-
 </script>
 
 <template>
@@ -98,8 +100,8 @@ const submit = () => {
   <form @submit.prevent="submit" class="flex flex-col gap-6">
     <div class="grid gap-6">
       <div class="grid gap-2">
-        <FormField label="Категория" :required="true" :error="form.errors.categoryId">
-          <FormSelect :options="categories" v-model="form.categoryId" />
+        <FormField label="Категория" :required="true" :error="form.errors.category_id">
+          <FormSelect :options="categories" v-model="form.category_id" />
         </FormField>
       </div>
 
@@ -111,21 +113,21 @@ const submit = () => {
 
       <div class="grid grid-cols-2 gap-6">
         <div class="grid gap-2">
-          <FormField label="Цена" :required="true" :error="form.errors.priceBase">
-            <FormNumberInput  v-model="form.priceBase" />
+          <FormField label="Цена" :required="true" :error="form.errors.price_base">
+            <FormNumberInput  v-model="form.price_base" />
           </FormField>
         </div>
         <div class="grid gap-2">
-          <FormField label="Цена по скидке" :error="form.errors.priceDiscount">
-            <FormNumberInput v-model="form.priceDiscount" />
+          <FormField label="Цена по скидке" :error="form.errors.price_discount">
+            <FormNumberInput v-model="form.price_discount" />
           </FormField>
         </div>
       </div>
 
       <div class="grid gap-2">
         <Label>Изображение <span class="text-red-600">*</span></Label>
-        <FilePondImage v-model="form.previewImage"/>
-        <InputError :message="form.errors.previewImage"/>
+        <ImageUploader v-model="form.preview_image" :aspect-ratio="3/4"/>
+        <InputError :message="form.errors.preview_image"/>
       </div>
 
       <div class="grid gap-2">
@@ -135,7 +137,7 @@ const submit = () => {
       </div>
     </div>
 
-    <div class="grid gap-6" v-if="form.categoryId">
+    <div class="grid gap-6" v-if="form.category_id">
       <div v-if="featureFields" v-for="field in featureFields" :key="field.id" class="grid gap-2">
         <template v-if="field.type === 'text'">
           <FormField :label="field.name">

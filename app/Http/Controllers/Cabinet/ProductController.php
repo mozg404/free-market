@@ -65,13 +65,12 @@ class ProductController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(ProductEditableData $data)
     {
-        dd($request->all());
-        Product::new(Auth::user(), ProductEditableData::validateAndCreate($request));
+        Product::new(Auth::user(), $data);
         $this->toaster->success('Товар успешно создан');
 
-        return redirect()->route('cabinet.products');
+        return redirect()->route('my.products');
     }
 
     public function edit(Product $product)
@@ -88,12 +87,12 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update(Request $request, Product $product)
+    public function update(ProductEditableData $data, Product $product)
     {
-        $product->edit(ProductEditableData::validateAndCreate($request));
+        $product->edit($data);
         $this->toaster->success('Товар успешно изменен');
 
-        return redirect()->route('cabinet.products');
+        return redirect()->route('my.products');
     }
 
     public function destroy(Product $product)
@@ -101,6 +100,6 @@ class ProductController extends Controller
         $this->products->delete($product);
         $this->toaster->success('Товар успешно удален');
 
-        return redirect()->route('cabinet.products');
+        return redirect()->route('my.products');
     }
 }

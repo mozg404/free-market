@@ -8,14 +8,26 @@ import MainTitle from "@/components/shared/layout/MainTitle.vue";
 import { Label } from "@/components/ui/label"
 import ImageUploader from "@/components/shared/ImageUploader.vue";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card/index.js";
+import ErrorMessage from "@/components/support/ErrorMessage.vue";
+import {Button} from "@/components/ui/button/index.js";
 
-defineProps({
+const props = defineProps({
   user: Object,
 })
 
 const form = useForm({
-  avatar: null
+  avatar: props.user.avatar,
+  _method: 'PATCH', // Method spoofing
 });
+
+const changeAvatar = () => {
+  return form.post(route('my.settings.change-avatar', props.id), {
+    forceFormData: true,
+    onSuccess: () => {
+      props.user.avatar = form.avatar;
+    }
+  })
+}
 </script>
 
 <template>
@@ -28,12 +40,16 @@ const form = useForm({
             <MainTitle class="p-0">{{ user.name }}</MainTitle>
           </div>
           <div class="text-right">
-            <ImageUploader class="w-56" upload-label="Выбрать аватар" :aspect-ratio="1" v-model="avatar"/>
+            <form @submit.prevent="changeAvatar">
+              <ImageUploader class="w-56" upload-label="Выбрать аватар" :aspect-ratio="1" v-model="form.avatar"/>
+              <ErrorMessage :message="form.errors.avatar" />
+
+              <div v-if="form.avatar !== props.user.avatar" class="text-center mt-4">
+                <Button type="submit">Сохранить</Button>
+              </div>
+            </form>
           </div>
         </div>
-
-
-
 
       </Main>
     </Wrapper>

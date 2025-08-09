@@ -10,17 +10,11 @@ use Inertia\Inertia;
 
 class IndexController extends Controller
 {
-    public function __construct(
-        private Toaster $toaster,
-    )
-    {
-    }
-
     public function __invoke()
     {
         $products = Product::query()
             ->withAvailableStockItemsCount()
-//            ->with('user')
+            //            ->with('user')
             ->orderByDesc('id')
             ->take(10)
             ->get();

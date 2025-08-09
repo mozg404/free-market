@@ -4,13 +4,8 @@ declare(strict_types=1);
 
 namespace App\Data\Products;
 
-use App\Data\ImageData;
 use App\Data\User\UserData;
-use App\Enum\OrderStatus;
 use App\Enum\StockItemStatus;
-use App\Models\Product;
-use App\Models\StockItem;
-use App\Support\Price;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Data;
 

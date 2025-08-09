@@ -60,7 +60,7 @@ const props = defineProps({
             </div>
           </div>
           <div class="w-44 shrink-0 ml-6">
-            <ProductImage :image="product.preview_image" :alt="product.name"/>
+            <ProductImage :src="product.preview_image" :alt="product.name"/>
           </div>
         </div>
 

@@ -1,10 +1,7 @@
-/*@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');*/
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');*/
 @import 'tailwindcss';
 @import "tw-animate-css";
-@import 'filepond/dist/filepond.min.css';
-@import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
-@import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css';
 
 @plugin "@tailwindcss/typography";
 
@@ -24,11 +21,11 @@
 }
 
 @theme inline {
-    /*--font-display: "Inter", sans-serif;*/
-    /*--font-sans: "Inter", sans-serif;*/
+    --font-display: "Inter", sans-serif;
+    --font-sans: "Inter", sans-serif;
 
-    --font-display: "Geist", sans-serif;
-    --font-sans: "Geist", sans-serif;
+    /*--font-display: "Geist", sans-serif;*/
+    /*--font-sans: "Geist", sans-serif;*/
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);

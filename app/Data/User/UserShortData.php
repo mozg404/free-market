@@ -12,16 +12,7 @@ class UserShortData extends Data
         public int $id,
         public string $name,
         public string $email,
+        public ?string $avatar,
         public Carbon $registeredAt,
     ) {}
-
-    public static function fromModel(User $user): self
-    {
-        return new self(
-            id: $user->id,
-            name: $user->name,
-            email: $user->email,
-            registeredAt: $user->created_at,
-        );
-    }
 }

@@ -4,9 +4,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Cabinet\BalanceController;
-use App\Http\Controllers\Cabinet\BalanceDepositController;
 use App\Http\Controllers\Cabinet\OrderController;
-use App\Http\Controllers\Cabinet\ProfileController;
+use App\Http\Controllers\Cabinet\SettingsController;
 use App\Http\Controllers\Cabinet\PurchaseController;
 use App\Http\Controllers\Cabinet\SaleController;
 use App\Http\Controllers\Cabinet\ProductController as CabinetProductController;
@@ -14,19 +13,12 @@ use App\Http\Controllers\Cabinet\ProductStockItemsController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\OrderCheckoutController;
-use App\Http\Controllers\FilepondImageController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\SandboxController;
 use App\Http\Controllers\TestController;
 use App\Http\Middleware\OrderCheckoutAccess;
 use Illuminate\Support\Facades\Route;
-
-// FilePond
-Route::get('/filepond/image/load', [FilepondImageController::class, 'load'])->name('filepond.image.load');
-Route::post('/filepond/image/upload', [FilepondImageController::class, 'upload'])->name('filepond.image.upload');
-Route::delete('/filepond/image/remove', [FilepondImageController::class, 'remove'])->name('filepond.image.remove');
 
 if (config('app.env') === 'local') {
     Route::get('/test', [TestController::class, 'test']);
@@ -34,7 +26,7 @@ if (config('app.env') === 'local') {
     Route::get('/test-page2', [TestController::class, 'testPage2']);
 }
 
-// Товары
+// My
 Route::middleware('auth')->prefix('/my')->group(function () {
     Route::get('/products', [CabinetProductController::class, 'index'])->name('my.products');
     Route::get('/products/create', [CabinetProductController::class, 'create'])->name('my.products.create');
@@ -50,34 +42,13 @@ Route::middleware('auth')->prefix('/my')->group(function () {
         Route::get('/stock-items/{stock_item}/edit', [ProductStockItemsController::class, 'edit'])->name('my.products.stock-items.edit');
         Route::put('/stock-items/{stock_item}', [ProductStockItemsController::class, 'update'])->name('my.products.stock-items.update');
     });
+
+    // Настройки профиля
+    Route::get('/settings', [SettingsController::class, 'index'])->name('my.settings');
+    Route::patch('/settings/change-avatar', [SettingsController::class, 'changeAvatar'])->name('my.settings.change-avatar');
 });
 
 Route::middleware('auth')->group(function () {
-    // Профиль
-    Route::get('/my/profile', [ProfileController::class, 'index'])->name('my.profile');
-
-    // Товары и
-//    Route::get('/my/products', [CabinetProductController::class, 'index'])->name('my.products');
-//    Route::get('/my/products/create', [CabinetProductController::class, 'create'])->name('my.products.create');
-//    Route::post('/my/products', [CabinetProductController::class, 'store'])->name('my.products.store');
-//    Route::get('/my/products/{product}', [CabinetProductController::class, 'show'])->name('my.products.show');
-//    Route::get('/my/products/{product}/edit', [CabinetProductController::class, 'edit'])->name('my.products.edit');
-//    Route::put('/my/products/{product}', [CabinetProductController::class, 'update'])->name('my.products.update');
-//    Route::delete('/my/products/{product}', [CabinetProductController::class, 'destroy'])->name('my.products.delete');
-
-
-//    Route::prefix('/my/products/{product}')->group(function () {
-//        Route::get('/stock-items/create', [ProductStockItemsController::class, 'create'])->name('my.products.stock-items.create');
-//    });
-
-
-    // Позиции товара
-//    Route::get('/my/products/{product}/stock/create', [ProductStockController::class, 'create'])->name('my.products.stock.add');
-//    Route::post('/cabinet/products/{product}/stock', [ProductStockController::class, 'store'])->name('cabinet.stock.store');
-//    Route::get('/cabinet/stock/{stock_item}/edit', [ProductStockController::class, 'edit'])->name('cabinet.stock.edit');
-//    Route::put('/cabinet/stock/{stock_item}', [ProductStockController::class, 'update'])->name('cabinet.stock.update');
-//    Route::delete('/cabinet/stock/{stock_item}', [ProductStockController::class, 'destroy'])->name('cabinet.stock.destroy');
-
     Route::get('/cabinet/purchases', [PurchaseController::class, 'index'])->name('cabinet.purchases');
     Route::get('/cabinet/sales', [SaleController::class, 'index'])->name('cabinet.sales');
 

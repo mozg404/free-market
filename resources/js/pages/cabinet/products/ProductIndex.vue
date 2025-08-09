@@ -94,7 +94,7 @@ watch([search, shopId], applyFilters);
                     <div class="flex items-center">
                       <div class="w-14 shrink-0 mr-4">
                         <Link :href="route('catalog.product', product.id)" class="block">
-                          <ProductImage :image="product.preview_image" :alt="product.name"/>
+                          <ProductImage :src="product.preview_image" :alt="product.name"/>
                         </Link>
                       </div>
                       <div class="text-sm">

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Products;
 
-use App\Data\ImageData;
 use App\Data\User\UserShortData;
-use App\Models\Product;
 use App\Support\Price;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Data;
@@ -17,7 +15,7 @@ class ProductData extends Data
         public int $id,
         public string $name,
         public Price $price,
-        public ImageData $preview_image,
+        public ?string $preview_image,
         public ?UserShortData $user = null,
         public Carbon $created_at,
         public ?int $stock_items_count = null,

@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Product;
-use App\Support\Filepond\Image;
+use App\Support\Image;
 use App\Support\Price;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -61,7 +61,7 @@ class ProductFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'preview_image' => Image::createFromPath(resource_path(static::randomFromArray(static::$images)))->id,
+                'preview_image' => Image::createFromAbsolutePath(resource_path(static::randomFromArray(static::$images)))->getRelativePath(),
             ];
         });
     }
