@@ -56,14 +56,14 @@ Route::middleware('auth')->prefix('/my')->group(function () {
     Route::patch('/settings/change-avatar', [SettingsController::class, 'changeAvatar'])->name('my.settings.change-avatar');
 
     // Мои заказы
-    Route::get('/my/orders/{order}', [OrderController::class, 'show'])
+    Route::get('/orders/{order}', [OrderController::class, 'show'])
         ->can('view', 'order')
         ->name('my.orders.show');
-    Route::get('/my/orders', [OrderController::class, 'index'])->name('my.orders');
+    Route::get('/orders', [OrderController::class, 'index'])->name('my.orders');
 
     // Мой баланс
-    Route::get('/my/balance', [BalanceController::class, 'index'])->name('my.balance');
-    Route::post('/my/balance/deposit', [BalanceController::class, 'deposit'])->name('my.balance.deposit');
+    Route::get('/balance', [BalanceController::class, 'index'])->name('my.balance');
+    Route::post('/balance/deposit', [BalanceController::class, 'deposit'])->name('my.balance.deposit');
 });
 
 Route::middleware('auth')->group(function () {
