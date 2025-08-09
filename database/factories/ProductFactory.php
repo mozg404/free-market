@@ -48,7 +48,7 @@ class ProductFactory extends Factory
         $price = Price::random();
 
         return [
-            'name' => static::randomFromArray(static::$names),
+            'name' => $this->faker->randomElement(static::$names),
             'current_price' => $price->getCurrentPrice(),
             'base_price' => $price->getBasePrice(),
             'is_available' => fake()->boolean(),
@@ -61,7 +61,7 @@ class ProductFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'preview_image' => Image::createFromAbsolutePath(resource_path(static::randomFromArray(static::$images)))->getRelativePath(),
+                'preview_image' => Image::createFromAbsolutePath(resource_path($this->faker->randomElement(static::$images)))->getRelativePath(),
             ];
         });
     }
@@ -76,10 +76,5 @@ class ProductFactory extends Factory
         }
 
         return $text;
-    }
-
-    private static function randomFromArray(array $array): string
-    {
-        return $array[random_int(0, count($array) - 1)];
     }
 }

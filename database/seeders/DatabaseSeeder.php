@@ -8,9 +8,7 @@ use App\Models\Feature;
 use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
-use Database\Factories\ProductFeatureValueFactory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Log;
 use Random\RandomException;
 
 class DatabaseSeeder extends Seeder
@@ -22,14 +20,18 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Создаем главного пользователя
-        $mainUser = User::factory()->create(['email' => 'user@gmail.com']);
+        $mainUser = User::factory()
+            ->withAvatar()
+            ->create(['email' => 'user@gmail.com']);
 
         // Создаем рандомных 5 пользователей
-        $users = User::factory(5)->create();
+        $users = User::factory(5)
+            ->withRandomAvatar()
+            ->create();
 
         // Создаем 3 категории
         $categories = Category::factory(5)
-            ->has(Feature::factory(7), 'features')
+            ->has(Feature::factory(4), 'features')
             ->create();
 
         // Для каждой категории создаем 10 товаров
