@@ -54,7 +54,7 @@ const props = defineProps({
               <CardContent class="px-4">
                 <div><small>Пополнить</small></div>
 
-                <form @submit.prevent="form.post(route('balance.deposit'))">
+                <form @submit.prevent="form.post(route('my.balance.deposit'))">
                   <FormNumberInput placeholder="Сумма" v-model="form.amount" class="mt-2 mb-4"/>
                   <ErrorMessage :message="form.errors.amount"/>
 

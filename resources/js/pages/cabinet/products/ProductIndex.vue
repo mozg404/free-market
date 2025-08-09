@@ -1,7 +1,6 @@
 <script setup>
 import {PlusIcon, Menu, Search} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
-import {Badge} from '@/components/ui/badge'
 import { ref, watch } from 'vue';
 import {Link, router} from '@inertiajs/vue3';
 import debounce from 'lodash/debounce';
@@ -41,7 +40,7 @@ const shopId = '';
 
 // Общая функция для обработки фильтров
 const applyFilters = debounce(() => {
-  router.get(route('cabinet.products'), {
+  router.get(route('my.products'), {
     search: search.value,
     shop_id: shopId.value
   }, {

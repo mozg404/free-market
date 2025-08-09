@@ -38,7 +38,7 @@ class OrderCheckoutController extends Controller
             $this->billing->processOrderPayment($order);
             $this->toaster->success('Заказ успешно оплачен');
 
-            return redirect()->route('orders.show', $order->id);
+            return redirect()->route('my.orders.show', $order->id);
         }
 
         // Если на счету недостаточно средств - создаем внешний платеж

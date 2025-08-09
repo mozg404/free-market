@@ -19,7 +19,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <MainLayout>
+  <MainLayout :with-breadcrumbs="false">
     <Wrapper>
 
       <Main>
@@ -54,7 +54,7 @@ const props = defineProps({
                   <PriceFormatter class="font-bold" :value="order.amount"/>
                 </TableCell>
                 <TableCell class="text-right">
-                  <Button :as="Link" :href="route('orders.show', order.id)" variant="secondary" size="icon" class="w-8 h-8">
+                  <Button :as="Link" :href="route('my.orders.show', order.id)" variant="secondary" size="icon" class="w-8 h-8">
                     <ChevronRight/>
                   </Button>
                 </TableCell>

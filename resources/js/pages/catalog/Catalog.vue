@@ -15,6 +15,7 @@ import FormMultipleCheckboxList from "@/components/shared/form/FormMultipleCheck
 import {normalizeKeyValuePairs} from "@/lib/support.js";
 import NavArrowLink from "@/components/shared/navigation/NavArrowLink.vue";
 import LaravelPagination from "@/components/support/LaravelPagination.vue";
+import MainLayout from "@/layouts/MainLayout.vue";
 
 const props = defineProps({
   isCategory: {
@@ -86,8 +87,8 @@ const filtersApply = () => {
 </script>
 
 <template>
+  <MainLayout :with-breadcrumbs="isCategory">
     <Wrapper>
-
       <div class="flex">
         <aside class="w-64 py-6 pr-6 border-r-1 bg-white top-0 h-screen">
 
@@ -156,12 +157,5 @@ const filtersApply = () => {
         </main>
       </div>
     </Wrapper>
+  </MainLayout>
 </template>
-
-<script>
-import MainLayout from "@/layouts/MainLayout.vue";
-
-export default {
-  layout: MainLayout,
-}
-</script>

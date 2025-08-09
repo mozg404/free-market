@@ -37,7 +37,7 @@ class PaymentController extends Controller
         if ($payment->isReplenishmentSource()) {
             $this->toaster->success('Счет успешно пополнен');
 
-            return redirect()->route('balance');
+            return redirect()->route('my.balance');
         }
 
         // Если пополнение в процессе оплаты заказа
@@ -46,7 +46,7 @@ class PaymentController extends Controller
             $this->billing->processOrderPayment($order);
             $this->toaster->success('Заказ успешно оплачен');
 
-            return redirect()->route('orders.show', $order->id);
+            return redirect()->route('my.orders.show', $order->id);
         }
 
         return 'Беда';

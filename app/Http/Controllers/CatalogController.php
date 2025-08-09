@@ -26,7 +26,7 @@ class CatalogController extends Controller
             ->withAvailableStockItemsCount()
             ->hasAvailableStockItems()
             ->descOrder()
-            ->paginate(5);
+            ->paginate(20);
 
         return Inertia::render('catalog/Catalog', [
             'filters' => $filters,
@@ -45,7 +45,7 @@ class CatalogController extends Controller
             ->hasAvailableStockItems()
             ->descOrder()
             ->for($category)
-            ->get();
+            ->paginate(20);
 
         return Inertia::render('catalog/Catalog', [
             'isCategory' => true,
@@ -53,7 +53,7 @@ class CatalogController extends Controller
             'features' => $category->features,
             'filters' => $filters,
             'categories' => $categories,
-            'products' => ProductData::collect($products)
+            'productsPaginate' => ProductData::collect($products)
         ]);
     }
 

@@ -29,15 +29,22 @@ if (config('app.env') === 'local') {
 
 // My
 Route::middleware('auth')->prefix('/my')->group(function () {
+    // Мои товары
     Route::get('/products', [CabinetProductController::class, 'index'])->name('my.products');
     Route::get('/products/create', [CabinetProductController::class, 'create'])->name('my.products.create');
     Route::post('/products', [CabinetProductController::class, 'store'])->name('my.products.store');
-    Route::get('/products/{product}', [CabinetProductController::class, 'show'])->name('my.products.show');
-    Route::get('/products/{product}/edit', [CabinetProductController::class, 'edit'])->name('my.products.edit');
-    Route::put('/products/{product}', [CabinetProductController::class, 'update'])->name('my.products.update');
+    Route::get('/products/{product}', [CabinetProductController::class, 'show'])
+        ->can('view', 'product')
+        ->name('my.products.show');
+    Route::get('/products/{product}/edit', [CabinetProductController::class, 'edit'])
+        ->can('update', 'product')
+        ->name('my.products.edit');
+    Route::put('/products/{product}', [CabinetProductController::class, 'update'])
+        ->can('update', 'product')
+        ->name('my.products.update');
     Route::delete('/products/{product}', [CabinetProductController::class, 'destroy'])->name('my.products.delete');
 
-    Route::prefix('/products/{product}')->group(function () {
+    Route::prefix('/products/{product}')->middleware(['can:view,product'])->group(function () {
         Route::get('/stock-items/create', [ProductStockItemsController::class, 'create'])->name('my.products.stock-items.create');
         Route::post('/stock-items', [ProductStockItemsController::class, 'store'])->name('my.products.stock-items.store');
         Route::get('/stock-items/{stock_item}/edit', [ProductStockItemsController::class, 'edit'])->name('my.products.stock-items.edit');
@@ -47,21 +54,21 @@ Route::middleware('auth')->prefix('/my')->group(function () {
     // Настройки профиля
     Route::get('/settings', [SettingsController::class, 'index'])->name('my.settings');
     Route::patch('/settings/change-avatar', [SettingsController::class, 'changeAvatar'])->name('my.settings.change-avatar');
+
+    // Мои заказы
+    Route::get('/my/orders/{order}', [OrderController::class, 'show'])
+        ->can('view', 'order')
+        ->name('my.orders.show');
+    Route::get('/my/orders', [OrderController::class, 'index'])->name('my.orders');
+
+    // Мой баланс
+    Route::get('/my/balance', [BalanceController::class, 'index'])->name('my.balance');
+    Route::post('/my/balance/deposit', [BalanceController::class, 'deposit'])->name('my.balance.deposit');
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/cabinet/purchases', [PurchaseController::class, 'index'])->name('cabinet.purchases');
     Route::get('/cabinet/sales', [SaleController::class, 'index'])->name('cabinet.sales');
-
-    // Заказы
-    Route::get('/orders/{order}', [OrderController::class, 'show'])
-        ->can('view', 'order')
-        ->name('orders.show');
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
-
-    // Баланс
-    Route::get('/balance', [BalanceController::class, 'index'])->name('balance');
-    Route::post('/balance/deposit', [BalanceController::class, 'deposit'])->name('balance.deposit');
 });
 
 // Корзина
@@ -78,7 +85,6 @@ Route::middleware(OrderCheckoutAccess::class)->group(function () {
 
 // Аккаунты пользователей
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
-
 
 // Каталог
 Route::get('/catalog/product/{product}', [CatalogController::class, 'show'])->name('catalog.product');

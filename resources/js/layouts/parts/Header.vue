@@ -52,7 +52,7 @@ const {user, isAuth} = useUser()
 
           <div class="flex gap-2">
             <Button variant="outline" class="rounded-3xl" v-if="isAuth" as-child>
-              <Link :href="route('balance')">
+              <Link :href="route('my.balance')">
                 <RussianRuble class="w-4 h-4"/>
                 {{ user.balance }}
               </Link>
@@ -80,10 +80,10 @@ const {user, isAuth} = useUser()
                     <Link :href="route('my.settings')" class="block w-full h-full">Настройки</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link :href="route('balance')" class="block w-full h-full">Баланс</Link>
+                    <Link :href="route('my.balance')" class="block w-full h-full">Баланс</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link :href="route('orders')" class="block w-full h-full">Покупки</Link>
+                    <Link :href="route('my.orders')" class="block w-full h-full">Покупки</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link :href="route('my.products')" class="block w-full h-full">Товары</Link>
