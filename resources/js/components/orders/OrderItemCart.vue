@@ -3,6 +3,7 @@ import {Link} from "@inertiajs/vue3";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
 import ProductImage from "@/components/products/ProductImage.vue";
 import {Card, CardContent} from "@/components/ui/card/index.js";
+import UserAvatar from "@/components/users/UserAvatar.vue";
 
 const props = defineProps({
     item: Object,
@@ -24,7 +25,13 @@ const props = defineProps({
           </div>
           <div>
             <div class="line-clamp-2">{{ item.product.name }}</div>
-            <div class="mt-2"><b>Продавец:</b> {{ item.product.user.name }}</div>
+            <div class="mt-5 flex items-center">
+              <UserAvatar class="mr-2" :src="item.product.user.avatar"/>
+              <div>
+                <div class="text-muted-foreground text-xs">Продавец</div>
+                <Link :href="route('users.show', item.product.user.id)" class="font-semibold text-sm hover:text-primary">{{item.product.user.name}}</Link>
+              </div>
+            </div>
           </div>
         </div>
 

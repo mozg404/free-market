@@ -13,6 +13,6 @@ class UserShortData extends Data
         public string $name,
         public string $email,
         public ?string $avatar,
-        public Carbon $registeredAt,
+        public Carbon $created_at,
     ) {}
 }

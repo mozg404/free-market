@@ -42,7 +42,7 @@ class OrderManager
                         'current_price' => $product->price->getCurrentPrice(),
                         'base_price' => $product->price->getBasePrice(),
                     ]);
-                    $stockItem->reserve();
+                    $stockItem->reserve($user);
                 }
             }
 

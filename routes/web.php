@@ -17,6 +17,7 @@ use App\Http\Controllers\IndexController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SandboxController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\OrderCheckoutAccess;
 use Illuminate\Support\Facades\Route;
 
@@ -74,6 +75,10 @@ Route::delete('/cart/items/{product}', [CartController::class, 'destroy'])->name
 Route::middleware(OrderCheckoutAccess::class)->group(function () {
     Route::post('/order-checkout', [OrderCheckoutController::class, 'store'])->name('order_checkout.store');
 });
+
+// Аккаунты пользователей
+Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+
 
 // Каталог
 Route::get('/catalog/product/{product}', [CatalogController::class, 'show'])->name('catalog.product');

@@ -45,6 +45,7 @@ use Illuminate\Support\Facades\DB;
  * @property-read Collection<int, \App\Models\StockItem> $stockItems
  * @property-read int|null $stock_items_count
  * @property-read \App\Models\User $user
+ * @method static Product find(int $id, array $columns = ['*'])
  * @method static ProductCollection<int, static> all($columns = ['*'])
  * @method static ProductQueryBuilder<static>|Product descOrder()
  * @method static \Database\Factories\ProductFactory factory($count = null, $state = [])
