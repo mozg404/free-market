@@ -98,4 +98,4 @@ Route::get('/logout', LogoutController::class)
     ->middleware('auth')
     ->name('logout');
 
-Route::get('/', IndexController::class)->name('index');
+Route::get('/', IndexController::class)->name('home');

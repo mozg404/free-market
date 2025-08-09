@@ -2,30 +2,15 @@
 import InputError from "@/components/ui/input/InputError.vue";
 import {Label} from "@/components/ui/label/index.js";
 import {LoaderCircle} from 'lucide-vue-next';
-import Input from "@/components/ui/input/Input.vue";
 import {Button} from '@/components/ui/button/index.js'
 import {useForm} from "@inertiajs/vue3";
-import FilePondImage from "@/components/support/FilePondImage.vue";
 import QuillEditor from "@/components/support/QuillEditor.vue";
-import { ref, computed,watch } from 'vue'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import {computed} from 'vue'
 import FormField from "@/components/shared/form/FormField.vue";
 import FormNumberInput from "@/components/shared/form/FormNumberInput.vue";
 import FormSelect from "@/components/shared/form/FormSelect.vue";
 import FormTextInput from "@/components/shared/form/FormTextInput.vue";
-import {forEach} from "lodash";
 import FormSwitch from "@/components/shared/form/FormSwitch.vue";
-import {Switch} from "@/components/ui/switch/index.js";
-import FormMultipleCheckbox from "@/components/shared/form/FormMultipleCheckbox.vue";
-import FormMultipleCheckboxList from "@/components/shared/form/FormMultipleCheckboxList.vue";
-import {normalizeKeyValuePairs} from "@/lib/support.js";
 import ImageUploader from "@/components/shared/ImageUploader.vue";
 
 const props = defineProps({

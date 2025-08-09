@@ -21,8 +21,6 @@ class SettingsController extends Controller
     {
         $user = Auth::user();
 
-//        return UserData::from($user);
-
         return Inertia::render('my/SettingsIndex', [
             'user' => UserData::from($user),
         ]);
@@ -37,6 +35,6 @@ class SettingsController extends Controller
         Auth::user()->changeAvatar(Image::createFromUploadedFile($data['avatar']));
         $this->toaster->success('Новый аватар установлен');
 
-        return back();
+        return Inertia::location(route('my.settings'));
     }
 }

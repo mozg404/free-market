@@ -8,6 +8,7 @@ use App\Services\Cart\CartManager;
 use App\Services\Toaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -50,7 +51,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'isAuth' => Auth::check(),
-            'user' => Auth::check() ? UserData::from(Auth::user()) : null,
+            'user' => Auth::check() ? UserData::from(Auth::user()->fresh()) : null,
             'cart' => $this->cart->all(),
             'toasts' => $this->toaster->pull(),
             'breadcrumbs' => $this->breadcrumbs->generateFromRequest($request)

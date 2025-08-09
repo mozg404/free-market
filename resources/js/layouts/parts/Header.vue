@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu/index.js'
+import UserAvatar from "@/components/users/UserAvatar.vue";
 
 const {cart} = useCart()
 const {user, isAuth} = useUser()
@@ -25,18 +26,14 @@ const {user, isAuth} = useUser()
       <div class="flex items-center justify-between py-5" aria-label="Global">
 
         <div class="flex items-center gap-x-6">
-          <Link href="/public" class="-m-1.5 p-1.5">
+          <Link :href="route('home')" class="-m-1.5 p-1.5">
             <span class="sr-only">Your Company</span>
             <img class="h-14 w-auto" :src="logoUrl" alt="">
           </Link>
 
           <div class="hidden lg:flex lg:gap-x-2">
             <Button variant="ghost" class="rounded-3xl" as-child>
-              <Link href="/public">Главная</Link>
-            </Button>
-
-            <Button variant="ghost" class="rounded-3xl" as-child>
-              <Link href="/catalog">Каталог</Link>
+              <Link :href="route('catalog')">Каталог</Link>
             </Button>
           </div>
         </div>
@@ -71,9 +68,7 @@ const {user, isAuth} = useUser()
             <template v-if="isAuth">
               <DropdownMenu>
                 <DropdownMenuTrigger as-child>
-                  <Button variant="outline" size="icon" class="rounded-3xl">
-                    <User2Icon class="w-4 h-4"/>
-                  </Button>
+                  <UserAvatar :src="user.avatar" class="hover:opacity-50 transition-opacity cursor-pointer"/>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent class="w-44">
                   <DropdownMenuLabel>

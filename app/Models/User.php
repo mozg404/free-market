@@ -83,10 +83,13 @@ class User extends Authenticatable
      * @return void
      * @throws \ErrorException
      */
-    public function changeAvatar(Image $image): void
+    public function changeAvatar(Image $image): self
     {
         $this->avatar = $image->publishIfTemporary();
         $this->save();
+        $this->fresh();
+
+        return $this;
     }
 
     /**

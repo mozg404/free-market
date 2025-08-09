@@ -1,13 +1,10 @@
 <script setup>
-import {Link, useForm} from '@inertiajs/vue3'
-import CabinetLayout from "@/layouts/CabinetLayout.vue";
+import {useForm} from '@inertiajs/vue3'
 import MainLayout from "@/layouts/MainLayout.vue";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import Main from "@/components/shared/layout/Main.vue";
 import MainTitle from "@/components/shared/layout/MainTitle.vue";
-import { Label } from "@/components/ui/label"
 import ImageUploader from "@/components/shared/ImageUploader.vue";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card/index.js";
 import ErrorMessage from "@/components/support/ErrorMessage.vue";
 import {Button} from "@/components/ui/button/index.js";
 
