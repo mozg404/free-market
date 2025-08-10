@@ -55,8 +55,8 @@ class ProductFactory extends Factory
             'base_price' => $price->getBasePrice(),
             'is_available' => fake()->boolean(),
             'is_published' => fake()->boolean(),
-            'description' => $this->htmlText(),
-            'instruction' => $this->htmlText(),
+            'description' => TextGenerator::paragraphs(include resource_path('data/demo_product_descriptions.php'), random_int(3, 7)),
+            'instruction' => TextGenerator::paragraphs(include resource_path('data/demo_product_instructions.php'), random_int(1, 4)),
             'preview_image' => null,
         ];
     }
