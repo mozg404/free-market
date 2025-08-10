@@ -54,6 +54,7 @@ class ProductFactory extends Factory
             'current_price' => $price->getCurrentPrice(),
             'base_price' => $price->getBasePrice(),
             'is_available' => fake()->boolean(),
+            'is_published' => fake()->boolean(),
             'description' => $this->htmlText(),
             'preview_image' => null,
         ];

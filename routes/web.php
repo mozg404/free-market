@@ -36,19 +36,32 @@ Route::middleware('auth')->prefix('/my')->group(function () {
     Route::get('/products/{product}', [CabinetProductController::class, 'show'])
         ->can('view', 'product')
         ->name('my.products.show');
-    Route::get('/products/{product}/edit', [CabinetProductController::class, 'edit'])
-        ->can('update', 'product')
-        ->name('my.products.edit');
-    Route::put('/products/{product}', [CabinetProductController::class, 'update'])
-        ->can('update', 'product')
-        ->name('my.products.update');
-    Route::delete('/products/{product}', [CabinetProductController::class, 'destroy'])->name('my.products.delete');
 
-    Route::prefix('/products/{product}')->middleware(['can:view,product'])->group(function () {
-        Route::get('/stock-items/create', [ProductStockItemsController::class, 'create'])->name('my.products.stock-items.create');
-        Route::post('/stock-items', [ProductStockItemsController::class, 'store'])->name('my.products.stock-items.store');
-        Route::get('/stock-items/{stock_item}/edit', [ProductStockItemsController::class, 'edit'])->name('my.products.stock-items.edit');
-        Route::put('/stock-items/{stock_item}', [ProductStockItemsController::class, 'update'])->name('my.products.stock-items.update');
+    Route::middleware(['can:update,product'])->group(function () {
+        Route::get('/products/{product}/edit', [CabinetProductController::class, 'edit'])
+            ->name('my.products.edit');
+
+        Route::put('/products/{product}', [CabinetProductController::class, 'update'])
+            ->name('my.products.update');
+
+        Route::delete('/products/{product}', [CabinetProductController::class, 'destroy'])->name('my.products.delete');
+
+        Route::patch('/products/{product}/publish', [CabinetProductController::class, 'publish'])
+            ->name('my.products.publish');
+        Route::patch('/products/{product}/unpublish', [CabinetProductController::class, 'unpublish'])
+            ->name('my.products.unpublish');
+
+        Route::patch('/products/{product}/mark-available', [CabinetProductController::class, 'markAsAvailable'])
+            ->name('my.products.mark-available');
+        Route::patch('/products/{product}/mark-unavailable', [CabinetProductController::class, 'markAsUnavailable'])
+            ->name('my.products.mark-unavailable');
+
+        Route::prefix('/products/{product}')->group(function () {
+            Route::get('/stock-items/create', [ProductStockItemsController::class, 'create'])->name('my.products.stock-items.create');
+            Route::post('/stock-items', [ProductStockItemsController::class, 'store'])->name('my.products.stock-items.store');
+            Route::get('/stock-items/{stock_item}/edit', [ProductStockItemsController::class, 'edit'])->name('my.products.stock-items.edit');
+            Route::put('/stock-items/{stock_item}', [ProductStockItemsController::class, 'update'])->name('my.products.stock-items.update');
+        });
     });
 
     // Настройки профиля

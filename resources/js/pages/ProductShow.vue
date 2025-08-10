@@ -52,46 +52,55 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
               </div>
             </div>
 
-            <div v-if="inCart(product.id)">
-              <div class="flex justify-center space-x-4">
-                <div class="bg-gray-100 rounded-3xl flex items-center gap-3">
-                  <Button
-                    variant="outline"
-                    class="rounded-3xl cursor-pointer hover:bg-destructive hover:text-destructive-foreground hover:border-destructive"
-                    size="icon"
-                    :disabled="form.processing"
-                    @click="decreaseQuantity(product.id)"
-                  >
-                    <Minus class="w-4 h-4"/>
-                  </Button>
+            <template v-if="product.is_available">
+              <div v-if="inCart(product.id)">
+                <div class="flex justify-center space-x-4">
+                  <div class="bg-gray-100 rounded-3xl flex items-center gap-3">
+                    <Button
+                      variant="outline"
+                      class="rounded-3xl cursor-pointer hover:bg-destructive hover:text-destructive-foreground hover:border-destructive"
+                      size="icon"
+                      :disabled="form.processing"
+                      @click="decreaseQuantity(product.id)"
+                    >
+                      <Minus class="w-4 h-4"/>
+                    </Button>
 
-                  <div>{{getCartItemQuantity(product.id)}}</div>
+                    <div>{{getCartItemQuantity(product.id)}}</div>
 
-                  <Button
-                    variant="outline"
-                    class="rounded-3xl cursor-pointer hover:bg-primary hover:text-primary-foreground hover:border-primary"
-                    size="icon"
-                    @click="addToCart(product.id)"
-                    :disabled="form.processing"
-                  >
-                    <Plus class="w-4 h-4"/>
+                    <Button
+                      variant="outline"
+                      class="rounded-3xl cursor-pointer hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                      size="icon"
+                      @click="addToCart(product.id)"
+                      :disabled="form.processing"
+                    >
+                      <Plus class="w-4 h-4"/>
+                    </Button>
+                  </div>
+                  <Button :as="Link" :href="route('cart.index')" class="rounded-3xl cursor-pointer">
+                    <ShoppingCart class="w-4 h-4"/>
+                    Перейти в корзину
                   </Button>
                 </div>
-                <Button :as="Link" :href="route('cart.index')" class="rounded-3xl cursor-pointer">
-                  <ShoppingCart class="w-4 h-4"/>
-                  Перейти в корзину
-                </Button>
               </div>
-            </div>
-            <Button
-              v-else
-              class="w-full cursor-pointer py-6"
-              @click="addToCart(product.id)"
-              :disabled="form.processing"
-            >
-              <ShoppingCart class="w-4 h-4"/>
-              В корзину
-            </Button>
+              <Button
+                v-else
+                class="w-full cursor-pointer py-6"
+                @click="addToCart(product.id)"
+                :disabled="form.processing"
+              >
+                <ShoppingCart class="w-4 h-4"/>
+                В корзину
+              </Button>
+            </template>
+
+            <template v-else>
+              <Button class="w-full cursor-pointer py-6" disabled>
+                Недоступно для покупки
+              </Button>
+            </template>
+
           </div>
 
           <!-- Правый блок (контент) -->

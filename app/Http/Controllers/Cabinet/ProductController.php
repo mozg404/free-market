@@ -45,6 +45,8 @@ class ProductController extends Controller
 
     public function show(Product $product, Request $request)
     {
+//        return ProductDetailedData::from($product);
+
         return Inertia::render('cabinet/products/ProductShow', [
             'product' => ProductDetailedData::from($product),
             'itemsPaginated' => StockItemData::collect($product->stockItems()->orderByDesc('id')->paginate(10)),
@@ -93,6 +95,38 @@ class ProductController extends Controller
         $this->toaster->success('Товар успешно изменен');
 
         return redirect()->route('my.products');
+    }
+
+    public function publish(Product $product)
+    {
+        $product->publish();
+        $this->toaster->success('Опубликовано');
+
+        return back();
+    }
+
+    public function unpublish(Product $product)
+    {
+        $product->unpublish();
+        $this->toaster->error('Снято с публикации');
+
+        return back();
+    }
+
+    public function markAsAvailable(Product $product)
+    {
+        $product->markAsAvailable();
+        $this->toaster->success('Разрешено для продажи');
+
+        return back();
+    }
+
+    public function markAsUnavailable(Product $product)
+    {
+        $product->markAsUnavailable();
+        $this->toaster->success('Снято с продажи');
+
+        return back();
     }
 
     public function destroy(Product $product)

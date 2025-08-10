@@ -13,8 +13,8 @@ class IndexController extends Controller
     public function __invoke()
     {
         $products = Product::query()
+            ->forListing()
             ->withAvailableStockItemsCount()
-            ->hasAvailableStockItems()
             ->orderByDesc('id')
             ->take(10)
             ->get();

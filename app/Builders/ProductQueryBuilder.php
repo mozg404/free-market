@@ -61,6 +61,16 @@ class ProductQueryBuilder extends Builder
         return $this;
     }
 
+    public function isAvailable(): self
+    {
+        return $this->where('is_available', true);
+    }
+
+    public function isPublished(): self
+    {
+        return $this->where('is_published', true);
+    }
+
     /**
      * Фильтр по минимальной цене (current_price)
      */
@@ -142,6 +152,37 @@ class ProductQueryBuilder extends Builder
         return $this;
     }
 
+
+
+    /**
+     * Сортировка по ID в обратном порядке
+     * @return $this
+     */
+    public function descOrder(): self
+    {
+        return $this->orderByDesc('id');
+    }
+
+    /**
+     * Оставляет только те строки, подстрока $search содержится в названии
+     * @param string $search
+     * @return $this
+     */
+    public function searchByName(string $search): self
+    {
+        return $this->where('name', 'like', '%' . $search . '%');
+    }
+
+    /**
+     * Возвращает перечень товаров массиву ID
+     * @param array $ids
+     * @return $this
+     */
+    public function whereIds(array $ids): self
+    {
+        return $this->whereIn('id', $ids);
+    }
+
     public function withFeatures(): self
     {
         return $this->with('features');
@@ -189,46 +230,18 @@ class ProductQueryBuilder extends Builder
         }]);
     }
 
-    /**
-     * Сортировка по ID в обратном порядке
-     * @return $this
-     */
-    public function descOrder(): self
-    {
-        return $this->orderByDesc('id');
-    }
+    // -----------------------------------------------
+    // Combined
+    // -----------------------------------------------
 
     /**
-     * Оставляет только те строки, подстрока $search содержится в названии
-     * @param string $search
-     * @return $this
+     * Возвращает только активные опубликованные товары с доступными для продажи позициями
      */
-    public function searchByName(string $search): self
+    public function forListing(): self
     {
-        return $this->where('name', 'like', '%' . $search . '%');
-    }
-
-    /**
-     * Возвращает коллекцию объектов моделей с ценами
-     * @return ProductCollection
-     */
-    public function getPrices(): ProductCollection
-    {
-        return $this->get(['id', 'price', 'price_discount']);
-    }
-
-    /**
-     * Возвращает перечень товаров массиву ID
-     * @param array $ids
-     * @return $this
-     */
-    public function whereIds(array $ids): self
-    {
-        return $this->whereIn('id', $ids);
-    }
-
-    public function withShop(): ProductQueryBuilder
-    {
-        return $this->with('shop');
+        return $this
+            ->isAvailable()
+            ->isPublished()
+            ->hasAvailableStockItems();
     }
 }

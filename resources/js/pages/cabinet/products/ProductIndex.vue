@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu/index.js";
 import Main from "@/components/shared/layout/Main.vue";
 import MainTitle from "@/components/shared/layout/MainTitle.vue";
+import {Badge} from "@/components/ui/badge/index.js";
 
 const props = defineProps({
   products: Array,
@@ -96,12 +97,12 @@ watch([search, shopId], applyFilters);
                           <ProductImage :src="product.preview_image" :alt="product.name"/>
                         </Link>
                       </div>
-                      <div class="text-sm">
+                      <Link :href="route('my.products.show', product.id)" class="text-sm">
                         {{product.name}}
                         <div class="text-muted-foreground text-xs mt-2">
                           #{{product.id}}
                         </div>
-                      </div>
+                      </Link>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -117,7 +118,14 @@ watch([search, shopId], applyFilters);
                     </template>
                     <PriceFormatter v-else :value="product.price.current" class="font-semibold"/>
                   </TableCell>
-                  <TableCell>Доступен</TableCell>
+                  <TableCell>
+                    <div class="flex flex-col space-y-1">
+                      <Badge v-if="!product.is_published" variant="destructive">Не опубликован</Badge>
+                      <Badge v-else-if="!product.is_available" variant="secondary">Снят с продажи</Badge>
+                      <Badge v-else-if="product.available_stock_items_count === 0" variant="destructive">Закончился</Badge>
+                      <Badge v-else>Продается</Badge>
+                    </div>
+                  </TableCell>
 
                   <TableCell>
                     <span class="mr-1">{{ product.stock_items_count }}</span>

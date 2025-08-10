@@ -23,8 +23,8 @@ class CatalogController extends Controller
         $categories = Category::query()->get();
         $products = Product::query()
             ->filterFromArray($filters)
-//            ->withAvailableStockItemsCount()
-//            ->hasAvailableStockItems()
+            ->forListing()
+            ->withAvailableStockItemsCount()
             ->descOrder()
             ->paginate(20);
 
@@ -41,8 +41,8 @@ class CatalogController extends Controller
         $categories = Category::query()->get();
         $products = Product::query()
             ->filterFromArray($filters)
-//            ->withAvailableStockItemsCount()
-//            ->hasAvailableStockItems()
+            ->forListing()
+            ->withAvailableStockItemsCount()
             ->descOrder()
             ->for($category)
             ->paginate(20);
@@ -59,6 +59,8 @@ class CatalogController extends Controller
 
     public function show(Product $product)
     {
+        abort_if($product->isUnpublished(), 404);
+
         return Inertia::render('ProductShow', [
             'product' => ProductDetailedData::from($product),
         ]);

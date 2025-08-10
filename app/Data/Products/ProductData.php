@@ -16,6 +16,8 @@ class ProductData extends Data
         public string $name,
         public Price $price,
         public ?string $preview_image,
+        public bool $is_published,
+        public bool $is_available,
         public ?UserShortData $user = null,
         public Carbon $created_at,
         public ?int $stock_items_count = null,

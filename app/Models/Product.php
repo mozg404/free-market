@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\DB;
  * @property string $name
  * @property int $current_price
  * @property int $base_price
- * @property bool $is_publish
+ * @property bool $is_published
  * @property bool $is_available
  * @property \App\Support\Image|string|null|null $preview_image
  * @property string|null $description
@@ -166,6 +166,62 @@ class Product extends Model
         if (isset($data->preview_image)) {
             $this->preview_image = $data->preview_image;
         }
+    }
+
+    public function isPublished(): bool
+    {
+        return $this->is_published;
+    }
+
+    public function isUnpublished(): bool
+    {
+        return !$this->is_published;
+    }
+
+    /**
+     * Публикует товар
+     */
+    public function publish(): void
+    {
+        $this->is_published = true;
+        $this->save();
+    }
+
+    /**
+     * Снимает с публикации
+     */
+    public function unpublish(): void
+    {
+        $this->is_published = false;
+        $this->save();
+    }
+
+    public function isAvailable(): bool
+    {
+        return $this->is_available;
+    }
+
+    public function isNotAvailable(): bool
+    {
+        return !$this->is_available;
+    }
+
+    /**
+     * Разрешает продажу
+     */
+    public function markAsAvailable(): void
+    {
+        $this->is_available = true;
+        $this->save();
+    }
+
+    /**
+     * Запрещает продажу
+     */
+    public function markAsUnavailable(): void
+    {
+        $this->is_available = false;
+        $this->save();
     }
 
     /**
