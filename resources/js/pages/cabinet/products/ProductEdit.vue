@@ -35,6 +35,7 @@ const form = useForm({
   price_base: props.data.price_base,
   price_discount: props.data.price_discount,
   description: props.data.description,
+  instruction: props.data.instruction,
   preview_image: props.data.preview_image,
   features: props.data.features ?? [],
   _method: props.isEdit ? 'PUT' : 'GET', // Method spoofing
@@ -111,14 +112,22 @@ const submit = () => {
 
       <div class="grid gap-2">
         <Label>Изображение <span class="text-red-600">*</span></Label>
-        <ImageUploader v-model="form.preview_image" :aspect-ratio="3/4"/>
+        <div class="max-w-[300px]">
+          <ImageUploader v-model="form.preview_image" :aspect-ratio="3/4"/>
+        </div>
         <InputError :message="form.errors.preview_image"/>
       </div>
 
       <div class="grid gap-2">
-        <Label>Описание <span class="text-red-600">*</span></Label>
+        <Label>Описание</Label>
         <QuillEditor v-model="form.description"/>
         <InputError :message="form.errors.description"/>
+      </div>
+
+      <div class="grid gap-2">
+        <Label>Инструкция</Label>
+        <QuillEditor v-model="form.instruction"/>
+        <InputError :message="form.errors.instruction"/>
       </div>
     </div>
 

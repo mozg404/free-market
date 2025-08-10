@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Support\Image;
+use App\Support\Price;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,19 +16,13 @@ class TestController extends Controller
 
     public function test(Request $request)
     {
+        $product = new Product();
+        $product->name = 'test';
+        $product->price = new Price(100);
+        $product->description = 'test';
+        $product->save();
 
-//        "id": "tmp/FK8wKTILSG2DyN3Y7l4HfzCc0J2u10eAyJNNVRSm.jpg",
-//        "uri": "/storage/tmp/FK8wKTILSG2DyN3Y7l4HfzCc0J2u10eAyJNNVRSm.jpg",
-//        "url": "http://localhost:8080/storage/tmp/FK8wKTILSG2DyN3Y7l4HfzCc0J2u10eAyJNNVRSm.jpg",
-//        "name": "FK8wKTILSG2DyN3Y7l4HfzCc0J2u10eAyJNNVRSm.jpg",
-//        "size": 35437,
-//        "type": "image/jpeg"
-
-
-
-        $image = Image::from('http://localhost:8080/storage/tmp/FK8wKTILSG2DyN3Y7l4HfzCc0J2u10eAyJNNVRSm.jpg');
-
-        return $image;
+        return $product;
     }
 
     public function testPage()

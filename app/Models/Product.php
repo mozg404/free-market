@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Mews\Purifier\Casts\CleanHtmlInput;
 
 /**
  * 
@@ -33,7 +34,7 @@ use Illuminate\Support\Facades\DB;
  * @property bool $is_available
  * @property \App\Support\Image|string|null|null $preview_image
  * @property string|null $description
- * @property string|null $activation_instruction
+ * @property string|null $instruction
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int|null $category_id
@@ -106,7 +107,10 @@ class Product extends Model
             'current_price' => 'int',
             'base_price' => 'int',
             'is_available' => 'boolean',
+            'is_published' => 'boolean',
             'preview_image' => ImageCast::class,
+            'description' => CleanHtmlInput::class,
+            'instruction' => CleanHtmlInput::class,
         ];
     }
 
@@ -162,6 +166,7 @@ class Product extends Model
         $this->category_id = $data->category_id;
         $this->price = Price::fromBaseAndDiscount($data->price_base, $data->price_discount);
         $this->description = $data->description;
+        $this->instruction = $data->instruction;
 
         if (isset($data->preview_image)) {
             $this->preview_image = $data->preview_image;

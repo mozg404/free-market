@@ -22,7 +22,7 @@ return new class extends Migration
             $table->boolean('is_available')->default(true);
             $table->string('preview_image', 255)->nullable();
             $table->text('description')->nullable();
-            $table->text('activation_instruction')->nullable();
+            $table->text('instruction')->nullable();
             $table->timestamps();
         });
 

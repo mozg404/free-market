@@ -56,6 +56,7 @@ class ProductFactory extends Factory
             'is_available' => fake()->boolean(),
             'is_published' => fake()->boolean(),
             'description' => $this->htmlText(),
+            'instruction' => $this->htmlText(),
             'preview_image' => null,
         ];
     }

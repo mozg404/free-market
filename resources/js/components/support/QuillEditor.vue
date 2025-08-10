@@ -29,19 +29,25 @@ const editorOptions = {
       ['clean'],
     ],
     clipboard: {
-      // matchVisual: false, // Отключаем визуальное форматирование
+      matchVisual: true, // Включаем визуальное соответствие
       matchers: [
-        ['*', (node, delta) => {
-          // Оставляем только чистый текст
-          const plainText = node.textContent;
-          return {
-            ops: [{ insert: plainText }]
-          };
+        // Сохраняем только разрешённые теги и переносы строк
+        [Node.ELEMENT_NODE, (node, delta) => {
+          const allowedTags = ['P', 'BR', 'UL', 'OL', 'LI', 'B', 'STRONG', 'I', 'EM', 'U'];
+          const tagName = node.tagName?.toUpperCase();
+
+          if (!allowedTags.includes(tagName)) {
+            return {
+              ops: [{ insert: node.textContent + (tagName === 'LI' ? '\n' : '') }]
+            };
+          }
+
+          return delta;
         }]
       ]
     }
   },
-  theme: 'snow', // Snow — стандартная тема Quill
+  theme: 'snow',
 };
 
 // Обновляем модель при изменении контента

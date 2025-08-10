@@ -15,11 +15,12 @@ class ProductEditableData extends Data
     public function __construct(
         public string $name,
         public int $price_base,
-        public int|null $price_discount = null,
-        public int|null $category_id = null,
+        public ?int $price_discount = null,
+        public ?int $category_id = null,
         public string|UploadedFile|null $preview_image = null,
-        public string|null $description = null,
-        public array|null $features = null,
+        public ?string $description = null,
+        public ?string $instruction = null,
+        public ?array $features = null,
     ) {
         if ($this->preview_image instanceof UploadedFile) {
             $this->preview_image = Image::createFromUploadedFile($this->preview_image)->getUrl();
@@ -41,6 +42,7 @@ class ProductEditableData extends Data
             category_id: $product->category_id,
             preview_image: $product->preview_image->getUrl(),
             description: $product->description,
+            instruction: $product->instruction,
             features: $features,
         );
     }
@@ -56,7 +58,7 @@ class ProductEditableData extends Data
                 'sometimes',
                 'nullable',
                 function ($attribute, $value, $fail) {
-                    if ($value === null || $value instanceof Image) {
+                    if ($value === null || is_string($value) || $value instanceof Image) {
                         return;
                     }
 
