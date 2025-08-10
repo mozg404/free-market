@@ -9,16 +9,30 @@ use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Random\RandomException;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     * @throws RandomException
-     */
     public function run(): void
     {
+        $demoCategoriesData = include resource_path('data/demo_categories.php');
+        $demoFeaturesData = include resource_path('data/demo_features.php');
+        $demoProductsData = include resource_path('data/demo_products.php');
+        $demoData = [];
+
+        // Объединяем демо данные воедино
+        foreach ($demoCategoriesData as $demoCategoryKey => $demoCategory) {
+            $demoData[$demoCategoryKey] = $demoCategory;
+
+            if (isset($demoFeaturesData[$demoCategoryKey])) {
+                $demoData[$demoCategoryKey]['features'] = $demoFeaturesData[$demoCategoryKey];
+            }
+
+            if (isset($demoProductsData[$demoCategoryKey])) {
+                $demoData[$demoCategoryKey]['products'] = $demoProductsData[$demoCategoryKey];
+            }
+        }
+
         // Создаем главного пользователя
         $mainUser = User::factory()
             ->withAvatar()
@@ -29,43 +43,58 @@ class DatabaseSeeder extends Seeder
             ->withRandomAvatar()
             ->create();
 
-        // Создаем 3 категории
-        $categories = Category::factory(5)
-            ->has(Feature::factory(4), 'features')
-            ->create();
 
-        // Для каждой категории создаем 10 товаров
-        $categories->each(function ($category) use ($mainUser, $users) {
-            // 5 товаров от главного пользователя
-            $products = Product::factory(5)
-                ->withImage()
-                ->for($category)
-                ->for($mainUser)
-                ->create();
+        foreach ($demoData as $categoryKey => $categoryData) {
+            $category = Category::create([
+                'name' => $categoryData['name'],
+                'slug' => Str::slug($categoryData['name'])
+            ]);
 
-            // 10 товаров от рандомных пользователей
-            $products = $products->merge(
-                Product::factory(20)
-                    ->withImage()
+            foreach ($categoryData['features'] ?? [] as $featureData) {
+                Feature::factory()
                     ->for($category)
-                    ->for($users->random())
-                    ->create()
-            );
+                    ->withOptions($featureData['options'] ?? null)
+                    ->withType($featureData['type'])
+                    ->create([
+                        'name' => $featureData['name'],
+                    ]);
+            }
 
-            // Используем существующую связь features()
-            $products->each(function ($product) use ($category) {
-                $attachments = [];
+            // Дозагружаем характеристики
+            $category->load('features');
 
-                foreach ($category->features as $feature) {
-                    $attachments[$feature->id] = $this->generateFeatureValue($feature);
-                }
+            if (isset($categoryData['products'])) {
+                // Товары для основного пользователя
+                $products = Product::factory(random_int(0,10))
+                    ->fromDemo($categoryData['products'] ?? [])
+                    ->for($category)
+                    ->for($mainUser)
+                    ->create();
 
-                $product->featuresAttachFrom($attachments);
-            });
+                // 10 товаров от рандомных пользователей
+                $products = $products->merge(
+                    Product::factory(random_int(0,20))
+                        ->fromDemo($categoryData['products'] ?? [])
+                        ->for($category)
+                        ->for($users->random())
+                        ->create()
+                );
 
-            // Создаем позиции
-            $products->each(fn($p) => StockItem::factory(random_int(3,5))->for($p)->create());
-        });
+                // Используем существующую связь features()
+                $products->each(function ($product) use ($category) {
+                    $attachments = [];
+
+                    foreach ($category->features as $feature) {
+                        $attachments[$feature->id] = $this->generateFeatureValue($feature);
+                    }
+
+                    $product->featuresAttachFrom($attachments);
+                });
+
+                // Создаем позиции
+                $products->each(fn($p) => StockItem::factory(random_int(5,20))->for($p)->create());
+            }
+        }
     }
 
     protected function generateFeatureValue(Feature $feature)
@@ -73,7 +102,7 @@ class DatabaseSeeder extends Seeder
         return match($feature->type) {
             FeatureType::TEXT => fake()->word(),
             FeatureType::NUMBER => fake()->randomNumber(2),
-            FeatureType::SELECT => fake()->randomElement($feature->options),
+            FeatureType::SELECT => fake()->randomElement(array_keys($feature->options)),
             FeatureType::CHECK => fake()->boolean(),
             default => 'DEFAULT',
         };

@@ -7,35 +7,50 @@ use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Feature>
- */
 class FeatureFactory extends Factory
 {
-    /**
-     * @throws \JsonException
-     */
     public function definition(): array
     {
-//        $types = FeatureType::values();
         $types = ['select'];
         $type = $this->faker->randomElement($types);
-        $options = null;
-
-        if (in_array($type, ['select', 'multiselect'])) {
-            $options = [];
-
-            foreach ($this->faker->words(5) as $word) {
-                $options[Str::slug($word)] = $word;
-            }
-        }
 
         return [
             'category_id' => Category::factory(),
-            'name' => $this->faker->unique()->word(), // Добавляем заполнение поля name
-            'key' => $this->faker->unique()->slug(),
+            'name' => $this->faker->unique()->word(),
             'type' => $type,
-            'options' => $options,
+            'options' => $this->generateOptions($type),
         ];
+    }
+
+    public function withOptions(array $options): self
+    {
+        return $this->state(function (array $attributes) use ($options) {
+            return [
+                'options' => $options,
+            ];
+        });
+    }
+
+    public function withType(FeatureType $type): self
+    {
+        return $this->state(function (array $attributes) use ($type) {
+            return [
+                'type' => $type->value,
+            ];
+        });
+    }
+
+    protected function generateOptions(string $type): ?array
+    {
+        if (!in_array($type, ['select', 'multiselect'])) {
+            return null;
+        }
+
+        $options = [];
+        foreach ($this->faker->words(5) as $word) {
+            $options[Str::slug($word)] = $word;
+        }
+
+        return $options;
     }
 }

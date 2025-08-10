@@ -5,7 +5,9 @@ namespace Database\Factories;
 use App\Models\Product;
 use App\Support\Image;
 use App\Support\Price;
+use App\Support\TextGenerator;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
@@ -55,6 +57,38 @@ class ProductFactory extends Factory
             'description' => $this->htmlText(),
             'preview_image' => null,
         ];
+    }
+
+    public function fromDemo(?array $data = null): Factory
+    {
+        return $this->state(function (array $attributes) use ($data) {
+            // Если нет данных или нет списка - возвращаем пустой массив (не изменяем атрибуты)
+            if (empty($data['list'])) {
+                return [];
+            }
+
+            $demoItem = $this->faker->randomElement($data['list']);
+
+            // Обработка name (может быть строкой или массивом)
+            $name = is_array($demoItem['name'] ?? null)
+                ? $this->faker->randomElement($demoItem['name'])
+                : ($demoItem['name'] ?? $this->faker->sentence(2));
+
+            // Обработка image (может быть строкой, массивом или отсутствовать)
+            $imagePath = null;
+            if (isset($demoItem['image'])) {
+                $imagePath = is_array($demoItem['image'])
+                    ? $this->faker->randomElement($demoItem['image'])
+                    : $demoItem['image'];
+            }
+
+            return array_filter([
+                'name' => TextGenerator::decoratedText($name, $data['name_modifiers'], random_int(0, 2), $this->faker->randomElement(['. ', ' | '])),
+                'preview_image' => $imagePath
+                    ? Image::createFromAbsolutePath($imagePath)->getRelativePath()
+                    : null,
+            ]);
+        });
     }
 
     public function withImage(): Factory

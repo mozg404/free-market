@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->foreignId('feature_id')->constrained()->cascadeOnDelete();
             $table->string('value'); // Значение характеристики
-            $table->timestamps();
             $table->unique(['product_id', 'feature_id']); // Уникальная пара
         });
     }

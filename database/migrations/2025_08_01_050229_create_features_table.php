@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->string('name');
-            $table->string('key')->unique();
             $table->string('type');
             $table->json('options')->nullable();
             $table->boolean('is_required')->default(false);

@@ -11,11 +11,10 @@ class FeatureData extends Data
     public function __construct(
         public int $id,
         public string $name,
-        public string $key,
         public string $type,
         public array|null $options = null,
         public string|null $value = null,
-        public string|null $valueKey = null,
+        public string|null $value_key = null,
     ) {
     }
 
@@ -34,11 +33,10 @@ class FeatureData extends Data
         return new self(
             id: $feature->id,
             name: $feature->name,
-            key: $feature->key,
             type: $feature->type->value,
             options: $feature->options,
             value: $value,
-            valueKey: $feature?->pivot?->value,
+            value_key: $feature?->pivot?->value,
         );
     }
 }

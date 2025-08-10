@@ -29,8 +29,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class ProductFeatureValue extends Pivot
 {
     public const TABLE = 'product_feature_values';
-
     protected $table = self::TABLE;
-
+    public $timestamps = false;
     protected $fillable = ['value'];
 }
