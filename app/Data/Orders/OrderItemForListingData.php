@@ -8,7 +8,7 @@ use App\Models\Product;
 use App\Support\Price;
 use Spatie\LaravelData\Data;
 
-class OrderItemData extends Data
+class OrderItemForListingData extends Data
 {
     public function __construct(
         public int $id,

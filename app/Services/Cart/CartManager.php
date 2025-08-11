@@ -2,9 +2,10 @@
 
 namespace App\Services\Cart;
 
+use App\Contracts\Cart;
 use App\Data\Cart\CartData;
 use App\Data\Cart\CartItemData;
-use App\Exceptions\Cart\NotEnoughStockException;
+use App\Exceptions\Product\NotEnoughStockException;
 use App\Models\Product;
 
 class CartManager

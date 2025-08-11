@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('amount');
             $table->string('status');
             $table->string('source')->nullable();
-            $table->integer('source_id')->nullable();
+            $table->nullableMorphs('sourceable');
             $table->timestamps();
         });
     }

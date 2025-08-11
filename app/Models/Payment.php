@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Contracts\Sourceable;
 use App\Contracts\Transactionable;
 use App\Enum\PaymentSource;
 use App\Enum\PaymentStatus;
 use App\Builders\UserQueryBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * 
@@ -18,7 +20,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $amount
  * @property PaymentStatus $status
  * @property PaymentSource|null $source
- * @property int|null $source_id
+ * @property Order|null $sourceable
+ * @property ?int $sourceable_id
+ * @property ?string $sourceable_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
@@ -44,24 +48,25 @@ class Payment extends Model implements Transactionable
         'source' => PaymentSource::class,
     ];
 
-    protected $fillable = ['user_id', 'amount', 'status', 'source', 'source_id'];
+    protected $fillable = ['user_id', 'amount', 'status', 'source', 'sourceable_type', 'sourceable_id'];
 
     /**
      * Создает новый платеж
      * @param User $user
      * @param int $amount
      * @param PaymentSource $source
-     * @param int|null $sourceId
+     * @param Sourceable|null $sourceable
      * @return static
      */
-    public static function new(User $user, int $amount, PaymentSource $source, int|null $sourceId = null): static
+    public static function new(User $user, int $amount, PaymentSource $source, Sourceable $sourceable = null): static
     {
         return self::create([
             'user_id' => $user->id,
             'amount' => $amount,
             'status' => PaymentStatus::NEW,
             'source' => $source->value,
-            'source_id' => $sourceId
+            'sourceable_type' => $sourceable?->getSourceableType(),
+            'sourceable_id' => $sourceable?->getSourceableId(),
         ]);
     }
 
@@ -128,6 +133,11 @@ class Payment extends Model implements Transactionable
     public function getTransactionableId(): int
     {
         return $this->id;
+    }
+
+    public function sourceable(): MorphTo
+    {
+        return $this->morphTo();
     }
 
     public function user(): BelongsTo|UserQueryBuilder

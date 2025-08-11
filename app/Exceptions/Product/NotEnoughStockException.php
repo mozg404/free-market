@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions\Cart;
+namespace App\Exceptions\Product;
 
 class NotEnoughStockException extends \DomainException
 {

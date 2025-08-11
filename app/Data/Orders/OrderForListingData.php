@@ -3,12 +3,10 @@
 namespace App\Data\Orders;
 
 use App\Enum\OrderStatus;
-use App\Models\Order;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 
-class OrderData extends Data
+class OrderForListingData extends Data
 {
     public function __construct(
         public int $id,

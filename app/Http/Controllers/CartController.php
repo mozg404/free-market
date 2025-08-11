@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\Cart\NotEnoughStockException;
+use App\Exceptions\Product\NotEnoughStockException;
 use App\Models\Product;
 use App\Services\Cart\CartManager;
 use App\Services\Toaster;

@@ -12,7 +12,7 @@ class CartItemData extends Data
 
     public function __construct(
         public ProductData $product,
-        public int $quantity,
+        public int $quantity = 1,
     ) {
         $this->amount = $product->price->multiply($this->quantity);
     }

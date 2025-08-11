@@ -9,7 +9,6 @@ use App\Data\Products\StockItemData;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
-use App\Services\ProductManager;
 use App\Services\Toaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +17,6 @@ use Inertia\Inertia;
 class ProductController extends Controller
 {
     public function __construct(
-        private readonly ProductManager $products,
         private readonly Toaster $toaster,
     ) {}
 
@@ -131,7 +129,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        $this->products->delete($product);
+//        $this->products->delete($product);
         $this->toaster->success('Товар успешно удален');
 
         return redirect()->route('my.products');

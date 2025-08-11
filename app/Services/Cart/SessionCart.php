@@ -2,7 +2,7 @@
 
 namespace App\Services\Cart;
 
-use App\Models\Product;
+use App\Contracts\Cart;
 use Illuminate\Contracts\Session\Session;
 
 class SessionCart implements Cart

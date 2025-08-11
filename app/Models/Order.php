@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Sourceable;
 use App\Contracts\Transactionable;
 use App\Enum\OrderStatus;
 use App\Builders\OrderItemQueryBuilder;
@@ -51,7 +52,7 @@ use Illuminate\Support\Facades\DB;
  * @method static OrderQueryBuilder<static>|Order withUser()
  * @mixin \Eloquent
  */
-class Order extends Model implements Transactionable
+class Order extends Model implements Transactionable, Sourceable
 {
     protected $casts = [
         'status' => OrderStatus::class,
@@ -64,11 +65,11 @@ class Order extends Model implements Transactionable
         'amount',
     ];
 
-    public static function new(User $user, int $amount): static
+    public static function new(User $user, Price $amount): static
     {
         return static::create([
             'user_id' => $user->id,
-            'amount' => $amount,
+            'amount' => $amount->getCurrentPrice(),
             'status' => OrderStatus::NEW,
         ]);
     }
@@ -98,12 +99,34 @@ class Order extends Model implements Transactionable
         });
     }
 
+    /**
+     * Добавляет позицию в заказ
+     */
+    public function createItem(StockItem $item, Price $price): OrderItem
+    {
+        return $this->items()->create([
+            'stock_item_id' => $item->id,
+            'current_price' => $price->getCurrentPrice(),
+            'base_price' => $price->getBasePrice(),
+        ]);
+    }
+
     public function getTransactionableType(): string
     {
         return $this::class;
     }
 
     public function getTransactionableId(): int
+    {
+        return $this->id;
+    }
+
+    public function getSourceableType(): string
+    {
+        return $this::class;
+    }
+
+    public function getSourceableId(): int
     {
         return $this->id;
     }

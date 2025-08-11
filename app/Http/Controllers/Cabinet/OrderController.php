@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Cabinet;
 
-use App\Data\Orders\OrderData;
-use App\Data\Orders\OrderItemData;
+use App\Data\Orders\OrderForListingData;
+use App\Data\Orders\OrderItemForListingData;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -21,7 +21,7 @@ class OrderController extends Controller
             ->paginate(10);
 
         return Inertia::render('orders/OrderIndex', [
-            'pagination' => OrderData::collect($orders),
+            'pagination' => OrderForListingData::collect($orders),
         ]);
     }
 
@@ -35,8 +35,8 @@ class OrderController extends Controller
             ->get();
 
         return Inertia::render('orders/OrderShow', [
-            'order' => OrderData::from($order),
-            'items' => OrderItemData::collect($items),
+            'order' => OrderForListingData::from($order),
+            'items' => OrderItemForListingData::collect($items),
             'totalAmount' => $items->getTotalAmount(),
             'totalCount' => $items->count(),
         ]);

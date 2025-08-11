@@ -93,6 +93,16 @@ class ProductFactory extends Factory
         });
     }
 
+    public function withPrice(Price $price): ProductFactory|Factory
+    {
+        return $this->state(function (array $attributes) use ($price) {
+            return [
+                'current_price' => $price->getCurrentPrice(),
+                'base_price' => $price->getBasePrice(),
+            ];
+        });
+    }
+
     public function withImage(): Factory
     {
         return $this->state(function (array $attributes) {
@@ -100,17 +110,5 @@ class ProductFactory extends Factory
                 'preview_image' => Image::createFromAbsolutePath(resource_path($this->faker->randomElement(static::$images)))->getRelativePath(),
             ];
         });
-    }
-
-    public function htmlText(): string
-    {
-        $paragraphs = $this->faker->paragraphs(random_int(2, 6));
-        $text = "";
-
-        foreach ($paragraphs as $para) {
-            $text .= "<p>{$para}</p>";
-        }
-
-        return $text;
     }
 }

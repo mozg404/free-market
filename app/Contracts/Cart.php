@@ -1,9 +1,6 @@
 <?php
 
-namespace App\Services\Cart;
-
-use App\Models\Product;
-use Illuminate\Session\Store as Session;
+namespace App\Contracts;
 
 interface Cart
 {

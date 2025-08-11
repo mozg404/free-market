@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Builders;
 
 use App\Enum\StockItemStatus;
+use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,6 +29,15 @@ class StockItemQueryBuilder extends Builder
     public function isSold(): static
     {
         return $this->where('status', StockItemStatus::SOLD->value);
+    }
+
+    public function forProduct(int|Product $id): static
+    {
+        if (is_object($id)) {
+            $id = $id->id;
+        }
+
+        return $this->where('product_id', $id);
     }
 
     public function forUser(int|User $id): static

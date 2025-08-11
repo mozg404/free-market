@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use App\Services\Cart\Cart;
+use App\Contracts\Cart;
+use App\Contracts\PaymentGateway;
 use App\Services\Cart\SessionCart;
+use App\Services\Payment\DemoPaymentGateway;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(Cart::class, SessionCart::class);
+        $this->app->bind(PaymentGateway::class, DemoPaymentGateway::class);
     }
 
     /**

@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Cabinet;
 
 use App\Data\Products\ProductData;
-use App\Data\Products\StockItemData;
-use App\Data\Products\StockItemFullData;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\StockItem;
-use App\Services\StockManager;
 use App\Services\Toaster;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
