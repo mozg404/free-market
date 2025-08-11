@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <section :class="cn(props.class)">
+  <section :class="cn('mb-12', props.class)">
     <slot/>
   </section>
 </template>

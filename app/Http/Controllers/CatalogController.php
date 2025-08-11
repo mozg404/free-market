@@ -61,6 +61,8 @@ class CatalogController extends Controller
     {
         abort_if($product->isUnpublished(), 404);
 
+//        return ProductDetailedData::from($product);
+
         return Inertia::render('ProductShow', [
             'product' => ProductDetailedData::from($product),
         ]);

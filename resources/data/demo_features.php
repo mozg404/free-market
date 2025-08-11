@@ -75,6 +75,17 @@ return [
     'game_services' => [
         [
             'type' => FeatureType::SELECT,
+            'name' => 'Тип сервиса',
+            'options' => [
+                'subscription' => 'Подписка',
+                'game_pass' => 'Игровой пропуск',
+                'cloud_gaming' => 'Облачный гейминг',
+                'early_access' => 'Ранний доступ',
+                'premium' => 'Премиум-аккаунт'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
             'name' => 'Платформа',
             'options' => [
                 'steam' => 'Steam',
@@ -94,8 +105,36 @@ return [
                 'vkontakte_games' => 'ВКонтакте Игры',
                 'mygames' => 'MY.GAMES'
             ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Период подписки',
+            'options' => [
+                '1_month' => '1 месяц',
+                '3_months' => '3 месяца',
+                '6_months' => '6 месяцев',
+                '1_year' => '1 год',
+                'lifetime' => 'Пожизненная'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Особенности',
+            'options' => [
+                'cloud_saves' => 'Облачные сохранения',
+                'exclusive_content' => 'Эксклюзивный контент',
+                'discounts' => 'Скидки на игры',
+                'multiplayer' => 'Доступ к мультиплееру',
+                'free_games' => 'Бесплатные игры'
+            ]
+        ],
+        [
+            'type' => FeatureType::TEXT,
+            'name' => 'Регион активации',
+            'options' => []
         ]
     ],
+
 
     // ------------------------------------------------------
     // Операционные системы
@@ -104,17 +143,46 @@ return [
     'os' => [
         [
             'type' => FeatureType::SELECT,
-            'name' => 'ОС',
+            'name' => 'Тип ОС',
             'options' => [
-                'windows_11' => 'Windows 11',
-                'windows_10' => 'Windows 10',
-                'windows_server' => 'Windows Server',
+                'windows' => 'Windows',
                 'macos' => 'macOS',
-                'ubuntu' => 'Ubuntu',
-                'rosa_linux' => 'ROSA Linux',
-                'alt_linux' => 'ALT Linux'
+                'linux' => 'Linux',
+                'android' => 'Android',
+                'ios' => 'iOS'
             ]
-        ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Версия',
+            'options' => [
+                'home' => 'Домашняя',
+                'pro' => 'Профессиональная',
+                'enterprise' => 'Корпоративная',
+                'education' => 'Для образования',
+                'server' => 'Серверная'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Разрядность',
+            'options' => [
+                '32bit' => '32-битная',
+                '64bit' => '64-битная',
+                'arm' => 'ARM-версия'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Дополнительные функции',
+            'options' => [
+                'activated' => 'Активирована',
+                'fresh_install' => 'Чистая установка',
+                'with_drivers' => 'С драйверами',
+                'multi_language' => 'Многоязычная',
+                'oem' => 'OEM-версия'
+            ]
+        ],
     ],
 
     // ------------------------------------------------------
@@ -124,17 +192,52 @@ return [
     'ai' => [
         [
             'type' => FeatureType::SELECT,
-            'name' => 'Нейросеть',
+            'name' => 'Тип сервиса',
             'options' => [
-                'chatgpt_plus' => 'ChatGPT Plus',
-                'midjourney' => 'Midjourney',
-                'yandex_gpt' => 'YandexGPT',
-                'gigachat' => 'GigaChat',
-                'claude' => 'Claude AI',
-                'stable_diffusion' => 'Stable Diffusion',
-                'dalle' => 'DALL-E',
-                'kandinsky' => 'Kandinsky AI'
+                'chatbot' => 'Чат-бот',
+                'image_generation' => 'Генерация изображений',
+                'text_analysis' => 'Анализ текста',
+                'voice_assistant' => 'Голосовой ассистент',
+                'video_processing' => 'Обработка видео'
             ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Провайдер',
+            'options' => [
+                'openai' => 'OpenAI',
+                'midjourney' => 'Midjourney',
+                'stability_ai' => 'Stability AI',
+                'anthropic' => 'Anthropic',
+                'deepmind' => 'DeepMind'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Подписка',
+            'options' => [
+                'free' => 'Бесплатная',
+                'basic' => 'Базовая',
+                'pro' => 'Профессиональная',
+                'enterprise' => 'Корпоративная',
+                'pay_as_you_go' => 'Pay-as-you-go'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Возможности',
+            'options' => [
+                'api_access' => 'Доступ к API',
+                'priority_support' => 'Приоритетная поддержка',
+                'higher_limits' => 'Повышенные лимиты',
+                'custom_models' => 'Кастомные модели',
+                'commercial_use' => 'Коммерческое использование'
+            ]
+        ],
+        [
+            'type' => FeatureType::TEXT,
+            'name' => 'Кредиты/Лимиты',
+            'options' => []
         ]
     ],
 
@@ -145,19 +248,57 @@ return [
     'media' => [
         [
             'type' => FeatureType::SELECT,
-            'name' => 'Медиа сервис',
+            'name' => 'Тип сервиса',
+            'options' => [
+                'music' => 'Музыка',
+                'video' => 'Видеостриминг',
+                'podcasts' => 'Подкасты',
+                'audiobooks' => 'Аудиокниги',
+                'ebooks' => 'Электронные книги'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Провайдер',
             'options' => [
                 'spotify' => 'Spotify',
+                'apple_music' => 'Apple Music',
                 'youtube_premium' => 'YouTube Premium',
                 'netflix' => 'Netflix',
-                'disney_plus' => 'Disney+',
-                'apple_music' => 'Apple Music',
-                'twitch' => 'Twitch',
-                'yandex_music' => 'Яндекс Музыка',
-                'yandex_plus' => 'Яндекс Плюс',
-                'ivi' => 'IVI',
-                'okko' => 'Okko',
-                'kinopoisk' => 'Кинопоиск'
+                'amazon_prime' => 'Amazon Prime'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Подписка',
+            'options' => [
+                'free' => 'Бесплатная',
+                'individual' => 'Индивидуальная',
+                'family' => 'Семейная',
+                'student' => 'Студенческая',
+                'annual' => 'Годовая'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Качество контента',
+            'options' => [
+                'sd' => 'SD',
+                'hd' => 'HD',
+                'full_hd' => 'Full HD',
+                '4k' => '4K',
+                'hdr' => 'HDR'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Регион',
+            'options' => [
+                'ru' => 'Россия',
+                'us' => 'США',
+                'eu' => 'Европа',
+                'asia' => 'Азия',
+                'global' => 'Глобальная'
             ]
         ]
     ],
@@ -169,16 +310,57 @@ return [
     'social' => [
         [
             'type' => FeatureType::SELECT,
-            'name' => 'Соц. сеть',
+            'name' => 'Тип сервиса',
             'options' => [
-                'discord' => 'Discord',
-                'discord_nitro' => 'Discord Nitro',
+                'social_network' => 'Соцсеть',
+                'messenger' => 'Мессенджер',
+                'forum' => 'Форум',
+                'dating' => 'Знакомства',
+                'blogging' => 'Блогинг'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Платформа',
+            'options' => [
                 'telegram' => 'Telegram',
-                'vkontakte' => 'ВКонтакте',
-                'facebook' => 'Facebook',
-                'instagram' => 'Instagram',
-                'twitter' => 'Twitter',
-                'tiktok' => 'TikTok',
+                'whatsapp' => 'WhatsApp',
+                'vk' => 'ВКонтакте',
+                'discord' => 'Discord',
+                'instagram' => 'Instagram'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Тип аккаунта',
+            'options' => [
+                'personal' => 'Личный',
+                'business' => 'Бизнес',
+                'premium' => 'Премиум',
+                'verified' => 'Верифицированный',
+                'creator' => 'Для создателей'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Длительность',
+            'options' => [
+                '1_month' => '1 месяц',
+                '3_months' => '3 месяца',
+                '6_months' => '6 месяцев',
+                '1_year' => '1 год',
+                'lifetime' => 'Пожизненная'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Дополнительно',
+            'options' => [
+                'ads_free' => 'Без рекламы',
+                'extra_storage' => 'Доп. хранилище',
+                'analytics' => 'Аналитика',
+                'multi_device' => 'Мультиустройство',
+                'exclusive_content' => 'Эксклюзивный контент'
             ]
         ]
     ],
@@ -190,16 +372,57 @@ return [
     'work_soft' => [
         [
             'type' => FeatureType::SELECT,
-            'name' => 'Софт',
+            'name' => 'Тип ПО',
             'options' => [
-                'adobe_photoshop' => 'Adobe Photoshop',
-                'adobe_illustrator' => 'Adobe Illustrator',
+                'office' => 'Офисное',
+                'graphics' => 'Графика',
+                'video_edit' => 'Видеомонтаж',
+                'development' => 'Разработка',
+                'security' => 'Безопасность'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Продукт',
+            'options' => [
                 'microsoft_office' => 'Microsoft Office',
-                'microsoft_365' => 'Microsoft 365',
-                'notion' => 'Notion',
-                'figma' => 'Figma',
-                'phpstorm' => 'PhpStorm',
-                'intellij_idea' => 'IntelliJ IDEA',
+                'adobe_photoshop' => 'Adobe Photoshop',
+                'final_cut' => 'Final Cut Pro',
+                'jetbrains' => 'JetBrains Suite',
+                'norton' => 'Norton Antivirus'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Лицензия',
+            'options' => [
+                'trial' => 'Пробная',
+                'home' => 'Домашняя',
+                'pro' => 'Профессиональная',
+                'enterprise' => 'Корпоративная',
+                'education' => 'Образовательная'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Период',
+            'options' => [
+                '1_month' => '1 месяц',
+                '1_year' => '1 год',
+                '3_years' => '3 года',
+                'perpetual' => 'Постоянная',
+                'subscription' => 'Подписка'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Версия',
+            'options' => [
+                'latest' => 'Последняя',
+                '2023' => '2023',
+                '2022' => '2022',
+                '2021' => '2021',
+                'legacy' => 'Устаревшая'
             ]
         ]
     ],
@@ -211,13 +434,90 @@ return [
     'vpn_security' => [
         [
             'type' => FeatureType::SELECT,
-            'name' => 'VPN сервис',
+            'name' => 'Тип сервиса',
+            'options' => [
+                'vpn' => 'VPN',
+                'antivirus' => 'Антивирус',
+                'password_manager' => 'Менеджер паролей',
+                'firewall' => 'Фаервол',
+                'encryption' => 'Шифрование данных'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Провайдер',
             'options' => [
                 'nordvpn' => 'NordVPN',
                 'expressvpn' => 'ExpressVPN',
-                'kaspersky' => 'Касперский',
-                'drweb' => 'Dr.Web',
-                'mcafee' => 'McAfee',
+                'kaspersky' => 'Kaspersky',
+                'bitdefender' => 'Bitdefender',
+                '1password' => '1Password'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Подписка',
+            'options' => [
+                '1_month' => '1 месяц',
+                '1_year' => '1 год',
+                '2_years' => '2 года',
+                '3_years' => '3 года',
+                'lifetime' => 'Пожизненная'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Локации',
+            'options' => [
+                '50+' => '50+ стран',
+                '100+' => '100+ стран',
+                'specific' => 'Конкретные страны',
+                'p2p' => 'P2P-оптимизированные',
+                'dedicated' => 'Выделенные IP'
+            ]
+        ],
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Особенности',
+            'options' => [
+                'no_logs' => 'No-logs политика',
+                'kill_switch' => 'Kill Switch',
+                'multi_device' => 'Мультиустройство',
+                'ad_blocker' => 'Блокировщик рекламы',
+                'tor' => 'Поддержка Tor'
+            ]
+        ]
+    ],
+
+    // ------------------------------------------------------
+    // Банковские сервисы
+    // ------------------------------------------------------
+
+    'banking' => [
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Банковский сервис',
+            'options' => [
+                'tinkoff' => 'Тинькофф',
+                'sberbank' => 'СберБанк',
+                'alfabank' => 'Альфа-Банк',
+                'qiwi' => 'QIWI'
+            ]
+        ]
+    ],
+
+    // ------------------------------------------------------
+    // Путешествия
+    // ------------------------------------------------------
+
+    'travels' => [
+        [
+            'type' => FeatureType::SELECT,
+            'name' => 'Сервис по путешествиям',
+            'options' => [
+                'yandex_travel' => 'Яндекс Путешествия',
+                'ostrovok' => 'Островок',
+                'tutu' => 'Туту.ру'
             ]
         ]
     ],

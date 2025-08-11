@@ -40,6 +40,7 @@ const form = useForm()
       <Main>
         <div class="flex items-center mb-12">
 
+
           <div class="flex-1">
             <div class="flex space-x-3 mb-2">
               <Badge>{{ product.category.name }}</Badge>
