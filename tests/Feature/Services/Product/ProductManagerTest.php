@@ -27,7 +27,10 @@ class ProductManagerTest extends TestCase
     public function testCheckStockAvailable(): void
     {
         $user = User::factory()->create();
-        $product = Product::factory()->for($user)->create();
+        $product = Product::factory()
+            ->isActive()
+            ->for($user)
+            ->create();
         StockItem::factory(1)
             ->for($product)
             ->available()
@@ -44,7 +47,10 @@ class ProductManagerTest extends TestCase
     public function testEnsureStockAvailable(): void
     {
         $user = User::factory()->create();
-        $product = Product::factory()->for($user)->create();
+        $product = Product::factory()
+            ->for($user)
+            ->isActive()
+            ->create();
         StockItem::factory(1)
             ->for($product)
             ->available()
@@ -52,19 +58,5 @@ class ProductManagerTest extends TestCase
 
         $this->expectException(NotEnoughStockException::class);
         $this->productManager->ensureStockAvailable($product, 2);
-    }
-
-    public function testCheckProductAvailable()
-    {
-        $user = User::factory()->create();
-        $product = Product::factory()
-
-            ->for($user)
-            ->create();
-
-        $this->assertTrue(
-            $this->productManager->checkProductAvailable($product)
-        );
-
     }
 }

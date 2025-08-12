@@ -2,6 +2,7 @@
 
 namespace App\Services\Product;
 
+use App\Exceptions\Product\NotAvailableForPurchaseException;
 use App\Exceptions\Product\NotEnoughStockException;
 use App\Models\Order;
 use App\Models\Product;
@@ -10,6 +11,14 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ProductManager
 {
+    /**
+     * Проверяет наличие доступных позиций для продажи у товара
+     */
+    public function checkStockAvailable(Product $product, int $quantity = 1): bool
+    {
+        return $product->stockItems()->isAvailable()->count() >= $quantity;
+    }
+
     /**
      * Выбрасывает исключение, если у товара $product нет $quantity доступных позиций на складе
      */
@@ -21,15 +30,26 @@ class ProductManager
     }
 
     /**
-     * Проверяет наличие доступных позиций для продажи у товара
+     * @throws NotAvailableForPurchaseException
      */
-    public function checkStockAvailable(Product $product, int $quantity = 1): bool
+    public function ensureIsActiveProduct(Product $product): void
     {
-        return $product->stockItems()->isAvailable()->count() >= $quantity;
+        if (!$product->isActive()) {
+            throw new NotAvailableForPurchaseException();
+        }
     }
 
     /**
-     * Возвращает $quantity количество доступных для продажи позиций товара $product
+     * @throws NotAvailableForPurchaseException
+     */
+    public function ensureCanByPurchased(Product $product, int $quantity = 1): void
+    {
+        $this->ensureIsActiveProduct($product);
+        $this->ensureStockAvailable($product, $quantity);
+    }
+
+    /**
+     * Возвращает коллекцию позиций на складе в количестве $quantity для товара $product
      * @param Product $product
      * @param int $quantity
      * @return Collection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\PaymentGateway;
 use App\Exceptions\Billing\InsufficientFundsException;
+use App\Exceptions\Product\NotAvailableForPurchaseException;
 use App\Exceptions\Product\NotEnoughStockException;
 use App\Services\Order\OrderFromCartCreator;
 use App\Services\Order\OrderPaymentProcessor;
@@ -35,7 +36,7 @@ class OrderCheckoutController extends Controller
                     $gateway->createForOrder($order)
                 ));
             }
-        } catch (NotEnoughStockException $e) {
+        } catch (NotEnoughStockException|NotAvailableForPurchaseException $e) {
             $this->toaster->error($e->getMessage());
 
             return back();

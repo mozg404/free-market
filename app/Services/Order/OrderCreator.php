@@ -4,6 +4,7 @@ namespace App\Services\Order;
 
 use App\Collections\CreatableOrderItemCollection;
 use App\Data\Orders\CreatableOrderItemData;
+use App\Exceptions\Product\NotAvailableForPurchaseException;
 use App\Models\Order;
 use App\Models\StockItem;
 use App\Models\User;
@@ -21,11 +22,12 @@ readonly class OrderCreator
      * @param User $user
      * @param CreatableOrderItemCollection $items
      * @return Order
+     * @throws NotAvailableForPurchaseException
      */
     public function create(User $user, CreatableOrderItemCollection $items): Order
     {
         // Проверяем, что у товаров из списка есть нужное количество позиций на складе
-        $items->each(fn(CreatableOrderItemData $item) => $this->productManager->ensureStockAvailable($item->product, $item->quantity));
+        $items->each(fn(CreatableOrderItemData $item) => $this->productManager->ensureCanByPurchased($item->product, $item->quantity));
 
         // Создаем новый заказ
         $order = Order::new($user, $items->getTotalPrice());
