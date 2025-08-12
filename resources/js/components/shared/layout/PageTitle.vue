@@ -1,5 +1,5 @@
 <script setup>
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils.ts'
 
 const props = defineProps({
   class: { type: String, default: '' }
@@ -7,7 +7,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div :class="cn('text-4xl font-semibold tracking-tight mb-12', props.class)">
+  <div :class="cn('text-4xl font-semibold tracking-tight', props.class)">
     <slot/>
   </div>
 </template>

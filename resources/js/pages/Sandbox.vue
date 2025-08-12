@@ -1,6 +1,6 @@
 <script setup>
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
-import MainTitle from "@/components/shared/layout/MainTitle.vue";
+import PageTitle from "@/components/shared/layout/PageTitle.vue";
 import sandboxImage from "../../img/sandbox.jpg";
 import {Link, useForm} from "@inertiajs/vue3";
 import {Button} from "@/components/ui/button/index.js";
@@ -27,7 +27,7 @@ const form = useForm({
 
     <div class="flex items-center justify-center h-screen">
       <div class="p-8 text-center">
-        <MainTitle class="pb-2">Тут должна быть касса</MainTitle>
+        <PageTitle class="pb-2">Тут должна быть касса</PageTitle>
         <div class="text-gray-500">Но это же демо проект ;)</div>
 
         <Card class="max-w-[300px] mx-auto my-10 shadow-none">

@@ -27,11 +27,6 @@ class TestController extends Controller
 
     public function testPage()
     {
-        return Inertia::render('TestPage');
-    }
-
-    public function testPage2()
-    {
-        return Inertia::render('TestPage2');
+        return Inertia::render('test/TestPage');
     }
 }

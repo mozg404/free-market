@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Cabinet;
+namespace App\Http\Controllers\My;
 
 use App\Data\User\UserData;
 use App\Http\Controllers\Controller;
@@ -21,7 +21,7 @@ class SettingsController extends Controller
     {
         $user = Auth::user();
 
-        return Inertia::render('my/SettingsIndex', [
+        return Inertia::render('my/SettingsIndexPage', [
             'user' => UserData::from($user),
         ]);
     }

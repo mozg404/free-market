@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\FeatureData;
 use App\Data\Products\ProductDetailedData;
 use App\Data\Products\ProductForListingData;
 use App\Http\Requests\CatalogRequest;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\User;
-use App\Services\Cart\CartManager;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class CatalogController extends Controller
@@ -28,10 +22,10 @@ class CatalogController extends Controller
             ->descOrder()
             ->paginate(20);
 
-        return Inertia::render('catalog/Catalog', [
+        return Inertia::render('catalog/CatalogPage', [
             'filters' => $filters,
             'categories' => $categories,
-            'productsPaginate' => ProductForListingData::collect($products)
+            'products' => ProductForListingData::collect($products)
         ]);
     }
 
@@ -47,23 +41,21 @@ class CatalogController extends Controller
             ->for($category)
             ->paginate(20);
 
-        return Inertia::render('catalog/Catalog', [
+        return Inertia::render('catalog/CatalogPage', [
             'isCategory' => true,
             'category' => $category,
             'features' => $category->features,
             'filters' => $filters,
             'categories' => $categories,
-            'productsPaginate' => ProductForListingData::collect($products)
+            'products' => ProductForListingData::collect($products)
         ]);
     }
 
     public function show(Product $product)
     {
-        abort_if($product->isUnpublished(), 404);
+        abort_if($product->isDraft(), 404);
 
-//        return ProductDetailedData::from($product);
-
-        return Inertia::render('ProductShow', [
+        return Inertia::render('catalog/CatalogProductShowPage', [
             'product' => ProductDetailedData::from($product),
         ]);
     }

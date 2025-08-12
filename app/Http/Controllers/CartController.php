@@ -18,7 +18,11 @@ class CartController extends Controller
 
     public function index()
     {
-        return Inertia::render('Cart');
+        if ($this->cart->isEmpty()) {
+            return Inertia::render('cart/EmptyCartIndexPage');
+        }
+
+        return Inertia::render('cart/CartIndexPage');
     }
 
     public function store(Product $product)

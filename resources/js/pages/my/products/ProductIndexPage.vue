@@ -11,8 +11,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import Input from "@/components/ui/input/Input.vue";
+} from '@/components/ui/table/index.js'
+import Input from "../../../components/ui/input/Input.vue";
 import TableBordered from "@/components/shared/table/TableBordered.vue";
 import DateTime from "@/components/support/DateTime.vue";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
@@ -27,7 +27,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu/index.js";
 import Main from "@/components/shared/layout/Main.vue";
-import MainTitle from "@/components/shared/layout/MainTitle.vue";
+import PageTitle from "@/components/shared/layout/PageTitle.vue";
 import {Badge} from "@/components/ui/badge/index.js";
 import ProductStatus from "@/components/products/ProductStatus.vue";
 
@@ -59,7 +59,7 @@ watch([search, shopId], applyFilters);
   <MainLayout :with-breadcrumbs="false">
     <Wrapper>
       <Main>
-        <MainTitle>Мои товары</MainTitle>
+        <PageTitle>Мои товары</PageTitle>
 
           <div class="flex items-center justify-between mb-6">
             <div class="relative w-full max-w-sm items-center">

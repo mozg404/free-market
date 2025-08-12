@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Cabinet;
+namespace App\Http\Controllers\My;
 
 use App\Data\Orders\OrderForListingData;
 use App\Data\Orders\OrderItemForListingData;
@@ -10,7 +10,7 @@ use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class OrderController extends Controller
+class MyOrderController extends Controller
 {
     public function index()
     {
@@ -20,8 +20,8 @@ class OrderController extends Controller
             ->descOrder()
             ->paginate(10);
 
-        return Inertia::render('orders/OrderIndex', [
-            'pagination' => OrderForListingData::collect($orders),
+        return Inertia::render('my/orders/OrderIndexPage', [
+            'orders' => OrderForListingData::collect($orders),
         ]);
     }
 
@@ -34,7 +34,7 @@ class OrderController extends Controller
             ->withProductUser()
             ->get();
 
-        return Inertia::render('orders/OrderShow', [
+        return Inertia::render('my/orders/OrderShowPage', [
             'order' => OrderForListingData::from($order),
             'items' => OrderItemForListingData::collect($items),
             'totalAmount' => $items->getTotalAmount(),

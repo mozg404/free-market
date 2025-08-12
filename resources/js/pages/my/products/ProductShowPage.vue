@@ -2,7 +2,7 @@
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card/index.js";
 import DateTime from "@/components/support/DateTime.vue";
 import MainLayout from "@/layouts/MainLayout.vue";
-import MainTitle from "@/components/shared/layout/MainTitle.vue";
+import PageTitle from "@/components/shared/layout/PageTitle.vue";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
 import Main from "@/components/shared/layout/Main.vue";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
@@ -13,8 +13,8 @@ import {Button} from "@/components/ui/button/index.js";
 import {Badge} from "@/components/ui/badge/index.js";
 import {Input} from "@/components/ui/input/index.js";
 import TableEmbed from "@/components/shared/table/TableEmbed.vue";
-import {Separator} from "@/components/ui/separator"
-import LaravelPagination from "@/components/support/LaravelPagination.vue";
+import {Separator} from "@/components/ui/separator/index.js"
+import LaravelPagination from "@/components/shared/LaravelPagination.vue";
 import {ModalLink} from '@inertiaui/modal-vue'
 import {Link, router, useForm} from "@inertiajs/vue3";
 import {
@@ -51,7 +51,7 @@ const form = useForm()
               </Badge>
             </div>
 
-            <MainTitle class="mb-8">{{ product.name }}</MainTitle>
+            <PageTitle class="mb-8">{{ product.name }}</PageTitle>
 
 
             <div class="max-w-3/4 space-y-2">

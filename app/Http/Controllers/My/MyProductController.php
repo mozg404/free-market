@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Cabinet;
+namespace App\Http\Controllers\My;
 
 use App\Data\Products\ProductDetailedData;
 use App\Data\Products\ProductEditableData;
@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class ProductController extends Controller
+class MyProductController extends Controller
 {
     public function __construct(
         private readonly Toaster $toaster,
@@ -34,7 +34,7 @@ class ProductController extends Controller
 
         $products = $products->paginate(10);
 
-        return Inertia::render('cabinet/products/ProductIndex', [
+        return Inertia::render('my/products/ProductIndexPage', [
             'products' => ProductForListingData::collect($products->items()),
             'links' => $products->toArray()['links'],
             'filters' => $request->only(['search', 'shop_id']),
@@ -45,7 +45,7 @@ class ProductController extends Controller
     {
 //        return ProductDetailedData::from($product);
 
-        return Inertia::render('cabinet/products/ProductShow', [
+        return Inertia::render('my/products/ProductShowPage', [
             'product' => ProductDetailedData::from($product),
             'itemsPaginated' => StockItemData::collect($product->stockItems()->orderByDesc('id')->paginate(10)),
             'availableItemsCount' => $product->stockItems()->isAvailable()->count(),
@@ -60,7 +60,7 @@ class ProductController extends Controller
             ->withFeatures()
             ->get();
 
-        return Inertia::render('cabinet/products/ProductEdit', [
+        return Inertia::render('my/products/ProductCreateAndEditPage', [
             'categories' => $categories,
         ]);
     }
@@ -79,7 +79,7 @@ class ProductController extends Controller
             ->withFeatures()
             ->get();
 
-        return Inertia::render('cabinet/products/ProductEdit', [
+        return Inertia::render('my/products/ProductCreateAndEditPage', [
             'categories' => $categories,
             'isEdit' => true,
             'id' => $product->id,

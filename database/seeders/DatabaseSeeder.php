@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
 
         // Создаем рандомных 5 пользователей
         $users = User::factory(5)
-            ->withRandomAvatar()
+            ->withAvatar()
             ->create();
 
 

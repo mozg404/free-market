@@ -3,8 +3,8 @@ import {useForm} from '@inertiajs/vue3'
 import MainLayout from "@/layouts/MainLayout.vue";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import Main from "@/components/shared/layout/Main.vue";
-import MainTitle from "@/components/shared/layout/MainTitle.vue";
-import ImageUploader from "@/components/shared/ImageUploader.vue";
+import PageTitle from "@/components/shared/layout/PageTitle.vue";
+import ImageUploader from "@/components/shared/form/ImageUploader.vue";
 import ErrorMessage from "@/components/support/ErrorMessage.vue";
 import {Button} from "@/components/ui/button/index.js";
 
@@ -34,7 +34,7 @@ const changeAvatar = () => {
 
         <div class="flex justify-between">
           <div class="flex-1">
-            <MainTitle class="p-0">{{ user.name }}</MainTitle>
+            <PageTitle class="p-0">{{ user.name }}</PageTitle>
           </div>
           <div class="text-right">
             <form @submit.prevent="changeAvatar">

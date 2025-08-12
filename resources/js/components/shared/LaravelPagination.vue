@@ -1,6 +1,6 @@
 <script setup>
 import { Link } from '@inertiajs/vue3'
-import {cn} from "@/lib/utils.js";
+import {cn} from "@/lib/utils.ts";
 import {computed} from "vue";
 import {Button} from "@/components/ui/button/index.js";
 

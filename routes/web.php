@@ -3,13 +3,13 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegistrationController;
-use App\Http\Controllers\Cabinet\BalanceController;
-use App\Http\Controllers\Cabinet\OrderController;
-use App\Http\Controllers\Cabinet\SettingsController;
-use App\Http\Controllers\Cabinet\PurchaseController;
-use App\Http\Controllers\Cabinet\SaleController;
-use App\Http\Controllers\Cabinet\ProductController as CabinetProductController;
-use App\Http\Controllers\Cabinet\ProductStockItemsController;
+use App\Http\Controllers\My\MyBalanceController;
+use App\Http\Controllers\My\MyOrderController;
+use App\Http\Controllers\My\SettingsController;
+use App\Http\Controllers\My\PurchaseController;
+use App\Http\Controllers\My\SaleController;
+use App\Http\Controllers\My\MyProductController as CabinetProductController;
+use App\Http\Controllers\My\MyProductStockItemsController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\OrderCheckoutController;
@@ -57,10 +57,10 @@ Route::middleware('auth')->prefix('/my')->group(function () {
             ->name('my.products.mark-unavailable');
 
         Route::prefix('/products/{product}')->group(function () {
-            Route::get('/stock-items/create', [ProductStockItemsController::class, 'create'])->name('my.products.stock-items.create');
-            Route::post('/stock-items', [ProductStockItemsController::class, 'store'])->name('my.products.stock-items.store');
-            Route::get('/stock-items/{stock_item}/edit', [ProductStockItemsController::class, 'edit'])->name('my.products.stock-items.edit');
-            Route::put('/stock-items/{stock_item}', [ProductStockItemsController::class, 'update'])->name('my.products.stock-items.update');
+            Route::get('/stock-items/create', [MyProductStockItemsController::class, 'create'])->name('my.products.stock-items.create');
+            Route::post('/stock-items', [MyProductStockItemsController::class, 'store'])->name('my.products.stock-items.store');
+            Route::get('/stock-items/{stock_item}/edit', [MyProductStockItemsController::class, 'edit'])->name('my.products.stock-items.edit');
+            Route::put('/stock-items/{stock_item}', [MyProductStockItemsController::class, 'update'])->name('my.products.stock-items.update');
         });
     });
 
@@ -69,14 +69,14 @@ Route::middleware('auth')->prefix('/my')->group(function () {
     Route::patch('/settings/change-avatar', [SettingsController::class, 'changeAvatar'])->name('my.settings.change-avatar');
 
     // Мои заказы
-    Route::get('/orders/{order}', [OrderController::class, 'show'])
+    Route::get('/orders/{order}', [MyOrderController::class, 'show'])
         ->can('view', 'order')
         ->name('my.orders.show');
-    Route::get('/orders', [OrderController::class, 'index'])->name('my.orders');
+    Route::get('/orders', [MyOrderController::class, 'index'])->name('my.orders');
 
     // Мой баланс
-    Route::get('/balance', [BalanceController::class, 'index'])->name('my.balance');
-    Route::post('/balance/deposit', [BalanceController::class, 'deposit'])->name('my.balance.deposit');
+    Route::get('/balance', [MyBalanceController::class, 'index'])->name('my.balance');
+    Route::post('/balance/deposit', [MyBalanceController::class, 'deposit'])->name('my.balance.deposit');
 });
 
 Route::middleware('auth')->group(function () {

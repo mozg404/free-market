@@ -1,32 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Cabinet;
+namespace App\Http\Controllers\My;
 
 use App\Data\PurchasedProductViewData;
 use App\Http\Controllers\Controller;
 use App\Models\OrderItem;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class SaleController extends Controller
+class PurchaseController extends Controller
 {
     public function index()
     {
-        $items = OrderItem::query()
+        $purchasedProducts = OrderItem::query()
             ->withOrder()
             ->withStockItem()
             ->withProduct()
             ->isPaid()
-            ->whereSeller(Auth::id())
+            ->forUser(Auth::id())
             ->descOrder()
             ->get();
 
-//        return $purchasedProducts;
+//        return $orderItems;
 //        return PurchasedProductViewData::collect($purchasedProducts);
 
-        return Inertia::render('cabinet/SoldProductList', [
-            'items' => PurchasedProductViewData::collect($items),
+        return Inertia::render('cabinet/PurchasedProductList', [
+            'items' => PurchasedProductViewData::collect($purchasedProducts),
         ]);
     }
 }

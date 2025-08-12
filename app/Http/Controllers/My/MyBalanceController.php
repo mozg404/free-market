@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Cabinet;
+namespace App\Http\Controllers\My;
 
 use App\Contracts\PaymentGateway;
 use App\Data\TransactionData;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class BalanceController extends Controller
+class MyBalanceController extends Controller
 {
     public function index()
     {
@@ -19,7 +19,7 @@ class BalanceController extends Controller
             ->descOrder()
             ->paginate(10);
 
-        return Inertia::render('cabinet/balance/BalanceIndex', [
+        return Inertia::render('my/balance/BalanceIndexPage', [
             'pagination' => TransactionData::collect($transactions),
         ]);
     }

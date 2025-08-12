@@ -1,11 +1,11 @@
 <script setup>
 import { ref, watch } from 'vue';
 import VuePictureCropper, { cropper } from 'vue-picture-cropper';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog/index.js';
+import { Button } from '@/components/ui/button/index.js';
 import {ImageOff, Upload, X} from 'lucide-vue-next';
 import {AspectRatio} from "@/components/ui/aspect-ratio/index.js";
-import {cn} from "@/lib/utils.js";
+import {cn} from "@/lib/utils.ts";
 
 const props = defineProps({
   modelValue: [File, String, null],

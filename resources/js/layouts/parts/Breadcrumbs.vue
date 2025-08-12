@@ -16,7 +16,7 @@ const breadcrumbs = computed(() => page.props.breadcrumbs)
 </script>
 
 <template>
-  <div class="py-2 border-b-1" v-if="breadcrumbs.length > 0">
+  <div class="pt-3" v-if="breadcrumbs.length > 0">
     <Wrapper>
       <Breadcrumb>
         <BreadcrumbList>

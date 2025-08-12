@@ -44,15 +44,6 @@ class UserFactory extends Factory
         ];
     }
 
-    public function withRandomAvatar(): Factory
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'avatar' => random_int(1, 100) <= 30 ? Image::createFromAbsolutePath(resource_path($this->faker->randomElement(static::$avatars)))->getRelativePath() : null,
-            ];
-        });
-    }
-
     public function withAvatar(): Factory
     {
         return $this->state(function (array $attributes) {

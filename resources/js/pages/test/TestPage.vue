@@ -1,7 +1,7 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
-import ImageUploader from "@/components/shared/ImageUploader.vue";
+import ImageUploader from "@/components/shared/form/ImageUploader.vue";
 
 const form = useForm({
   image: null

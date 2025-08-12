@@ -11,7 +11,7 @@ import FormNumberInput from "@/components/shared/form/FormNumberInput.vue";
 import FormSelect from "@/components/shared/form/FormSelect.vue";
 import FormTextInput from "@/components/shared/form/FormTextInput.vue";
 import FormSwitch from "@/components/shared/form/FormSwitch.vue";
-import ImageUploader from "@/components/shared/ImageUploader.vue";
+import ImageUploader from "@/components/shared/form/ImageUploader.vue";
 
 const props = defineProps({
   isEdit: {

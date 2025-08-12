@@ -48,6 +48,11 @@ class CartManager
         return $cart[$product->id]['quantity'] ?? 0;
     }
 
+    public function isEmpty(): bool
+    {
+        return $this->cart->all() === [];
+    }
+
     /**
      * Возвращает данные корзины
      * @return CartData

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Cabinet;
+namespace App\Http\Controllers\My;
 
 use App\Data\Products\ProductForListingData;
 use App\Http\Controllers\Controller;
@@ -10,7 +10,7 @@ use App\Services\Toaster;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ProductStockItemsController extends Controller
+class MyProductStockItemsController extends Controller
 {
     public function __construct(
         private readonly Toaster $toaster,
@@ -19,7 +19,7 @@ class ProductStockItemsController extends Controller
 
     public function create(Product $product, Request $request)
     {
-        return Inertia::render('cabinet/products/StockItemCreate', [
+        return Inertia::render('my/products/StockItemCreateModal', [
             'product' => ProductForListingData::from($product),
         ]);
     }
@@ -38,7 +38,7 @@ class ProductStockItemsController extends Controller
 
     public function edit(Product $product, StockItem $stockItem)
     {
-        return Inertia::render('cabinet/products/StockItemEdit', [
+        return Inertia::render('my/products/StockItemEditModal', [
             'stockItem' => $stockItem,
             'product' => $product,
         ]);
