@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Transactionable;
 use App\Enum\StockItemStatus;
 use App\Builders\StockItemQueryBuilder;
 use Database\Factories\StockItemFactory;
@@ -43,7 +44,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static StockItemQueryBuilder<static>|StockItem withPinnedUser()
  * @mixin \Eloquent
  */
-class StockItem extends Model
+class StockItem extends Model implements Transactionable
 {
     use HasFactory;
 
@@ -147,6 +148,16 @@ class StockItem extends Model
     public function pinnedUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'pinned_user_id');
+    }
+
+    public function getTransactionableType(): string
+    {
+        return $this::class;
+    }
+
+    public function getTransactionableId(): int
+    {
+        return $this->id;
     }
 
     public function newEloquentBuilder($query): StockItemQueryBuilder

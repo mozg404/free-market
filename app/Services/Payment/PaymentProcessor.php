@@ -30,7 +30,7 @@ class PaymentProcessor
             // Пополняем баланс пользователя из платежа
             $payment->user->deposit(
                 amount: $payment->amount,
-                type: TransactionType::REPLENISHMENT,
+                type: TransactionType::DEPOSIT,
                 transactionable: $payment
             );
 

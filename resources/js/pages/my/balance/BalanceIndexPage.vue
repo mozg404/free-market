@@ -17,7 +17,7 @@ import {
 import DateTime from "@/components/support/DateTime.vue";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
 import FormNumberInput from "@/components/shared/form/FormNumberInput.vue";
-import {useForm} from "@inertiajs/vue3";
+import {Link, useForm} from "@inertiajs/vue3";
 import ErrorMessage from "@/components/support/ErrorMessage.vue";
 import { useUser } from '@/composables/useUser.js'
 import LaravelPagination from "@/components/shared/LaravelPagination.vue";
@@ -81,11 +81,17 @@ const props = defineProps({
                     <DateTime :value="transaction.created_at" format="DD-MM-YYYY в HH:mm"/>
                   </TableCell>
                   <TableCell class="font-medium">
-                    <div v-if="transaction.type === 'replenishment'">Пополнение баланса</div>
-                    <div v-else>Оплата заказа #{{ transaction.transactionable_id }}</div>
+                    <div v-if="transaction.type === 'deposit'">Пополнение баланса</div>
+                    <div v-else-if="transaction.type === 'purchase'">
+                      <Link :href="route('my.orders.show', transaction.transactionable_id)">
+                        Оплата заказа #{{ transaction.transactionable_id }}
+                      </Link>
+                    </div>
+                    <div v-else-if="transaction.type === 'sale'">Продажа позиции #{{ transaction.transactionable_id }}</div>
+                    <div v-else class="text-destructive">Неизвестный тип транзакции</div>
                   </TableCell>
                   <TableCell class="text-right">
-                    <PriceFormatter v-if="transaction.type === 'replenishment'" class="text-primary" :value="transaction.amount" />
+                    <PriceFormatter v-if="transaction.amount > 0" class="text-primary" :value="transaction.amount" />
                     <PriceFormatter v-else class="text-destructive" :value="transaction.amount" />
                   </TableCell>
                 </TableRow>

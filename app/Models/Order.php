@@ -89,19 +89,11 @@ class Order extends Model implements Transactionable, Sourceable
         return $this->status === OrderStatus::PAID;
     }
 
-    public function paid(): void
+    public function markAsPaid(): void
     {
-        DB::transaction(function () {
-            // Меняем статус заказа
-            $this->status = OrderStatus::PAID;
-            $this->paid_at = Carbon::now();
-            $this->save();
-
-            // Меняем статус позиций на складе на оплачено
-            foreach ($this->items as $item) {
-                $item->stockItem->sold($this->user);
-            }
-        });
+        $this->status = OrderStatus::PAID;
+        $this->paid_at = Carbon::now();
+        $this->save();
     }
 
     /**

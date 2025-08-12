@@ -4,6 +4,7 @@ namespace App\Enum;
 
 enum TransactionType: string
 {
-    case REPLENISHMENT = 'replenishment'; // Пополнение
-    case ORDER_PAYMENT = 'order_payment'; // Оплата заказа
+    case DEPOSIT = 'deposit'; // Пополнение
+    case PURCHASE = 'purchase'; // Оплата заказа
+    case SALE = 'sale'; // Продажа товаров
 }

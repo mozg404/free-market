@@ -73,7 +73,7 @@ class PaymentProcessorTest extends TestCase
         $this->assertDatabaseHas('transactions', [
             'user_id' => $payment->user_id,
             'amount' => 2000,
-            'type' => TransactionType::REPLENISHMENT,
+            'type' => TransactionType::DEPOSIT,
             'transactionable_id' => $payment->id,
         ]);
     }
@@ -96,7 +96,7 @@ class PaymentProcessorTest extends TestCase
         // Транзакция с указанием типа оплаты заказа И id заказа
         $this->assertDatabaseHas('transactions', [
             'user_id' => $payment->user_id,
-            'type' => TransactionType::ORDER_PAYMENT,
+            'type' => TransactionType::PURCHASE,
             'transactionable_id' => $payment->sourceable->id,
         ]);
 
