@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Builders\UserQueryBuilder;
 use App\Casts\ImageCast;
 use App\Contracts\Transactionable;
 use App\Enum\TransactionType;
 use App\Support\Image;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -37,19 +36,19 @@ use Illuminate\Support\Facades\DB;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Transaction> $transactions
  * @property-read int|null $transactions_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAvatar($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereBalance($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
+ * @method static UserQueryBuilder<static>|User newModelQuery()
+ * @method static UserQueryBuilder<static>|User newQuery()
+ * @method static UserQueryBuilder<static>|User query()
+ * @method static UserQueryBuilder<static>|User whereAvatar($value)
+ * @method static UserQueryBuilder<static>|User whereBalance($value)
+ * @method static UserQueryBuilder<static>|User whereCreatedAt($value)
+ * @method static UserQueryBuilder<static>|User whereEmail($value)
+ * @method static UserQueryBuilder<static>|User whereEmailVerifiedAt($value)
+ * @method static UserQueryBuilder<static>|User whereId($value)
+ * @method static UserQueryBuilder<static>|User whereName($value)
+ * @method static UserQueryBuilder<static>|User wherePassword($value)
+ * @method static UserQueryBuilder<static>|User whereRememberToken($value)
+ * @method static UserQueryBuilder<static>|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -155,5 +154,10 @@ class User extends Authenticatable
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function newEloquentBuilder($query): UserQueryBuilder
+    {
+        return new UserQueryBuilder($query);
     }
 }

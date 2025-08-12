@@ -111,9 +111,12 @@ class ProductQueryBuilder extends Builder
      */
     public function hasAvailableStock(): self
     {
-        return $this->whereHas('stockItems', fn (StockItemQueryBuilder $builder) =>
-            $builder->isAvailable()
-        );
+        return $this->whereHas('stockItems', fn (StockItemQueryBuilder $builder) => $builder->isAvailable());
+    }
+
+    public function canByPurchased(): self
+    {
+        return $this->hasAvailableStock()->isActive();
     }
 
     /**

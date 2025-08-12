@@ -36,6 +36,12 @@ const {user, isAuth} = useUser()
               <Link :href="route('catalog')">Каталог</Link>
             </Button>
           </div>
+
+          <div class="hidden lg:flex lg:gap-x-2">
+            <Button variant="ghost" class="rounded-3xl" as-child>
+              <Link :href="route('users')">Продавцы</Link>
+            </Button>
+          </div>
         </div>
 
         <div class="flex lg:hidden">
@@ -77,9 +83,6 @@ const {user, isAuth} = useUser()
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator/>
                   <DropdownMenuItem>
-                    <Link :href="route('my.settings')" class="block w-full h-full">Настройки</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
                     <Link :href="route('my.balance')" class="block w-full h-full">Баланс</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
@@ -90,6 +93,13 @@ const {user, isAuth} = useUser()
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link :href="route('my.products')" class="block w-full h-full">Товары</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator/>
+                  <DropdownMenuItem>
+                    <Link :href="route('users.show', user.id)" class="block w-full h-full">Профиль</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link :href="route('my.settings')" class="block w-full h-full">Настройки</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator/>
                   <DropdownMenuItem>

@@ -101,6 +101,7 @@ Route::middleware(OrderCheckoutAccess::class)->group(function () {
 });
 
 // Аккаунты пользователей
+Route::get('/users', [UserController::class, 'index'])->name('users');
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
 // Каталог

@@ -3,6 +3,7 @@
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
@@ -57,4 +58,16 @@ Breadcrumbs::for('catalog.product', function (BreadcrumbTrail $trail, Product $p
     }
 
     $trail->push($product->name, route('catalog.product', $product->id));
+});
+
+// -------------------------------
+// Продавцы
+// -------------------------------
+
+Breadcrumbs::for('users', function (BreadcrumbTrail $trail) {
+    $trail->push('Продавцы', route('users'));
+});
+Breadcrumbs::for('users.show', function (BreadcrumbTrail $trail, User $user) {
+    $trail->parent('users');
+    $trail->push($user->name, route('users.show', $user->id));
 });
