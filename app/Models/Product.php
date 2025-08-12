@@ -22,43 +22,49 @@ use Illuminate\Support\Facades\DB;
 use Mews\Purifier\Casts\CleanHtmlInput;
 
 /**
+ * 
+ *
  * @property int $id
  * @property int $user_id
  * @property string $name
  * @property int $current_price
  * @property int $base_price
  * @property ProductStatus $status
- * @property Image|string|null $preview_image
- * @property string|null $description
- * @property string|null $instruction
+ * @property mixed|null $preview_image
+ * @property array|null $description
+ * @property array|null $instruction
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int|null $category_id
- * @property-read Category|null $category
- * @property-read ProductFeatureValue|null $pivot
- * @property-read Collection<int, Feature> $features
+ * @property-read \App\Models\Category|null $category
+ * @property-read \App\Models\ProductFeatureValue|null $pivot
+ * @property-read Collection<int, \App\Models\Feature> $features
  * @property-read int|null $features_count
  * @property Price $price
- * @property-read Collection<int, StockItem> $stockItems
+ * @property-read Collection<int, \App\Models\StockItem> $stockItems
  * @property-read int|null $stock_items_count
- * @property-read User $user
- * @method static Product find(int $id, array $columns = ['*'])
+ * @property-read \App\Models\User $user
  * @method static ProductCollection<int, static> all($columns = ['*'])
  * @method static ProductQueryBuilder<static>|Product descOrder()
  * @method static \Database\Factories\ProductFactory factory($count = null, $state = [])
  * @method static ProductQueryBuilder<static>|Product filterFromArray(array $data)
  * @method static ProductQueryBuilder<static>|Product for(\App\Models\User|\App\Models\Category $object)
  * @method static ProductQueryBuilder<static>|Product forCategory(\App\Models\Category|int $category)
+ * @method static ProductQueryBuilder<static>|Product forListing()
  * @method static ProductQueryBuilder<static>|Product forUser(\App\Models\User|int $user)
  * @method static ProductCollection<int, static> get($columns = ['*'])
- * @method static ProductQueryBuilder<static>|Product getPrices()
+ * @method static ProductQueryBuilder<static>|Product hasAvailableStock()
+ * @method static ProductQueryBuilder<static>|Product hasStockItems()
+ * @method static ProductQueryBuilder<static>|Product isActive()
+ * @method static ProductQueryBuilder<static>|Product isDraft()
+ * @method static ProductQueryBuilder<static>|Product isPaused()
+ * @method static ProductQueryBuilder<static>|Product isPublished()
  * @method static ProductQueryBuilder<static>|Product newModelQuery()
  * @method static ProductQueryBuilder<static>|Product newQuery()
  * @method static ProductQueryBuilder<static>|Product onlyDiscounted()
  * @method static ProductQueryBuilder<static>|Product orderByActualPrice(string $direction = 'asc')
  * @method static ProductQueryBuilder<static>|Product query()
  * @method static ProductQueryBuilder<static>|Product searchByName(string $search)
- * @method static ProductQueryBuilder<static>|Product whereActivationInstruction($value)
  * @method static ProductQueryBuilder<static>|Product whereBasePrice($value)
  * @method static ProductQueryBuilder<static>|Product whereCategoryId($value)
  * @method static ProductQueryBuilder<static>|Product whereCreatedAt($value)
@@ -67,19 +73,17 @@ use Mews\Purifier\Casts\CleanHtmlInput;
  * @method static ProductQueryBuilder<static>|Product whereFeatureValues(array $filters)
  * @method static ProductQueryBuilder<static>|Product whereId($value)
  * @method static ProductQueryBuilder<static>|Product whereIds(array $ids)
- * @method static ProductQueryBuilder<static>|Product whereIsAvailable($value)
- * @method static ProductQueryBuilder<static>|Product whereIsPublish($value)
+ * @method static ProductQueryBuilder<static>|Product whereInstruction($value)
  * @method static ProductQueryBuilder<static>|Product whereName($value)
  * @method static ProductQueryBuilder<static>|Product wherePreviewImage($value)
- * @method static ProductQueryBuilder<static>|Product wherePriceBetween(?int $minPrice, ?int $maxPrice)
- * @method static ProductQueryBuilder<static>|Product wherePriceMax(int $maxPrice)
- * @method static ProductQueryBuilder<static>|Product wherePriceMin(int $minPrice)
+ * @method static ProductQueryBuilder<static>|Product wherePriceMax(float $maxPrice)
+ * @method static ProductQueryBuilder<static>|Product wherePriceMin(float $minPrice)
+ * @method static ProductQueryBuilder<static>|Product whereStatus($value)
  * @method static ProductQueryBuilder<static>|Product whereUpdatedAt($value)
  * @method static ProductQueryBuilder<static>|Product whereUserId($value)
  * @method static ProductQueryBuilder<static>|Product withAvailableStockItemsCount()
  * @method static ProductQueryBuilder<static>|Product withFeatures()
  * @method static ProductQueryBuilder<static>|Product withReservedStockItemsCount()
- * @method static ProductQueryBuilder<static>|Product withShop()
  * @method static ProductQueryBuilder<static>|Product withSoldStockItemsCount()
  * @method static ProductQueryBuilder<static>|Product withStockItemsCount()
  * @mixin \Eloquent

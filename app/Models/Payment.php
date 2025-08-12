@@ -7,6 +7,8 @@ use App\Contracts\Transactionable;
 use App\Enum\PaymentSource;
 use App\Enum\PaymentStatus;
 use App\Builders\UserQueryBuilder;
+use Database\Factories\PaymentFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -20,12 +22,13 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $amount
  * @property PaymentStatus $status
  * @property PaymentSource|null $source
- * @property Order|null $sourceable
- * @property ?int $sourceable_id
- * @property ?string $sourceable_type
+ * @property string|null $sourceable_type
+ * @property int|null $sourceable_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Model|Order|\Eloquent|null $sourceable
  * @property-read \App\Models\User $user
+ * @method static \Database\Factories\PaymentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment query()
@@ -34,7 +37,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereExternalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereSource($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereSourceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereSourceableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereSourceableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereUserId($value)
@@ -42,6 +46,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Payment extends Model implements Transactionable
 {
+    use HasFactory;
+
     protected $casts = [
         'amount' => 'integer',
         'status' => PaymentStatus::class,
@@ -80,20 +86,9 @@ class Payment extends Model implements Transactionable
         return $this->source === PaymentSource::ORDER;
     }
 
-    public function isPending(): bool
+    public function markAsCompleted(): self
     {
-        return $this->status === PaymentStatus::PENDING;
-    }
-
-    /**
-     * Задает ID в кассе и переводит в режим ожидания
-     * @param string $externalId
-     * @return $this
-     */
-    public function toPend(string $externalId): static
-    {
-        $this->external_id = $externalId;
-        $this->status = PaymentStatus::PENDING;
+        $this->status = PaymentStatus::COMPLETED;
         $this->save();
 
         return $this;
@@ -104,20 +99,43 @@ class Payment extends Model implements Transactionable
         return $this->status === PaymentStatus::COMPLETED;
     }
 
-    public function toComplete(): static
+    public function markAsSuccess(): self
     {
-        $this->status = PaymentStatus::COMPLETED;
+        $this->status = PaymentStatus::SUCCESS;
         $this->save();
 
         return $this;
     }
 
-    public function toError(): static
+    public function isSuccess(): bool
     {
-        $this->status = PaymentStatus::ERROR;
+        return $this->status === PaymentStatus::SUCCESS;
+    }
+
+    public function markAsCancelled(): self
+    {
+        $this->status = PaymentStatus::CANCELLED;
         $this->save();
 
         return $this;
+    }
+
+    public function isCancelled(): bool
+    {
+        return $this->status === PaymentStatus::CANCELLED;
+    }
+
+    public function markAsFailed(): self
+    {
+        $this->status = PaymentStatus::FAILED;
+        $this->save();
+
+        return $this;
+    }
+
+    public function isFailed(): bool
+    {
+        return $this->status === PaymentStatus::FAILED;
     }
 
     public static function findByExternalId(string $hash): static|null
@@ -135,7 +153,7 @@ class Payment extends Model implements Transactionable
         return $this->id;
     }
 
-    public function sourceable(): MorphTo
+    public function sourceable(): MorphTo|Order
     {
         return $this->morphTo();
     }
@@ -143,5 +161,10 @@ class Payment extends Model implements Transactionable
     public function user(): BelongsTo|UserQueryBuilder
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected static function newFactory(): PaymentFactory|\Illuminate\Database\Eloquent\Factories\Factory
+    {
+        return PaymentFactory::new();
     }
 }

@@ -13,7 +13,7 @@ class IndexController extends Controller
         $products = Product::query()
             ->forListing()
             ->withAvailableStockItemsCount()
-            ->orderByDesc('id')
+            ->latest()
             ->take(10)
             ->get();
 

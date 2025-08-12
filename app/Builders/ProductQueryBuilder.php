@@ -163,17 +163,6 @@ class ProductQueryBuilder extends Builder
         return $this;
     }
 
-
-
-    /**
-     * Сортировка по ID в обратном порядке
-     * @return $this
-     */
-    public function descOrder(): self
-    {
-        return $this->orderByDesc('id');
-    }
-
     /**
      * Оставляет только те строки, подстрока $search содержится в названии
      * @param string $search

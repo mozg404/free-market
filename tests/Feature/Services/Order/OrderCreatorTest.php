@@ -30,7 +30,7 @@ class OrderCreatorTest extends TestCase
     public function testNotEnoughStock()
     {
         $user = User::factory()->create();
-        $product = Product::factory()->for($user)->create();
+        $product = Product::factory()->for($user)->isActive()->create();
         StockItem::factory(1)
             ->for($product)
             ->available()
@@ -47,7 +47,7 @@ class OrderCreatorTest extends TestCase
         $price = new Price(1000);
         $quantity = 2;
         $user = User::factory()->create();
-        $product = Product::factory()->for($user)->withPrice($price)->create();
+        $product = Product::factory()->for($user)->isActive()->withPrice($price)->create();
         $stockItems = StockItem::factory(3)
             ->for($product)
             ->available()

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enum\ProductStatus;
 use App\Models\Product;
+use App\Models\User;
 use App\Support\Image;
 use App\Support\Price;
 use App\Support\TextGenerator;
@@ -47,9 +48,11 @@ class ProductFactory extends Factory
 
     public function definition(): array
     {
+        $createdAt = $this->faker->dateTimeBetween('-1 year', 'now');
         $price = Price::random();
 
         return [
+            'user_id' => User::factory(),
             'name' => $this->faker->randomElement(static::$names),
             'current_price' => $price->getCurrentPrice(),
             'base_price' => $price->getBasePrice(),
@@ -57,22 +60,24 @@ class ProductFactory extends Factory
             'description' => TextGenerator::paragraphs(include resource_path('data/demo_product_descriptions.php'), random_int(3, 7)),
             'instruction' => TextGenerator::paragraphs(include resource_path('data/demo_product_instructions.php'), random_int(1, 4)),
             'preview_image' => null,
+            'created_at' => $createdAt,
+            'updated_at' => $this->faker->dateTimeBetween($createdAt),
         ];
     }
 
     public function isDraft(): Factory
     {
-        return $this->state(fn (array $attributes) => [ProductStatus::DRAFT->value]);
+        return $this->state(fn (array $attributes) => ['status' => ProductStatus::DRAFT->value]);
     }
 
     public function isActive(): Factory
     {
-        return $this->state(fn (array $attributes) => [ProductStatus::ACTIVE->value]);
+        return $this->state(fn (array $attributes) => ['status' => ProductStatus::ACTIVE->value]);
     }
 
     public function isPaused(): Factory
     {
-        return $this->state(fn (array $attributes) => [ProductStatus::PAUSED->value]);
+        return $this->state(fn (array $attributes) => ['status' => ProductStatus::PAUSED->value]);
     }
 
     public function fromDemo(?array $data = null): Factory

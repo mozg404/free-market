@@ -1,7 +1,7 @@
 <script setup>
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
-import sandboxImage from "../../img/sandbox.jpg";
+import sandboxImage from "../../../img/sandbox.jpg";
 import {Link, useForm} from "@inertiajs/vue3";
 import {Button} from "@/components/ui/button/index.js";
 import {
@@ -9,16 +9,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card/index.js'
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
 
 const props = defineProps({
   hash: String,
   amount: Number,
-})
-
-const form = useForm({
-  hash: props.hash
 })
 </script>
 
@@ -35,8 +31,9 @@ const form = useForm({
             <CardTitle>К оплате: <PriceFormatter :value="amount"/></CardTitle>
           </CardHeader>
           <CardFooter class="flex justify-center">
-            <Button @click="form.post(route('payments.success'))" class="mx-2 cursor-pointer" >Успех</Button>
-            <Button @click="form.post(route('payments.fail'))" class="mx-2 cursor-pointer" variant="destructive">Успех</Button>
+            <Button :as="Link" :href="route('sandbox.success', hash)" class="mx-2 cursor-pointer">Успех</Button>
+            <Button :as="Link" :href="route('sandbox.failed', hash)" variant="destructive" class="mx-2 cursor-pointer">Провал</Button>
+            <Button :as="Link" :href="route('sandbox.cancelled', hash)" variant="secondary" class="mx-2 cursor-pointer">Отмена</Button>
           </CardFooter>
         </Card>
 

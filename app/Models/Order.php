@@ -10,8 +10,10 @@ use App\Builders\OrderQueryBuilder;
 use App\Builders\UserQueryBuilder;
 use App\Support\Price;
 use Carbon\Carbon;
+use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,6 +33,7 @@ use Illuminate\Support\Facades\DB;
  * @property-read int|null $items_count
  * @property-read \App\Models\User $user
  * @method static OrderQueryBuilder<static>|Order descOrder()
+ * @method static \Database\Factories\OrderFactory factory($count = null, $state = [])
  * @method static OrderQueryBuilder<static>|Order isNew()
  * @method static OrderQueryBuilder<static>|Order isPaid()
  * @method static OrderQueryBuilder<static>|Order newModelQuery()
@@ -54,6 +57,8 @@ use Illuminate\Support\Facades\DB;
  */
 class Order extends Model implements Transactionable, Sourceable
 {
+    use HasFactory;
+
     protected $casts = [
         'status' => OrderStatus::class,
         'paid_at' => 'datetime',
@@ -144,5 +149,10 @@ class Order extends Model implements Transactionable, Sourceable
     public function newEloquentBuilder($query): OrderQueryBuilder
     {
         return new OrderQueryBuilder($query);
+    }
+
+    protected static function newFactory(): OrderFactory|\Illuminate\Database\Eloquent\Factories\Factory
+    {
+        return OrderFactory::new();
     }
 }

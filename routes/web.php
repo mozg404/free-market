@@ -14,7 +14,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\OrderCheckoutController;
 use App\Http\Controllers\IndexController;
-use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentCallbackController;
 use App\Http\Controllers\SandboxController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
@@ -105,11 +105,13 @@ Route::get('/catalog/category/{category:slug}', [CatalogController::class, 'cate
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog');
 
 // Эмуляция кассы
-Route::get('/sandbox/{hash}', [SandboxController::class, 'index'])->name('sandbox');
+Route::get('/demo/sandbox/{hash}', [SandboxController::class, 'index'])->name('sandbox');
+Route::get('/demo/sandbox/{hash}/failed', [SandboxController::class, 'failed'])->name('sandbox.failed');
+Route::get('/demo/sandbox/{hash}/success', [SandboxController::class, 'success'])->name('sandbox.success');
+Route::get('/demo/sandbox/{hash}/cancelled', [SandboxController::class, 'cancelled'])->name('sandbox.cancelled');
 
-// Платежи
-Route::post('/payments/success', [PaymentController::class, 'success'])->name('payments.success');
-Route::post('/payments/fail', [PaymentController::class, 'fail'])->name('payments.fail');
+// Обработка внешнего платежа
+Route::get('/payment/callback', PaymentCallbackController::class)->name('payment.callback');
 
 // Авторизация
 Route::middleware('guest')->group(function () {

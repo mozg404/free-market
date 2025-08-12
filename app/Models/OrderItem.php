@@ -7,7 +7,9 @@ use App\Builders\OrderQueryBuilder;
 use App\Builders\StockItemQueryBuilder;
 use App\Collections\OrderItemCollection;
 use App\Support\Price;
+use Database\Factories\OrderItemFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -24,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\StockItem $stockItem
  * @method static OrderItemCollection<int, static> all($columns = ['*'])
  * @method static OrderItemQueryBuilder<static>|OrderItem descOrder()
+ * @method static \Database\Factories\OrderItemFactory factory($count = null, $state = [])
  * @method static OrderItemQueryBuilder<static>|OrderItem for(\App\Models\Order|\App\Models\User $model)
  * @method static OrderItemQueryBuilder<static>|OrderItem forOrder(\App\Models\Order|int $order)
  * @method static OrderItemQueryBuilder<static>|OrderItem forUser(\App\Models\User|int $user)
@@ -48,6 +51,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class OrderItem extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
 
     protected $table = 'orders_items';
@@ -91,5 +96,10 @@ class OrderItem extends Model
     public function newEloquentBuilder($query): OrderItemQueryBuilder
     {
         return new OrderItemQueryBuilder($query);
+    }
+
+    protected static function newFactory(): OrderItemFactory|\Illuminate\Database\Eloquent\Factories\Factory
+    {
+        return OrderItemFactory::new();
     }
 }

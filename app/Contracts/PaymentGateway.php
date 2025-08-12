@@ -19,7 +19,7 @@ interface PaymentGateway
     public function createDeposit(User $user, int $amount): Payment;
 
     /**
-     * Валидирует callback от платежного шлюза
+     * Обрабатывает колбэк от шлюза
      */
     public function validateCallback(array $data): Payment;
 

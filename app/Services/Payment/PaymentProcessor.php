@@ -3,7 +3,9 @@
 namespace App\Services\Payment;
 
 use App\Enum\TransactionType;
-use App\Exceptions\Payment\PaymentAlreadyProcessedException;
+use App\Exceptions\Payment\PaymentAlreadyCompletedException;
+use App\Exceptions\Payment\PaymentFailedException;
+use App\Exceptions\Payment\PaymentCancelledException;
 use App\Models\Payment;
 use App\Services\Order\OrderPaymentProcessor;
 use Illuminate\Support\Facades\DB;
@@ -16,16 +18,15 @@ class PaymentProcessor
     {}
 
     /**
-     * @throws PaymentAlreadyProcessedException|\Throwable
+     * @throws PaymentAlreadyCompletedException|\Throwable
      */
-    public function process(Payment $payment)
+    public function process(Payment $payment): Payment
     {
-        if (!$payment->isPending()) {
-            throw new PaymentAlreadyProcessedException();
-        }
+        throw_if($payment->isCompleted(), new PaymentAlreadyCompletedException());
+        throw_if($payment->isCancelled(), new PaymentCancelledException());
+        throw_if($payment->isFailed(), new PaymentFailedException());
 
-        // Пополняем баланс
-        DB::transaction(function () use ($payment) {
+        return DB::transaction(function () use ($payment) {
             // Пополняем баланс пользователя из платежа
             $payment->user->deposit(
                 amount: $payment->amount,
@@ -39,9 +40,7 @@ class PaymentProcessor
             }
 
             // Помечаем, как выполненный
-            $payment->toComplete();
+            return $payment->markAsCompleted();
         });
-
-
     }
 }

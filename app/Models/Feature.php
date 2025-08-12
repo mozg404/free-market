@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $category_id
  * @property string $name
- * @property string $key
  * @property FeatureType $type
  * @property array<array-key, mixed>|null $options
  * @property bool $is_required
@@ -29,7 +28,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereIsRequired($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereOptions($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereType($value)

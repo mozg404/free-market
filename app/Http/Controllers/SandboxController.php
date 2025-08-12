@@ -19,9 +19,33 @@ class SandboxController extends Controller
             abort(404);
         }
 
-        return Inertia::render('Sandbox', [
+        return Inertia::render('demo/SandboxIndexPage', [
             'amount' => $data['amount'],
             'hash' => $hash,
+        ]);
+    }
+
+    public function success(string $hash): \Illuminate\Http\RedirectResponse
+    {
+        return redirect()->route('payment.callback', [
+            'external_id' => $hash,
+            'status' => 'success'
+        ]);
+    }
+
+    public function failed(string $hash): \Illuminate\Http\RedirectResponse
+    {
+        return redirect()->route('payment.callback', [
+            'external_id' => $hash,
+            'status' => 'failed'
+        ]);
+    }
+
+    public function cancelled(string $hash): \Illuminate\Http\RedirectResponse
+    {
+        return redirect()->route('payment.callback', [
+            'external_id' => $hash,
+            'status' => 'cancelled'
         ]);
     }
 }

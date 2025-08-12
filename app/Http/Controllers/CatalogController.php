@@ -19,7 +19,7 @@ class CatalogController extends Controller
             ->filterFromArray($filters)
             ->forListing()
             ->withAvailableStockItemsCount()
-            ->descOrder()
+            ->latest()
             ->paginate(20);
 
         return Inertia::render('catalog/CatalogPage', [
@@ -37,7 +37,7 @@ class CatalogController extends Controller
             ->filterFromArray($filters)
             ->forListing()
             ->withAvailableStockItemsCount()
-            ->descOrder()
+            ->latest()
             ->for($category)
             ->paginate(20);
 

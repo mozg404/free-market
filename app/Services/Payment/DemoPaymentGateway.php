@@ -4,53 +4,77 @@ namespace App\Services\Payment;
 
 use App\Contracts\PaymentGateway;
 use App\Enum\PaymentSource;
+use App\Exceptions\Payment\EmptyExternalIdException;
+use App\Exceptions\Payment\UnknownPaymentException;
+use App\Exceptions\Payment\UnknownPaymentStatusException;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\User;
-use App\Support\Sandbox;
 
 class DemoPaymentGateway implements PaymentGateway
 {
     public function createForOrder(Order $order): Payment
     {
-        // Вычисляем недостающую сумму
         $amount = $order->amount - $order->user->balance;
-
-        // Создаем новый платеж
         $payment = Payment::new($order->user, $amount, PaymentSource::ORDER, $order);
-
-        // Генерируем внешней ID кассы
-        $externalId = Sandbox::createId($payment->id, $amount);
-
-        // Сохраняем внешний ID в модель
-        $payment->toPend($externalId);
+        $payment->external_id = $this->generateExternalId($payment->id, $amount);
+        $payment->save();
 
         return $payment;
     }
 
     public function createDeposit(User $user, int $amount): Payment
     {
-        // Создаем новый платеж
         $payment = Payment::new($user, $amount, PaymentSource::REPLENISHMENT);
-
-        // Генерируем внешний ID
-        $externalId = Sandbox::createId($payment->id, $amount);
-
-        // Сохраняем внешний ID в модель
-        $payment->toPend($externalId);
+        $payment->external_id = $this->generateExternalId($payment->id, $amount);
+        $payment->save();
 
         return $payment;
     }
 
+    /**
+     * @throws UnknownPaymentException|UnknownPaymentStatusException
+     */
     public function validateCallback(array $data): Payment
     {
-        $payment = Payment::findOrFail($data['payment_id']);
+        $payment = Payment::findByExternalId($data['external_id']);
 
-        return $payment;
+        if (!isset($payment)) {
+            throw new UnknownPaymentException();
+        }
+
+        if ($data['status'] === 'failed') {
+            return $payment->markAsFailed();
+        }
+
+        if ($data['status'] === 'cancelled') {
+            return $payment->markAsCancelled();
+        }
+
+        if ($data['status'] === 'success') {
+            return $payment->markAsSuccess();
+        }
+
+        throw new UnknownPaymentStatusException();
     }
 
+    /**
+     * @throws EmptyExternalIdException
+     */
     public function getPaymentUrl(Payment $payment): string
     {
-        return Sandbox::generateUrlToPay($payment->external_id);
+        if (empty($payment->external_id)) {
+            throw new EmptyExternalIdException();
+        }
+
+        return route('sandbox', $payment->external_id);
+    }
+
+    private function generateExternalId(int $id, int $amount): string
+    {
+        return base64_encode(json_encode([
+            'id' => $id,
+            'amount' => $amount,
+        ], JSON_THROW_ON_ERROR));
     }
 }

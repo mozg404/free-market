@@ -17,6 +17,7 @@ class StockItemFactory extends Factory
     public function definition(): array
     {
         return [
+            'product_id' => Product::factory(),
             'status' => $this->faker->randomElement(StockItemStatus::cases()),
             'content' => $this->faker->regexify('[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}'),
         ];
