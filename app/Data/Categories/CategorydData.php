@@ -5,7 +5,7 @@ namespace App\Data\Categories;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Data;
 
-class CategoryData extends Data
+class CategorydData extends Data
 {
     public function __construct(
         public int $id,

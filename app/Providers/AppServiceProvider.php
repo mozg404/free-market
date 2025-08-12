@@ -4,8 +4,11 @@ namespace App\Providers;
 
 use App\Contracts\Cart;
 use App\Contracts\PaymentGateway;
+use App\Models\StockItem;
+use App\Models\User;
 use App\Services\Cart\SessionCart;
 use App\Services\Payment\DemoPaymentGateway;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +27,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+//        Gate::define('view-purchased-product', function (User $user, StockItem $stockItem) {
+//            return $stockItem->orderItem()
+//                ->whereHas('order', fn($q) => $q->where('user_id', $user->id))
+//                ->exists();
+//        });
     }
 }

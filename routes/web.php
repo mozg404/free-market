@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\My\MyBalanceController;
 use App\Http\Controllers\My\MyOrderController;
 use App\Http\Controllers\My\SettingsController;
-use App\Http\Controllers\My\PurchaseController;
+use App\Http\Controllers\My\MyPurchaseController;
 use App\Http\Controllers\My\SaleController;
 use App\Http\Controllers\My\MyProductController as CabinetProductController;
 use App\Http\Controllers\My\MyProductStockItemsController;
@@ -77,10 +77,14 @@ Route::middleware('auth')->prefix('/my')->group(function () {
     // Мой баланс
     Route::get('/balance', [MyBalanceController::class, 'index'])->name('my.balance');
     Route::post('/balance/deposit', [MyBalanceController::class, 'deposit'])->name('my.balance.deposit');
+
+    // Мои покупки
+    Route::get('/purchases', [MyPurchaseController::class, 'index'])->name('my.purchases');
+    Route::get('/purchases/{stock_item}', [MyPurchaseController::class, 'show'])->name('my.purchases.show');
+
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/cabinet/purchases', [PurchaseController::class, 'index'])->name('cabinet.purchases');
     Route::get('/cabinet/sales', [SaleController::class, 'index'])->name('cabinet.sales');
 });
 

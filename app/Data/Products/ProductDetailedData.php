@@ -2,7 +2,7 @@
 
 namespace App\Data\Products;
 
-use App\Data\Categories\CategoryData;
+use App\Data\Categories\CategorydData;
 use App\Data\FeatureData;
 use App\Data\User\UserData;
 use App\Enum\ProductStatus;
@@ -22,7 +22,7 @@ class ProductDetailedData extends Data
         public ?string $instruction,
         public ProductStatus $status,
         public ?int $available_stock_items_count,
-        public ?CategoryData $category,
+        public ?CategorydData $category,
         public ?UserData $user,
         public ?Collection $features = null,
     ) {
@@ -39,7 +39,7 @@ class ProductDetailedData extends Data
             instruction: $product->instruction,
             status: $product->status,
             available_stock_items_count: $product->getQuantityInStock() ?? 0,
-            category: CategoryData::from($product->category),
+            category: CategorydData::from($product->category),
             user: UserData::from($product->user),
             features: FeatureData::collect($product->features),
         );

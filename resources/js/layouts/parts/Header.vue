@@ -83,7 +83,10 @@ const {user, isAuth} = useUser()
                     <Link :href="route('my.balance')" class="block w-full h-full">Баланс</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link :href="route('my.orders')" class="block w-full h-full">Покупки</Link>
+                    <Link :href="route('my.orders')" class="block w-full h-full">Заказы</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link :href="route('my.purchases')" class="block w-full h-full">Покупки</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link :href="route('my.products')" class="block w-full h-full">Товары</Link>

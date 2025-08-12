@@ -66,11 +66,6 @@ class OrderItemQueryBuilder extends Builder
         });
     }
 
-    public function descOrder(): static
-    {
-        return $this->orderByDesc('id');
-    }
-
     public function withOrder(): static
     {
         return $this->with('order');
@@ -94,5 +89,9 @@ class OrderItemQueryBuilder extends Builder
     public function withProductUser(): static
     {
         return $this->with('stockItem.product.user');
+    }
+    public function withProductCategory(): static
+    {
+        return $this->with('stockItem.product.category');
     }
 }

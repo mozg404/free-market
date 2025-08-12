@@ -1,5 +1,5 @@
 <script setup>
-import dayjs from 'dayjs';
+import dayjs from '@/lib/dayjs.js';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -16,6 +16,3 @@ const formatted = computed(() => dayjs(props.value).format(props.format));
 <template>
   <time :datetime="value">{{ formatted }}</time>
 </template>
-
-<style scoped>
-</style>
