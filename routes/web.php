@@ -7,7 +7,7 @@ use App\Http\Controllers\My\MyBalanceController;
 use App\Http\Controllers\My\MyOrderController;
 use App\Http\Controllers\My\SettingsController;
 use App\Http\Controllers\My\MyPurchaseController;
-use App\Http\Controllers\My\SaleController;
+use App\Http\Controllers\My\MySaleController;
 use App\Http\Controllers\My\MyProductController as CabinetProductController;
 use App\Http\Controllers\My\MyProductStockItemsController;
 use App\Http\Controllers\CartController;
@@ -82,10 +82,8 @@ Route::middleware('auth')->prefix('/my')->group(function () {
     Route::get('/purchases', [MyPurchaseController::class, 'index'])->name('my.purchases');
     Route::get('/purchases/{stock_item}', [MyPurchaseController::class, 'show'])->name('my.purchases.show');
 
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/cabinet/sales', [SaleController::class, 'index'])->name('cabinet.sales');
+    // Мои продажи
+    Route::get('/sales', [MySaleController::class, 'index'])->name('my.sales');
 });
 
 // Корзина

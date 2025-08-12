@@ -94,6 +94,9 @@ const {user, isAuth} = useUser()
                   <DropdownMenuItem>
                     <Link :href="route('my.products')" class="block w-full h-full">Товары</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link :href="route('my.sales')" class="block w-full h-full">Продажи</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator/>
                   <DropdownMenuItem>
                     <Link :href="route('users.show', user.id)" class="block w-full h-full">Профиль</Link>

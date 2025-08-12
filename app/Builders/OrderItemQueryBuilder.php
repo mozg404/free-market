@@ -14,6 +14,20 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class OrderItemQueryBuilder extends Builder
 {
+    /**
+     * Ищем по владельцу проданного товара
+     */
+    public function forProductUser(User|int $user): static
+    {
+        if (is_object($user)) {
+            $user = $user->id;
+        }
+
+        return $this->whereHas('stockItem', function (StockItemQueryBuilder $query) use ($user) {
+            return $query->forUser($user);
+        });
+    }
+
     public function forUser(User|int $user): static
     {
         if (is_object($user)) {
@@ -43,15 +57,10 @@ class OrderItemQueryBuilder extends Builder
         if (is_a($model, User::class)) {
             return $this->forUser($model);
         }
+
+        return $this;
     }
 
-    public function whereSeller(int $id): static
-    {
-        return $this->whereHas('stockItem', function (StockItemQueryBuilder $query) use ($id) {
-            return $query->forUser($id);
-        });
-    }
-    
     public function isPaid(): static
     {
         return $this->whereHas('order', function (OrderQueryBuilder $query) {
