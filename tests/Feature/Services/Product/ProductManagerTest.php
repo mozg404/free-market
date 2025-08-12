@@ -53,4 +53,18 @@ class ProductManagerTest extends TestCase
         $this->expectException(NotEnoughStockException::class);
         $this->productManager->ensureStockAvailable($product, 2);
     }
+
+    public function testCheckProductAvailable()
+    {
+        $user = User::factory()->create();
+        $product = Product::factory()
+
+            ->for($user)
+            ->create();
+
+        $this->assertTrue(
+            $this->productManager->checkProductAvailable($product)
+        );
+
+    }
 }

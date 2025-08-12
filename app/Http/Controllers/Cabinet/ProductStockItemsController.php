@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Cabinet;
 
-use App\Data\Products\ProductData;
+use App\Data\Products\ProductForListingData;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\StockItem;
@@ -20,7 +20,7 @@ class ProductStockItemsController extends Controller
     public function create(Product $product, Request $request)
     {
         return Inertia::render('cabinet/products/StockItemCreate', [
-            'product' => ProductData::from($product),
+            'product' => ProductForListingData::from($product),
         ]);
     }
 

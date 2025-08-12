@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Enum\ProductStatus;
 use App\Models\Product;
 use App\Support\Image;
 use App\Support\Price;
 use App\Support\TextGenerator;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Log;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
@@ -53,12 +53,26 @@ class ProductFactory extends Factory
             'name' => $this->faker->randomElement(static::$names),
             'current_price' => $price->getCurrentPrice(),
             'base_price' => $price->getBasePrice(),
-            'is_available' => fake()->boolean(),
-            'is_published' => fake()->boolean(),
+            'status' => fake()->randomElement(ProductStatus::cases())->value,
             'description' => TextGenerator::paragraphs(include resource_path('data/demo_product_descriptions.php'), random_int(3, 7)),
             'instruction' => TextGenerator::paragraphs(include resource_path('data/demo_product_instructions.php'), random_int(1, 4)),
             'preview_image' => null,
         ];
+    }
+
+    public function isDraft(): Factory
+    {
+        return $this->state(fn (array $attributes) => [ProductStatus::DRAFT->value]);
+    }
+
+    public function isActive(): Factory
+    {
+        return $this->state(fn (array $attributes) => [ProductStatus::ACTIVE->value]);
+    }
+
+    public function isPaused(): Factory
+    {
+        return $this->state(fn (array $attributes) => [ProductStatus::PAUSED->value]);
     }
 
     public function fromDemo(?array $data = null): Factory

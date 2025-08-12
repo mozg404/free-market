@@ -23,6 +23,7 @@ import {
   DescriptionTitle,
   DescriptionValue
 } from "@/components/shared/description/index.js";
+import ProductStatus from "@/components/products/ProductStatus.vue";
 
 const props = defineProps({
   product: Object,
@@ -77,20 +78,10 @@ const form = useForm()
               </DescriptionItem>
 
               <DescriptionItem>
-                <DescriptionTitle>Статус публикации</DescriptionTitle>
+                <DescriptionTitle>Статус</DescriptionTitle>
                 <DescriptionSeparator/>
                 <DescriptionValue>
-                  <Badge v-if="product.is_published">Опубликовано</Badge>
-                  <Badge v-else variant="destructive">Не опубликовано</Badge>
-                </DescriptionValue>
-              </DescriptionItem>
-
-              <DescriptionItem>
-                <DescriptionTitle>Статус продажи</DescriptionTitle>
-                <DescriptionSeparator/>
-                <DescriptionValue>
-                  <Badge v-if="product.is_available">Доступно для продажи</Badge>
-                  <Badge v-else variant="destructive">Не доступно для продажи</Badge>
+                  <ProductStatus :product="product" />
                 </DescriptionValue>
               </DescriptionItem>
 
@@ -117,29 +108,29 @@ const form = useForm()
                   Изменить
                 </Button>
 
-                <Button v-if="product.is_available"
-                        @click="router.patch(route('my.products.mark-unavailable', product.id))" variant="secondary">
-                  <X/>
-                  Снять с продажи
-                </Button>
-                <Button v-else @click="router.patch(route('my.products.mark-available', product.id))"
-                        variant="secondary">
-                  <Check/>
-                  Поставить на продажу
-                </Button>
+<!--                <Button v-if="product.is_available"-->
+<!--                        @click="router.patch(route('my.products.mark-unavailable', product.id))" variant="secondary">-->
+<!--                  <X/>-->
+<!--                  Снять с продажи-->
+<!--                </Button>-->
+<!--                <Button v-else @click="router.patch(route('my.products.mark-available', product.id))"-->
+<!--                        variant="secondary">-->
+<!--                  <Check/>-->
+<!--                  Поставить на продажу-->
+<!--                </Button>-->
 
-                <Button v-if="product.is_published" @click="router.patch(route('my.products.unpublish', product.id))"
-                        variant="secondary">
-                  <ArrowBigDown/>
-                  Снять с публикации
-                </Button>
-                <Button v-else @click="router.patch(route('my.products.publish', product.id))" variant="secondary">
-                  <ArrowBigUp/>
-                  Опубликовать
-                </Button>
+<!--                <Button v-if="product.is_published" @click="router.patch(route('my.products.unpublish', product.id))"-->
+<!--                        variant="secondary">-->
+<!--                  <ArrowBigDown/>-->
+<!--                  Снять с публикации-->
+<!--                </Button>-->
+<!--                <Button v-else @click="router.patch(route('my.products.publish', product.id))" variant="secondary">-->
+<!--                  <ArrowBigUp/>-->
+<!--                  Опубликовать-->
+<!--                </Button>-->
 
                 <Button
-                  v-if="product.is_published"
+                  v-if="product.status !== 'draft'"
                   :as="Link"
                   :href="route('catalog.product', product.id)" class="cursor-pointer"
                   variant="secondary"

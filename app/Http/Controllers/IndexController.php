@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\Products\ProductData;
+use App\Data\Products\ProductForListingData;
 use App\Models\Product;
 use App\Services\Toaster;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ class IndexController extends Controller
             ->get();
 
         return Inertia::render('Index', [
-            'products' => ProductData::collect($products)
+            'products' => ProductForListingData::collect($products)
         ]);
     }
 }

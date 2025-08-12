@@ -19,7 +19,7 @@ class CartManager
 
     public function add(Product $product): void
     {
-        if (!$product->hasEnoughStockItems($this->getQuantityFor($product) + 1)) {
+        if (!$product->hasEnoughStock($this->getQuantityFor($product) + 1)) {
             throw new NotEnoughStockException();
         }
 

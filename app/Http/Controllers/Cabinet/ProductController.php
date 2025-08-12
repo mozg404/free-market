@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Cabinet;
 
 use App\Data\Products\ProductDetailedData;
 use App\Data\Products\ProductEditableData;
-use App\Data\Products\ProductData;
+use App\Data\Products\ProductForListingData;
 use App\Data\Products\StockItemData;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -35,7 +35,7 @@ class ProductController extends Controller
         $products = $products->paginate(10);
 
         return Inertia::render('cabinet/products/ProductIndex', [
-            'products' => ProductData::collect($products->items()),
+            'products' => ProductForListingData::collect($products->items()),
             'links' => $products->toArray()['links'],
             'filters' => $request->only(['search', 'shop_id']),
         ]);

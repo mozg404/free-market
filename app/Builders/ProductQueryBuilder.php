@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Builders;
 
 use App\Collections\ProductCollection;
+use App\Enum\ProductStatus;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -61,9 +62,19 @@ class ProductQueryBuilder extends Builder
         return $this;
     }
 
-    public function isAvailable(): self
+    public function isActive(): self
     {
-        return $this->where('is_available', true);
+        return $this->where('status', ProductStatus::ACTIVE->value);
+    }
+
+    public function isDraft(): self
+    {
+        return $this->where('status', ProductStatus::DRAFT->value);
+    }
+
+    public function isPaused(): self
+    {
+        return $this->where('status', ProductStatus::PAUSED->value);
     }
 
     public function isPublished(): self
@@ -98,7 +109,7 @@ class ProductQueryBuilder extends Builder
     /**
      * Имеет доступные для продажи позиции
      */
-    public function hasAvailableStockItems(): self
+    public function hasAvailableStock(): self
     {
         return $this->whereHas('stockItems', fn (StockItemQueryBuilder $builder) =>
             $builder->isAvailable()
@@ -240,8 +251,7 @@ class ProductQueryBuilder extends Builder
     public function forListing(): self
     {
         return $this
-            ->isAvailable()
-            ->isPublished()
-            ->hasAvailableStockItems();
+            ->isActive()
+            ->hasAvailableStock();
     }
 }

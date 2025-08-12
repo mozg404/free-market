@@ -2,7 +2,7 @@
 
 namespace App\Data\Orders;
 
-use App\Data\Products\ProductData;
+use App\Data\Products\ProductForListingData;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Support\Price;
@@ -14,7 +14,7 @@ class OrderItemForListingData extends Data
         public int $id,
         public int $order_id,
         public Price $price,
-        public ProductData $product,
+        public ProductForListingData $product,
     ) {
     }
 
@@ -24,7 +24,7 @@ class OrderItemForListingData extends Data
             id: $orderItem->id,
             order_id: $orderItem->order_id,
             price: $orderItem->price,
-            product: ProductData::from($orderItem->stockItem->product),
+            product: ProductForListingData::from($orderItem->stockItem->product),
         );
     }
 }

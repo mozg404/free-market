@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Data\FeatureData;
 use App\Data\Products\ProductDetailedData;
-use App\Data\Products\ProductData;
+use App\Data\Products\ProductForListingData;
 use App\Http\Requests\CatalogRequest;
 use App\Models\Category;
 use App\Models\Product;
@@ -31,7 +31,7 @@ class CatalogController extends Controller
         return Inertia::render('catalog/Catalog', [
             'filters' => $filters,
             'categories' => $categories,
-            'productsPaginate' => ProductData::collect($products)
+            'productsPaginate' => ProductForListingData::collect($products)
         ]);
     }
 
@@ -53,7 +53,7 @@ class CatalogController extends Controller
             'features' => $category->features,
             'filters' => $filters,
             'categories' => $categories,
-            'productsPaginate' => ProductData::collect($products)
+            'productsPaginate' => ProductForListingData::collect($products)
         ]);
     }
 

@@ -29,6 +29,7 @@ import {
 import Main from "@/components/shared/layout/Main.vue";
 import MainTitle from "@/components/shared/layout/MainTitle.vue";
 import {Badge} from "@/components/ui/badge/index.js";
+import ProductStatus from "@/components/products/ProductStatus.vue";
 
 const props = defineProps({
   products: Array,
@@ -119,12 +120,7 @@ watch([search, shopId], applyFilters);
                     <PriceFormatter v-else :value="product.price.current" class="font-semibold"/>
                   </TableCell>
                   <TableCell>
-                    <div class="flex flex-col space-y-1">
-                      <Badge v-if="!product.is_published" variant="destructive">Не опубликован</Badge>
-                      <Badge v-else-if="!product.is_available" variant="secondary">Снят с продажи</Badge>
-                      <Badge v-else-if="product.available_stock_items_count === 0" variant="destructive">Закончился</Badge>
-                      <Badge v-else>Продается</Badge>
-                    </div>
+                    <ProductStatus :product="product"/>
                   </TableCell>
 
                   <TableCell>

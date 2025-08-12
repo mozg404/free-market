@@ -5,10 +5,9 @@ namespace App\Models;
 use App\Builders\ProductQueryBuilder;
 use App\Builders\StockItemQueryBuilder;
 use App\Casts\ImageCast;
-use App\Collections\ArticleCollection;
 use App\Collections\ProductCollection;
 use App\Data\Products\ProductEditableData;
-use App\Support\Image;
+use App\Enum\ProductStatus;
 use App\Support\Price;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -23,29 +22,26 @@ use Illuminate\Support\Facades\DB;
 use Mews\Purifier\Casts\CleanHtmlInput;
 
 /**
- * 
- *
  * @property int $id
  * @property int $user_id
  * @property string $name
  * @property int $current_price
  * @property int $base_price
- * @property bool $is_published
- * @property bool $is_available
- * @property \App\Support\Image|string|null|null $preview_image
+ * @property ProductStatus $status
+ * @property Image|string|null $preview_image
  * @property string|null $description
  * @property string|null $instruction
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int|null $category_id
- * @property-read \App\Models\Category|null $category
- * @property-read \App\Models\ProductFeatureValue|null $pivot
- * @property-read Collection<int, \App\Models\Feature> $features
+ * @property-read Category|null $category
+ * @property-read ProductFeatureValue|null $pivot
+ * @property-read Collection<int, Feature> $features
  * @property-read int|null $features_count
  * @property Price $price
- * @property-read Collection<int, \App\Models\StockItem> $stockItems
+ * @property-read Collection<int, StockItem> $stockItems
  * @property-read int|null $stock_items_count
- * @property-read \App\Models\User $user
+ * @property-read User $user
  * @method static Product find(int $id, array $columns = ['*'])
  * @method static ProductCollection<int, static> all($columns = ['*'])
  * @method static ProductQueryBuilder<static>|Product descOrder()
@@ -96,7 +92,7 @@ class Product extends Model
         'name',
         'current_price',
         'base_price',
-        'is_available',
+        'status',
         'preview_image',
         'category_id',
     ];
@@ -106,8 +102,7 @@ class Product extends Model
         return [
             'current_price' => 'int',
             'base_price' => 'int',
-            'is_available' => 'boolean',
-            'is_published' => 'boolean',
+            'status' => ProductStatus::class,
             'preview_image' => ImageCast::class,
             'description' => CleanHtmlInput::class,
             'instruction' => CleanHtmlInput::class,
@@ -173,77 +168,50 @@ class Product extends Model
         }
     }
 
-    public function isPublished(): bool
+    public function isActive(): bool
     {
-        return $this->is_published;
+        return $this->status === ProductStatus::ACTIVE;
     }
 
-    public function isUnpublished(): bool
+    public function isDraft(): bool
     {
-        return !$this->is_published;
+        return $this->status === ProductStatus::DRAFT;
     }
 
-    /**
-     * Публикует товар
-     */
-    public function publish(): void
+    public function isPaused(): bool
     {
-        $this->is_published = true;
-        $this->save();
+        return $this->status === ProductStatus::PAUSED;
     }
 
     /**
-     * Снимает с публикации
+     * Есть в наличие
      */
-    public function unpublish(): void
+    public function hasAvailableStock(): bool
     {
-        $this->is_published = false;
-        $this->save();
-    }
-
-    public function isAvailable(): bool
-    {
-        return $this->is_available;
-    }
-
-    public function isNotAvailable(): bool
-    {
-        return !$this->is_available;
+        return $this->stockItems()->available()->exists();
     }
 
     /**
-     * Разрешает продажу
+     * Доступен для покупки
      */
-    public function markAsAvailable(): void
+    public function canBePurchased(): bool
     {
-        $this->is_available = true;
-        $this->save();
+        return $this->isActive() && $this->hasAvailableStock();
     }
 
     /**
-     * Запрещает продажу
+     * Проверяет достаточно ли доступных позиций на складе
      */
-    public function markAsUnavailable(): void
+    public function hasEnoughStock(int $amount): bool
     {
-        $this->is_available = false;
-        $this->save();
-    }
-
-    /**
-     * Проверяет достаточно ли доступных позиций для продажи
-     * @param int $amount
-     * @return bool
-     */
-    public function hasEnoughStockItems(int $amount): bool
-    {
-        return $this->getAvailableStockItemsCount() >= $amount;
+        return $this->getQuantityInStock() >= $amount;
     }
 
     /**
      * Возвращает количество доступных позиций для продажи
      * @return int
      */
-    public function getAvailableStockItemsCount(): int
+    public function getQuantityInStock(): int
     {
         return $this->stockItems()->isAvailable()->count();
     }
