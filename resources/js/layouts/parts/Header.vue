@@ -1,9 +1,9 @@
 <script setup>
-import {Link, usePage} from "@inertiajs/vue3";
+import {Link} from "@inertiajs/vue3";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import logoUrl from "../../../img/logo.svg";
 import {Button} from "@/components/ui/button/index.js";
-import {User2Icon, ShoppingCart, LogIn, RussianRuble} from 'lucide-vue-next'
+import {ShoppingCart, LogIn, RussianRuble} from 'lucide-vue-next'
 import {useCart} from '@/composables/useCart.js'
 import {useUser} from '@/composables/useUser.js'
 import {

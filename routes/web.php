@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Route;
 if (config('app.env') === 'local') {
     Route::get('/test', [TestController::class, 'test']);
     Route::get('/test-page', [TestController::class, 'testPage']);
-    Route::get('/test-page2', [TestController::class, 'testPage2']);
 }
 
 // My
