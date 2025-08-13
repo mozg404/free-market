@@ -3,7 +3,9 @@
 namespace App\Services\PaymentGateway;
 
 use App\Contracts\PaymentGateway;
+use App\Contracts\Sourceable;
 use App\Enum\PaymentSource;
+use App\Enum\PaymentStatus;
 use App\Exceptions\Payment\EmptyExternalIdException;
 use App\Exceptions\Payment\UnknownPaymentException;
 use App\Exceptions\Payment\UnknownPaymentStatusException;
@@ -13,19 +15,16 @@ use App\Models\User;
 
 class DemoPaymentGateway implements PaymentGateway
 {
-    public function createForOrder(Order $order): Payment
+    public function createPayment(User $user, int $amount, PaymentSource $source, Sourceable $sourceable = null): Payment
     {
-        $amount = $order->amount - $order->user->balance;
-        $payment = Payment::new($order->user, $amount, PaymentSource::ORDER, $order);
-        $payment->external_id = $this->generateExternalId($payment->id, $amount);
-        $payment->save();
-
-        return $payment;
-    }
-
-    public function createDeposit(User $user, int $amount): Payment
-    {
-        $payment = Payment::new($user, $amount, PaymentSource::REPLENISHMENT);
+        $payment = Payment::create([
+            'user_id' => $user->id,
+            'amount' => $amount,
+            'status' => PaymentStatus::NEW,
+            'source' => $source->value,
+            'sourceable_type' => $sourceable?->getSourceableType(),
+            'sourceable_id' => $sourceable?->getSourceableId(),
+        ]);
         $payment->external_id = $this->generateExternalId($payment->id, $amount);
         $payment->save();
 

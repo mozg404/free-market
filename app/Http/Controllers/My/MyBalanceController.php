@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\My;
 
-use App\Contracts\PaymentGateway;
 use App\Data\TransactionData;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use App\Services\PaymentGateway\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -24,14 +24,14 @@ class MyBalanceController extends Controller
         ]);
     }
 
-    public function deposit(Request $request, PaymentGateway $gateway)
+    public function deposit(Request $request, PaymentService $paymentService)
     {
         $data = $request->validate([
             'amount' => 'required|numeric'
         ]);
 
-        return redirect($gateway->getPaymentUrl(
-            $gateway->createDeposit(auth()->user(), $data['amount'])
+        return redirect($paymentService->getPaymentUrl(
+            $paymentService->createForDeposit(auth()->user(), $data['amount'])
         ));
     }
 }

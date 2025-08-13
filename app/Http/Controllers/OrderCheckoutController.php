@@ -8,6 +8,7 @@ use App\Exceptions\Product\NotAvailableForPurchaseException;
 use App\Exceptions\Product\NotEnoughStockException;
 use App\Services\Order\OrderFromCartCreator;
 use App\Services\Order\OrderProcessor;
+use App\Services\PaymentGateway\PaymentService;
 use App\Services\Toaster;
 
 class OrderCheckoutController extends Controller
@@ -20,7 +21,7 @@ class OrderCheckoutController extends Controller
     public function store(
         OrderFromCartCreator $creator,
         OrderProcessor $processor,
-        PaymentGateway $gateway,
+        PaymentService $paymentService,
     ) {
         try {
             $user = auth()->user();
@@ -32,8 +33,8 @@ class OrderCheckoutController extends Controller
 
                 return redirect()->route('my.orders.show', $order->id);
             } catch (InsufficientFundsException $e) {
-                return redirect($gateway->getPaymentUrl(
-                    $gateway->createForOrder($order)
+                return redirect($paymentService->getPaymentUrl(
+                    $paymentService->createForOrder($order)
                 ));
             }
         } catch (NotEnoughStockException|NotAvailableForPurchaseException $e) {

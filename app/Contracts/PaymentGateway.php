@@ -2,21 +2,16 @@
 
 namespace App\Contracts;
 
-use App\Models\Order;
+use App\Enum\PaymentSource;
 use App\Models\Payment;
 use App\Models\User;
 
 interface PaymentGateway
 {
     /**
-     * Создает платеж для заказа
+     * Создает платеж
      */
-    public function createForOrder(Order $order): Payment;
-
-    /**
-     * Создает платеж для пополнения баланса
-     */
-    public function createDeposit(User $user, int $amount): Payment;
+    public function createPayment(User $user, int $amount, PaymentSource $source, Sourceable $sourceable = null): Payment;
 
     /**
      * Обрабатывает колбэк от шлюза
