@@ -12,6 +12,8 @@ import {
 import DateTime from "@/components/support/DateTime.vue";
 import PageLayout from "@/layouts/PageLayout.vue";
 import SidebarLayout from "@/components/shared/SidebarLayout.vue";
+import {Button} from "@/components/ui/button/index.js";
+import {Link} from "@inertiajs/vue3";
 
 const props = defineProps({
   order: Object,
@@ -35,8 +37,11 @@ const props = defineProps({
           <Card v-if="order.status === 'completed'" class="border-0 bg-primary text-primary-foreground text-center mb-4">
             <CardContent class="flex justify-center">Заказ оплачен</CardContent>
           </Card>
-          <Card v-else class="border-0 bg-destructive text-destructive-foreground text-center mb-4">
-            <CardContent class="flex justify-center">Ожидает оплату</CardContent>
+          <Card v-else class="border-0 bg-secondary text-secondary-foreground text-center mb-4">
+            <CardContent class="flex justify-between items-center">
+              <div class="text-sm">Ожидает оплату</div>
+              <Button :as="Link" :href="route('my.orders.pay', order.id)">Оплатить</Button>
+            </CardContent>
           </Card>
 
           <Card>
