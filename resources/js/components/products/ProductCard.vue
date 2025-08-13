@@ -1,10 +1,7 @@
 <script setup>
-import {Link, useForm, usePage} from "@inertiajs/vue3";
-import {Button} from '@/components/ui/button/index.js'
-import {ShoppingCart} from 'lucide-vue-next';
-import {computed} from "vue";
-import { AspectRatio } from "@/components/ui/aspect-ratio/index.js"
+import {Link} from "@inertiajs/vue3";
 import ProductImage from "@/components/products/ProductImage.vue";
+import PriceFormatter from "@/components/support/PriceFormatter.vue";
 
 const props = defineProps({
   product: Object,
@@ -21,22 +18,18 @@ const props = defineProps({
     />
   </Link>
 
-  <div class="mt-3">
-    <div v-if="product.price.has_discount">
-      <div class="flex items-center">
-        <div class="text-xl font-bold text-red-600 line-through mr-2">{{ product.price.base }}</div>
-        <div>{{ product.price.discount }} ₽</div>
-      </div>
+  <div class="mt-5">
+    <div v-if="product.price.has_discount" class="flex items-center">
+        <PriceFormatter class="block text-2xl text-destructive font-semibold mr-2" :value="product.price.current"/>
+        <PriceFormatter class="block text-sm text-muted-foreground line-through" :value="product.price.base"/>
     </div>
-    <div v-else class="text-lg font-bold">{{ product.price.current }} ₽</div>
+    <PriceFormatter v-else class="text-2xl font-semibold" :value="product.price.current"/>
   </div>
 
-  <div class="mt-1 text-sm  text-gray-400">В наличии: {{ product.stock_items_count }}</div>
-  <div class="mt-1 line-clamp-2 leading-5" :title="product.name">{{ product.name }}</div>
-
+  <div class="mt-3 line-clamp-3 leading-5" :title="product.name">
+    <Link :href="route('catalog.product', product.id)" class="hover:text-black transition-colors">
+      {{ product.name }}
+    </Link>
+  </div>
 </div>
 </template>
-
-<style scoped>
-
-</style>

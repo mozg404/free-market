@@ -38,12 +38,12 @@ class DatabaseSeeder extends Seeder
 
         // Создаем главного пользователя
         $mainUser = User::factory()
-            ->withAvatar()
+            ->withPublishedAvatar()
             ->create(['email' => 'user@gmail.com']);
 
         // Создаем рандомных 5 пользователей
         $users = User::factory(20)
-            ->withAvatar()
+            ->withPublishedAvatar()
             ->create();
 
         foreach ($demoData as $categoryKey => $categoryData) {
