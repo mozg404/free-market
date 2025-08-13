@@ -3,6 +3,7 @@ import { Toaster, toast } from 'vue-sonner'
 import 'vue-sonner/style.css'
 import {usePage} from "@inertiajs/vue3";
 import {watch, computed} from "vue";
+import PageLoader from "@/components/support/PageLoader.vue";
 
 const page = usePage()
 const toasts = computed(() => page.props.toasts)
@@ -40,6 +41,7 @@ watch(
 
 <template>
   <Toaster closeButton richColors position="top-right" />
+  <PageLoader />
   <slot/>
 </template>
 

@@ -28,7 +28,7 @@ const props = defineProps({
     type: [Array, null],
     default: null,
   },
-  products: Array,
+  products: Object,
   filters: Object,
 })
 
