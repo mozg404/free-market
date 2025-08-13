@@ -73,6 +73,6 @@ class ProductManager
      */
     public function reserveStockItem(StockItem $stockItem, Order $order): void
     {
-        $stockItem->reserve($order->user);
+        $stockItem->reserveFor($order->user);
     }
 }

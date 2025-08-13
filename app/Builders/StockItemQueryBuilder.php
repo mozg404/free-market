@@ -31,6 +31,21 @@ class StockItemQueryBuilder extends Builder
         return $this->where('status', StockItemStatus::SOLD->value);
     }
 
+    public function isActiveProduct(): static
+    {
+        return $this->whereHas('product', function (ProductQueryBuilder $query) {
+            return $query->isActive();
+        });
+    }
+
+    /**
+     * @return $this
+     */
+    public function canByPurchased(): static
+    {
+        return $this->isAvailable()->isActiveProduct();
+    }
+
     public function forProduct(int|Product $id): static
     {
         if (is_object($id)) {
@@ -40,20 +55,32 @@ class StockItemQueryBuilder extends Builder
         return $this->where('product_id', $id);
     }
 
-    public function forUser(int|User $id): static
+    /**
+     * Только позиции, принадлежащие пользователю $user
+     */
+    public function forUser(int|User $user): static
     {
-        if (is_object($id)) {
-            $id = $id->id;
+        if (is_object($user)) {
+            $user = $user->id;
         }
 
-        return $this->whereHas('product', function (ProductQueryBuilder $query) use ($id) {
-            $query->forUser($id);
+        return $this->whereHas('product', function (ProductQueryBuilder $query) use ($user) {
+            $query->forUser($user);
         });
     }
 
-    public function withPinnedUser(): static
+    /**
+     * Только позиции, не принадлежащие пользователю $user
+     */
+    public function whereNotBelongsToUser(int|User $user): self
     {
-        return $this->with('pinnedUser');
+        if (is_object($user)) {
+            $user = $user->id;
+        }
+
+        return $this->whereHas('product', function (ProductQueryBuilder $query) use ($user) {
+            $query->whereNotBelongsToUser($user);
+        });
     }
 
     public function forPinnedUser(int|User $id): static
@@ -63,5 +90,20 @@ class StockItemQueryBuilder extends Builder
         }
 
         return $this->where('pinned_user_id', $id);
+    }
+
+    public function withProduct(): static
+    {
+        return $this->with('product');
+    }
+
+    public function withProductUser(): static
+    {
+        return $this->with('product.user');
+    }
+
+    public function withPinnedUser(): static
+    {
+        return $this->with('pinnedUser');
     }
 }

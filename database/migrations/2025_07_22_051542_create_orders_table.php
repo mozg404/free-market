@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
@@ -27,13 +24,18 @@ return new class extends Migration
             $table->integer('current_price');
             $table->integer('base_price');
         });
+
+        Schema::table('stock_items', function (Blueprint $table) {
+            $table->foreignId('order_id')->nullable()->constrained()->cascadeOnDelete();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
+        Schema::table('stock_items', function (Blueprint $table) {
+            $table->dropForeign(['order_id']);
+            $table->dropColumn('order_id');
+        });
         Schema::dropIfExists('orders_items');
         Schema::dropIfExists('orders');
     }

@@ -28,8 +28,6 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('status');
             $table->string('content');
-            $table->foreignId('pinned_user_id')->nullable()->constrained('users');
-            $table->timestamp('pinned_at')->nullable();
             $table->timestamps();
         });
     }

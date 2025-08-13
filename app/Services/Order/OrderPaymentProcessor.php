@@ -29,7 +29,7 @@ class OrderPaymentProcessor
                 ->withStockItem()
                 ->withProductUser()
                 ->get()->each(function (OrderItem $item) use ($order) {
-                    $item->stockItem->sold($order->user);
+                    $item->stockItem->markAsSold($order->user);
                     $item->stockItem->product->user->deposit(
                         amount: $item->price->getCurrentPrice(),
                         type: TransactionType::SALE,

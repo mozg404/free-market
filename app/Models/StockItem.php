@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Builders\OrderQueryBuilder;
+use App\Builders\ProductQueryBuilder;
 use App\Contracts\Transactionable;
 use App\Enum\StockItemStatus;
 use App\Builders\StockItemQueryBuilder;
@@ -17,11 +19,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $product_id
  * @property StockItemStatus $status
  * @property string $content
- * @property int|null $pinned_user_id
+ * @property int|null $order_id
+ * @property Order|null $order
  * @property \Illuminate\Support\Carbon|null $pinned_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User|null $pinnedUser
  * @property-read \App\Models\Product $product
  * @method static \Database\Factories\StockItemFactory factory($count = null, $state = [])
  * @method static StockItemQueryBuilder<static>|StockItem forPinnedUser(\App\Models\User|int $id)
@@ -63,14 +65,13 @@ class StockItem extends Model implements Transactionable
     }
 
     /**
-     * Переводит статус к "Доступно"
+     * Помечает позицию как доступную для продажи
      * @return void
      */
-    public function toAvailable(): void
+    public function markAsAvailable(): void
     {
         $this->status = StockItemStatus::AVAILABLE;
-        $this->pinned_user_id = null;
-        $this->pinned_at = null;
+        $this->order_id = null;
         $this->save();
     }
 
@@ -80,15 +81,14 @@ class StockItem extends Model implements Transactionable
     }
 
     /**
-     * Резервирует позицию за пользователем
-     * @param User $user
+     * Резервирует позицию для заказа $order
+     * @param Order $order
      * @return void
      */
-    public function reserve(User $user): void
+    public function reserveFor(Order $order): void
     {
         $this->status = StockItemStatus::RESERVED;
-        $this->pinned_user_id = $user->id;
-        $this->pinned_at = now();
+        $this->order_id = $order->id;
         $this->save();
     }
 
@@ -99,14 +99,11 @@ class StockItem extends Model implements Transactionable
 
     /**
      * Помечает позицию, как проданную
-     * @param User $user
      * @return void
      */
-    public function sold(User $user): void
+    public function markAsSold(): void
     {
         $this->status = StockItemStatus::SOLD;
-        $this->pinned_user_id = $user->id;
-        $this->pinned_at = now();
         $this->save();
     }
 
@@ -140,9 +137,14 @@ class StockItem extends Model implements Transactionable
         $this->save();
     }
 
-    public function product(): BelongsTo
+    public function product(): BelongsTo|ProductQueryBuilder
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function order(): BelongsTo|OrderQueryBuilder|null
+    {
+        return $this->belongsTo(Order::class);
     }
 
     public function pinnedUser(): BelongsTo

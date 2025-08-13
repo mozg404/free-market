@@ -3,8 +3,11 @@
 namespace Database\Seeders;
 
 use App\Enum\FeatureType;
+use App\Enum\TransactionType;
 use App\Models\Category;
 use App\Models\Feature;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
@@ -39,10 +42,9 @@ class DatabaseSeeder extends Seeder
             ->create(['email' => 'user@gmail.com']);
 
         // Создаем рандомных 5 пользователей
-        $users = User::factory(5)
+        $users = User::factory(20)
             ->withAvatar()
             ->create();
-
 
         foreach ($demoData as $categoryKey => $categoryData) {
             $category = Category::create([
@@ -73,7 +75,7 @@ class DatabaseSeeder extends Seeder
 
                 // 10 товаров от рандомных пользователей
                 $products = $products->merge(
-                    Product::factory(random_int(0,20))
+                    Product::factory(random_int(0,15))
                         ->fromDemo($categoryData['products'] ?? [])
                         ->for($category)
                         ->for($users->random())
@@ -92,12 +94,39 @@ class DatabaseSeeder extends Seeder
                 });
 
                 // Создаем позиции
-                $products->each(fn($p) => StockItem::factory(random_int(5,20))->for($p)->create());
+                $products->each(function ($product) use ($category) {
+                    StockItem::factory(random_int(0,10))
+                        ->for($product)
+                        ->available()
+                        ->create();
+                });
             }
         }
+
+        // 2 неоплаченных заказа и 3 оплаченных для основного пользователя
+        $this->createOrder($mainUser);
+        $this->payOrder($mainUser, $this->createOrder($mainUser));
+        $this->createOrder($mainUser);
+        $this->payOrder($mainUser, $this->createOrder($mainUser));
+        $this->payOrder($mainUser, $this->createOrder($mainUser));
+        $this->payOrder($mainUser, $this->createOrder($mainUser));
+
+        // Рандомные заказы от других пользователей
+        $users->each(function ($user) {
+            if (random_int(1, 100) <= 50) {
+                for ($i = 0; $i < random_int(1, 3); $i++) {
+                    $order = $this->createOrder($user);
+
+                    // Выполненный заказ с вероятностью 80%
+                    if (random_int(1, 100) <= 80) {
+                        $this->payOrder($user, $order);
+                    }
+                }
+            }
+        });
     }
 
-    protected function generateFeatureValue(Feature $feature)
+    private function generateFeatureValue(Feature $feature)
     {
         return match($feature->type) {
             FeatureType::TEXT => fake()->word(),
@@ -106,5 +135,62 @@ class DatabaseSeeder extends Seeder
             FeatureType::CHECK => fake()->boolean(),
             default => 'DEFAULT',
         };
+    }
+
+    // Генерирует новый заказ для пользователя
+    private function createOrder(User $user): Order
+    {
+        // Получаем случайно количество доступных для покупки позиций товара со склада
+        $stock = StockItem::query()
+            ->inRandomOrder()
+            ->whereNotBelongsToUser($user)
+            ->canByPurchased()
+            ->with('product', function ($query) {
+                return $query
+                    ->select('id', 'user_id', 'category_id', 'status', 'current_price', 'base_price')
+                    ->with('user', fn ($q) => $q->select('id', 'name', 'balance'));
+            })
+            ->take(random_int(1, 5))
+            ->get();
+
+        // Генерируем заказ из позиций на складе
+        $order = Order::factory()
+            ->for($user)
+            ->asNew()
+            ->withStockItems($stock)
+            ->create();
+
+        return $order;
+    }
+
+    // Оплачивает заказ
+    public function payOrder(User $user, Order $order): void
+    {
+        $order->fresh();
+        $order->markAsPaid();
+        $order
+            ->items()
+            ->with('stockItem', function ($builder) {
+                return $builder
+                    ->with(['product' => function ($query) {
+                        return $query
+                            ->select('id', 'user_id', 'category_id', 'status', 'current_price', 'base_price')
+                            ->with('user', fn ($q) => $q->select('id', 'name', 'balance'));
+                    }]);
+            })
+            ->get()
+            ->each(function (OrderItem $item) use ($user, $order) {
+                // Зачисляем на баланс пользователя сумму заказа
+                $user->deposit($order->amount, TransactionType::DEPOSIT);
+
+                // Списываем с баланса пользователя сумму заказа
+                $user->withdraw($order->amount, TransactionType::PURCHASE, $order);
+
+                // Помечаем позицию на складе как проданную
+                $item->stockItem->markAsSold($user);
+
+                // Зачисляем средства на баланс продавца
+                $item->stockItem->product->user->deposit($order->amount, TransactionType::SALE, $item->stockItem);
+            });
     }
 }

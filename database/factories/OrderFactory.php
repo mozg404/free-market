@@ -3,8 +3,12 @@
 namespace Database\Factories;
 
 use App\Enum\OrderStatus;
+use App\Enum\StockItemStatus;
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\StockItem;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -25,7 +29,7 @@ class OrderFactory extends Factory
         ];
     }
 
-    public function configure(): OrderFactory
+    public function withItems(): OrderFactory
     {
         return $this->afterCreating(function (Order $order) {
             OrderItemFactory::new()
@@ -65,5 +69,31 @@ class OrderFactory extends Factory
             'status' => OrderStatus::CANCELLED,
             'paid_at' => null,
         ]);
+    }
+
+    public function withStockItems(Collection $stockItems): static
+    {
+        return $this->afterCreating(function (Order $order) use ($stockItems) {
+            $amount = 0;
+
+            $stockItems->each(function (StockItem $stockItem) use ($order, &$amount) {
+                $product = $stockItem->product;
+
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'stock_item_id' => $stockItem->id,
+                    'current_price' => $product->current_price,
+                    'base_price' => $product->base_price,
+                ]);
+
+                $amount += $product->current_price;
+                $stockItem->update([
+                    'status' => $order->isNew() ? StockItemStatus::RESERVED->value : StockItemStatus::SOLD->value,
+                    'order_id' => $order->id,
+                ]);
+            });
+
+            $order->update(['amount' => $amount]);
+        });
     }
 }

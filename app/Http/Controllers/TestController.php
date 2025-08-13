@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use App\Support\Image;
-use App\Support\Price;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -16,14 +13,9 @@ class TestController extends Controller
 
     public function test(Request $request)
     {
-        $product = new Product();
-        $product->name = 'test';
-        $product->price = new Price(100);
-        $product->description = 'test';
-        $product->save();
-
-        return $product;
+        return 123;
     }
+
 
     public function testPage()
     {

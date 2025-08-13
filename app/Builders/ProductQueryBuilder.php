@@ -144,6 +144,15 @@ class ProductQueryBuilder extends Builder
         return $this->where('user_id', $user);
     }
 
+    public function whereNotBelongsToUser(int|User $user): self
+    {
+        if (is_object($user)) {
+            $user = $user->id;
+        }
+
+        return $this->where('user_id', '!=', $user);
+    }
+
     public function forCategory(Category|int $category): self
     {
         if (is_object($category)) {
