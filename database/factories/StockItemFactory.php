@@ -36,11 +36,4 @@ class StockItemFactory extends Factory
             'status' => StockItemStatus::RESERVED,
         ]);
     }
-
-    public function sold(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'status' => StockItemStatus::SOLD,
-        ]);
-    }
 }

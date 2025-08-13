@@ -4,7 +4,7 @@ namespace App\Services\Order;
 
 use App\Collections\CreatableOrderItemCollection;
 use App\Data\Orders\CreatableOrderItemData;
-use App\Exceptions\Product\NotAvailableForPurchaseException;
+use App\Exceptions\Product\ProductUnavailableException;
 use App\Models\Order;
 use App\Models\StockItem;
 use App\Models\User;
@@ -22,7 +22,7 @@ readonly class OrderCreator
      * @param User $user
      * @param CreatableOrderItemCollection $items
      * @return Order
-     * @throws NotAvailableForPurchaseException
+     * @throws ProductUnavailableException
      */
     public function create(User $user, CreatableOrderItemCollection $items): Order
     {

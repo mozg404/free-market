@@ -66,7 +66,7 @@ const { cart, clearCart, form } = useCart()
               </CardHeader>
               <CardFooter class="border-t-1 pt-5">
                 <Button class="w-full" as-child>
-                  <Link method="post" class="cursor-pointer" :href="route('order_checkout.store')">
+                  <Link class="cursor-pointer" :href="route('checkout')">
                     <ShoppingBasket class="w-4 h-4" />
                     Оформить заказ
                   </Link>

@@ -2,7 +2,7 @@
 
 namespace App\Services\Product;
 
-use App\Exceptions\Product\NotAvailableForPurchaseException;
+use App\Exceptions\Product\ProductUnavailableException;
 use App\Exceptions\Product\NotEnoughStockException;
 use App\Models\Order;
 use App\Models\Product;
@@ -30,17 +30,17 @@ class ProductManager
     }
 
     /**
-     * @throws NotAvailableForPurchaseException
+     * @throws ProductUnavailableException
      */
     public function ensureIsActiveProduct(Product $product): void
     {
         if (!$product->isActive()) {
-            throw new NotAvailableForPurchaseException();
+            throw new ProductUnavailableException();
         }
     }
 
     /**
-     * @throws NotAvailableForPurchaseException
+     * @throws ProductUnavailableException
      */
     public function ensureCanByPurchased(Product $product, int $quantity = 1): void
     {

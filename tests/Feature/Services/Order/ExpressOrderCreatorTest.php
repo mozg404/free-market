@@ -7,99 +7,84 @@ use App\Data\Orders\CreatableOrderItemData;
 use App\Enum\OrderStatus;
 use App\Exceptions\Product\NotEnoughStockException;
 use App\Exceptions\Product\ProductUnavailableException;
-use App\Models\Order;
 use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
-use App\Services\Order\OrderCreator;
+use App\Services\Order\ExpressOrderCreator;
 use App\Support\Price;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class OrderCreatorTest extends TestCase
+class ExpressOrderCreatorTest extends TestCase
 {
     use RefreshDatabase;
 
-    private OrderCreator $orderCreator;
+    private ExpressOrderCreator $orderCreator;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->orderCreator = $this->app->make(OrderCreator::class);
+        $this->orderCreator = $this->app->make(ExpressOrderCreator::class);
     }
 
-    public function testNotEnoughStock()
+    // Недостаточно позиций на складе
+    public function testNotEnoughStock(): void
     {
         $user = User::factory()->create();
         $product = Product::factory()->isActive()->create();
-        StockItem::factory(1)
-            ->for($product)
-            ->available()
-            ->create();
 
         $this->expectException(NotEnoughStockException::class);
-        $this->orderCreator->create($user, new CreatableOrderItemCollection([
-            new CreatableOrderItemData($product, 2)
-        ]));
+        $this->orderCreator->create($user, $product);
     }
 
     // Товар со статусом черновика
     public function testProductIsDraft(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->make();
         $product = Product::factory()->isDraft()->create();
         StockItem::factory()->for($product)->available()->create();
 
         $this->expectException(ProductUnavailableException::class);
-        $this->orderCreator->create($user, new CreatableOrderItemCollection([
-            new CreatableOrderItemData($product)
-        ]));
+        $this->orderCreator->create($user, $product);
     }
 
-    // Товар со статусом паузы
+    // Товар на паузе
     public function testProductIsPaused(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->make();
         $product = Product::factory()->isPaused()->create();
         StockItem::factory()->for($product)->available()->create();
 
         $this->expectException(ProductUnavailableException::class);
-        $this->orderCreator->create($user, new CreatableOrderItemCollection([
-            new CreatableOrderItemData($product)
-        ]));
+        $this->orderCreator->create($user, $product);
     }
 
-    // Тест успешного создания заказа
+    // Успешное создание заказа
     public function testSuccessCreating(): void
     {
         $price = new Price(1000);
-        $quantity = 2;
         $user = User::factory()->create();
         $product = Product::factory()->for($user)->isActive()->withPrice($price)->create();
-        $stockItems = StockItem::factory(3)
+        StockItem::factory(3)
             ->for($product)
             ->available()
             ->create();
 
-        $order = $this->orderCreator->create($user, new CreatableOrderItemCollection([
-            new CreatableOrderItemData($product, $quantity)
-        ]));
+        $order = $this->orderCreator->create($user, $product);
 
         $this->assertEquals($order->user->id, $user->id);
-        $this->assertEquals($price->getCurrentPrice() * $quantity, $order->amount);
+        $this->assertEquals($price->getCurrentPrice(), $order->amount);
         $this->assertEquals(OrderStatus::PENDING, $order->status);
 
         // Проверяем наличие в БД
         $this->assertDatabaseHas('orders', [
             'id' => $order->id,
             'user_id' => $user->id,
-            'amount' => $price->getCurrentPrice() * $quantity,
+            'amount' => $price->getCurrentPrice(),
         ]);
 
         // Проверка на резервацию
-        // 1 доступен из 3
-        $this->assertEquals(1, StockItem::query()->forProduct($product)->isAvailable()->count());
-        // 2 зарезервировано из 3
-        $this->assertEquals(2, StockItem::query()->forProduct($product)->isReserved()->count());
+        $this->assertEquals(2, StockItem::query()->forProduct($product)->isAvailable()->count());
+        $this->assertEquals(1, StockItem::query()->forProduct($product)->isReserved()->count());
     }
 }

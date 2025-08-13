@@ -32,7 +32,7 @@ const props = defineProps({
         </div>
 
         <template #sidebar_right>
-          <Card v-if="order.status === 'paid'" class="border-0 bg-primary text-primary-foreground text-center mb-4">
+          <Card v-if="order.status === 'completed'" class="border-0 bg-primary text-primary-foreground text-center mb-4">
             <CardContent class="flex justify-center">Заказ оплачен</CardContent>
           </Card>
           <Card v-else class="border-0 bg-destructive text-destructive-foreground text-center mb-4">

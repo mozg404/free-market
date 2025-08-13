@@ -112,7 +112,7 @@ class ProductFactory extends Factory
         });
     }
 
-    public function withPrice(Price $price): ProductFactory|Factory
+    public function withPrice(Price $price): self
     {
         return $this->state(function (array $attributes) use ($price) {
             return [
@@ -122,7 +122,7 @@ class ProductFactory extends Factory
         });
     }
 
-    public function withImage(): Factory
+    public function withImage(): self
     {
         return $this->state(function (array $attributes) {
             return [

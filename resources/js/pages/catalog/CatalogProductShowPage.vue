@@ -1,14 +1,12 @@
 <script setup>
-import MainLayout from "@/layouts/MainLayout.vue";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {Link} from "@inertiajs/vue3";
 import {Button} from '@/components/ui/button/index.js'
 import {Badge} from '@/components/ui/badge/index.js'
-import {Minus, Plus, ShoppingBasket, ShoppingCart} from 'lucide-vue-next';
+import {Minus, Plus, ShoppingCart, CreditCard, Sparkles} from 'lucide-vue-next';
 import ProductImage from "@/components/products/ProductImage.vue";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
-import Main from "@/components/shared/layout/Main.vue";
 import {
   DescriptionList,
   DescriptionItem,
@@ -87,16 +85,23 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
                     </Button>
                   </div>
                 </div>
-                <Button
-                  v-else
-                  size="lg"
-                  class="w-full cursor-pointer "
-                  @click="addToCart(product.id)"
-                  :disabled="form.processing"
-                >
-                  <ShoppingCart class="w-4 h-4"/>
-                  В корзину
-                </Button>
+
+                <div v-else class="flex">
+                  <Button :as="Link" :href="route('checkout.express', product.id)" size="lg" class="cursor-pointer w-full flex-1 mr-3">
+                    Купить
+                  </Button>
+
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    class="cursor-pointer p-5"
+                    @click="addToCart(product.id)"
+                    :disabled="form.processing"
+                  >
+                    <ShoppingCart />
+                  </Button>
+                </div>
+
               </template>
 
               <template v-else>

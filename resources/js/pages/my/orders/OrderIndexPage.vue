@@ -10,6 +10,7 @@ import {ChevronRight} from "lucide-vue-next";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {Link} from "@inertiajs/vue3";
 import PageLayout from "@/layouts/PageLayout.vue";
+import OrderStatus from "@/components/orders/OrderStatus.vue";
 
 const props = defineProps({
   orders: Array,
@@ -42,10 +43,7 @@ const props = defineProps({
               </TableCell>
               <TableCell>{{ order.items_count }}</TableCell>
               <TableCell>
-                <Badge v-if="order.status === 'paid'">Оплачен</Badge>
-                <Badge v-else-if="order.status === 'new'" variant="destructive">Ожидает оплаты</Badge>
-                <Badge v-else-if="order.status === 'canceled'" variant="secondary">Отменен</Badge>
-                <Badge v-else variant="destructive">НЕИЗВЕСТНО</Badge>
+                <OrderStatus :status="order.status"/>
               </TableCell>
               <TableCell>
                 <PriceFormatter class="font-bold" :value="order.amount"/>

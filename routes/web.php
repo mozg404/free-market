@@ -12,13 +12,14 @@ use App\Http\Controllers\My\MyProductController as CabinetProductController;
 use App\Http\Controllers\My\MyProductStockItemsController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\OrderCheckoutController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\PaymentCallbackController;
 use App\Http\Controllers\SandboxController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\OrderCheckoutAccess;
+use App\Http\Middleware\CheckoutAccess;
+use App\Http\Middleware\CheckoutExpressAccess;
 use Illuminate\Support\Facades\Route;
 
 if (config('app.env') === 'local') {
@@ -93,9 +94,13 @@ Route::post('/cart/items/{product}/decrease', [CartController::class, 'decrease'
 Route::delete('/cart/items/{product}', [CartController::class, 'destroy'])->name('cart.items.destroy');
 
 // Оформление заказа
-Route::middleware(OrderCheckoutAccess::class)->group(function () {
-    Route::post('/order-checkout', [OrderCheckoutController::class, 'store'])->name('order_checkout.store');
-});
+Route::get('/checkout', [CheckoutController::class, 'cart'])
+    ->middleware(CheckoutAccess::class)
+    ->name('checkout');
+Route::get('/checkout/express/{product}', [CheckoutController::class, 'express'])
+    ->middleware(CheckoutExpressAccess::class)
+    ->name('checkout.express');
+
 
 // Аккаунты пользователей
 Route::get('/users', [UserController::class, 'index'])->name('users');

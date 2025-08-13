@@ -9,7 +9,7 @@ class CreatableOrderItemData extends Data
 {
     public function __construct(
         public Product $product,
-        public int $quantity,
+        public int $quantity = 1,
     ) {
     }
 }
