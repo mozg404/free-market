@@ -46,6 +46,13 @@ generate-models-phpdoc:
 	./vendor/bin/sail php artisan ide-helper:models -RW
 
 # ========================
+# Тестирование
+# ========================
+
+test:
+	./vendor/bin/sail php artisan test
+
+# ========================
 # Работа с хранилищем
 # ========================
 

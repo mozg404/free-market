@@ -6,6 +6,7 @@ use App\Builders\OrderItemQueryBuilder;
 use App\Builders\OrderQueryBuilder;
 use App\Builders\StockItemQueryBuilder;
 use App\Collections\OrderItemCollection;
+use App\Contracts\Transactionable;
 use App\Support\Price;
 use Database\Factories\OrderItemFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -49,7 +50,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static OrderItemQueryBuilder<static>|OrderItem withStockItem()
  * @mixin \Eloquent
  */
-class OrderItem extends Model
+class OrderItem extends Model implements Transactionable
 {
     use HasFactory;
 
@@ -86,6 +87,16 @@ class OrderItem extends Model
     public function stockItem(): BelongsTo|StockItemQueryBuilder
     {
         return $this->belongsTo(StockItem::class);
+    }
+
+    public function getTransactionableType(): string
+    {
+        return $this::class;
+    }
+
+    public function getTransactionableId(): int
+    {
+        return $this->id;
     }
 
     public function newCollection(array $models = []): OrderItemCollection

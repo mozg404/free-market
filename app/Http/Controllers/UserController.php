@@ -15,7 +15,6 @@ class UserController extends Controller
     {
         $users = User::query()
             ->withAvailableProductsCount()
-            ->withSoldCount()
             ->hasAvailableProducts()
             ->paginate(20);
 

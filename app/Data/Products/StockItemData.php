@@ -16,7 +16,6 @@ class StockItemData extends Data
         public int $product_id,
         public StockItemStatus $status,
         public string $content,
-        public ?UserData $pinnedUser = null,
         public Carbon $created_at,
         public Carbon $updated_at,
     ){}

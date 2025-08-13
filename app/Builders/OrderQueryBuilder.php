@@ -22,12 +22,12 @@ class OrderQueryBuilder extends Builder
 
     public function isPaid(): static
     {
-        return $this->where('status', OrderStatus::PAID);
+        return $this->where('status', OrderStatus::COMPLETED);
     }
 
     public function isNew(): static
     {
-        return $this->where('status', OrderStatus::NEW);
+        return $this->where('status', OrderStatus::PENDING);
     }
 
     public function descOrder(): static

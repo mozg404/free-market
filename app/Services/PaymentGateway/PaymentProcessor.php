@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Services\Payment;
+namespace App\Services\PaymentGateway;
 
 use App\Enum\TransactionType;
 use App\Exceptions\Payment\PaymentAlreadyCompletedException;
 use App\Exceptions\Payment\PaymentFailedException;
 use App\Exceptions\Payment\PaymentCancelledException;
 use App\Models\Payment;
-use App\Services\Order\OrderPaymentProcessor;
+use App\Services\Balance\BalanceService;
+use App\Services\Order\OrderProcessor;
 use Illuminate\Support\Facades\DB;
 
-class PaymentProcessor
+readonly class PaymentProcessor
 {
     public function __construct(
-        private readonly OrderPaymentProcessor $orderProcessor,
+        private OrderProcessor $orderProcessor,
+        private BalanceService $balanceService,
     )
     {}
 
@@ -28,9 +30,10 @@ class PaymentProcessor
 
         return DB::transaction(function () use ($payment) {
             // Пополняем баланс пользователя из платежа
-            $payment->user->deposit(
+            $this->balanceService->deposit(
+                user: $payment->user,
                 amount: $payment->amount,
-                type: TransactionType::DEPOSIT,
+                type: TransactionType::GATEWAY_DEPOSIT,
                 transactionable: $payment
             );
 

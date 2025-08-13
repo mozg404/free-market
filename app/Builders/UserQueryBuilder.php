@@ -15,17 +15,10 @@ class UserQueryBuilder extends Builder
         }]);
     }
 
-    public function hasAvailableProducts()
+    public function hasAvailableProducts(): self
     {
         return $this->whereHas('products', function (ProductQueryBuilder $builder) {
             return $builder->canByPurchased();
         });
-    }
-
-    public function withSoldCount(): self
-    {
-        return $this->withCount(['products as sold_stock_count' => function (ProductQueryBuilder $query) {
-            $query->whereHas('stockItems', fn (StockItemQueryBuilder $q) => $q->isSold());
-        }]);
     }
 }

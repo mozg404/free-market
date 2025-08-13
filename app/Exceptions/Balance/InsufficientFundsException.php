@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions\Billing;
+namespace App\Exceptions\Balance;
 
 class InsufficientFundsException extends \RuntimeException
 {

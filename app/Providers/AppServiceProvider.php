@@ -7,7 +7,7 @@ use App\Contracts\PaymentGateway;
 use App\Models\StockItem;
 use App\Models\User;
 use App\Services\Cart\SessionCart;
-use App\Services\Payment\DemoPaymentGateway;
+use App\Services\PaymentGateway\DemoPaymentGateway;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 

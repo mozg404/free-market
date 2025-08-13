@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Payment;
+namespace App\Services\PaymentGateway;
 
 use App\Contracts\PaymentGateway;
 use App\Enum\PaymentSource;

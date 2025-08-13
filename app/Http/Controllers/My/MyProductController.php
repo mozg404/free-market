@@ -49,7 +49,7 @@ class MyProductController extends Controller
             'product' => ProductDetailedData::from($product),
             'itemsPaginated' => StockItemData::collect($product->stockItems()->orderByDesc('id')->paginate(10)),
             'availableItemsCount' => $product->stockItems()->isAvailable()->count(),
-            'soldItemsCount' => $product->stockItems()->isSold()->count(),
+            'soldItemsCount' => '---',
             'reservedItemsCount' => $product->stockItems()->isReserved()->count(),
         ]);
     }

@@ -81,13 +81,13 @@ const props = defineProps({
                     <DateTime :value="transaction.created_at" format="DD-MM-YYYY в HH:mm"/>
                   </TableCell>
                   <TableCell class="font-medium">
-                    <div v-if="transaction.type === 'deposit'">Пополнение баланса</div>
-                    <div v-else-if="transaction.type === 'purchase'">
+                    <div v-if="transaction.type === 'gateway_deposit'">Пополнение баланса</div>
+                    <div v-else-if="transaction.type === 'order_payment'">
                       <Link :href="route('my.orders.show', transaction.transactionable_id)">
                         Оплата заказа #{{ transaction.transactionable_id }}
                       </Link>
                     </div>
-                    <div v-else-if="transaction.type === 'sale'">Продажа позиции #{{ transaction.transactionable_id }}</div>
+                    <div v-else-if="transaction.type === 'seller_payout'">Продажа товара</div>
                     <div v-else class="text-destructive">Неизвестный тип транзакции</div>
                   </TableCell>
                   <TableCell class="text-right">

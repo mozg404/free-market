@@ -6,5 +6,4 @@ enum StockItemStatus: string
 {
     case AVAILABLE = 'available';
     case RESERVED = 'reserved';
-    case SOLD = 'sold';
 }

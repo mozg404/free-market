@@ -7,7 +7,7 @@ use App\Exceptions\Payment\PaymentAlreadyCompletedException;
 use App\Exceptions\Payment\PaymentCancelledException;
 use App\Exceptions\Payment\PaymentFailedException;
 use App\Models\Payment;
-use App\Services\Payment\PaymentProcessor;
+use App\Services\PaymentGateway\PaymentProcessor;
 use App\Services\Toaster;
 use Illuminate\Http\Request;
 

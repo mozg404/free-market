@@ -46,7 +46,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static StockItemQueryBuilder<static>|StockItem withPinnedUser()
  * @mixin \Eloquent
  */
-class StockItem extends Model implements Transactionable
+class StockItem extends Model
 {
     use HasFactory;
 
@@ -98,21 +98,6 @@ class StockItem extends Model implements Transactionable
     }
 
     /**
-     * Помечает позицию, как проданную
-     * @return void
-     */
-    public function markAsSold(): void
-    {
-        $this->status = StockItemStatus::SOLD;
-        $this->save();
-    }
-
-    public function isSold(): bool
-    {
-        return $this->status === StockItemStatus::SOLD;
-    }
-
-    /**
      * Создает новую позицию
      * @param Product $product
      * @param string $content
@@ -145,21 +130,6 @@ class StockItem extends Model implements Transactionable
     public function order(): BelongsTo|OrderQueryBuilder|null
     {
         return $this->belongsTo(Order::class);
-    }
-
-    public function pinnedUser(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'pinned_user_id');
-    }
-
-    public function getTransactionableType(): string
-    {
-        return $this::class;
-    }
-
-    public function getTransactionableId(): int
-    {
-        return $this->id;
     }
 
     public function newEloquentBuilder($query): StockItemQueryBuilder

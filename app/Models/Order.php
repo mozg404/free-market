@@ -75,18 +75,18 @@ class Order extends Model implements Transactionable, Sourceable
         return static::create([
             'user_id' => $user->id,
             'amount' => $amount->getCurrentPrice(),
-            'status' => OrderStatus::NEW,
+            'status' => OrderStatus::PENDING,
         ]);
     }
 
-    public function isNew(): bool
+    public function isPending(): bool
     {
-        return $this->status === OrderStatus::NEW;
+        return $this->status === OrderStatus::PENDING;
     }
 
-    public function isPaid(): bool
+    public function isCompleted(): bool
     {
-        return $this->status === OrderStatus::PAID;
+        return $this->status === OrderStatus::COMPLETED;
     }
 
     /**
@@ -94,7 +94,7 @@ class Order extends Model implements Transactionable, Sourceable
      */
     public function markAsPaid(): static
     {
-        $this->status = OrderStatus::PAID;
+        $this->status = OrderStatus::COMPLETED;
         $this->paid_at = Carbon::now();
         $this->save();
 

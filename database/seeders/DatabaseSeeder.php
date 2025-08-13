@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
+use App\Services\Balance\BalanceService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -156,7 +157,7 @@ class DatabaseSeeder extends Seeder
         // Генерируем заказ из позиций на складе
         $order = Order::factory()
             ->for($user)
-            ->asNew()
+            ->pending()
             ->withStockItems($stock)
             ->create();
 
@@ -166,6 +167,7 @@ class DatabaseSeeder extends Seeder
     // Оплачивает заказ
     public function payOrder(User $user, Order $order): void
     {
+        $balanceService = app(BalanceService::class);
         $order->fresh();
         $order->markAsPaid();
         $order
@@ -179,18 +181,15 @@ class DatabaseSeeder extends Seeder
                     }]);
             })
             ->get()
-            ->each(function (OrderItem $item) use ($user, $order) {
+            ->each(function (OrderItem $item) use ($balanceService, $user, $order) {
                 // Зачисляем на баланс пользователя сумму заказа
-                $user->deposit($order->amount, TransactionType::DEPOSIT);
+                $balanceService->deposit($user, $order->amount, TransactionType::GATEWAY_DEPOSIT);
 
                 // Списываем с баланса пользователя сумму заказа
-                $user->withdraw($order->amount, TransactionType::PURCHASE, $order);
-
-                // Помечаем позицию на складе как проданную
-                $item->stockItem->markAsSold($user);
+                $balanceService->withdraw($user, $order->amount, TransactionType::ORDER_PAYMENT, $order);
 
                 // Зачисляем средства на баланс продавца
-                $item->stockItem->product->user->deposit($order->amount, TransactionType::SALE, $item->stockItem);
+                $balanceService->deposit($item->stockItem->product->user, $order->amount, TransactionType::SELLER_PAYOUT, $item);
             });
     }
 }

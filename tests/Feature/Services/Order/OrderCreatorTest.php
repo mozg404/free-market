@@ -59,7 +59,7 @@ class OrderCreatorTest extends TestCase
 
         $this->assertEquals($order->user->id, $user->id);
         $this->assertEquals($price->getCurrentPrice() * $quantity, $order->amount);
-        $this->assertEquals(OrderStatus::NEW, $order->status);
+        $this->assertEquals(OrderStatus::PENDING, $order->status);
 
         // Проверяем наличие в БД
         $this->assertDatabaseHas('orders', [

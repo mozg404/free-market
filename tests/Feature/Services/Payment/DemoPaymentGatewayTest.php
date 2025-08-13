@@ -6,7 +6,7 @@ use App\Exceptions\Payment\EmptyExternalIdException;
 use App\Exceptions\Payment\UnknownPaymentException;
 use App\Exceptions\Payment\UnknownPaymentStatusException;
 use App\Models\Payment;
-use App\Services\Payment\DemoPaymentGateway;
+use App\Services\PaymentGateway\DemoPaymentGateway;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

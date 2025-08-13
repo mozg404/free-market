@@ -221,17 +221,6 @@ class ProductQueryBuilder extends Builder
     }
 
     /**
-     * Включает количество проданных позиций
-     * @return $this
-     */
-    public function withSoldStockItemsCount(): self
-    {
-        return $this->withCount(['stockItems as sold_stock_items_count' => static function (StockItemQueryBuilder $builder) {
-            return $builder->isSold();
-        }]);
-    }
-
-    /**
      * Включает количество зарезервированных позиций
      * @return $this
      */

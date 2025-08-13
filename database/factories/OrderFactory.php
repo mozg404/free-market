@@ -21,7 +21,7 @@ class OrderFactory extends Factory
 
         return [
             'user_id' => User::factory(),
-            'amount' => 0, // Будет пересчитано автоматически
+            'amount' => random_int(1000, 5000),
             'status' => $this->faker->randomElement(OrderStatus::cases()),
             'paid_at' => null,
             'created_at' => $createdAt,
@@ -41,24 +41,24 @@ class OrderFactory extends Factory
                 'amount' => $order->items->sum('current_price')
             ]);
 
-            if ($order->status === OrderStatus::PAID && !$order->paid_at) {
+            if ($order->status === OrderStatus::COMPLETED && !$order->paid_at) {
                 $order->update(['paid_at' => now()]);
             }
         });
     }
 
-    public function paid(): static
+    public function completed(): static
     {
         return $this->state([
-            'status' => OrderStatus::PAID,
+            'status' => OrderStatus::COMPLETED,
             'paid_at' => now(),
         ]);
     }
 
-    public function asNew(): static
+    public function pending(): static
     {
         return $this->state([
-            'status' => OrderStatus::NEW,
+            'status' => OrderStatus::PENDING,
             'paid_at' => null,
         ]);
     }
@@ -88,7 +88,7 @@ class OrderFactory extends Factory
 
                 $amount += $product->current_price;
                 $stockItem->update([
-                    'status' => $order->isNew() ? StockItemStatus::RESERVED->value : StockItemStatus::SOLD->value,
+                    'status' => StockItemStatus::RESERVED->value,
                     'order_id' => $order->id,
                 ]);
             });

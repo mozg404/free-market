@@ -25,7 +25,6 @@ const props = defineProps({
               <TableHead>Продавец</TableHead>
               <TableHead>На сайте</TableHead>
               <TableHead>Товаров</TableHead>
-              <TableHead>Продаж</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -48,7 +47,6 @@ const props = defineProps({
                 <AccountAge :registration-date="user.created_at"/>
               </TableCell>
               <TableCell>{{ user.available_products_count }}</TableCell>
-              <TableCell>{{ user.sold_stock_count }}</TableCell>
             </TableRow>
           </TableBody>
         </Table>

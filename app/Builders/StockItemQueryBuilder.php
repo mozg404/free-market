@@ -26,11 +26,6 @@ class StockItemQueryBuilder extends Builder
         return $this->where('status', StockItemStatus::RESERVED->value);
     }
 
-    public function isSold(): static
-    {
-        return $this->where('status', StockItemStatus::SOLD->value);
-    }
-
     public function isActiveProduct(): static
     {
         return $this->whereHas('product', function (ProductQueryBuilder $query) {
@@ -81,29 +76,5 @@ class StockItemQueryBuilder extends Builder
         return $this->whereHas('product', function (ProductQueryBuilder $query) use ($user) {
             $query->whereNotBelongsToUser($user);
         });
-    }
-
-    public function forPinnedUser(int|User $id): static
-    {
-        if (is_object($id)) {
-            $id = $id->id;
-        }
-
-        return $this->where('pinned_user_id', $id);
-    }
-
-    public function withProduct(): static
-    {
-        return $this->with('product');
-    }
-
-    public function withProductUser(): static
-    {
-        return $this->with('product.user');
-    }
-
-    public function withPinnedUser(): static
-    {
-        return $this->with('pinnedUser');
     }
 }

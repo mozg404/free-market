@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\PaymentGateway;
-use App\Exceptions\Billing\InsufficientFundsException;
+use App\Exceptions\Balance\InsufficientFundsException;
 use App\Exceptions\Product\NotAvailableForPurchaseException;
 use App\Exceptions\Product\NotEnoughStockException;
 use App\Services\Order\OrderFromCartCreator;
-use App\Services\Order\OrderPaymentProcessor;
+use App\Services\Order\OrderProcessor;
 use App\Services\Toaster;
 
 class OrderCheckoutController extends Controller
@@ -19,7 +19,7 @@ class OrderCheckoutController extends Controller
 
     public function store(
         OrderFromCartCreator $creator,
-        OrderPaymentProcessor $processor,
+        OrderProcessor $processor,
         PaymentGateway $gateway,
     ) {
         try {

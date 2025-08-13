@@ -4,14 +4,11 @@ namespace App\Models;
 
 use App\Builders\UserQueryBuilder;
 use App\Casts\ImageCast;
-use App\Contracts\Transactionable;
-use App\Enum\TransactionType;
 use App\Support\Image;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 
 
 /**
@@ -90,42 +87,6 @@ class User extends Authenticatable
         $this->fresh();
 
         return $this;
-    }
-
-    /**
-     * @throws \Throwable
-     */
-    public function deposit(int $amount, TransactionType $type, Transactionable $transactionable = null): Transaction
-    {
-        return DB::transaction(function () use ($amount, $type, $transactionable) {
-            $this->increment('balance', $amount);
-
-            return $this->transactions()->create([
-                'amount' => $amount,
-                'type' => $type->value,
-                'transactionable_type' => $transactionable?->getTransactionableType(),
-                'transactionable_id' => $transactionable?->getTransactionableId(),
-                'created_at' => now()->toDateTimeString(),
-            ]);
-        });
-    }
-
-    /**
-     * @throws \Throwable
-     */
-    public function withdraw(int $amount, TransactionType $type, Transactionable $transactionable = null): Transaction
-    {
-        return DB::transaction(function () use ($amount, $type, $transactionable) {
-            $this->decrement('balance', $amount);
-
-            return $this->transactions()->create([
-                'amount' => -$amount,
-                'type' => $type->value,
-                'transactionable_type' => $transactionable?->getTransactionableType(),
-                'transactionable_id' => $transactionable?->getTransactionableId(),
-                'created_at' => now()->toDateTimeString(),
-            ]);
-        });
     }
 
     public function toArray(): array

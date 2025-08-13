@@ -12,7 +12,7 @@ use App\Exceptions\Payment\PaymentFailedException;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\User;
-use App\Services\Payment\PaymentProcessor;
+use App\Services\PaymentGateway\PaymentProcessor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -73,14 +73,14 @@ class PaymentProcessorTest extends TestCase
         $this->assertDatabaseHas('transactions', [
             'user_id' => $payment->user_id,
             'amount' => 2000,
-            'type' => TransactionType::DEPOSIT,
+            'type' => TransactionType::GATEWAY_DEPOSIT,
             'transactionable_id' => $payment->id,
         ]);
     }
 
     public function testCompletedOrderPayment()
     {
-        $order = Order::factory()->asNew()->create();
+        $order = Order::factory()->pending()->withItems()->create();
         $payment = Payment::factory()->forOrder($order)->create([
             'status' => PaymentStatus::SUCCESS,
         ]);
@@ -90,13 +90,13 @@ class PaymentProcessorTest extends TestCase
         // Платеж в бд со статусом "Оплачен"
         $this->assertDatabaseHas('orders', [
             'id' => $payment->sourceable->id,
-            'status' => OrderStatus::PAID,
+            'status' => OrderStatus::COMPLETED,
         ]);
 
         // Транзакция с указанием типа оплаты заказа И id заказа
         $this->assertDatabaseHas('transactions', [
             'user_id' => $payment->user_id,
-            'type' => TransactionType::PURCHASE,
+            'type' => TransactionType::ORDER_PAYMENT,
             'transactionable_id' => $payment->sourceable->id,
         ]);
 

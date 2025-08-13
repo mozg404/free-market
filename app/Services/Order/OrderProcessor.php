@@ -3,24 +3,30 @@
 namespace App\Services\Order;
 
 use App\Enum\TransactionType;
-use App\Exceptions\Billing\InsufficientFundsException;
+use App\Exceptions\Balance\InsufficientFundsException;
+use App\Exceptions\Order\OrderAlreadyProcessedException;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Services\Balance\BalanceService;
 use Illuminate\Support\Facades\DB;
 
-class OrderPaymentProcessor
+readonly class OrderProcessor
 {
+    public function __construct(
+        private BalanceService $balanceService,
+    ) {}
+
     public function process(Order $order): void
     {
-        if (!$order->user->hasEnoughBalance($order->amount)) {
-            throw new InsufficientFundsException();
-        }
+        throw_if(!$order->isPending(), new OrderAlreadyProcessedException());
+        $this->balanceService->ensureSufficientFunds($order->user, $order->amount);
 
         DB::transaction(function () use ($order) {
             // Списываем со счета пользователя сумму заказа
-            $order->user->withdraw(
+            $this->balanceService->withdraw(
+                user: $order->user,
                 amount: $order->amount,
-                type: TransactionType::PURCHASE,
+                type: TransactionType::ORDER_PAYMENT,
                 transactionable: $order
             );
 
@@ -29,11 +35,12 @@ class OrderPaymentProcessor
                 ->withStockItem()
                 ->withProductUser()
                 ->get()->each(function (OrderItem $item) use ($order) {
-                    $item->stockItem->markAsSold($order->user);
-                    $item->stockItem->product->user->deposit(
+                    // Выплачиваем продавцу средства
+                    $this->balanceService->deposit(
+                        user: $item->stockItem->product->user,
                         amount: $item->price->getCurrentPrice(),
-                        type: TransactionType::SALE,
-                        transactionable: $item->stockItem
+                        type: TransactionType::SELLER_PAYOUT,
+                        transactionable: $item
                     );
                 });
 
