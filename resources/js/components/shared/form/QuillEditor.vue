@@ -117,4 +117,14 @@ watch(
   padding: 1.25rem;
   min-height: 10rem;
 }
+
+.ql-editor li {
+  padding-left: .5rem;
+  list-style: auto !important;
+}
+
+.ql-editor ol, .ql-editor ul {
+  padding-left: 1.5em;
+}
+
 </style>
