@@ -88,6 +88,7 @@ const props = defineProps({
                       </Link>
                     </div>
                     <div v-else-if="transaction.type === 'seller_payout'">Продажа товара</div>
+                    <div v-else-if="transaction.type === 'admin_correction'">Корректировка администрацией</div>
                     <div v-else class="text-destructive">Неизвестный тип транзакции</div>
                   </TableCell>
                   <TableCell class="text-right">
