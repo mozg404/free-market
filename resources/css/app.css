@@ -168,3 +168,24 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* Переопределение стилей NProgress */
+#nprogress {
+    --nprogress-color: var(--primary); /* Используем CSS-переменную */
+    --nprogress-height: 2px;
+    --nprogress-zindex: 9999;
+}
+#nprogress .bar {
+    background: var(--nprogress-color) !important;
+    height: var(--nprogress-height) !important;
+    z-index: var(--nprogress-zindex) !important;
+}
+#nprogress .peg {
+    box-shadow:
+            0 0 10px var(--nprogress-color),
+            0 0 5px var(--nprogress-color) !important;
+}
+#nprogress .spinner-icon {
+    border-top-color: var(--nprogress-color) !important;
+    border-left-color: var(--nprogress-color) !important;
+}
