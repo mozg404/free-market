@@ -2,6 +2,8 @@
 
 namespace App\Data\User;
 
+use App\Models\User;
+use App\Support\Image;
 use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 
@@ -12,8 +14,12 @@ class UserData extends Data
         public string $name,
         public string $email,
         public int $balance,
-        public ?string $avatar,
+        public ?Image $avatar,
         public Carbon $created_at,
+        public ?string $avatar_url = null,
     ) {
+        if (isset($avatar)) {
+            $this->avatar_url = $this->avatar->getUrl();
+        }
     }
 }

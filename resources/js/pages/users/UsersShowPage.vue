@@ -21,7 +21,7 @@ const props = defineProps({
       <div class="mb-12 flex items-center">
         <div class="w-30 shrink-0 mr-4">
           <AspectRatio :ratio="1" class="bg-muted rounded-full overflow-hidden relative">
-            <img :src="concreateUser.avatar" class="object-cover rounded-full w-full" :alt="concreateUser.avatar"/>
+            <img :src="concreateUser.avatar_url" class="object-cover rounded-full w-full" :alt="concreateUser.avatar"/>
           </AspectRatio>
         </div>
         <div>

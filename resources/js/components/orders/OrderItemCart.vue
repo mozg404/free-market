@@ -26,7 +26,7 @@ const props = defineProps({
           <div>
             <div class="line-clamp-2">{{ item.product.name }}</div>
             <div class="mt-5 flex items-center">
-              <UserAvatar class="mr-2" :src="item.product.user.avatar"/>
+              <UserAvatar class="mr-2" :src="item.product.user.avatar_url"/>
               <div>
                 <div class="text-muted-foreground text-xs">Продавец</div>
                 <Link :href="route('users.show', item.product.user.id)" class="font-semibold text-sm hover:text-primary">{{item.product.user.name}}</Link>

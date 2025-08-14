@@ -35,6 +35,7 @@ class SettingsController extends Controller
         Auth::user()->changeAvatar(Image::createFromUploadedFile($data['avatar']));
         $this->toaster->success('Новый аватар установлен');
 
-        return Inertia::location(route('my.settings'));
+//        return Inertia::location(route('my.settings'));
+        return back();
     }
 }

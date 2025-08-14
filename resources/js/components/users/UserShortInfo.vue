@@ -13,7 +13,7 @@ const props = defineProps({
 
 <template>
   <div class="flex items-center">
-    <UserAvatar class="mr-3" :src="user.avatar"/>
+    <UserAvatar class="mr-3" :src="user.avatar_url"/>
     <div>
       <Link :href="route('users.show', user.id)" class="font-semibold text-sm hover:text-primary mb-[-4px]">{{ user.name }}</Link>
       <div class="text-muted-foreground text-xs ">

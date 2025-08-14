@@ -13,7 +13,7 @@ const props = defineProps({
 })
 
 const form = useForm({
-  avatar: props.user.avatar,
+  avatar: props.user.avatar_url,
   _method: 'PATCH', // Method spoofing
 });
 

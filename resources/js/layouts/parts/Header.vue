@@ -74,7 +74,7 @@ const {user, isAuth} = useUser()
             <template v-if="isAuth">
               <DropdownMenu>
                 <DropdownMenuTrigger as-child>
-                  <UserAvatar :src="user.avatar" class="hover:opacity-50 transition-opacity cursor-pointer"/>
+                  <UserAvatar :src="user.avatar_url" class="hover:opacity-50 transition-opacity cursor-pointer"/>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent class="w-44">
                   <DropdownMenuLabel>
