@@ -89,6 +89,11 @@ class Order extends Model implements Transactionable, Sourceable
         return $this->status === OrderStatus::COMPLETED;
     }
 
+    public function isCancelled(): bool
+    {
+        return $this->status === OrderStatus::CANCELLED;
+    }
+
     /**
      * Помечает заказ, как оплаченный
      */

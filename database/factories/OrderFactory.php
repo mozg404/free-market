@@ -47,6 +47,14 @@ class OrderFactory extends Factory
         });
     }
 
+    public function cancelled(): static
+    {
+        return $this->state([
+            'status' => OrderStatus::CANCELLED,
+            'paid_at' => now(),
+        ]);
+    }
+
     public function completed(): static
     {
         return $this->state([
@@ -59,14 +67,6 @@ class OrderFactory extends Factory
     {
         return $this->state([
             'status' => OrderStatus::PENDING,
-            'paid_at' => null,
-        ]);
-    }
-
-    public function cancelled(): static
-    {
-        return $this->state([
-            'status' => OrderStatus::CANCELLED,
             'paid_at' => null,
         ]);
     }

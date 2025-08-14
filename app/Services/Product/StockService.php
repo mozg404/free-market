@@ -2,8 +2,10 @@
 
 namespace App\Services\Product;
 
+use App\Enum\StockItemStatus;
 use App\Exceptions\Product\NotEnoughStockException;
 use App\Models\Product;
+use App\Models\StockItem;
 
 class StockService
 {
@@ -22,5 +24,11 @@ class StockService
     public function getAvailableCount(Product $product): int
     {
         return $product->stockItems()->isAvailable()->count();
+    }
+
+    public function cancelReservation(StockItem $stockItem): void
+    {
+        $stockItem->status = StockItemStatus::AVAILABLE;
+        $stockItem->save();
     }
 }

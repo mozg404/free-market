@@ -69,6 +69,9 @@ Route::middleware('auth')->prefix('/my')->group(function () {
     Route::patch('/settings/change-avatar', [SettingsController::class, 'changeAvatar'])->name('my.settings.change-avatar');
 
     // Мои заказы
+    Route::get('/orders/{order}/cancel', [MyOrderController::class, 'cancel'])
+        ->can('cancel', 'order')
+        ->name('my.orders.cancel');
     Route::get('/orders/{order}/pay', [MyOrderController::class, 'pay'])
         ->can('pay', 'order')
         ->name('my.orders.pay');

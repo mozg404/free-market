@@ -14,6 +14,7 @@ import PageLayout from "@/layouts/PageLayout.vue";
 import SidebarLayout from "@/components/shared/SidebarLayout.vue";
 import {Button} from "@/components/ui/button/index.js";
 import {Link} from "@inertiajs/vue3";
+import {Separator} from "@/components/ui/separator";
 
 const props = defineProps({
   order: Object,
@@ -37,11 +38,11 @@ const props = defineProps({
           <Card v-if="order.status === 'completed'" class="border-0 bg-primary text-primary-foreground text-center mb-4">
             <CardContent class="flex justify-center">Заказ оплачен</CardContent>
           </Card>
-          <Card v-else class="border-0 bg-secondary text-secondary-foreground text-center mb-4">
-            <CardContent class="flex justify-between items-center">
-              <div class="text-sm">Ожидает оплату</div>
-              <Button :as="Link" :href="route('my.orders.pay', order.id)">Оплатить</Button>
-            </CardContent>
+          <Card v-else-if="order.status === 'cancelled'" class="border-0 bg-secondary text-secondary-foreground text-center mb-4">
+            <CardContent class="flex justify-center">Заказ отменен</CardContent>
+          </Card>
+          <Card v-else class="border-0 bg-destructive text-destructive-foreground text-center mb-4">
+            <CardContent class="flex justify-center">Ожидает оплаты</CardContent>
           </Card>
 
           <Card>
@@ -92,6 +93,12 @@ const props = defineProps({
                   <DescriptionValue class="text-sm"><PriceFormatter :value="totalAmount.discount_percent ?? 0" currency="%"/></DescriptionValue>
                 </DescriptionItem>
               </div>
+
+              <div class="mt-8" v-if="order.status === 'pending'">
+                <Button :as="Link" :href="route('my.orders.pay', order.id)" class="w-full py-6">Оплатить</Button>
+                <Button :as="Link" :href="route('my.orders.cancel', order.id)" class="w-full mt-2" variant="ghost">Отменить заказ</Button>
+              </div>
+
             </CardContent>
           </Card>
         </template>

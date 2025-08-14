@@ -5,12 +5,16 @@ namespace App\Http\Controllers\My;
 use App\Data\Orders\OrderForListingData;
 use App\Data\Orders\OrderItemForListingData;
 use App\Exceptions\Balance\InsufficientFundsException;
+use App\Exceptions\Order\CompletedOrderCannotBeCanceledException;
+use App\Exceptions\Order\OrderAlreadyCanceledException;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Services\Order\OrderCancelService;
 use App\Services\Order\OrderProcessor;
 use App\Services\PaymentGateway\PaymentService;
 use App\Services\Toaster;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -56,7 +60,7 @@ class MyOrderController extends Controller
         Order $order,
         OrderProcessor $processor,
         PaymentService $paymentService,
-    ) {
+    ): RedirectResponse {
         try {
             $processor->process($order);
             $this->toaster->success('Заказ успешно оплачен');
@@ -66,6 +70,22 @@ class MyOrderController extends Controller
             return redirect($paymentService->getPaymentUrl(
                 $paymentService->createForOrder($order)
             ));
+        }
+    }
+
+    public function cancel(
+        Order $order,
+        OrderCancelService $cancelService,
+    ): RedirectResponse {
+        try {
+            $cancelService->cancelOrder($order);
+            $this->toaster->info('Заказ #'.$order->id.' отменен');
+
+            return back();
+        } catch (CompletedOrderCannotBeCanceledException|OrderAlreadyCanceledException $e) {
+            $this->toaster->error($e->getMessage());
+
+            return back();
         }
     }
 }
