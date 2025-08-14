@@ -4,41 +4,21 @@ namespace App\Contracts;
 
 interface Cart
 {
-    /**
-     * Добавляет товар в корзину в кол-ве 1шт
-     *
-     * @param int $productId
-     * @return void
-     */
-    public function add(int $productId): void;
+    public function add(int $id, int $quantity = 1): void;
 
-    /**
-     * Убирает товар из корзины в кол-ве 1шт
-     *
-     * @param int $productId
-     * @return void
-     */
-    public function remove(int $productId): void;
+    public function has(int $id): bool;
 
-    /**
-     * Полностью убирает определенный товар из корзины
-     *
-     * @param int $productId
-     * @return void
-     */
-    public function delete(int $productId): void;
+    public function remove(int $id, int $quantity = 1): void;
 
-    /**
-     * Очищает корзину
-     *
-     * @return void
-     */
-    public function clean(): void;
+    public function getQuantityFor(int $id): int;
 
-    /**
-     * Возвращает весь перечень товаров из корзины
-     *
-     * @return array
-     */
-    public function all(): array;
+    public function removeItem(int $id): void;
+
+    public function getItems(): array;
+
+    public function getIds(): array;
+
+    public function isEmpty(): bool;
+
+    public function clear(): void;
 }

@@ -22,7 +22,6 @@ class ProductForListingData extends Data
         public Carbon $created_at,
         public ?int $stock_items_count = null,
         public ?int $available_stock_items_count = null,
-        public ?int $sold_stock_items_count = null,
         public ?int $reserved_stock_items_count = null,
     ) {
     }

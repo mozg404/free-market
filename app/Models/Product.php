@@ -8,6 +8,7 @@ use App\Casts\ImageCast;
 use App\Collections\ProductCollection;
 use App\Data\Products\ProductEditableData;
 use App\Enum\ProductStatus;
+use App\Support\Image;
 use App\Support\Price;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -30,7 +31,7 @@ use Mews\Purifier\Casts\CleanHtmlInput;
  * @property int $current_price
  * @property int $base_price
  * @property ProductStatus $status
- * @property mixed|null $preview_image
+ * @property Image|null $preview_image
  * @property array|null $description
  * @property array|null $instruction
  * @property Carbon|null $created_at

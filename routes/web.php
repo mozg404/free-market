@@ -91,7 +91,7 @@ Route::middleware('auth')->prefix('/my')->group(function () {
 
 // Корзина
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::delete('/cart', [CartController::class, 'clean'])->name('cart.clean');
+Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
 Route::post('/cart/items/{product}', [CartController::class, 'store'])->name('cart.items.store');
 Route::post('/cart/items/{product}/decrease', [CartController::class, 'decrease'])->name('cart.items.decrease');
 Route::delete('/cart/items/{product}', [CartController::class, 'destroy'])->name('cart.items.destroy');

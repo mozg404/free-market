@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\Product\NotEnoughStockException;
 use App\Models\Product;
-use App\Services\Cart\CartManager;
+use App\Services\Cart\CartService;
 use App\Services\Toaster;
 use Inertia\Inertia;
 
 class CartController extends Controller
 {
     public function __construct(
-        private CartManager $cart,
+        private CartService $cart,
         private Toaster $toaster,
     )
     {}
@@ -49,15 +49,15 @@ class CartController extends Controller
 
     public function destroy(Product $product)
     {
-        $this->cart->delete($product);
+        $this->cart->removeItem($product);
         $this->toaster->info('Товар удален из корзины');
 
         return back();
     }
 
-    public function clean()
+    public function clear()
     {
-        $this->cart->clean();
+        $this->cart->clear();
 
         return back();
     }

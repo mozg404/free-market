@@ -16,42 +16,94 @@ class SessionCart implements Cart
         $this->session = $session;
     }
 
-    public function add(int $productId): void
+    public function add(int $id, int $quantity = 1): void
     {
-        $cart = $this->all();
-        $cart[$productId] = [
-            'product_id' => $productId,
-            'quantity' => ($cart[$productId]['quantity'] ?? 0) + 1,
-        ];
+        $this->ensureCorrectId($id);
+        $this->ensureCorrectQuantity($quantity);
+
+        $cart = $this->getItems();
+        $cart[$id] = ($cart[$id] ?? 0) + $quantity;
         $this->session->put(self::SESSION_KEY, $cart);
     }
 
-    public function remove(int $productId): void
+    public function has(int $id): bool
     {
-        $cart = $this->all();
+        $this->ensureCorrectId($id);
 
-        if (isset($cart[$productId])) {
-            if ($cart[$productId]['quantity'] > 1) {
-                $cart[$productId]['quantity']--;
+        return $this->session->has(self::SESSION_KEY . '.' . $id);
+    }
+
+    public function remove(int $id, int $quantity = 1): void
+    {
+        $this->ensureCorrectId($id);
+        $this->ensureCorrectQuantity($quantity);
+        $cart = $this->getItems();
+
+        if (isset($cart[$id])) {
+            if ($cart[$id] > 1 && $cart[$id] > $quantity) {
+                $cart[$id] -= $quantity;
                 $this->session->put(self::SESSION_KEY, $cart);
             } else {
-                $this->delete($productId);
+                $this->removeItem($id);
             }
         }
     }
 
-    public function delete(int $productId): void
+    public function isEmpty(): bool
     {
-        $this->session->forget(self::SESSION_KEY.'.'.$productId);
+        return empty($this->getItems());
     }
 
-    public function clean(): void
+    public function clear(): void
     {
         $this->session->forget(self::SESSION_KEY);
     }
 
-    public function all(): array
+    public function getQuantityFor(int $id): int
+    {
+        // (!) Проверка на валидность $productId уже есть в has
+        if (!$this->has($id)) {
+            return 0;
+        }
+
+        return $this->session->get(self::SESSION_KEY . '.' . $id);
+    }
+
+    public function removeItem(int $id): void
+    {
+        $this->ensureCorrectId($id);
+        $this->session->forget(self::SESSION_KEY.'.'.$id);
+    }
+
+    public function getItems(): array
     {
         return $this->session->get(self::SESSION_KEY, []);
+    }
+
+    public function getIds(): array
+    {
+        return array_keys($this->session->get(self::SESSION_KEY, []));
+    }
+
+    private function ensureCorrectQuantity(int $quantity): void
+    {
+        if ($quantity < 0) {
+            throw new \InvalidArgumentException('Quantity cannot be negative');
+        }
+
+        if ($quantity === 0) {
+            throw new \InvalidArgumentException('Quantity cannot be zero');
+        }
+    }
+
+    private function ensureCorrectId(int $productId): void
+    {
+        if ($productId < 0) {
+            throw new \InvalidArgumentException('ID cannot be negative');
+        }
+
+        if ($productId === 0) {
+            throw new \InvalidArgumentException('ID cannot be zero');
+        }
     }
 }

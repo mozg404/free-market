@@ -2,15 +2,19 @@ import { computed } from 'vue'
 import { usePage, useForm } from '@inertiajs/vue3'
 
 /**
+ * @typedef {Object} Price
+ * @property {number} current - Текущая сумма
+ * @property {number} base - Базовая сумма без скидок
+ * @property {number} discount - Сумма со скидкой
+ * @property {number} discount_amount - Размер скидки
+ * @property {number} discount_percent - Процент скидки
+ * @property {boolean} has_discount - Есть ли скидка
+ */
+
+/**
  * Реактивный объект корзины
  * @typedef {Object} Cart
- * @property {Object} amount - Итоговые суммы
- * @property {number} amount.current - Текущая сумма
- * @property {number} amount.base - Базовая сумма без скидок
- * @property {number} amount.discount - Сумма со скидкой
- * @property {number} amount.discountPercent - Процент скидки
- * @property {boolean} amount.isDiscount - Есть ли скидка
- * @property {number} amount.benefit - Выгода в рублях
+ * @property {Price} amount - Итоговые суммы
  * @property {number} count - Количество позиций
  * @property {number} quantity - Общее количество товаров
  * @property {Object.<string, CartItem>} items - Товары в корзине
@@ -19,29 +23,15 @@ import { usePage, useForm } from '@inertiajs/vue3'
 /**
  * Элемент корзины
  * @typedef {Object} CartItem
- * @property {Object} amount - Сумма по позиции
- * @property {number} amount.current
- * @property {number} amount.base
- * @property {number} amount.discount
- * @property {number} amount.discountPercent
- * @property {boolean} amount.isDiscount
- * @property {number} amount.benefit
- * @property {Object} product - Товар
- * @property {number} product.id
- * @property {string} product.name
- * @property {boolean} product.isAvailable
- * @property {Object} product.price
- * @property {number} product.price.current
- * @property {number} product.price.base
- * @property {number} product.price.discount
- * @property {number} product.price.discountPercent
- * @property {boolean} product.price.isDiscount
- * @property {number} product.price.benefit
- * @property {Object} product.previewImage
- * @property {boolean} product.previewImage.isExists
- * @property {string} product.previewImage.url
- * @property {number} product.stockItemsCount - Остаток на складе
- * @property {number} quantity - Количество данного товара
+ * @property {number} id ID товара
+ * @property {string} name Название товара
+ * @property {Price} amount Итоговая цена по позиции в корзине
+ * @property {Price} price Цена за 1шт товара
+ * @property {number} preview_image_url Цена за 1шт товара
+ * @property {string} status Статус
+ * @property {string} created_at Создан в
+ * @property {string} available_stock_items_count Количество доступных позиций на складе
+ * @property {string} quantity Количество позиций в корзине
  */
 
 /**
@@ -70,7 +60,7 @@ export function useCart() {
      */
     const inCart = (id) => {
         return Object.keys(cart.value.items).some(
-            key => cart.value.items[key].product.id === id
+            key => cart.value.items[key].id === id
         )
     }
 
@@ -81,7 +71,7 @@ export function useCart() {
      */
     const getCartItem = (id) => {
         const foundKey = Object.keys(cart.value.items).find(
-            key => cart.value.items[key].product.id === id
+            key => cart.value.items[key].id === id
         )
         return foundKey ? cart.value.items[foundKey] : null
     }
@@ -100,7 +90,7 @@ export function useCart() {
      * Очищает корзину
      */
     const clearCart = () => {
-        return form.delete(route('cart.clean'))
+        return form.delete(route('cart.clear'))
     }
 
     /**
