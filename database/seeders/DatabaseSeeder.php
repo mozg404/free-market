@@ -40,7 +40,10 @@ class DatabaseSeeder extends Seeder
         // Создаем главного пользователя
         $mainUser = User::factory()
             ->withPublishedAvatar()
-            ->create(['email' => 'user@gmail.com']);
+            ->create([
+                'email' => 'user@gmail.com',
+                'is_admin' => true,
+            ]);
 
         // Создаем рандомных 5 пользователей
         $users = User::factory(20)

@@ -17,6 +17,7 @@ use Illuminate\Notifications\Notifiable;
  * @property int $id
  * @property string $name
  * @property string $email
+ * @property bool $is_admin
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property Image|null $avatar
@@ -67,6 +68,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'is_admin' => 'bool',
             'balance' => 'int',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',

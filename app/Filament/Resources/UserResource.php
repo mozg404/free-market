@@ -32,6 +32,10 @@ class UserResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Toggle::make('is_admin')
+                    ->label('Администратор')
+                    ->onColor('danger')
+                    ->offColor('gray'),
                 Forms\Components\TextInput::make('balance')
                     ->numeric()
                     ->prefix('₽')

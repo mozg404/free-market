@@ -6,6 +6,7 @@ use App\Data\UserRegisteringData;
 use App\Http\Controllers\Controller;
 use App\Services\Auth\UserRegistrar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class RegistrationController extends Controller
@@ -27,6 +28,6 @@ class RegistrationController extends Controller
             'password' => $request->input('password'),
         ]));
 
-        return to_route('index');
+        return redirect()->intended();
     }
 }
