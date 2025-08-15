@@ -8,12 +8,12 @@ use App\Exceptions\Product\ProductUnavailableException;
 use App\Models\Order;
 use App\Models\StockItem;
 use App\Models\User;
-use App\Services\Product\ProductManager;
+use App\Services\Product\ProductService;
 
 readonly class OrderCreator
 {
     public function __construct(
-        private ProductManager $productManager,
+        private ProductService $productManager,
     ) {
     }
 

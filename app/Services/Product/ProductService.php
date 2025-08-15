@@ -9,7 +9,7 @@ use App\Models\Product;
 use App\Models\StockItem;
 use Illuminate\Database\Eloquent\Collection;
 
-class ProductManager
+class ProductService
 {
     /**
      * Проверяет наличие доступных позиций для продажи у товара

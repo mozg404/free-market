@@ -6,7 +6,7 @@ use App\Exceptions\Product\NotEnoughStockException;
 use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
-use App\Services\Product\ProductManager;
+use App\Services\Product\ProductService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -15,13 +15,13 @@ class ProductManagerTest extends TestCase
 {
     use RefreshDatabase;
 
-    private ProductManager $productManager;
+    private ProductService $productManager;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->productManager = $this->app->make(ProductManager::class);
+        $this->productManager = $this->app->make(ProductService::class);
     }
 
     public function testCheckStockAvailable(): void

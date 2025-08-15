@@ -7,12 +7,12 @@ use App\Data\Orders\CreatableOrderItemData;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
-use App\Services\Product\ProductManager;
+use App\Services\Product\ProductService;
 
 class ExpressOrderCreator
 {
     public function __construct(
-        private ProductManager $productManager,
+        private ProductService $productManager,
         private OrderCreator $creater
     )
     {}
