@@ -5,7 +5,7 @@
 init: restart
 up: docker-up
 down: docker-down
-restart: down up migrate-refresh clear seed frontend-up
+restart: down up migrate-fresh clear seed frontend-up
 start: up frontend-up
 
 # ========================
@@ -21,6 +21,12 @@ docker-down:
 # ========================
 # Миграции и данные
 # ========================
+
+migrate:
+	./vendor/bin/sail php artisan migrate
+
+migrate-fresh:
+	./vendor/bin/sail php artisan migrate:fresh
 
 migrate-refresh:
 	./vendor/bin/sail php artisan migrate:refresh
