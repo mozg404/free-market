@@ -7,22 +7,44 @@ use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
 use App\Services\Product\ProductService;
+use App\Support\Price;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class ProductManagerTest extends TestCase
+class ProductServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-    private ProductService $productManager;
+    private ProductService $productService;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->productManager = $this->app->make(ProductService::class);
+        $this->productService = $this->app->make(ProductService::class);
     }
+
+    public function testCorrectCreateProduct(): void
+    {
+        $user = User::factory()->create();
+        $name = 'Тестовый товар';
+        $price = new Price(100, 50);
+
+        $product = $this->productService->createProduct($user, $name, $price);
+
+        $this->assertInstanceOf(Product::class, $product);
+        $this->assertSame($product->user_id, $user->id);
+        $this->assertSame($name, $product->name);
+        $this->assertSame(50, $product->price->getCurrentPrice());
+        $this->assertSame(100, $product->price->getBasePrice());
+    }
+
+
+
+    // -----------------------------------------------
+    // На удаление
+    // -----------------------------------------------
 
     public function testCheckStockAvailable(): void
     {
@@ -37,10 +59,10 @@ class ProductManagerTest extends TestCase
             ->create();
 
         $this->assertTrue(
-            $this->productManager->checkStockAvailable($product, 1)
+            $this->productService->checkStockAvailable($product, 1)
         );
         $this->assertFalse(
-            $this->productManager->checkStockAvailable($product, 2)
+            $this->productService->checkStockAvailable($product, 2)
         );
     }
 
@@ -57,6 +79,6 @@ class ProductManagerTest extends TestCase
             ->create();
 
         $this->expectException(NotEnoughStockException::class);
-        $this->productManager->ensureStockAvailable($product, 2);
+        $this->productService->ensureStockAvailable($product, 2);
     }
 }

@@ -7,10 +7,24 @@ use App\Exceptions\Product\NotEnoughStockException;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\StockItem;
+use App\Models\User;
+use App\Support\Price;
 use Illuminate\Database\Eloquent\Collection;
 
 class ProductService
 {
+    public function createProduct(User $user, string $name, Price $price): Product
+    {
+        $product = new Product();
+        $product->user_id = $user->id;
+        $product->name = $name;
+        $product->price = $price;
+        $product->save();
+
+        return $product;
+    }
+
+
     /**
      * Проверяет наличие доступных позиций для продажи у товара
      */
