@@ -17,19 +17,33 @@ use Illuminate\Support\Str;
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack'; // Более подходящая иконка
+    protected static ?string $modelLabel = 'Категория';
+    protected static ?string $pluralModelLabel = 'Категории';
+    protected static ?int $navigationSort = 1; // Позиция в меню
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('parent_id')
+                    ->label('Родительская категория')
+                    ->relationship('parent', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->nullable()
+                    ->columnSpanFull(),
+
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+
                 Forms\Components\TextInput::make('slug')
+                    ->required()
+                    ->maxLength(255)
                     ->unique(ignoreRecord: true)
-                    ->maxLength(255),
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -41,10 +55,16 @@ class CategoryResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('parent.name')
+                    ->label('Родитель')
+                    ->searchable() // Если нужно
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
             ])
+            ->defaultSort('_lft') // Сортировка по вложенности
+            ->reorderable('_lft') // Включение drag-and-drop
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
