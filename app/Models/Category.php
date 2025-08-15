@@ -7,6 +7,7 @@ use Database\Factories\CategoryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Kalnoy\Nestedset\NodeTrait;
 
 /**
  * 
@@ -32,19 +33,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory, NodeTrait;
 
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ['name', 'slug', 'parent_id'];
 
     public function features(): HasMany
     {
         return $this->hasMany(Feature::class);
     }
 
-    public function newEloquentBuilder($query): CategoryQueryBuilder
-    {
-        return new CategoryQueryBuilder($query);
-    }
+//    public function newEloquentBuilder($query): CategoryQueryBuilder
+//    {
+//        return new CategoryQueryBuilder($query);
+//    }
 
     protected static function newFactory(): CategoryFactory|\Illuminate\Database\Eloquent\Factories\Factory
     {
@@ -52,12 +53,12 @@ class Category extends Model
     }
 
     // Автогенерация slug
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($category) {
-            $category->slug = $category->slug ?? \Str::slug($category->name);
-        });
-    }
+//    public static function boot()
+//    {
+//        parent::boot();
+//
+//        static::creating(function ($category) {
+//            $category->slug = $category->slug ?? \Str::slug($category->name);
+//        });
+//    }
 }
