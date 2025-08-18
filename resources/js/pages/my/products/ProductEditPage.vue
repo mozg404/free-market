@@ -24,14 +24,16 @@ import SidebarLayout from "@/components/shared/SidebarLayout.vue";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import DropdownModalLink from "@/components/shared/dropdown/DropdownModalLink.vue";
 
 const props = defineProps({
   product: Object,
 })
 const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCart()
+
+
 </script>
 
 <template>
@@ -60,13 +62,8 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <ModalLink :href="route('my.products.change_name', product.id)" class="block w-full h-full">Изменить название</ModalLink>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Billing</DropdownMenuItem>
-                  <DropdownMenuItem>Team</DropdownMenuItem>
-                  <DropdownMenuItem>Subscription</DropdownMenuItem>
+                  <DropdownModalLink :href="route('my.products.change_name', product.id)">Изменить название</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change_image', product.id)">Изменить изображение</DropdownModalLink>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
