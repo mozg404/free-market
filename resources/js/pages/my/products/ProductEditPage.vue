@@ -64,6 +64,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
                 <DropdownMenuContent>
                   <DropdownModalLink :href="route('my.products.change_name', product.id)">Изменить название</DropdownModalLink>
                   <DropdownModalLink :href="route('my.products.change_category', product.id)">Изменить категорию</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change_price', product.id)">Изменить цену</DropdownModalLink>
                   <DropdownModalLink :href="route('my.products.change_image', product.id)">Изменить изображение</DropdownModalLink>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -88,7 +89,8 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
             <CardContent class="px-4">
 
               <div class="text-muted-foreground text-sm pb-2">В наличие: {{product.available_stock_items_count}}</div>
-              <div class="mb-4">
+              <div class="mb-4 flex justify-between">
+
                 <div class="flex items-center space-x-2" v-if="product.price.has_discount">
                   <div class="text-3xl font-bold">
                     <PriceFormatter :value="product.price.discount"/>
@@ -100,6 +102,13 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
                 <div v-else class="text-3xl font-bold">
                   <PriceFormatter :value="product.price.current"/>
                 </div>
+
+
+                <Button size="icon" variant="ghost" class="ml-3" as-child>
+                  <ModalLink :href="route('my.products.change_price', product.id)">
+                    <Pencil />
+                  </ModalLink>
+                </Button>
               </div>
 
               <template v-if="product.status === 'active'">
@@ -177,7 +186,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
             <Badge variant="secondary">{{ product.category.name }}</Badge>
 
             <Button size="icon" variant="ghost" class="ml-3 p-1 w-6 h-6" as-child>
-              <ModalLink :href="route('my.products.change_category', product.id)" to>
+              <ModalLink :href="route('my.products.change_category', product.id)">
                 <Pencil />
               </ModalLink>
             </Button>
@@ -187,7 +196,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
             {{ product.name }}
 
             <Button size="icon" variant="ghost" class="ml-3" as-child>
-              <ModalLink :href="route('my.products.change_name', product.id)" to>
+              <ModalLink :href="route('my.products.change_name', product.id)">
                 <Pencil />
               </ModalLink>
             </Button>
@@ -209,7 +218,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
           <SectionTitle>
             Описание
             <Button size="icon" variant="ghost" as-child>
-              <ModalLink :href="route('my.products.change_name', product.id)" to>
+              <ModalLink :href="route('my.products.change_name', product.id)">
                 <Pencil />
               </ModalLink>
             </Button>
@@ -226,7 +235,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
           <SectionTitle>
             Инструкция по активации
             <Button size="icon" variant="ghost" as-child>
-              <ModalLink :href="route('my.products.change_name', product.id)" to>
+              <ModalLink :href="route('my.products.change_name', product.id)">
                 <Pencil />
               </ModalLink>
             </Button>
