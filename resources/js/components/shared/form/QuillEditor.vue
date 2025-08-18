@@ -118,6 +118,11 @@ watch(
   min-height: 10rem;
 }
 
+.ql-editor p, .ql-editor ol, .ql-editor pre, .ql-editor blockquote, .ql-editor h1, .ql-editor h2, .ql-editor h3, .ql-editor h4, .ql-editor h5, .ql-editor h6 {
+  margin-bottom: 1.5rem !important;
+  line-height: 1.5;
+}
+
 .ql-editor li {
   padding-left: .5rem;
   list-style: auto !important;
