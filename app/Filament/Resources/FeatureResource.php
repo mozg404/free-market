@@ -24,20 +24,25 @@ class FeatureResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'name')
-                    ->required(),
+                Forms\Components\Select::make('categories')
+                    ->relationship('categories', 'name')
+                    ->multiple()
+                    ->required()
+                    ->preload()
+                    ->searchable()
+                    ->native(false)
+                    ->hint('Выберите одну или несколько категорий'),
 
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
 
-                Forms\Components\TextInput::make('key')
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(255)
-                    ->regex('/^[a-z0-9_]+$/') // Только латиница и подчёркивания
-                    ->hint('Например: edition_type'),
+//                Forms\Components\TextInput::make('key')
+//                    ->required()
+//                    ->unique(ignoreRecord: true)
+//                    ->maxLength(255)
+//                    ->regex('/^[a-z0-9_]+$/') // Только латиница и подчёркивания
+//                    ->hint('Например: edition_type'),
 
                 Forms\Components\Select::make('type')
                     ->options(FeatureType::names())
@@ -50,8 +55,6 @@ class FeatureResource extends Resource
                     ->keyLabel('Значение (для кода)')
                     ->valueLabel('Отображаемый текст'),
 
-                Forms\Components\Toggle::make('is_required')
-                    ->default(false),
             ]);
     }
 
@@ -63,15 +66,18 @@ class FeatureResource extends Resource
                     ->label('ID')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('category.name')
-                    ->label('Категория')
-                    ->sortable(),
+                // Обновляем отображение категорий (теперь их может быть несколько)
+                Tables\Columns\TextColumn::make('categories.name')
+                    ->label('Категории')
+                    ->badge()
+                    ->separator(', ')
+                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('key')
-                    ->searchable(),
+//                Tables\Columns\TextColumn::make('key')
+//                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('type')
                     ->badge()
@@ -81,15 +87,17 @@ class FeatureResource extends Resource
                         default => ucfirst($state->value)
                     }),
 
-                Tables\Columns\IconColumn::make('is_required')
-                    ->boolean()
-                    ->label('Обязательное'),
+//                Tables\Columns\IconColumn::make('is_required')
+//                    ->boolean()
+//                    ->label('Обязательное'),
             ])
             ->filters([
-                // Фильтр по категориям
-                Tables\Filters\SelectFilter::make('category')
-                    ->relationship('category', 'name')
-                    ->searchable(),
+                // Обновляем фильтр для работы с Many-to-Many
+                Tables\Filters\SelectFilter::make('categories')
+                    ->relationship('categories', 'name')
+                    ->multiple()
+                    ->searchable()
+                    ->preload(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -102,7 +110,7 @@ class FeatureResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\CategoriesRelationManager::class,
         ];
     }
 
