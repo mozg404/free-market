@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -19,6 +20,8 @@ class TestController extends Controller
 
     public function testPage()
     {
-        return Inertia::render('test/TestPage');
+        return Inertia::render('test/TestPage', [
+            'categoriesTree' => Category::query()->withDepth()->get()->toTree(),
+        ]);
     }
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Builders;
 
-use Illuminate\Database\Eloquent\Builder;
+use Kalnoy\Nestedset\QueryBuilder;
 
-class CategoryQueryBuilder extends Builder
+class CategoryQueryBuilder extends QueryBuilder
 {
     public function withFeatures(): static
     {

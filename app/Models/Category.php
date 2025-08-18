@@ -42,10 +42,10 @@ class Category extends Model
         return $this->hasMany(Feature::class);
     }
 
-//    public function newEloquentBuilder($query): CategoryQueryBuilder
-//    {
-//        return new CategoryQueryBuilder($query);
-//    }
+    public function newEloquentBuilder($query): CategoryQueryBuilder
+    {
+        return new CategoryQueryBuilder($query);
+    }
 
     protected static function newFactory(): CategoryFactory|\Illuminate\Database\Eloquent\Factories\Factory
     {

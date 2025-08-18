@@ -1,8 +1,10 @@
 <script setup>
-import MainLayout from "@/layouts/MainLayout.vue";
 import {Badge} from "@/components/ui/badge/index.js";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
+import AppLayout from "@/layouts/AppLayout.vue";
+import AppHeader from "@/layouts/parts/AppHeader.vue";
+import AppBreadcrumbs from "@/layouts/parts/AppBreadcrumbs.vue";
 
 const props = defineProps({
   withBreadcrumbs: {
@@ -13,7 +15,11 @@ const props = defineProps({
 </script>
 
 <template>
-  <MainLayout :with-breadcrumbs="withBreadcrumbs">
+  <AppLayout>
+    <slot name="before-header"/>
+    <AppHeader/>
+    <AppBreadcrumbs v-if="withBreadcrumbs" />
+
     <div class="py-12">
       <Wrapper v-if="$slots.title">
         <div class="mb-12">
@@ -31,5 +37,6 @@ const props = defineProps({
 
       <slot/>
     </div>
-  </MainLayout>
+
+  </AppLayout>
 </template>

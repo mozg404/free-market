@@ -2,7 +2,7 @@ import '../css/app.css';
 import axios from 'axios';
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
-import { renderApp } from '@inertiaui/modal-vue'
+import {Modal, ModalLink, renderApp} from '@inertiaui/modal-vue'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import NProgress from 'nprogress'
 import { router } from '@inertiajs/vue3'
@@ -38,6 +38,8 @@ createInertiaApp({
         return createApp({ render: renderApp(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .component('Modal', Modal)
+            .component('ModalLink', ModalLink)
             .mount(el)
     },
 })

@@ -33,7 +33,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
     <Wrapper>
       <SidebarLayout class="lg:sticky lg:top-6 lg:self-start">
         <template #sidebar_right>
-          <ProductImage :src="product.preview_image" :alt="product.name" class="mb-4"/>
+          <ProductImage :product="product" class="mb-4"/>
 
           <Card class="py-4 mb-4">
             <CardContent class="px-4">

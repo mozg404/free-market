@@ -12,10 +12,7 @@ const props = defineProps({
 <template>
 <div class="relative">
   <Link :href="route('catalog.product', product.id)">
-    <ProductImage
-      :src="product.preview_image"
-      :alt="product.name"
-    />
+    <ProductImage :product="product" />
   </Link>
 
   <div class="mt-5">

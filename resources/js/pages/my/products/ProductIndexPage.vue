@@ -28,7 +28,6 @@ import {
 } from "@/components/ui/dropdown-menu/index.js";
 import Main from "@/components/shared/layout/Main.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
-import {Badge} from "@/components/ui/badge/index.js";
 import ProductStatus from "@/components/products/ProductStatus.vue";
 
 const props = defineProps({
@@ -70,9 +69,9 @@ watch([search, shopId], applyFilters);
             </div>
             <div class="text-right">
               <Button variant="outline" as-child>
-                <Link :href="route('my.products.create')">
+                <ModalLink :href="route('my.products.create')">
                   <PlusIcon class="w-4 h-4"/> Создать товар
-                </Link>
+                </ModalLink>
               </Button>
             </div>
           </div>
@@ -95,7 +94,7 @@ watch([search, shopId], applyFilters);
                     <div class="flex items-center">
                       <div class="w-14 shrink-0 mr-4">
                         <Link :href="route('catalog.product', product.id)" class="block">
-                          <ProductImage :src="product.preview_image" :alt="product.name"/>
+                          <ProductImage :product="product" />
                         </Link>
                       </div>
                       <Link :href="route('my.products.show', product.id)" class="text-sm">

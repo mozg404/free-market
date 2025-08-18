@@ -6,6 +6,7 @@ namespace App\Data\Products;
 
 use App\Data\User\UserShortData;
 use App\Enum\ProductStatus;
+use App\Support\Image;
 use App\Support\Price;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Data;
@@ -16,7 +17,7 @@ class ProductForListingData extends Data
         public int $id,
         public string $name,
         public Price $price,
-        public ?string $preview_image,
+        public ?string $image_url,
         public ProductStatus $status,
         public ?UserShortData $user = null,
         public Carbon $created_at,

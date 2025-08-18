@@ -40,7 +40,7 @@ class ProductEditableData extends Data
             price_base: $product->price->getBasePrice(),
             price_discount: $product->price->getDiscountPrice(),
             category_id: $product->category_id,
-            preview_image: $product->preview_image->getUrl(),
+            preview_image: $product->image->getUrl(),
             description: $product->description,
             instruction: $product->instruction,
             features: $features,

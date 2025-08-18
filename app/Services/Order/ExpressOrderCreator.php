@@ -12,16 +12,16 @@ use App\Services\Product\ProductService;
 class ExpressOrderCreator
 {
     public function __construct(
-        private ProductService $productManager,
-        private OrderCreator $creater
+        private ProductService $productService,
+        private OrderCreator $creator
     )
     {}
 
     public function create(User $user, Product $product): Order
     {
-        $this->productManager->ensureCanByPurchased($product);
+        $this->productService->ensureCanByPurchased($product);
 
-        return $this->creater->create($user, new CreatableOrderItemCollection([
+        return $this->creator->create($user, new CreatableOrderItemCollection([
             new CreatableOrderItemData($product)
         ]));
     }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('current_price');
             $table->integer('base_price');
             $table->string('status')->default(ProductStatus::DRAFT->value);
-            $table->string('preview_image', 255)->nullable();
+            $table->string('image', 255)->nullable();
             $table->text('description')->nullable();
             $table->text('instruction')->nullable();
             $table->timestamps();

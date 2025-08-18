@@ -21,10 +21,7 @@ const { addToCart, decreaseQuantity, deleteFromCart, form } = useCart()
           <div class="flex items-center min-w-0">
             <div class="w-20 shrink-0 mr-4">
               <Link :href="route('catalog.product', item.id)" class="block">
-                <ProductImage
-                  :src="item.preview_image_url"
-                  :alt="item.name"
-                />
+                <ProductImage :product="item"/>
               </Link>
             </div>
             <div>

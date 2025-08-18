@@ -5,6 +5,10 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\My\MyBalanceController;
 use App\Http\Controllers\My\MyOrderController;
+use App\Http\Controllers\My\Product\ProductChangeImageController;
+use App\Http\Controllers\My\Product\ProductChangeNameController;
+use App\Http\Controllers\My\Product\ProductCreateController;
+use App\Http\Controllers\My\Product\ProductEditController;
 use App\Http\Controllers\My\SettingsController;
 use App\Http\Controllers\My\MyPurchaseController;
 use App\Http\Controllers\My\MySaleController;
@@ -31,15 +35,35 @@ if (config('app.env') === 'local') {
 Route::middleware('auth')->prefix('/my')->group(function () {
     // Мои товары
     Route::get('/products', [CabinetProductController::class, 'index'])->name('my.products');
-    Route::get('/products/create', [CabinetProductController::class, 'create'])->name('my.products.create');
+
+    Route::get('/products/create', [ProductCreateController::class, 'index'])
+        ->name('my.products.create');
+    Route::post('/products/create', [ProductCreateController::class, 'store'])
+        ->name('my.products.create.store');
+
+
+
+
+
+
+
+    Route::middleware(['can:update,product'])->prefix('/products/{product}')->group(function () {
+        Route::get('/edit', [ProductEditController::class, 'index'])->name('my.products.edit');
+        Route::get('/change-name', [ProductChangeNameController::class, 'index'])->name('my.products.change_name');
+        Route::patch('/change-name', [ProductChangeNameController::class, 'update'])->name('my.products.change_name.update');
+        Route::get('/change-image', [ProductChangeImageController::class, 'index'])->name('my.products.change_image');
+        Route::patch('/change-image', [ProductChangeImageController::class, 'update'])->name('my.products.change_image.update');
+    });
+
+
     Route::post('/products', [CabinetProductController::class, 'store'])->name('my.products.store');
     Route::get('/products/{product}', [CabinetProductController::class, 'show'])
         ->can('view', 'product')
         ->name('my.products.show');
 
     Route::middleware(['can:update,product'])->group(function () {
-        Route::get('/products/{product}/edit', [CabinetProductController::class, 'edit'])
-            ->name('my.products.edit');
+//        Route::get('/products/{product}/edit', [CabinetProductController::class, 'edit'])
+//            ->name('my.products.edit');
 
         Route::put('/products/{product}', [CabinetProductController::class, 'update'])
             ->name('my.products.update');

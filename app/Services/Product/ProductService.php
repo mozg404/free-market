@@ -2,21 +2,27 @@
 
 namespace App\Services\Product;
 
+use App\Enum\ProductStatus;
 use App\Exceptions\Product\ProductUnavailableException;
 use App\Exceptions\Product\NotEnoughStockException;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
+use App\Support\Image;
 use App\Support\Price;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class ProductService
 {
-    public function createProduct(User $user, string $name, Price $price): Product
+    public function createProduct(User $user, Category $category, string $name, Price $price): Product
     {
         $product = new Product();
         $product->user_id = $user->id;
+        $product->category_id = $category->id;
+        $product->status = ProductStatus::DRAFT;
         $product->name = $name;
         $product->price = $price;
         $product->save();
@@ -24,6 +30,42 @@ class ProductService
         return $product;
     }
 
+    public function changeName(Product $product, string $newName): void
+    {
+        $product->name = $newName;
+        $product->save();
+    }
+
+    public function changePrice(Product $product, Price $price): void
+    {
+        $product->price = $price;
+        $product->save();
+    }
+
+    public function changeFeatures(Product $product, array $features): void
+    {
+        DB::transaction(static function () use ($product, $features) {
+            $product->features()->detach();
+
+            foreach ($features as $id => $value) {
+                if (!empty($value)) {
+                    $product->features()->attach($id, ['value' => $value]);
+                }
+            }
+        });
+    }
+
+    public function changeImage(Product $product, Image $image): void
+    {
+        if ($image->getUrl() !== $product->image?->getUrl()) {
+            if (isset($product->image)) {
+                $product->image->delete();
+            }
+
+            $product->image = $image->publishIfTemporary();
+            $product->save();
+        }
+    }
 
     /**
      * Проверяет наличие доступных позиций для продажи у товара

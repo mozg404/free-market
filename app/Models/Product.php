@@ -31,7 +31,8 @@ use Mews\Purifier\Casts\CleanHtmlInput;
  * @property int $current_price
  * @property int $base_price
  * @property ProductStatus $status
- * @property Image|null $preview_image
+ * @property ?Image $image
+ * @property ?string|null $image_url
  * @property array|null $description
  * @property array|null $instruction
  * @property Carbon|null $created_at
@@ -98,7 +99,7 @@ class Product extends Model
         'current_price',
         'base_price',
         'status',
-        'preview_image',
+        'image',
         'category_id',
     ];
 
@@ -108,7 +109,7 @@ class Product extends Model
             'current_price' => 'int',
             'base_price' => 'int',
             'status' => ProductStatus::class,
-            'preview_image' => ImageCast::class,
+            'image' => ImageCast::class,
             'description' => CleanHtmlInput::class,
             'instruction' => CleanHtmlInput::class,
         ];
@@ -125,6 +126,13 @@ class Product extends Model
                 'base_price' => $price->getBasePrice(),
                 'current_price' => $price->getCurrentPrice()
             ]
+        );
+    }
+
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => Image::from($attributes['image'])?->getUrl(),
         );
     }
 
@@ -169,7 +177,7 @@ class Product extends Model
         $this->instruction = $data->instruction;
 
         if (isset($data->preview_image)) {
-            $this->preview_image = $data->preview_image;
+            $this->image = $data->preview_image;
         }
     }
 
@@ -225,6 +233,7 @@ class Product extends Model
     {
         $array = parent::toArray();
         $array['price'] = $this->price->toArray();
+        $array['image_url'] = $this->image_url;
 
         return $array;
     }

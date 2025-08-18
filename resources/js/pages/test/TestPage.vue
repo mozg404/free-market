@@ -1,22 +1,57 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
-import ImageUploader from "@/components/shared/form/ImageUploader.vue";
+import CategorySelect from "@/components/products/CategorySelect.vue";
+import {Label} from "@/components/ui/label/index.js";
+import ErrorMessage from "@/components/support/ErrorMessage.vue";
+import { ref } from "vue"
 
-const form = useForm({
-  image: null
-});
+import { Button } from "@/components/ui/button"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
+const statuses = [
+  {
+    value: "backlog",
+    label: "Backlog",
+  },
+  {
+    value: "todo",
+    label: "Todo",
+  },
+  {
+    value: "in progress",
+    label: "In Progress",
+  },
+  {
+    value: "done",
+    label: "Done",
+  },
+  {
+    value: "canceled",
+    label: "Canceled",
+  },
+]
+
+const open = ref(false)
+const selectedStatus = ref(null)
 </script>
 
 <template>
-  <Wrapper class="mt-10 flex relative">
-    <div>
-      <ImageUploader v-model="form.image" upload-label="Выбрать аватар" :aspect-ratio="3/4" />
-    </div>
+  <Wrapper class="mt-10 p-10 flex relative">
 
-    <pre>
-      {{form.image}}
-    </pre>
+    <CategorySelect/>
 
   </Wrapper>
 </template>

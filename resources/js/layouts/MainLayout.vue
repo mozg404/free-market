@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from "@/layouts/AppLayout.vue";
-import Header from "./parts/Header.vue";
-import Breadcrumbs from "@/layouts/parts/Breadcrumbs.vue";
+import AppHeader from "./parts/AppHeader.vue";
+import AppBreadcrumbs from "@/layouts/parts/AppBreadcrumbs.vue";
 
 const props = defineProps({
   withBreadcrumbs: {
@@ -13,8 +13,8 @@ const props = defineProps({
 
 <template>
   <AppLayout>
-    <Header/>
-    <Breadcrumbs v-if="withBreadcrumbs" />
+    <AppHeader/>
+    <AppBreadcrumbs v-if="withBreadcrumbs" />
     <slot/>
   </AppLayout>
 </template>

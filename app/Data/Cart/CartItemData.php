@@ -15,7 +15,7 @@ class CartItemData extends Data
         public int $id,
         public string $name,
         public Price $price,
-        public ?string $preview_image_url = null,
+        public ?string $image_url = null,
         public ProductStatus $status,
         public Carbon $created_at,
         public ?int $available_stock_items_count = null,

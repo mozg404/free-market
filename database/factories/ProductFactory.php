@@ -2,12 +2,15 @@
 
 namespace Database\Factories;
 
+use App\Enum\FeatureType;
 use App\Enum\ProductStatus;
+use App\Models\Feature;
 use App\Models\Product;
 use App\Models\User;
 use App\Support\Image;
 use App\Support\Price;
 use App\Support\TextGenerator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -59,7 +62,7 @@ class ProductFactory extends Factory
             'status' => fake()->randomElement(ProductStatus::cases())->value,
             'description' => TextGenerator::paragraphs(include resource_path('data/demo_product_descriptions.php'), random_int(3, 7)),
             'instruction' => TextGenerator::paragraphs(include resource_path('data/demo_product_instructions.php'), random_int(1, 4)),
-            'preview_image' => null,
+            'image' => null,
             'created_at' => $createdAt,
             'updated_at' => $this->faker->dateTimeBetween($createdAt),
         ];
@@ -105,7 +108,7 @@ class ProductFactory extends Factory
 
             return array_filter([
                 'name' => TextGenerator::decoratedText($name, $data['name_modifiers'], random_int(0, 2), $this->faker->randomElement(['. ', ' | '])),
-                'preview_image' => $imagePath
+                'image' => $imagePath
                     ? Image::createFromAbsolutePath($imagePath)->getRelativePath()
                     : null,
             ]);
@@ -126,7 +129,7 @@ class ProductFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'preview_image' => Image::createFromAbsolutePath(resource_path($this->faker->randomElement(static::$images)))->getRelativePath(),
+                'image' => Image::createFromAbsolutePath(resource_path($this->faker->randomElement(static::$images)))->getRelativePath(),
             ];
         });
     }

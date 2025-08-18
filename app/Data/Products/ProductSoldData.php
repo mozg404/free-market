@@ -18,7 +18,7 @@ class ProductSoldData extends Data
         public int $stock_item_id,
         public string $name,
         public Price $price,
-        public ?string $preview_image,
+        public ?string $image_url,
         public ProductStatus $status,
         public ?UserShortData $buyer = null,
         public Carbon $sold_at,
@@ -32,7 +32,7 @@ class ProductSoldData extends Data
             stock_item_id: $orderItem->stock_item_id,
             name: $orderItem->stockItem->product->name,
             price: $orderItem->price,
-            preview_image: $orderItem->stockItem->product->preview_image,
+            image_url: $orderItem->stockItem->product->image_url,
             status: $orderItem->stockItem->product->status,
             buyer: UserShortData::from($orderItem->order->user),
             sold_at: $orderItem->order->paid_at

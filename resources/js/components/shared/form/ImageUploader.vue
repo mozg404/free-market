@@ -36,7 +36,7 @@ const emit = defineEmits(['update:modelValue']);
 const imageUrl = ref('');
 const showCropper = ref(false);
 const uploadInput = ref(null);
-const originalFile = ref(null); // Храним исходный файл
+const originalFile = ref(null);
 
 // Инициализация
 watch(() => props.modelValue, (value) => {
