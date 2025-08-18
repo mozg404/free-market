@@ -3,8 +3,14 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegistrationController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\My\MyBalanceController;
 use App\Http\Controllers\My\MyOrderController;
+use App\Http\Controllers\My\MyPurchaseController;
+use App\Http\Controllers\My\MySaleController;
 use App\Http\Controllers\My\Product\ProductChangeCategoryController;
 use App\Http\Controllers\My\Product\ProductChangeDescriptionController;
 use App\Http\Controllers\My\Product\ProductChangeFeaturesController;
@@ -14,15 +20,9 @@ use App\Http\Controllers\My\Product\ProductChangeNameController;
 use App\Http\Controllers\My\Product\ProductChangePriceController;
 use App\Http\Controllers\My\Product\ProductCreateController;
 use App\Http\Controllers\My\Product\ProductEditController;
+use App\Http\Controllers\My\Product\ProductIndexController as CabinetProductController;
+use App\Http\Controllers\My\Product\StockController;
 use App\Http\Controllers\My\SettingsController;
-use App\Http\Controllers\My\MyPurchaseController;
-use App\Http\Controllers\My\MySaleController;
-use App\Http\Controllers\My\MyProductController as CabinetProductController;
-use App\Http\Controllers\My\MyProductStockItemsController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\IndexController;
 use App\Http\Controllers\PaymentCallbackController;
 use App\Http\Controllers\SandboxController;
 use App\Http\Controllers\TestController;
@@ -36,85 +36,72 @@ if (config('app.env') === 'local') {
     Route::get('/test-page', [TestController::class, 'testPage']);
 }
 
+// ---------------------------------------------
 // My
+// ---------------------------------------------
+
 Route::middleware('auth')->prefix('/my')->group(function () {
+
+    // ---------------------------------------------
     // Мои товары
-    Route::get('/products', [CabinetProductController::class, 'index'])->name('my.products');
+    // ---------------------------------------------
 
-    Route::get('/products/create', [ProductCreateController::class, 'index'])
-        ->name('my.products.create');
-    Route::post('/products/create', [ProductCreateController::class, 'store'])
-        ->name('my.products.create.store');
+    Route::prefix('/products')->group(function () {
+        Route::get('/', [CabinetProductController::class, 'index'])->name('my.products');
 
+        Route::get('/create', [ProductCreateController::class, 'index'])->name('my.products.create');
+        Route::post('/create', [ProductCreateController::class, 'store'])->name('my.products.create.store');
 
+        Route::middleware(['can:update,product'])->prefix('/{product}')->group(function () {
+            Route::get('/edit', [ProductEditController::class, 'index'])->name('my.products.edit');
 
+            Route::prefix('/change')->group(function () {
+                Route::get('/name', [ProductChangeNameController::class, 'index'])->name('my.products.change.name');
+                Route::patch('/name', [ProductChangeNameController::class, 'update'])->name('my.products.change.name.update');
 
+                Route::get('/image', [ProductChangeImageController::class, 'index'])->name('my.products.change.image');
+                Route::patch('/image', [ProductChangeImageController::class, 'update'])->name('my.products.change.image.update');
 
+                Route::get('/category', [ProductChangeCategoryController::class, 'index'])->name('my.products.change.category');
+                Route::patch('/category', [ProductChangeCategoryController::class, 'update'])->name('my.products.change.category.update');
 
+                Route::get('/price', [ProductChangePriceController::class, 'index'])->name('my.products.change.price');
+                Route::patch('/price', [ProductChangePriceController::class, 'update'])->name('my.products.change.price.update');
 
-    Route::middleware(['can:update,product'])->prefix('/products/{product}')->group(function () {
-        Route::get('/edit', [ProductEditController::class, 'index'])->name('my.products.edit');
+                Route::get('/features', [ProductChangeFeaturesController::class, 'index'])->name('my.products.change.features');
+                Route::patch('/features', [ProductChangeFeaturesController::class, 'update'])->name('my.products.change.features.update');
 
-        Route::get('/change-name', [ProductChangeNameController::class, 'index'])->name('my.products.change_name');
-        Route::patch('/change-name', [ProductChangeNameController::class, 'update'])->name('my.products.change_name.update');
+                Route::get('/description', [ProductChangeDescriptionController::class, 'index'])->name('my.products.change.description');
+                Route::patch('/description', [ProductChangeDescriptionController::class, 'update'])->name('my.products.change.description.update');
 
-        Route::get('/change-image', [ProductChangeImageController::class, 'index'])->name('my.products.change_image');
-        Route::patch('/change-image', [ProductChangeImageController::class, 'update'])->name('my.products.change_image.update');
+                Route::get('/instruction', [ProductChangeInstructionController::class, 'index'])->name('my.products.change.instruction');
+                Route::patch('/instruction', [ProductChangeInstructionController::class, 'update'])->name('my.products.change.instruction.update');
+            });
 
-        Route::get('/change-category', [ProductChangeCategoryController::class, 'index'])->name('my.products.change_category');
-        Route::patch('/change-category', [ProductChangeCategoryController::class, 'update'])->name('my.products.change_category.update');
-
-        Route::get('/change-price', [ProductChangePriceController::class, 'index'])->name('my.products.change_price');
-        Route::patch('/change-price', [ProductChangePriceController::class, 'update'])->name('my.products.change_price.update');
-
-        Route::get('/change-features', [ProductChangeFeaturesController::class, 'index'])->name('my.products.change_features');
-        Route::patch('/change-features', [ProductChangeFeaturesController::class, 'update'])->name('my.products.change_features.update');
-
-        Route::get('/change-description', [ProductChangeDescriptionController::class, 'index'])->name('my.products.change_description');
-        Route::patch('/change-description', [ProductChangeDescriptionController::class, 'update'])->name('my.products.change_description.update');
-
-        Route::get('/change-instruction', [ProductChangeInstructionController::class, 'index'])->name('my.products.change_instruction');
-        Route::patch('/change-instruction', [ProductChangeInstructionController::class, 'update'])->name('my.products.change_instruction.update');
-    });
-
-
-    Route::post('/products', [CabinetProductController::class, 'store'])->name('my.products.store');
-    Route::get('/products/{product}', [CabinetProductController::class, 'show'])
-        ->can('view', 'product')
-        ->name('my.products.show');
-
-    Route::middleware(['can:update,product'])->group(function () {
-//        Route::get('/products/{product}/edit', [CabinetProductController::class, 'edit'])
-//            ->name('my.products.edit');
-
-        Route::put('/products/{product}', [CabinetProductController::class, 'update'])
-            ->name('my.products.update');
-
-        Route::delete('/products/{product}', [CabinetProductController::class, 'destroy'])->name('my.products.delete');
-
-        Route::patch('/products/{product}/publish', [CabinetProductController::class, 'publish'])
-            ->name('my.products.publish');
-        Route::patch('/products/{product}/unpublish', [CabinetProductController::class, 'unpublish'])
-            ->name('my.products.unpublish');
-
-        Route::patch('/products/{product}/mark-available', [CabinetProductController::class, 'markAsAvailable'])
-            ->name('my.products.mark-available');
-        Route::patch('/products/{product}/mark-unavailable', [CabinetProductController::class, 'markAsUnavailable'])
-            ->name('my.products.mark-unavailable');
-
-        Route::prefix('/products/{product}')->group(function () {
-            Route::get('/stock-items/create', [MyProductStockItemsController::class, 'create'])->name('my.products.stock-items.create');
-            Route::post('/stock-items', [MyProductStockItemsController::class, 'store'])->name('my.products.stock-items.store');
-            Route::get('/stock-items/{stock_item}/edit', [MyProductStockItemsController::class, 'edit'])->name('my.products.stock-items.edit');
-            Route::put('/stock-items/{stock_item}', [MyProductStockItemsController::class, 'update'])->name('my.products.stock-items.update');
+            Route::prefix('/stock')->group(function () {
+                Route::get('/', [StockController::class, 'index'])->name('my.products.stock');
+                Route::get('/create', [StockController::class, 'create'])->name('my.products.stock.create');
+                Route::post('/', [StockController::class, 'store'])->name('my.products.stock.store');
+                Route::get('/{stock_item}/edit', [StockController::class, 'edit'])->name('my.products.stock.edit');
+                Route::put('/{stock_item}', [StockController::class, 'update'])->name('my.products.stock.update');
+            });
         });
     });
 
+
+
+
+    // ---------------------------------------------
     // Настройки профиля
+    // ---------------------------------------------
+
     Route::get('/settings', [SettingsController::class, 'index'])->name('my.settings');
     Route::patch('/settings/change-avatar', [SettingsController::class, 'changeAvatar'])->name('my.settings.change-avatar');
 
+    // ---------------------------------------------
     // Мои заказы
+    // ---------------------------------------------
+
     Route::get('/orders/{order}/cancel', [MyOrderController::class, 'cancel'])
         ->can('cancel', 'order')
         ->name('my.orders.cancel');
@@ -126,26 +113,41 @@ Route::middleware('auth')->prefix('/my')->group(function () {
         ->name('my.orders.show');
     Route::get('/orders', [MyOrderController::class, 'index'])->name('my.orders');
 
+    // ---------------------------------------------
     // Мой баланс
+    // ---------------------------------------------
+
     Route::get('/balance', [MyBalanceController::class, 'index'])->name('my.balance');
     Route::post('/balance/deposit', [MyBalanceController::class, 'deposit'])->name('my.balance.deposit');
 
+    // ---------------------------------------------
     // Мои покупки
+    // ---------------------------------------------
+
     Route::get('/purchases', [MyPurchaseController::class, 'index'])->name('my.purchases');
     Route::get('/purchases/{stock_item}', [MyPurchaseController::class, 'show'])->name('my.purchases.show');
 
+    // ---------------------------------------------
     // Мои продажи
+    // ---------------------------------------------
+
     Route::get('/sales', [MySaleController::class, 'index'])->name('my.sales');
 });
 
+// ---------------------------------------------
 // Корзина
+// ---------------------------------------------
+
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
 Route::post('/cart/items/{product}', [CartController::class, 'store'])->name('cart.items.store');
 Route::post('/cart/items/{product}/decrease', [CartController::class, 'decrease'])->name('cart.items.decrease');
 Route::delete('/cart/items/{product}', [CartController::class, 'destroy'])->name('cart.items.destroy');
 
+// ---------------------------------------------
 // Оформление заказа
+// ---------------------------------------------
+
 Route::get('/checkout', [CheckoutController::class, 'cart'])
     ->middleware(CheckoutAccess::class)
     ->name('checkout');
@@ -153,26 +155,40 @@ Route::get('/checkout/express/{product}', [CheckoutController::class, 'express']
     ->middleware(CheckoutExpressAccess::class)
     ->name('checkout.express');
 
-
+// ---------------------------------------------
 // Аккаунты пользователей
+// ---------------------------------------------
+
 Route::get('/users', [UserController::class, 'index'])->name('users');
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
+// ---------------------------------------------
 // Каталог
+// ---------------------------------------------
+
 Route::get('/catalog/product/{product}', [CatalogController::class, 'show'])->name('catalog.product');
 Route::get('/catalog/category/{category:slug}', [CatalogController::class, 'category'])->name('catalog.category');
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog');
 
+// ---------------------------------------------
 // Эмуляция кассы
+// ---------------------------------------------
+
 Route::get('/demo/sandbox/{hash}', [SandboxController::class, 'index'])->name('sandbox');
 Route::get('/demo/sandbox/{hash}/failed', [SandboxController::class, 'failed'])->name('sandbox.failed');
 Route::get('/demo/sandbox/{hash}/success', [SandboxController::class, 'success'])->name('sandbox.success');
 Route::get('/demo/sandbox/{hash}/cancelled', [SandboxController::class, 'cancelled'])->name('sandbox.cancelled');
 
+// ---------------------------------------------
 // Обработка внешнего платежа
+// ---------------------------------------------
+
 Route::get('/payment/callback', PaymentCallbackController::class)->name('payment.callback');
 
+// ---------------------------------------------
 // Авторизация
+// ---------------------------------------------
+
 Route::middleware('guest')->group(function () {
     Route::post('/registration/store', [RegistrationController::class, 'store'])->name('auth.registration.store');
     Route::get('/registration', [RegistrationController::class, 'show'])->name('auth.registration.show');
@@ -182,5 +198,9 @@ Route::middleware('guest')->group(function () {
 Route::get('/logout', LogoutController::class)
     ->middleware('auth')
     ->name('logout');
+
+// ---------------------------------------------
+// Главная
+// ---------------------------------------------
 
 Route::get('/', IndexController::class)->name('home');

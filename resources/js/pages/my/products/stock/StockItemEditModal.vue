@@ -9,21 +9,29 @@ import {useForm} from "@inertiajs/vue3";
 import ErrorMessage from "@/components/support/ErrorMessage.vue";
 
 const props = defineProps({
-  product: Object,
+  product: {
+    type: Object,
+    required: true,
+  },
+  stockItem: {
+    type: Object,
+    required: true,
+  },
 })
 const form = useForm({
-  content: '',
+  content: props.stockItem.content,
+  _method: 'PUT',
 })
 const modalRef = ref(null)
-const submit = () => form.post(route('my.products.stock-items.store', props.product.id), {
-  onSuccess: () => modalRef.value.close()
+const submit = () => form.post(route('my.products.stock.update', [props.product.id, props.stockItem.id]), {
+  onSuccess: () => modalRef.value.close(),
 })
 
 </script>
 
 <template>
   <Modal max-width="md" ref="modalRef">
-    <h2 class="mb-6 text-lg font-semibold tracking-tight text-pretty text-gray-900 sm:text-3xl">Новая позиция</h2>
+    <div class="text-2xl font-semibold mb-8">Редактировать ключ</div>
 
     <form @submit.prevent="submit" class="flex flex-col gap-6">
       <div class="grid gap-6">
@@ -37,7 +45,7 @@ const submit = () => form.post(route('my.products.stock-items.store', props.prod
         <div>
           <Button type="submit" tabindex="6" :disabled="form.processing" class="cursor-pointer">
             <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin"/>
-            Создать
+            Сохранить
           </Button>
         </div>
       </div>

@@ -18,14 +18,15 @@ Breadcrumbs::for('my.products.create', function (BreadcrumbTrail $trail) {
     $trail->parent('my.products');
     $trail->push('Новый товар');
 });
-Breadcrumbs::for('my.products.show', function (BreadcrumbTrail $trail, Product $product) {
-    $trail->parent('my.products');
-    $trail->push($product->name, route('my.products.show', $product->id));
-});
 Breadcrumbs::for('my.products.edit', function (BreadcrumbTrail $trail, Product $product) {
-    $trail->parent('my.products.show', $product);
-    $trail->push('Редактирование товара №' . $product->id);
+    $trail->parent('my.products');
+    $trail->push('Редактирование товара №' . $product->id, route('my.products.edit', $product));
 });
+Breadcrumbs::for('my.products.stock', function (BreadcrumbTrail $trail, Product $product) {
+    $trail->parent('my.products.edit', $product);
+    $trail->push('Позиции на складе', route('my.products.stock', $product->id));
+});
+
 
 // -------------------------------
 // Мои заказы

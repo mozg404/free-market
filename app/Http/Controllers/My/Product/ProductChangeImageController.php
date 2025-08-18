@@ -24,7 +24,7 @@ class ProductChangeImageController extends Controller
         return Inertia::render('common/ImageUploaderModal', [
             'imageUrl' => $product->image->getUrl(),
             'aspectRatio' => 3/4,
-            'saveRoute' => route('my.products.change_image.update', $product->id),
+            'saveRoute' => route('my.products.change.image.update', $product->id),
             'product' => $product,
         ]);
     }

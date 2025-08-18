@@ -19,7 +19,7 @@ const form = useForm({
 })
 
 const modalRef = ref(null)
-const submit = () => form.post(route('my.products.change_description.update', props.product.id), {
+const submit = () => form.post(route('my.products.change.description.update', props.product.id), {
   onSuccess: () => modalRef.value.close()
 })
 </script>

@@ -4,18 +4,13 @@ import {ref} from "vue";
 import {Label} from "@/components/ui/label/index.js";
 import {LoaderCircle} from 'lucide-vue-next';
 import {Button} from '@/components/ui/button/index.js'
-import {Textarea} from '@/components/ui/textarea/index.js'
 import {useForm} from "@inertiajs/vue3";
 import ErrorMessage from "@/components/support/ErrorMessage.vue";
 import {Input} from "@/components/ui/input/index.js";
 import CategorySelect from "@/components/products/CategorySelect.vue";
-import FormNumberInput from "@/components/shared/form/FormNumberInput.vue";
-import FormField from "@/components/shared/form/FormField.vue";
 import {
   NumberField,
   NumberFieldContent,
-  NumberFieldDecrement,
-  NumberFieldIncrement,
   NumberFieldInput,
 } from "@/components/ui/number-field"
 

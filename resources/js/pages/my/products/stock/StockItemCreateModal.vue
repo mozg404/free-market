@@ -1,7 +1,6 @@
 <script setup>
 import {Modal} from '@inertiaui/modal-vue'
 import {ref} from "vue";
-import InputError from "@/components/ui/input/InputError.vue";
 import {Label} from "@/components/ui/label/index.js";
 import {LoaderCircle} from 'lucide-vue-next';
 import {Button} from '@/components/ui/button/index.js'
@@ -10,32 +9,24 @@ import {useForm} from "@inertiajs/vue3";
 import ErrorMessage from "@/components/support/ErrorMessage.vue";
 
 const props = defineProps({
-  product: {
-    type: Object,
-    required: true,
-  },
-  stockItem: {
-    type: Object,
-    required: true,
-  },
+  product: Object,
 })
 const form = useForm({
-  content: props.stockItem.content,
+  content: '',
 })
 const modalRef = ref(null)
-const submit = () => form.put(route('my.products.stock-items.update', [props.product.id, props.stockItem.id]), {
-  onSuccess: () => modalRef.value.close(),
+const submit = () => form.post(route('my.products.stock.store', props.product.id), {
+  onSuccess: () => modalRef.value.close()
 })
 
 </script>
 
 <template>
   <Modal max-width="md" ref="modalRef">
-    <h2 class="mb-6 text-lg font-semibold tracking-tight text-pretty text-gray-900 sm:text-3xl">Новая позиция</h2>
+    <div class="text-2xl font-semibold mb-8">Новый ключ</div>
 
     <form @submit.prevent="submit" class="flex flex-col gap-6">
       <div class="grid gap-6">
-
         <div class="grid gap-2">
           <Label for="content">Содержимое</Label>
           <Textarea id="content" v-model="form.content" />

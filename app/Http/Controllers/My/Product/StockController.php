@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\My;
+namespace App\Http\Controllers\My\Product;
 
+use App\Data\Products\ProductDetailedData;
 use App\Data\Products\ProductForListingData;
+use App\Data\Products\StockItemDetailedData;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\StockItem;
@@ -10,16 +12,27 @@ use App\Services\Toaster;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class MyProductStockItemsController extends Controller
+class StockController extends Controller
 {
     public function __construct(
         private readonly Toaster $toaster,
     ) {
     }
 
+    public function index(Product $product, Request $request)
+    {
+        return Inertia::render('my/products/stock/StockIndexPage', [
+            'product' => ProductDetailedData::from($product),
+            'itemsPaginated' => StockItemDetailedData::collect($product->stockItems()->orderByDesc('id')->paginate(10)),
+            'availableItemsCount' => $product->stockItems()->isAvailable()->count(),
+            'soldItemsCount' => '---',
+            'reservedItemsCount' => $product->stockItems()->isReserved()->count(),
+        ]);
+    }
+
     public function create(Product $product, Request $request)
     {
-        return Inertia::render('my/products/StockItemCreateModal', [
+        return Inertia::render('my/products/stock/StockItemCreateModal', [
             'product' => ProductForListingData::from($product),
         ]);
     }
@@ -38,9 +51,9 @@ class MyProductStockItemsController extends Controller
 
     public function edit(Product $product, StockItem $stockItem)
     {
-        return Inertia::render('my/products/StockItemEditModal', [
-            'stockItem' => $stockItem,
-            'product' => $product,
+        return Inertia::render('my/products/stock/StockItemEditModal', [
+            'stockItem' => StockItemDetailedData::from($stockItem),
+            'product' => ProductForListingData::from($product),
         ]);
     }
 

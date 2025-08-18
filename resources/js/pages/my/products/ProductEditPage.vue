@@ -3,7 +3,7 @@ import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {Link} from "@inertiajs/vue3";
 import {Button} from '@/components/ui/button/index.js'
 import {Badge} from '@/components/ui/badge/index.js'
-import {Minus, Plus, ShoppingCart, CreditCard, Sparkles, Pencil, TriangleAlert, Ellipsis, Eye} from 'lucide-vue-next';
+import {ShoppingCart, Pencil, TriangleAlert, Ellipsis, Eye} from 'lucide-vue-next';
 import ProductImage from "@/components/products/ProductImage.vue";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
@@ -16,7 +16,6 @@ import {
 } from '@/components/shared/description/index.js'
 import Section from "@/components/shared/layout/Section.vue";
 import SectionTitle from "@/components/shared/layout/SectionTitle.vue";
-import { useCart } from '@/composables/useCart.js'
 import {Card, CardContent} from "@/components/ui/card/index.js";
 import UserAvatar from "@/components/users/UserAvatar.vue";
 import PageLayout from "@/layouts/PageLayout.vue";
@@ -31,9 +30,6 @@ import DropdownModalLink from "@/components/shared/dropdown/DropdownModalLink.vu
 const props = defineProps({
   product: Object,
 })
-const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCart()
-
-
 </script>
 
 <template>
@@ -51,7 +47,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
               <Button variant="outline" as-child>
                 <Link :href="route('catalog.product', product.id)" >
                   <Eye />
-                  Просмотр
+                  Страница товара
                 </Link>
               </Button>
 
@@ -62,13 +58,13 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownModalLink :href="route('my.products.change_name', product.id)">Изменить название</DropdownModalLink>
-                  <DropdownModalLink :href="route('my.products.change_category', product.id)">Изменить категорию</DropdownModalLink>
-                  <DropdownModalLink :href="route('my.products.change_price', product.id)">Изменить цену</DropdownModalLink>
-                  <DropdownModalLink :href="route('my.products.change_features', product.id)">Изменить характеристики</DropdownModalLink>
-                  <DropdownModalLink :href="route('my.products.change_image', product.id)">Изменить изображение</DropdownModalLink>
-                  <DropdownModalLink :href="route('my.products.change_description', product.id)">Изменить описание</DropdownModalLink>
-                  <DropdownModalLink :href="route('my.products.change_instruction', product.id)">Изменить инструкцию</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change.name', product.id)">Изменить название</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change.category', product.id)">Изменить категорию</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change.price', product.id)">Изменить цену</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change.features', product.id)">Изменить характеристики</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change.image', product.id)">Изменить изображение</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change.description', product.id)">Изменить описание</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change.instruction', product.id)">Изменить инструкцию</DropdownModalLink>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -81,86 +77,113 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
 
     <Wrapper>
       <SidebarLayout class="lg:sticky lg:top-6 lg:self-start">
+
+        <div class="mb-12">
+          <div class="flex items-center">
+            <Badge variant="secondary">{{ product.category.name }}</Badge>
+
+            <Button size="icon" variant="ghost" class="ml-3 p-1 w-6 h-6" as-child>
+              <ModalLink :href="route('my.products.change.category', product.id)">
+                <Pencil />
+              </ModalLink>
+            </Button>
+          </div>
+
+          <PageTitle class="mt-3">
+            {{ product.name }}
+
+            <Button size="icon" variant="ghost" class="ml-2 p-1 w-8 h-8" as-child>
+              <ModalLink :href="route('my.products.change.name', product.id)">
+                <Pencil />
+              </ModalLink>
+            </Button>
+          </PageTitle>
+        </div>
+
+        <Section  class="mt-6">
+          <DescriptionList v-if="product.features" class="mb-5">
+            <DescriptionItem v-for="feature in product.features" :key="feature.id">
+              <DescriptionTitle>{{ feature.name }}</DescriptionTitle>
+              <DescriptionSeparator />
+              <DescriptionValue>{{ feature.value }}</DescriptionValue>
+            </DescriptionItem>
+          </DescriptionList>
+
+          <Button variant="secondary" as-child>
+            <ModalLink :href="route('my.products.change.features', product.id)">
+              <Pencil />
+              Изменить характеристики
+            </ModalLink>
+          </Button>
+        </Section>
+
+        <Section class="mt-12">
+          <SectionTitle>
+            Описание
+            <Button size="icon" variant="ghost" as-child>
+              <ModalLink :href="route('my.products.change.description', product.id)">
+                <Pencil />
+              </ModalLink>
+            </Button>
+          </SectionTitle>
+
+          <article v-if="product.description" class="mt-2 prose prose-md max-w-full">
+            <div v-html="product.description"></div>
+          </article>
+        </Section>
+
+        <Section >
+          <SectionTitle>
+            Инструкция по активации
+            <Button size="icon" variant="ghost" as-child>
+              <ModalLink :href="route('my.products.change.instruction', product.id)">
+                <Pencil />
+              </ModalLink>
+            </Button>
+          </SectionTitle>
+
+          <article v-if="product.instruction" class="mt-2 prose prose-md">
+            <div v-html="product.instruction"></div>
+          </article>
+        </Section>
+
         <template #sidebar_right>
-          <ModalLink :href="route('my.products.change_image', product.id)">
+          <ModalLink :href="route('my.products.change.image', product.id)">
             <ProductImage :product="product" class="mb-4"/>
           </ModalLink>
 
           <Card class="py-4 mb-4">
             <CardContent class="px-4">
-
               <div class="text-muted-foreground text-sm pb-2">В наличие: {{product.available_stock_items_count}}</div>
               <div class="mb-4 flex justify-between">
-
                 <div class="flex items-center space-x-2" v-if="product.price.has_discount">
                   <div class="text-3xl font-bold">
                     <PriceFormatter :value="product.price.discount"/>
                   </div>
+
                   <div class="text-muted-foreground line-through">
                     <PriceFormatter :value="product.price.base"/>
                   </div>
                 </div>
+
                 <div v-else class="text-3xl font-bold">
                   <PriceFormatter :value="product.price.current"/>
                 </div>
 
-
                 <Button size="icon" variant="ghost" class="ml-3" as-child>
-                  <ModalLink :href="route('my.products.change_price', product.id)">
+                  <ModalLink :href="route('my.products.change.price', product.id)">
                     <Pencil />
                   </ModalLink>
                 </Button>
               </div>
 
               <template v-if="product.status === 'active'">
-                <div v-if="inCart(product.id)">
-                  <div class="flex space-x-4 items-center">
-                    <div class="bg-gray-100 rounded-3xl flex items-center gap-3">
-                      <Button
-                        variant="outline"
-                        class="rounded-3xl cursor-pointer hover:bg-destructive hover:text-destructive-foreground hover:border-destructive"
-                        size="icon"
-                        :disabled="form.processing"
-                        @click="decreaseQuantity(product.id)"
-                      >
-                        <Minus class="w-4 h-4"/>
-                      </Button>
-
-                      <div>{{getCartItemQuantity(product.id)}}</div>
-
-                      <Button
-                        variant="outline"
-                        class="rounded-3xl cursor-pointer hover:bg-primary hover:text-primary-foreground hover:border-primary"
-                        size="icon"
-                        @click="addToCart(product.id)"
-                        :disabled="form.processing"
-                      >
-                        <Plus class="w-4 h-4"/>
-                      </Button>
-                    </div>
-                    В корзине
-                    <Button :as="Link" :href="route('cart.index')" class="rounded-3xl cursor-pointer hidden">
-                      В корзине
-                    </Button>
-                  </div>
-                </div>
-
-                <div v-else class="flex">
-                  <Button :as="Link" :href="route('checkout.express', product.id)" size="lg" class="cursor-pointer w-full flex-1 mr-3">
-                    Купить
-                  </Button>
-
-                  <Button
-                    size="icon"
-                    variant="secondary"
-                    class="cursor-pointer p-5"
-                    @click="addToCart(product.id)"
-                    :disabled="form.processing"
-                  >
+                <div class="flex">
+                  <Button size="lg" class="cursor-pointer w-full flex-1 mr-3">Купить</Button>
+                  <Button size="icon" variant="secondary" class="cursor-pointer p-5">
                     <ShoppingCart />
                   </Button>
                 </div>
-
               </template>
 
               <template v-else>
@@ -181,78 +204,6 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
             </CardContent>
           </Card>
         </template>
-
-        <div class="mb-12">
-          <div class="flex items-center">
-            <Badge variant="secondary">{{ product.category.name }}</Badge>
-
-            <Button size="icon" variant="ghost" class="ml-3 p-1 w-6 h-6" as-child>
-              <ModalLink :href="route('my.products.change_category', product.id)">
-                <Pencil />
-              </ModalLink>
-            </Button>
-          </div>
-
-          <PageTitle class="mt-3">
-            {{ product.name }}
-
-            <Button size="icon" variant="ghost" class="ml-2 p-1 w-8 h-8" as-child>
-              <ModalLink :href="route('my.products.change_name', product.id)">
-                <Pencil />
-              </ModalLink>
-            </Button>
-
-          </PageTitle>
-        </div>
-
-
-        <Section  class="mt-6">
-          <DescriptionList v-if="product.features" class="mb-5">
-            <DescriptionItem v-for="feature in product.features" :key="feature.id">
-              <DescriptionTitle>{{ feature.name }}</DescriptionTitle>
-              <DescriptionSeparator />
-              <DescriptionValue>{{ feature.value }}</DescriptionValue>
-            </DescriptionItem>
-          </DescriptionList>
-
-          <Button variant="secondary" as-child>
-            <ModalLink :href="route('my.products.change_features', product.id)">
-              <Pencil />
-              Изменить характеристики
-            </ModalLink>
-          </Button>
-
-        </Section>
-
-        <Section class="mt-12">
-          <SectionTitle>
-            Описание
-            <Button size="icon" variant="ghost" as-child>
-              <ModalLink :href="route('my.products.change_description', product.id)">
-                <Pencil />
-              </ModalLink>
-            </Button>
-          </SectionTitle>
-
-          <article v-if="product.description" class="mt-2 prose prose-md max-w-full">
-            <div v-html="product.description"></div>
-          </article>
-        </Section>
-
-        <Section >
-          <SectionTitle>
-            Инструкция по активации
-            <Button size="icon" variant="ghost" as-child>
-              <ModalLink :href="route('my.products.change_instruction', product.id)">
-                <Pencil />
-              </ModalLink>
-            </Button>
-          </SectionTitle>
-
-          <article v-if="product.instruction" class="mt-2 prose prose-md">
-            <div v-html="product.instruction"></div>
-          </article>
-        </Section>
       </SidebarLayout>
 
     </Wrapper>

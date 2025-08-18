@@ -1,5 +1,5 @@
 <script setup>
-import {PlusIcon, Menu, Search} from "lucide-vue-next";
+import {PlusIcon, Menu, Search, Eye, ListPlus, Pencil} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
 import { ref, watch } from 'vue';
 import {Link, router} from '@inertiajs/vue3';
@@ -97,7 +97,7 @@ watch([search, shopId], applyFilters);
                           <ProductImage :product="product" />
                         </Link>
                       </div>
-                      <Link :href="route('my.products.show', product.id)" class="text-sm">
+                      <Link :href="route('my.products.edit', product.id)" class="text-sm">
                         {{product.name}}
                         <div class="text-muted-foreground text-xs mt-2">
                           #{{product.id}}
@@ -135,10 +135,16 @@ watch([search, shopId], applyFilters);
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent class="w-44">
-                        <DropdownMenuItem class="cursor-pointer h-full w-full" :as="Link" :href="route('my.products.show', product.id)">Подробнее</DropdownMenuItem>
-                        <DropdownMenuItem class="cursor-pointer h-full w-full" :as="Link" :href="route('my.products.edit', product.id)">Изменить</DropdownMenuItem>
+                        <DropdownMenuItem class="cursor-pointer h-full w-full" :as="Link" :href="route('catalog.product', product.id)">
+                          <Eye />Страница товара
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator/>
-                        <DropdownMenuItem class="cursor-pointer h-full w-full" :as="Link" :href="route('catalog.product', product.id)">На сайте</DropdownMenuItem>
+                        <DropdownMenuItem class="cursor-pointer h-full w-full" :as="Link" :href="route('my.products.stock', product.id)">
+                          <ListPlus /> Склад
+                        </DropdownMenuItem>
+                        <DropdownMenuItem class="cursor-pointer h-full w-full" :as="Link" :href="route('my.products.edit', product.id)">
+                          <Pencil /> Редактировать
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
