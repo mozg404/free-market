@@ -218,7 +218,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
           <SectionTitle>
             Описание
             <Button size="icon" variant="ghost" as-child>
-              <ModalLink :href="route('my.products.change_name', product.id)">
+              <ModalLink :href="route('my.products.change_description', product.id)">
                 <Pencil />
               </ModalLink>
             </Button>

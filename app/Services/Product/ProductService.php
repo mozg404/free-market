@@ -48,6 +48,12 @@ class ProductService
         $product->save();
     }
 
+    public function changeDescription(Product $product, string $description): void
+    {
+        $product->description = $description;
+        $product->save();
+    }
+
     public function changeFeatures(Product $product, array $features): void
     {
         DB::transaction(static function () use ($product, $features) {
