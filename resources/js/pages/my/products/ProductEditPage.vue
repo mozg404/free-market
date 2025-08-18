@@ -66,6 +66,8 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
                   <DropdownModalLink :href="route('my.products.change_category', product.id)">Изменить категорию</DropdownModalLink>
                   <DropdownModalLink :href="route('my.products.change_price', product.id)">Изменить цену</DropdownModalLink>
                   <DropdownModalLink :href="route('my.products.change_image', product.id)">Изменить изображение</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change_description', product.id)">Изменить описание</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change_instruction', product.id)">Изменить инструкцию</DropdownModalLink>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -227,15 +229,13 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
           <article v-if="product.description" class="mt-2 prose prose-md max-w-full">
             <div v-html="product.description"></div>
           </article>
-
-          <Button variant="secondary">Изменить описание</Button>
         </Section>
 
         <Section >
           <SectionTitle>
             Инструкция по активации
             <Button size="icon" variant="ghost" as-child>
-              <ModalLink :href="route('my.products.change_name', product.id)">
+              <ModalLink :href="route('my.products.change_instruction', product.id)">
                 <Pencil />
               </ModalLink>
             </Button>
@@ -244,8 +244,6 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
           <article v-if="product.instruction" class="mt-2 prose prose-md">
             <div v-html="product.instruction"></div>
           </article>
-
-          <Button variant="secondary">Изменить инструкцию</Button>
         </Section>
       </SidebarLayout>
 

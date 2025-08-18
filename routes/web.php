@@ -8,6 +8,7 @@ use App\Http\Controllers\My\MyOrderController;
 use App\Http\Controllers\My\Product\ProductChangeCategoryController;
 use App\Http\Controllers\My\Product\ProductChangeDescriptionController;
 use App\Http\Controllers\My\Product\ProductChangeImageController;
+use App\Http\Controllers\My\Product\ProductChangeInstructionController;
 use App\Http\Controllers\My\Product\ProductChangeNameController;
 use App\Http\Controllers\My\Product\ProductChangePriceController;
 use App\Http\Controllers\My\Product\ProductCreateController;
@@ -67,6 +68,9 @@ Route::middleware('auth')->prefix('/my')->group(function () {
 
         Route::get('/change-description', [ProductChangeDescriptionController::class, 'index'])->name('my.products.change_description');
         Route::patch('/change-description', [ProductChangeDescriptionController::class, 'update'])->name('my.products.change_description.update');
+
+        Route::get('/change-instruction', [ProductChangeInstructionController::class, 'index'])->name('my.products.change_instruction');
+        Route::patch('/change-instruction', [ProductChangeInstructionController::class, 'update'])->name('my.products.change_instruction.update');
     });
 
 
