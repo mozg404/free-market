@@ -3,7 +3,7 @@ import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {Link} from "@inertiajs/vue3";
 import {Button} from '@/components/ui/button/index.js'
 import {Badge} from '@/components/ui/badge/index.js'
-import {ShoppingCart, Pencil, TriangleAlert, Ellipsis, Eye} from 'lucide-vue-next';
+import {ShoppingCart, Pencil, TriangleAlert, Ellipsis, Eye, ListPlus} from 'lucide-vue-next';
 import ProductImage from "@/components/products/ProductImage.vue";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
@@ -48,6 +48,12 @@ const props = defineProps({
                 <Link :href="route('catalog.product', product.id)" >
                   <Eye />
                   Страница товара
+                </Link>
+              </Button>
+
+              <Button variant="outline" as-child>
+                <Link :href="route('my.products.stock', product.id)" >
+                  <ListPlus /> Склад
                 </Link>
               </Button>
 
