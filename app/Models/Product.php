@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Builders\ProductQueryBuilder;
 use App\Builders\StockItemQueryBuilder;
 use App\Casts\ImageCast;
+use App\Collections\FeatureCollection;
 use App\Collections\ProductCollection;
 use App\Data\Products\ProductEditableData;
 use App\Enum\ProductStatus;
@@ -40,7 +41,7 @@ use Mews\Purifier\Casts\CleanHtmlInput;
  * @property int|null $category_id
  * @property-read \App\Models\Category|null $category
  * @property-read \App\Models\ProductFeatureValue|null $pivot
- * @property-read Collection<int, \App\Models\Feature> $features
+ * @property-read FeatureCollection $features
  * @property-read int|null $features_count
  * @property Price $price
  * @property-read Collection<int, \App\Models\StockItem> $stockItems

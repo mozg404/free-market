@@ -65,6 +65,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
                   <DropdownModalLink :href="route('my.products.change_name', product.id)">Изменить название</DropdownModalLink>
                   <DropdownModalLink :href="route('my.products.change_category', product.id)">Изменить категорию</DropdownModalLink>
                   <DropdownModalLink :href="route('my.products.change_price', product.id)">Изменить цену</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change_features', product.id)">Изменить характеристики</DropdownModalLink>
                   <DropdownModalLink :href="route('my.products.change_image', product.id)">Изменить изображение</DropdownModalLink>
                   <DropdownModalLink :href="route('my.products.change_description', product.id)">Изменить описание</DropdownModalLink>
                   <DropdownModalLink :href="route('my.products.change_instruction', product.id)">Изменить инструкцию</DropdownModalLink>
@@ -205,14 +206,22 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
         </div>
 
 
-        <Section v-if="product.features" class="mt-6">
-          <DescriptionList>
+        <Section  class="mt-6">
+          <DescriptionList v-if="product.features" class="mb-5">
             <DescriptionItem v-for="feature in product.features" :key="feature.id">
               <DescriptionTitle>{{ feature.name }}</DescriptionTitle>
               <DescriptionSeparator />
               <DescriptionValue>{{ feature.value }}</DescriptionValue>
             </DescriptionItem>
           </DescriptionList>
+
+          <Button variant="secondary" as-child>
+            <ModalLink :href="route('my.products.change_features', product.id)">
+              <Pencil />
+              Изменить характеристики
+            </ModalLink>
+          </Button>
+
         </Section>
 
         <Section class="mt-12">

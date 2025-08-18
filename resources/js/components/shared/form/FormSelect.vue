@@ -40,13 +40,19 @@ const handleChange = (value) => {
 
 <template>
   <Select
+    :disablePortal="true"
     :model-value="modelValue"
     @update:model-value="handleChange"
   >
     <SelectTrigger :class="cn('w-full cursor-pointer', props.class)" :id="finalId" v-bind="$attrs">
       <SelectValue :placeholder="placeholder" />
     </SelectTrigger>
-    <SelectContent>
+    <SelectContent
+      position="popper"
+      :teleport="true"
+      positionStrategy="fixed"
+      class="z-[1000]"
+    >
       <SelectItem v-if="emptyOption" :value="null">{{placeholder}}</SelectItem>
       <SelectItem
         v-for="(option, index) in options"
