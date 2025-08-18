@@ -14,7 +14,7 @@ class CatalogController extends Controller
     public function index(CatalogRequest $request)
     {
         $filters = $request->all();
-        $categories = Category::query()->get();
+        $categories = Category::query()->get()->toTree();
         $products = Product::query()
             ->filterFromArray($filters)
             ->forListing()
@@ -32,7 +32,7 @@ class CatalogController extends Controller
     public function category(Category $category, CatalogRequest $request)
     {
         $filters = $request->all();
-        $categories = Category::query()->get();
+        $categories = Category::query()->get()->toTree();
         $products = Product::query()
             ->filterFromArray($filters)
             ->forListing()

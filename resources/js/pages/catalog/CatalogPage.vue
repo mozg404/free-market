@@ -16,6 +16,8 @@ import LaravelPagination from "@/components/shared/LaravelPagination.vue";
 import PageLayout from "@/layouts/PageLayout.vue";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card/index.js";
 import SidebarLayout from "@/components/shared/SidebarLayout.vue";
+import CategoriesNavTree from "@/components/categories/CategoriesNavTree.vue";
+import {cn} from "@/lib/utils.js";
 
 const props = defineProps({
   isCategory: {
@@ -99,17 +101,22 @@ const filtersApply = () => {
               <CardTitle>Категории</CardTitle>
             </CardHeader>
             <CardContent>
-              <nav>
-                <NavArrowLink :as="Link" :is-active="route().current('catalog')" :href="route('catalog')">Все</NavArrowLink>
-                <NavArrowLink
-                  v-for="categoryItem in categories"
-                  :key="categoryItem.id"
-                  :as="Link"
-                  :is-active="route().current('catalog.category', categoryItem.slug)"
-                  :href="route('catalog.category', categoryItem.slug)"
-                  class="mt-2"
-                >{{ categoryItem.name }}</NavArrowLink>
-              </nav>
+              <div class="-my-[0.5rem]">
+
+                <Link
+                  :href="route('catalog')"
+                  :class="cn(
+        'flex items-center justify-between -mx-[1rem] my-1 whitespace-nowrap rounded-md text-sm font-medium outline-none',
+        'transition-colors hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 cursor-pointer',
+        route().current('catalog') ? 'bg-accent text-accent-foreground' : ''
+      )"
+                >
+                  Все
+                </Link>
+
+
+                <CategoriesNavTree :categories="categories"/>
+              </div>
             </CardContent>
           </Card>
 
