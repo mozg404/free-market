@@ -68,22 +68,22 @@ class ProductFactory extends Factory
         ];
     }
 
-    public function isDraft(): Factory
+    public function isDraft(): self
     {
         return $this->state(fn (array $attributes) => ['status' => ProductStatus::DRAFT->value]);
     }
 
-    public function isActive(): Factory
+    public function isActive(): self
     {
         return $this->state(fn (array $attributes) => ['status' => ProductStatus::ACTIVE->value]);
     }
 
-    public function isPaused(): Factory
+    public function isPaused(): self
     {
         return $this->state(fn (array $attributes) => ['status' => ProductStatus::PAUSED->value]);
     }
 
-    public function fromDemo(?array $data = null): Factory
+    public function fromDemo(?array $data = null): self
     {
         return $this->state(function (array $attributes) use ($data) {
             // Если нет данных или нет списка - возвращаем пустой массив (не изменяем атрибуты)

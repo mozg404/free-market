@@ -19,24 +19,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $demoCategoriesData = include resource_path('data/demo_categories.php');
-        $demoFeaturesData = include resource_path('data/demo_features.php');
-        $demoProductsData = include resource_path('data/demo_products.php');
-        $demoData = [];
-
-        // Объединяем демо данные воедино
-        foreach ($demoCategoriesData as $demoCategoryKey => $demoCategory) {
-            $demoData[$demoCategoryKey] = $demoCategory;
-
-            if (isset($demoFeaturesData[$demoCategoryKey])) {
-                $demoData[$demoCategoryKey]['features'] = $demoFeaturesData[$demoCategoryKey];
-            }
-
-            if (isset($demoProductsData[$demoCategoryKey])) {
-                $demoData[$demoCategoryKey]['products'] = $demoProductsData[$demoCategoryKey];
-            }
-        }
-
         // Создаем главного пользователя
         $mainUser = User::factory()
             ->withPublishedAvatar()
@@ -45,67 +27,83 @@ class DatabaseSeeder extends Seeder
                 'is_admin' => true,
             ]);
 
-        // Создаем рандомных 5 пользователей
-        $users = User::factory(20)
+        // Создаем рандомных 25 пользователей
+        $users = User::factory(25)
             ->withPublishedAvatar()
             ->create();
 
-        foreach ($demoData as $categoryKey => $categoryData) {
-            $category = Category::create([
-                'name' => $categoryData['name'],
-                'slug' => Str::slug($categoryData['name'])
-            ]);
+        // Создаем категории с учетом вложенности
+        $this->recursiveCreateCategory(
+            include resource_path('data/demo_categories.php'),
+        );
 
-            foreach ($categoryData['features'] ?? [] as $featureData) {
-                $feature = Feature::factory()
-                    ->withOptions($featureData['options'] ?? null)
-                    ->withType($featureData['type'])
-                    ->create([
-                        'name' => $featureData['name'],
-                    ]);
+        // Подгружаем получившийся список категорий
+        $categories = Category::query()->get();
 
-                $category->features()->attach($feature->id);
+        // Создам характеристики
+        foreach (include resource_path('data/demo_features.php') as $featureData) {
+            $feature = Feature::factory()
+                ->withOptions($featureData['options'] ?? null)
+                ->withType($featureData['type'])
+                ->create([
+                    'name' => $featureData['name'],
+                ]);
+
+            // Привязываем характеристику к категориям
+            foreach ($featureData['categories'] as $categorySlug) {
+                $categories
+                    ->where('slug', $categorySlug)
+                    ->first()
+                    ->features()
+                    ->attach($feature->id);
             }
+        }
 
-            // Дозагружаем характеристики
-            $category->load('features');
+        // Еще раз подгружаем категории, уже вместе с характеристиками
+        $categories = Category::query()
+            ->with('features')
+            ->get();
 
-            if (isset($categoryData['products'])) {
-                // Товары для основного пользователя
-                $products = Product::factory(random_int(0,10))
-                    ->fromDemo($categoryData['products'] ?? [])
-                    ->for($category)
-                    ->for($mainUser)
-                    ->create();
+        // Создаем товары
+        foreach (include resource_path('data/demo_products.php') as $productData) {
+            $category = $categories->where('slug', $productData['category'])->first();
 
-                // 10 товаров от рандомных пользователей
+            // Товары для основного пользователя
+            $products = Product::factory(random_int(0,10))
+                ->fromDemo($productData)
+                ->for($category)
+                ->for($mainUser)
+                ->create();
+
+            for ($i = 0; $i < random_int(4, 12); $i++) {
                 $products = $products->merge(
-                    Product::factory(random_int(0,15))
-                        ->fromDemo($categoryData['products'] ?? [])
+                    Product::factory(random_int(0,7))
+                        ->fromDemo($productData)
                         ->for($category)
+                        ->isActive()
                         ->for($users->random())
                         ->create()
                 );
-
-                // Используем существующую связь features()
-                $products->each(function ($product) use ($category) {
-                    $attachments = [];
-
-                    foreach ($category->features as $feature) {
-                        $attachments[$feature->id] = $this->generateFeatureValue($feature);
-                    }
-
-                    $product->featuresAttachFrom($attachments);
-                });
-
-                // Создаем позиции
-                $products->each(function ($product) use ($category) {
-                    StockItem::factory(random_int(0,10))
-                        ->for($product)
-                        ->available()
-                        ->create();
-                });
             }
+
+            // Используем существующую связь features()
+            $products->each(function ($product) use ($category) {
+                $attachments = [];
+
+                foreach ($category->features as $feature) {
+                    $attachments[$feature->id] = $this->generateFeatureValue($feature);
+                }
+
+                $product->featuresAttachFrom($attachments);
+            });
+
+            // Создаем позиции
+            $products->each(function ($product) {
+                StockItem::factory(random_int(0,10))
+                    ->for($product)
+                    ->available()
+                    ->create();
+            });
         }
 
         // 2 неоплаченных заказа и 3 оплаченных для основного пользователя
@@ -130,6 +128,23 @@ class DatabaseSeeder extends Seeder
             }
         });
     }
+
+    // Рекурсивное создание категорий
+    private function recursiveCreateCategory(array $data, ?Category $parent = null): void
+    {
+        foreach ($data as $categorySlug => $categoryData) {
+            $category = Category::create([
+                'name' => $categoryData['name'],
+                'slug' => $categorySlug,
+                'parent_id' => $parent?->id,
+            ]);
+
+            if (isset($categoryData['children'])) {
+                $this->recursiveCreateCategory($categoryData['children'], $category);
+            }
+        }
+    }
+
 
     private function generateFeatureValue(Feature $feature)
     {
@@ -169,7 +184,7 @@ class DatabaseSeeder extends Seeder
     }
 
     // Оплачивает заказ
-    public function payOrder(User $user, Order $order): void
+    private function payOrder(User $user, Order $order): void
     {
         $balanceService = app(BalanceService::class);
         $order->fresh();
