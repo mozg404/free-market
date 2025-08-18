@@ -36,6 +36,12 @@ class ProductService
         $product->save();
     }
 
+    public function changeCategory(Product $product, Category $category): void
+    {
+        $product->category_id = $category->id;
+        $product->save();
+    }
+
     public function changePrice(Product $product, Price $price): void
     {
         $product->price = $price;

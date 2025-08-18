@@ -63,6 +63,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownModalLink :href="route('my.products.change_name', product.id)">Изменить название</DropdownModalLink>
+                  <DropdownModalLink :href="route('my.products.change_category', product.id)">Изменить категорию</DropdownModalLink>
                   <DropdownModalLink :href="route('my.products.change_image', product.id)">Изменить изображение</DropdownModalLink>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -174,8 +175,9 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
         <div class="mb-12">
           <div class="flex items-center">
             <Badge variant="secondary">{{ product.category.name }}</Badge>
+
             <Button size="icon" variant="ghost" class="ml-3 p-1 w-6 h-6" as-child>
-              <ModalLink :href="route('my.products.change_name', product.id)" to>
+              <ModalLink :href="route('my.products.change_category', product.id)" to>
                 <Pencil />
               </ModalLink>
             </Button>

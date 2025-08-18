@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\My\MyBalanceController;
 use App\Http\Controllers\My\MyOrderController;
+use App\Http\Controllers\My\Product\ProductChangeCategoryController;
 use App\Http\Controllers\My\Product\ProductChangeImageController;
 use App\Http\Controllers\My\Product\ProductChangeNameController;
 use App\Http\Controllers\My\Product\ProductCreateController;
@@ -49,10 +50,15 @@ Route::middleware('auth')->prefix('/my')->group(function () {
 
     Route::middleware(['can:update,product'])->prefix('/products/{product}')->group(function () {
         Route::get('/edit', [ProductEditController::class, 'index'])->name('my.products.edit');
+
         Route::get('/change-name', [ProductChangeNameController::class, 'index'])->name('my.products.change_name');
         Route::patch('/change-name', [ProductChangeNameController::class, 'update'])->name('my.products.change_name.update');
+
         Route::get('/change-image', [ProductChangeImageController::class, 'index'])->name('my.products.change_image');
         Route::patch('/change-image', [ProductChangeImageController::class, 'update'])->name('my.products.change_image.update');
+
+        Route::get('/change-category', [ProductChangeCategoryController::class, 'index'])->name('my.products.change_category');
+        Route::patch('/change-category', [ProductChangeCategoryController::class, 'update'])->name('my.products.change_category.update');
     });
 
 
