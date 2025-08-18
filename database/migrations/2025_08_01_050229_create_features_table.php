@@ -13,12 +13,17 @@ return new class extends Migration
     {
         Schema::create('features', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('type');
             $table->json('options')->nullable();
             $table->boolean('is_required')->default(false);
             $table->timestamps();
+        });
+
+        Schema::create('category_feature', function (Blueprint $table) {
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('feature_id')->constrained()->cascadeOnDelete();
+            $table->primary(['category_id', 'feature_id']);
         });
     }
 
@@ -27,6 +32,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('category_feature');
         Schema::dropIfExists('features');
     }
 };

@@ -15,7 +15,6 @@ class FeatureFactory extends Factory
         $type = $this->faker->randomElement($types);
 
         return [
-            'category_id' => Category::factory(),
             'name' => $this->faker->unique()->word(),
             'type' => $type,
             'options' => $this->generateOptions($type),

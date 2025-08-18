@@ -6,6 +6,7 @@ use App\Builders\CategoryQueryBuilder;
 use Database\Factories\CategoryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Kalnoy\Nestedset\NodeTrait;
 
@@ -17,6 +18,7 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property string $slug
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property BelongsToMany $features
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Feature> $features
  * @property-read int|null $features_count
  * @method static \Database\Factories\CategoryFactory factory($count = null, $state = [])
@@ -37,9 +39,9 @@ class Category extends Model
 
     protected $fillable = ['name', 'slug', 'parent_id'];
 
-    public function features(): HasMany
+    public function features(): BelongsToMany
     {
-        return $this->hasMany(Feature::class);
+        return $this->belongsToMany(Feature::class);
     }
 
     public function newEloquentBuilder($query): CategoryQueryBuilder

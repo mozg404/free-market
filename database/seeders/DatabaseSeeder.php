@@ -57,13 +57,14 @@ class DatabaseSeeder extends Seeder
             ]);
 
             foreach ($categoryData['features'] ?? [] as $featureData) {
-                Feature::factory()
-                    ->for($category)
+                $feature = Feature::factory()
                     ->withOptions($featureData['options'] ?? null)
                     ->withType($featureData['type'])
                     ->create([
                         'name' => $featureData['name'],
                     ]);
+
+                $category->features()->attach($feature->id);
             }
 
             // Дозагружаем характеристики
