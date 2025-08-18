@@ -4,10 +4,10 @@ namespace App\Models;
 
 use App\Builders\CategoryQueryBuilder;
 use Database\Factories\CategoryFactory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Kalnoy\Nestedset\NodeTrait;
 
 /**
@@ -18,8 +18,7 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property string $slug
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property BelongsToMany $features
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Feature> $features
+ * @property BelongsToMany|Collection $features
  * @property-read int|null $features_count
  * @method static \Database\Factories\CategoryFactory factory($count = null, $state = [])
  * @method static CategoryQueryBuilder<static>|Category newModelQuery()
