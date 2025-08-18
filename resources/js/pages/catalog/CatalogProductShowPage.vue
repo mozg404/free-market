@@ -3,7 +3,7 @@ import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {Link} from "@inertiajs/vue3";
 import {Button} from '@/components/ui/button/index.js'
 import {Badge} from '@/components/ui/badge/index.js'
-import {Minus, Plus, ShoppingCart, CreditCard, Sparkles} from 'lucide-vue-next';
+import {Minus, Plus, ShoppingCart, Pencil, TriangleAlert, Eye} from 'lucide-vue-next';
 import ProductImage from "@/components/products/ProductImage.vue";
 import PriceFormatter from "@/components/support/PriceFormatter.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
@@ -24,12 +24,39 @@ import SidebarLayout from "@/components/shared/SidebarLayout.vue";
 
 const props = defineProps({
   product: Object,
+  isOwner: {
+    type: Boolean,
+    default: false,
+  },
 })
 const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCart()
 </script>
 
 <template>
   <PageLayout>
+    <template v-if="isOwner" #after-header>
+      <div class="py-3 bg-gray-50 border-b-1">
+        <Wrapper>
+          <div class="flex items-center justify-between">
+            <div class="flex text-sm font-semibold items-center">
+              <Eye class="mr-2 text-primary" />
+              Ваш товар
+            </div>
+
+            <div class="space-x-3">
+              <Button variant="outline" as-child>
+                <Link :href="route('my.products.edit', product.id)" >
+                  <Pencil />
+                  Редактировать
+                </Link>
+              </Button>
+            </div>
+
+          </div>
+        </Wrapper>
+      </div>
+    </template>
+
     <Wrapper>
       <SidebarLayout class="lg:sticky lg:top-6 lg:self-start">
         <template #sidebar_right>

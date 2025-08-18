@@ -53,10 +53,13 @@ class CatalogController extends Controller
 
     public function show(Product $product)
     {
-        abort_if($product->isDraft(), 404);
+        if ($product->isDraft() && (!auth()->check() || auth()->id() !== $product->user_id)) {
+            abort(403);
+        }
 
         return Inertia::render('catalog/CatalogProductShowPage', [
             'product' => ProductDetailedData::from($product),
+            'isOwner' => auth()?->id() === $product->user_id
         ]);
     }
 }

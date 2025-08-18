@@ -38,12 +38,12 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
 
 <template>
   <PageLayout>
-    <template #before-header>
-      <div class="py-6 bg-gray-50">
+    <template #after-header>
+      <div class="py-3 bg-gray-50 border-b-1">
         <Wrapper>
           <div class="flex items-center justify-between">
             <div class="flex text-sm font-semibold items-center">
-              <TriangleAlert class="mr-2" />
+              <TriangleAlert class="mr-2 text-destructive" />
               Режим редактирования
             </div>
 
@@ -72,12 +72,10 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
               </DropdownMenu>
             </div>
 
-
           </div>
         </Wrapper>
       </div>
     </template>
-
 
 
     <Wrapper>
@@ -194,14 +192,15 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
             </Button>
           </div>
 
-          <PageTitle class="mt-3 flex items-center">
+          <PageTitle class="mt-3">
             {{ product.name }}
 
-            <Button size="icon" variant="ghost" class="ml-3" as-child>
+            <Button size="icon" variant="ghost" class="ml-2 p-1 w-8 h-8" as-child>
               <ModalLink :href="route('my.products.change_name', product.id)">
                 <Pencil />
               </ModalLink>
             </Button>
+
           </PageTitle>
         </div>
 

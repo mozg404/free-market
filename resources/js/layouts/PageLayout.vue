@@ -16,8 +16,8 @@ const props = defineProps({
 
 <template>
   <AppLayout>
-    <slot name="before-header"/>
     <AppHeader/>
+    <slot name="after-header"/>
     <AppBreadcrumbs v-if="withBreadcrumbs" />
 
     <div class="py-12">
