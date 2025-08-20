@@ -34,7 +34,7 @@ const processedLinks = computed(() => {
     <template v-for="link in processedLinks" :key="link.label">
       <template v-if="link.type === 'page'">
         <Button :variant="link.active ? 'default' : 'outline'" size="icon" :disabled="true" class="rounded-full" as-child>
-          <Link preserve-scroll :disabled="true" :href="link.url ?? ''">{{link.label}}</Link>
+          <Link :disabled="true" :href="link.url ?? ''">{{link.label}}</Link>
         </Button>
       </template>
       <template v-if="link.type === 'separator'">

@@ -4,33 +4,28 @@ namespace App\Http\Controllers\My\Product;
 
 use App\Data\Products\ProductForListingData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MyProduct\ProductFilterableRequest;
 use App\Models\Product;
 use App\Support\SeoBuilder;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ProductIndexController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(ProductFilterableRequest $request): Response
     {
         $products = Product::query()
             ->forUser(Auth::id())
             ->withStockItemsCount()
             ->withAvailableStockItemsCount()
-            ->orderBy('id', 'desc');
-
-        if (!empty($request->input('search'))) {
-            $products->searchByName($request->input('search'));
-        }
-
-        $products = $products->paginate(10);
+            ->filterFromArray($request->getFiltersValues())
+            ->paginate(10)
+            ->appends($request->getFiltersValues());
 
         return Inertia::render('my/products/ProductIndexPage', [
-            'products' => ProductForListingData::collect($products->items()),
-            'links' => $products->toArray()['links'],
-            'filters' => $request->only(['search', 'shop_id']),
+            'products' => ProductForListingData::collect($products),
+            'filters' => $request->getFiltersValues(),
             'seo' => new SeoBuilder('Мои товары'),
         ]);
     }

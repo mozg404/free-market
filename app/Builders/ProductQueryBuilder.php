@@ -60,7 +60,65 @@ class ProductQueryBuilder extends Builder
             $this->whereFeatureValues($data['features']);
         }
 
+        if (isset($data['status'])) {
+            if ($data['status'] === 'available') {
+                $this->isAvailable();
+            }
+
+            if ($data['status'] === 'sold_out') {
+                $this->isSoldOut();
+            }
+
+            if ($data['status'] === 'draft') {
+                $this->isDraft();
+            }
+
+            if ($data['status'] === 'paused') {
+                $this->isPaused();
+            }
+        }
+
+        if (!empty($data['search'])) {
+            $this->searchByName($data['search']);
+        }
+
+        if (isset($data['sort'])) {
+            if ($data['sort'] === 'latest') {
+                $this->latest();
+            }
+
+            if ($data['sort'] === 'oldest') {
+                $this->oldest();
+            }
+
+            if ($data['sort'] === 'price_desc') {
+                $this->orderByDesc('current_price');
+            }
+
+            if ($data['sort'] === 'price_asc') {
+                $this->orderBy('current_price');
+            }
+
+            if ($data['sort'] === 'id_desc') {
+                $this->orderByDesc('id');
+            }
+
+            if ($data['sort'] === 'id_asc') {
+                $this->orderBy('id');
+            }
+        }
+
         return $this;
+    }
+
+    public function isAvailable(): self
+    {
+        return $this->hasAvailableStock()->isActive();
+    }
+
+    public function isSoldOut(): self
+    {
+        return $this->hasNoAvailableStock()->isActive();
     }
 
     public function isActive(): self
@@ -76,11 +134,6 @@ class ProductQueryBuilder extends Builder
     public function isPaused(): self
     {
         return $this->where('status', ProductStatus::PAUSED->value);
-    }
-
-    public function isPublished(): self
-    {
-        return $this->where('is_published', true);
     }
 
     /**
@@ -115,9 +168,12 @@ class ProductQueryBuilder extends Builder
         return $this->whereHas('stockItems', fn (StockItemQueryBuilder $builder) => $builder->isAvailable());
     }
 
-    public function canByPurchased(): self
+    /**
+     * НЕ имеет доступных позиций для продажи
+     */
+    public function hasNoAvailableStock(): self
     {
-        return $this->hasAvailableStock()->isActive();
+        return $this->whereDoesntHave('stockItems', fn (StockItemQueryBuilder $builder) => $builder->isAvailable());
     }
 
     /**
@@ -199,7 +255,7 @@ class ProductQueryBuilder extends Builder
      */
     public function searchByName(string $search): self
     {
-        return $this->where('name', 'like', '%' . $search . '%');
+        return $this->whereRaw('name LIKE ?', ['%' . $search . '%']);
     }
 
     /**

@@ -23,15 +23,23 @@ const props = defineProps({
     <div class="py-12">
       <Wrapper v-if="$slots.title">
         <div class="mb-12">
-          <div class="flex items-center">
-            <PageTitle v-if="$slots.title" >
-              <slot name="title"/>
-            </PageTitle>
 
-            <Badge v-if="$slots.counter" variant="secondary" class="ml-4 py-1.5 px-2.5">
-              <slot name="counter"/>
-            </Badge>
+          <div class="flex justify-between items-center">
+            <div class="flex items-center">
+              <PageTitle v-if="$slots.title" >
+                <slot name="title"/>
+              </PageTitle>
+
+              <Badge v-if="$slots.counter" variant="secondary" class="ml-4 py-1.5 px-2.5">
+                <slot name="counter"/>
+              </Badge>
+            </div>
+
+            <div class="flex items-center space-x-4" v-if="$slots.actions">
+              <slot name="actions"/>
+            </div>
           </div>
+
         </div>
       </Wrapper>
 
