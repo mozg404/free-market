@@ -10,9 +10,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
 {
@@ -35,14 +32,18 @@ class CategoryResource extends Resource
                     ->columnSpanFull(),
 
                 Forms\Components\TextInput::make('name')
+                    ->label('Название')
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
 
                 Forms\Components\TextInput::make('slug')
-                    ->required()
                     ->maxLength(255)
-                    ->unique(ignoreRecord: true)
+                    ->columnSpanFull(),
+
+                Forms\Components\TextInput::make('title')
+                    ->label('Заголовок')
+                    ->maxLength(255)
                     ->columnSpanFull(),
             ]);
     }
@@ -53,7 +54,8 @@ class CategoryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
+                Tables\Columns\TextColumn::make('full_path')
+                    ->label('URI')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('parent.name')
                     ->label('Родитель')

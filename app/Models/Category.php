@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Builders\CategoryQueryBuilder;
 use App\Contracts\Seoble;
+use App\Observers\CategoryObserver;
 use App\Support\SeoBuilder;
 use Database\Factories\CategoryFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +22,8 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property string $title
  * @property string $slug
  * @property string $full_path
+ * @property int $parent_id
+ * @property ?Category $parent
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property BelongsToMany|Collection $features
@@ -36,11 +40,17 @@ use Kalnoy\Nestedset\NodeTrait;
  * @method static CategoryQueryBuilder<static>|Category withFeatures()
  * @mixin \Eloquent
  */
+#[ObservedBy([CategoryObserver::class])]
 class Category extends Model implements Seoble
 {
     use HasFactory, NodeTrait;
 
     protected $fillable = ['name', 'slug', 'title', 'parent_id'];
+
+    protected $casts = [
+        '_lft' => 'integer',
+        '_rgt' => 'integer',
+    ];
 
     public function features(): BelongsToMany
     {
@@ -64,18 +74,4 @@ class Category extends Model implements Seoble
             ->description($this->title);
     }
 
-    public function getRouteKeyName(): string
-    {
-        return 'full_path';
-    }
-
-    // Автогенерация slug
-//    public static function boot()
-//    {
-//        parent::boot();
-//
-//        static::creating(function ($category) {
-//            $category->slug = $category->slug ?? \Str::slug($category->name);
-//        });
-//    }
 }

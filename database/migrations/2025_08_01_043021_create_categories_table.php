@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->string('full_path')->unique();
-            $table->string('title');
+            $table->string('title')->default('');
             $table->nestedSet();
             $table->timestamps();
         });
