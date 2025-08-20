@@ -17,7 +17,9 @@ use Kalnoy\Nestedset\NodeTrait;
  *
  * @property int $id
  * @property string $name
+ * @property string $title
  * @property string $slug
+ * @property string $full_path
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property BelongsToMany|Collection $features
@@ -38,7 +40,7 @@ class Category extends Model implements Seoble
 {
     use HasFactory, NodeTrait;
 
-    protected $fillable = ['name', 'slug', 'parent_id'];
+    protected $fillable = ['name', 'slug', 'title', 'parent_id'];
 
     public function features(): BelongsToMany
     {
@@ -57,12 +59,14 @@ class Category extends Model implements Seoble
 
     public function seo(): SeoBuilder
     {
-        return new SeoBuilder()->title($this->name);
+        return new SeoBuilder()
+            ->title($this->title)
+            ->description($this->title);
     }
 
     public function getRouteKeyName(): string
     {
-        return 'slug';
+        return 'full_path';
     }
 
     // Автогенерация slug

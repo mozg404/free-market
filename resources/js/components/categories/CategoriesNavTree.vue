@@ -21,14 +21,14 @@ const props = defineProps({
   <div v-for="category in categories" :key="category.id">
     <template v-if="level > 0">
       <Link
-        :href="route('catalog.category', category.slug)"
+        :href="route('catalog.category', category.full_path)"
         :style="{ paddingLeft: `${level * 21 + 12}px` }"
         :class="cn(
         'flex items-center -mx-[0.5rem] px-0 my-1 whitespace-nowrap rounded-md text-sm text-muted-foreground transition-colors hover:text-accent-foreground h-8 py-1 cursor-pointer',
-                route().current('catalog.category', category.slug) ? 'text-primary hover:text-primary' : ''
+                route().current('catalog.category', category.full_path) ? 'text-primary hover:text-primary' : ''
           )"
       >
-        <Dot :class="cn('h-7 w-7 -ml-[37px]', route().current('catalog.category', category.slug) ? 'text-primary' : '')" /> {{ category.name }}
+        <Dot :class="cn('h-7 w-7 -ml-[37px]', route().current('catalog.category', category.full_path) ? 'text-primary' : '')" /> {{ category.name }}
       </Link>
 
       <CategoriesNavTree :categories="category.children" :level="level + 1"/>
@@ -42,11 +42,11 @@ const props = defineProps({
 
     <Link
       v-else
-      :href="route('catalog.category', category.slug)"
+      :href="route('catalog.category', category.full_path)"
       :class="cn(
         'flex items-center justify-between -mx-[1rem] my-1 whitespace-nowrap rounded-md text-sm font-medium outline-none',
         'transition-colors hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 cursor-pointer',
-        route().current('catalog.category', category.slug) ? 'bg-accent text-accent-foreground' : ''
+        route().current('catalog.category', category.full_path) ? 'bg-accent text-accent-foreground' : ''
       )"
     >
       <span>{{ category.name }}</span>

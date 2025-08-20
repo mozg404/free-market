@@ -12,7 +12,7 @@ const props = defineProps({
 
 const shouldExpandCategory = (category) => {
   // Проверяем текущую категорию
-  if (route().current('catalog.category', { slug: category.slug })) {
+  if (route().current('catalog.category', { full_path: category.full_path })) {
     return true;
   }
 
@@ -38,7 +38,7 @@ onMounted(() => {
       'font-medium transition-all outline-none hover:bg-accent hover:text-accent-foreground h-9 px-4  cursor-pointer',
       isActive ? 'bg-accent text-accent-foreground' : ''
     )">
-    <Link :href="route('catalog.category', category.slug)" class="flex-1 py-2 h-full">{{ category.name }}</Link>
+    <Link :href="route('catalog.category', category.full_path)" class="flex-1 py-2 h-full">{{ category.name }}</Link>
     <button size="icon" class="p-1 -mr-[0.5rem] hover:text-accent-foreground cursor-pointer hover:opacity-80 transition-opacity" variant="ghost" @click="isOpen = !isOpen">
       <ChevronDown class="h-5 w-5" v-if="!isOpen" />
       <ChevronUp class="h-5 w-5" v-else />

@@ -58,7 +58,7 @@ class DatabaseSeeder extends Seeder
 
             // Привязываем характеристику к категориям
             foreach ($featureData['categories'] as $categorySlug) {
-                $category = $categories->where('slug', $categorySlug)->first();
+                $category = $categories->where('full_path', $categorySlug)->first();
 
                 if ($category) {
                     $category->features()->attach($feature->id);
@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder
 
         // Создаем товары
         foreach (include resource_path('data/demo_products.php') as $productData) {
-            $category = $categories->where('slug', $productData['category'])->first();
+            $category = $categories->where('full_path', $productData['category'])->first();
 
             $products = new Collection();
 
@@ -92,8 +92,8 @@ class DatabaseSeeder extends Seeder
                     Product::factory(random_int(1,3))
                         ->fromDemo($productData)
                         ->for($category)
-                        ->isActive()
                         ->for($users->random())
+                        ->isActive()
                         ->create()
                 );
             }
@@ -144,10 +144,12 @@ class DatabaseSeeder extends Seeder
     // Рекурсивное создание категорий
     private function recursiveCreateCategory(array $data, ?Category $parent = null): void
     {
-        foreach ($data as $categorySlug => $categoryData) {
+        foreach ($data as $fullPath => $categoryData) {
             $category = Category::create([
                 'name' => $categoryData['name'],
-                'slug' => $categorySlug,
+                'title' => $categoryData['title'] ?? $categoryData['name'],
+                'slug' => $categoryData['slug'],
+                'full_path' => $fullPath,
                 'parent_id' => $parent?->id,
             ]);
 

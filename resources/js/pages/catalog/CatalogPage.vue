@@ -11,7 +11,6 @@ import {Button} from "@/components/ui/button/index.js";
 import FormField from "@/components/shared/form/FormField.vue";
 import FormMultipleCheckboxList from "@/components/shared/form/FormMultipleCheckboxList.vue";
 import {normalizeKeyValuePairs} from "@/lib/support.js";
-import NavArrowLink from "@/components/shared/navigation/NavArrowLink.vue";
 import LaravelPagination from "@/components/shared/LaravelPagination.vue";
 import PageLayout from "@/layouts/PageLayout.vue";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card/index.js";
@@ -90,7 +89,7 @@ const filtersApply = () => {
 
 <template>
   <PageLayout :with-breadcrumbs="isCategory">
-    <template #title>{{ isCategory ? category.name : 'Каталог товаров'}}</template>
+    <template #title>{{ isCategory ? category.title : 'Каталог товаров'}}</template>
     <template #counter>{{ products.total }}</template>
 
     <Wrapper>
