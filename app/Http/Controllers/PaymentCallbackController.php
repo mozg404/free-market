@@ -9,6 +9,7 @@ use App\Exceptions\Payment\PaymentFailedException;
 use App\Models\Payment;
 use App\Services\PaymentGateway\PaymentProcessor;
 use App\Services\Toaster;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class PaymentCallbackController extends Controller
@@ -18,7 +19,7 @@ class PaymentCallbackController extends Controller
         PaymentGateway $gateway,
         PaymentProcessor $processor,
         Toaster $toaster
-    ) {
+    ): RedirectResponse {
         try {
             $payment = $gateway->validateCallback($request->all());
 
@@ -45,7 +46,7 @@ class PaymentCallbackController extends Controller
         }
     }
 
-    private function redirectTo(Payment $payment)
+    private function redirectTo(Payment $payment): RedirectResponse
     {
         if ($payment->isOrderSource()) {
             return redirect()->route('my.orders.show', $payment->sourceable->id);

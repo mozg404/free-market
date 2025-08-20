@@ -7,7 +7,9 @@ use App\Http\Requests\MyProduct\ProductChangeDescriptionRequest;
 use App\Models\Product;
 use App\Services\Product\ProductService;
 use App\Services\Toaster;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ProductChangeDescriptionController extends Controller
 {
@@ -16,7 +18,7 @@ class ProductChangeDescriptionController extends Controller
     ) {
     }
 
-    public function index(Product $product)
+    public function index(Product $product): Response
     {
         return Inertia::render('my/products/ProductChangeDescriptionModal', [
             'product' => $product,
@@ -27,7 +29,7 @@ class ProductChangeDescriptionController extends Controller
         Product $product,
         ProductChangeDescriptionRequest $request,
         ProductService $productService,
-    ) {
+    ): RedirectResponse {
         $productService->changeDescription($product, $request->input('description'));
         $this->toaster->success('Описание изменено');
 

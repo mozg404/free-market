@@ -12,13 +12,13 @@ class TestController extends Controller
     public function __construct()
     {}
 
-    public function test(Request $request)
+    public function test(Request $request): mixed
     {
         return 123;
     }
 
 
-    public function testPage()
+    public function testPage(): mixed
     {
         return Inertia::render('test/TestPage', [
             'categoriesTree' => Category::query()->withDepth()->get()->toTree(),

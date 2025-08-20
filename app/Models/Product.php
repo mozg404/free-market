@@ -7,10 +7,12 @@ use App\Builders\StockItemQueryBuilder;
 use App\Casts\ImageCast;
 use App\Collections\FeatureCollection;
 use App\Collections\ProductCollection;
+use App\Contracts\Seoble;
 use App\Data\Products\ProductEditableData;
 use App\Enum\ProductStatus;
 use App\Support\Image;
 use App\Support\Price;
+use App\Support\SeoBuilder;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -91,7 +93,7 @@ use Mews\Purifier\Casts\CleanHtmlInput;
  * @method static ProductQueryBuilder<static>|Product withStockItemsCount()
  * @mixin \Eloquent
  */
-class Product extends Model
+class Product extends Model implements Seoble
 {
     use HasFactory;
 
@@ -137,51 +139,6 @@ class Product extends Model
         );
     }
 
-    public static function new(User $user, ProductEditableData $data): Product
-    {
-        return DB::transaction(function () use ($user, $data) {
-            $model = new static();
-            $model->user_id = $user->id;
-            $model->saturate($data);
-            $model->save();
-            $model->featuresAttachFrom($data->features ?? []);
-
-            return $model;
-        });
-    }
-
-    public function edit(ProductEditableData $data): void
-    {
-        DB::transaction(function () use ($data) {
-            $this->saturate($data);
-            $this->save();
-            $this->features()->detach();
-            $this->featuresAttachFrom($data->features ?? []);
-        });
-    }
-
-    public function featuresAttachFrom(array $features): void
-    {
-        foreach ($features as $id => $value) {
-            if (isset($value)) {
-                $this->features()->attach($id, ['value' => $value]);
-            }
-        }
-    }
-
-    private function saturate(ProductEditableData $data): void
-    {
-        $this->name = $data->name;
-        $this->category_id = $data->category_id;
-        $this->price = Price::fromBaseAndDiscount($data->price_base, $data->price_discount);
-        $this->description = $data->description;
-        $this->instruction = $data->instruction;
-
-        if (isset($data->preview_image)) {
-            $this->image = $data->preview_image;
-        }
-    }
-
     public function isActive(): bool
     {
         return $this->status === ProductStatus::ACTIVE;
@@ -206,28 +163,19 @@ class Product extends Model
     }
 
     /**
-     * Доступен для покупки
-     */
-    public function canBePurchased(): bool
-    {
-        return $this->isActive() && $this->hasAvailableStock();
-    }
-
-    /**
-     * Проверяет достаточно ли доступных позиций на складе
-     */
-    public function hasEnoughStock(int $amount): bool
-    {
-        return $this->getQuantityInStock() >= $amount;
-    }
-
-    /**
      * Возвращает количество доступных позиций для продажи
      * @return int
      */
     public function getQuantityInStock(): int
     {
         return $this->stockItems()->isAvailable()->count();
+    }
+
+    public function seo(): SeoBuilder
+    {
+        return new SeoBuilder()
+            ->title($this->name)
+            ->image($this->image_url);
     }
 
     public function toArray(): array

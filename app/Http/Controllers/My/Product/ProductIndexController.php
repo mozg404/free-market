@@ -5,6 +5,7 @@ namespace App\Http\Controllers\My\Product;
 use App\Data\Products\ProductForListingData;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Support\SeoBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -30,6 +31,7 @@ class ProductIndexController extends Controller
             'products' => ProductForListingData::collect($products->items()),
             'links' => $products->toArray()['links'],
             'filters' => $request->only(['search', 'shop_id']),
+            'seo' => new SeoBuilder('Мои товары'),
         ]);
     }
 }

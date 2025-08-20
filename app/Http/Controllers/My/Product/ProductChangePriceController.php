@@ -7,8 +7,10 @@ use App\Http\Requests\MyProduct\ProductChangePriceRequest;
 use App\Models\Product;
 use App\Services\Product\ProductService;
 use App\Services\Toaster;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ProductChangePriceController extends Controller
 {
@@ -17,7 +19,7 @@ class ProductChangePriceController extends Controller
     ) {
     }
 
-    public function index(Product $product)
+    public function index(Product $product): Response
     {
         return Inertia::render('my/products/ProductChangePriceModal', [
             'product' => $product,
@@ -28,7 +30,7 @@ class ProductChangePriceController extends Controller
         Product $product,
         ProductChangePriceRequest $request,
         ProductService $productService,
-    ) {
+    ): RedirectResponse {
         $productService->changePrice($product, $request->getPrice());
         $this->toaster->success('Цена изменена');
 

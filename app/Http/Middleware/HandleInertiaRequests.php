@@ -5,7 +5,9 @@ namespace App\Http\Middleware;
 use App\Data\User\UserData;
 use App\Services\BreadcrumbsManager;
 use App\Services\Cart\CartService;
+use App\Services\Seo;
 use App\Services\Toaster;
+use App\Support\SeoBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -54,7 +56,8 @@ class HandleInertiaRequests extends Middleware
             'user' => Auth::check() ? UserData::from(Auth::user()->fresh()) : null,
             'cart' => $this->cart->getItems(),
             'toasts' => $this->toaster->pull(),
-            'breadcrumbs' => $this->breadcrumbs->generateFromRequest($request)
+            'breadcrumbs' => $this->breadcrumbs->generateFromRequest($request),
+            'seo' => new SeoBuilder(),
         ];
     }
 }

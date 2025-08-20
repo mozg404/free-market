@@ -44,9 +44,7 @@ const props = defineProps({
                   <div>
                     <div class="mb-2">{{product.name}}</div>
                     <div class="space-x-2">
-                      <Link :href="route('my.products.show', product.id)">
-                        <Badge variant="ghost" class="hover:opacity-70 transition-opacity">Товар #{{ product.id }}</Badge>
-                      </Link>
+                      <Badge variant="ghost" class="hover:opacity-70 transition-opacity">Товар #{{ product.id }}</Badge>
                       <Badge variant="ghost">Позиция #{{ product.stock_item_id }}</Badge>
                     </div>
                   </div>

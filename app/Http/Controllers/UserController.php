@@ -7,11 +7,13 @@ use App\Data\User\UserForListingData;
 use App\Data\User\UserShortData;
 use App\Models\Product;
 use App\Models\User;
+use App\Support\SeoBuilder;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $users = User::query()
             ->withAvailableProductsCount()
@@ -20,10 +22,11 @@ class UserController extends Controller
 
         return Inertia::render('users/UsersIndexPage', [
             'users' => UserForListingData::collect($users),
+            'seo' => new SeoBuilder('Продавцы'),
         ]);
     }
 
-    public function show(User $user)
+    public function show(User $user): Response
     {
         $products = Product::query()
             ->forListing()
@@ -34,6 +37,7 @@ class UserController extends Controller
         return Inertia::render('users/UsersShowPage', [
             'products' => ProductForListingData::collect($products),
             'concreateUser' => UserShortData::from($user),
+            'seo' => new SeoBuilder($user),
         ]);
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Builders\CategoryQueryBuilder;
+use App\Contracts\Seoble;
+use App\Support\SeoBuilder;
 use Database\Factories\CategoryFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,7 +34,7 @@ use Kalnoy\Nestedset\NodeTrait;
  * @method static CategoryQueryBuilder<static>|Category withFeatures()
  * @mixin \Eloquent
  */
-class Category extends Model
+class Category extends Model implements Seoble
 {
     use HasFactory, NodeTrait;
 
@@ -51,6 +53,11 @@ class Category extends Model
     protected static function newFactory(): CategoryFactory|\Illuminate\Database\Eloquent\Factories\Factory
     {
         return CategoryFactory::new();
+    }
+
+    public function seo(): SeoBuilder
+    {
+        return new SeoBuilder()->title($this->name);
     }
 
     // Автогенерация slug

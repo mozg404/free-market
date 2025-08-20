@@ -9,8 +9,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\StockItem;
 use App\Services\Toaster;
+use App\Support\SeoBuilder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class StockController extends Controller
 {
@@ -19,7 +22,7 @@ class StockController extends Controller
     ) {
     }
 
-    public function index(Product $product, Request $request)
+    public function index(Product $product): Response
     {
         return Inertia::render('my/products/stock/StockIndexPage', [
             'product' => ProductDetailedData::from($product),
@@ -27,20 +30,21 @@ class StockController extends Controller
             'availableItemsCount' => $product->stockItems()->isAvailable()->count(),
             'soldItemsCount' => '---',
             'reservedItemsCount' => $product->stockItems()->isReserved()->count(),
+            'seo' => new SeoBuilder('Позиции товара #' . $product->id),
         ]);
     }
 
-    public function create(Product $product, Request $request)
+    public function create(Product $product): Response
     {
         return Inertia::render('my/products/stock/StockItemCreateModal', [
             'product' => ProductForListingData::from($product),
         ]);
     }
 
-    public function store(Product $product, Request $request)
+    public function store(Product $product, Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'content' => 'required|string|max::255',
+            'content' => 'required|string|max:255',
         ]);
 
         StockItem::new($product, $data['content']);
@@ -49,7 +53,7 @@ class StockController extends Controller
         return back();
     }
 
-    public function edit(Product $product, StockItem $stockItem)
+    public function edit(Product $product, StockItem $stockItem): Response
     {
         return Inertia::render('my/products/stock/StockItemEditModal', [
             'stockItem' => StockItemDetailedData::from($stockItem),
@@ -57,7 +61,7 @@ class StockController extends Controller
         ]);
     }
 
-    public function update(Product $product, StockItem $stockItem, Request $request)
+    public function update(Product $product, StockItem $stockItem, Request $request): RedirectResponse
     {
         $data = $request->validate([
             'content' => 'required|string|max:255',

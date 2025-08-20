@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Data\Products\ProductForListingData;
 use App\Models\Product;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class IndexController extends Controller
 {
-    public function __invoke()
+    public function __invoke(): Response
     {
         $products = Product::query()
             ->forListing()

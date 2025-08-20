@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Seoble;
 use App\Contracts\Sourceable;
 use App\Contracts\Transactionable;
 use App\Enum\OrderStatus;
@@ -9,6 +10,7 @@ use App\Builders\OrderItemQueryBuilder;
 use App\Builders\OrderQueryBuilder;
 use App\Builders\UserQueryBuilder;
 use App\Support\Price;
+use App\Support\SeoBuilder;
 use Carbon\Carbon;
 use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -55,7 +57,7 @@ use Illuminate\Support\Facades\DB;
  * @method static OrderQueryBuilder<static>|Order withUser()
  * @mixin \Eloquent
  */
-class Order extends Model implements Transactionable, Sourceable
+class Order extends Model implements Transactionable, Sourceable, Seoble
 {
     use HasFactory;
 
@@ -116,6 +118,11 @@ class Order extends Model implements Transactionable, Sourceable
             'current_price' => $price->getCurrentPrice(),
             'base_price' => $price->getBasePrice(),
         ]);
+    }
+
+    public function seo(): SeoBuilder
+    {
+        return new SeoBuilder('Заказ #' . $this->id);
     }
 
     public function getTransactionableType(): string

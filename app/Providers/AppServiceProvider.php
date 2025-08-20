@@ -8,6 +8,7 @@ use App\Models\StockItem;
 use App\Models\User;
 use App\Services\Cart\SessionCart;
 use App\Services\PaymentGateway\DemoPaymentGateway;
+use App\Services\Seo;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(Cart::class, SessionCart::class);
         $this->app->bind(PaymentGateway::class, DemoPaymentGateway::class);
+        $this->app->singleton(Seo::class);
     }
 
     /**

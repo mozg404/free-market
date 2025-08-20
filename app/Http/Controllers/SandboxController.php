@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class SandboxController extends Controller
 {
     /**
      * @throws \JsonException
      */
-    public function index(string $hash)
+    public function index(string $hash): Response
     {
         $decodedHash = base64_decode($hash);
         $data = json_decode($decodedHash, true);
@@ -25,7 +27,7 @@ class SandboxController extends Controller
         ]);
     }
 
-    public function success(string $hash): \Illuminate\Http\RedirectResponse
+    public function success(string $hash): RedirectResponse
     {
         return redirect()->route('payment.callback', [
             'external_id' => $hash,
@@ -33,7 +35,7 @@ class SandboxController extends Controller
         ]);
     }
 
-    public function failed(string $hash): \Illuminate\Http\RedirectResponse
+    public function failed(string $hash): RedirectResponse
     {
         return redirect()->route('payment.callback', [
             'external_id' => $hash,
@@ -41,7 +43,7 @@ class SandboxController extends Controller
         ]);
     }
 
-    public function cancelled(string $hash): \Illuminate\Http\RedirectResponse
+    public function cancelled(string $hash): RedirectResponse
     {
         return redirect()->route('payment.callback', [
             'external_id' => $hash,

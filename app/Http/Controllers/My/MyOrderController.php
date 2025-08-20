@@ -14,6 +14,7 @@ use App\Services\Order\OrderCancelService;
 use App\Services\Order\OrderProcessor;
 use App\Services\PaymentGateway\PaymentService;
 use App\Services\Toaster;
+use App\Support\SeoBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -36,6 +37,7 @@ class MyOrderController extends Controller
 
         return Inertia::render('my/orders/OrderIndexPage', [
             'orders' => OrderForListingData::collect($orders),
+            'seo' => new SeoBuilder('Мои заказы'),
         ]);
     }
 
@@ -53,6 +55,7 @@ class MyOrderController extends Controller
             'items' => OrderItemForListingData::collect($items),
             'totalAmount' => $items->getTotalAmount(),
             'totalCount' => $items->count(),
+            'seo' => new SeoBuilder($order),
         ]);
     }
 

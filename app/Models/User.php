@@ -4,7 +4,10 @@ namespace App\Models;
 
 use App\Builders\UserQueryBuilder;
 use App\Casts\ImageCast;
+use App\Contracts\Seoble;
 use App\Support\Image;
+use App\Support\SeoBuilder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -20,7 +23,8 @@ use Illuminate\Notifications\Notifiable;
  * @property bool $is_admin
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
- * @property Image|null $avatar
+ * @property ?Image $avatar
+ * @property ?string $avatar_url
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -49,7 +53,7 @@ use Illuminate\Notifications\Notifiable;
  * @method static UserQueryBuilder<static>|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements Seoble
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -74,6 +78,13 @@ class User extends Authenticatable
             'password' => 'hashed',
             'avatar' => ImageCast::class,
         ];
+    }
+
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: static fn (mixed $value, array $attributes) => Image::from($attributes['avatar'])?->getUrl(),
+        );
     }
 
     /**
@@ -102,6 +113,13 @@ class User extends Authenticatable
     public function hasEnoughBalance(int $amount): bool
     {
         return $this->balance >= $amount;
+    }
+
+    public function seo(): SeoBuilder
+    {
+        return new SeoBuilder()
+            ->title('Пользователь ' . $this->name)
+            ->image($this->avatar_url);
     }
 
     public function transactions(): HasMany

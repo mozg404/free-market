@@ -7,8 +7,10 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Services\Product\ProductService;
 use App\Services\Toaster;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ProductChangeNameController extends Controller
 {
@@ -17,7 +19,7 @@ class ProductChangeNameController extends Controller
     ) {
     }
 
-    public function index(Product $product)
+    public function index(Product $product): Response
     {
         return Inertia::render('my/products/ProductChangeNameModal', [
             'product' => $product,
@@ -28,7 +30,7 @@ class ProductChangeNameController extends Controller
         Product $product,
         Request $request,
         ProductService $productService,
-    ) {
+    ): RedirectResponse {
         $productService->changeName($product, $request->input('name'));
         $this->toaster->success('Название отредактировано');
 

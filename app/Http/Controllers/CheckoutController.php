@@ -12,19 +12,20 @@ use App\Services\Order\OrderFromCartCreator;
 use App\Services\Order\OrderProcessor;
 use App\Services\PaymentGateway\PaymentService;
 use App\Services\Toaster;
+use Illuminate\Http\RedirectResponse;
 
 class CheckoutController extends Controller
 {
     public function __construct(
         private readonly Toaster $toaster,
-    )
-    {}
+    ) {
+    }
 
     public function cart(
         OrderFromCartCreator $creator,
         OrderProcessor $processor,
         PaymentService $paymentService,
-    ) {
+    ): RedirectResponse {
         try {
             $user = auth()->user();
             $order = $creator->create($user);
@@ -56,7 +57,7 @@ class CheckoutController extends Controller
         ExpressOrderCreator $creator,
         OrderProcessor $processor,
         PaymentService $paymentService,
-    ) {
+    ): RedirectResponse {
         try {
             $user = auth()->user();
             $order = $creator->create($user, $product);
