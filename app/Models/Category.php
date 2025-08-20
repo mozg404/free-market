@@ -60,6 +60,11 @@ class Category extends Model implements Seoble
         return new SeoBuilder()->title($this->name);
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     // Автогенерация slug
 //    public static function boot()
 //    {

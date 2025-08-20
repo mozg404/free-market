@@ -30,4 +30,16 @@ class CategoryQueryBuilder extends QueryBuilder
 
         return $this->ancestorsAndSelf($id)->pluck('id');
     }
+
+    /**
+     * Возвращает коллекцию ID для указанной категории + всех ее детей
+     */
+    public function getDescendantsAndSelfIds(Category|int $id): SupportCollection
+    {
+        if ($id instanceof Category) {
+            $id = $id->id;
+        }
+
+        return $this->descendantsAndSelf($id)->pluck('id');
+    }
 }

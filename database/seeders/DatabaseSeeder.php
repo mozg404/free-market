@@ -12,11 +12,18 @@ use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
 use App\Services\Balance\BalanceService;
+use App\Services\Product\ProductService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
+    public function __construct(
+        private ProductService $productService,
+    ) {
+    }
+
     public function run(): void
     {
         // Создаем главного пользователя
@@ -51,11 +58,11 @@ class DatabaseSeeder extends Seeder
 
             // Привязываем характеристику к категориям
             foreach ($featureData['categories'] as $categorySlug) {
-                $categories
-                    ->where('slug', $categorySlug)
-                    ->first()
-                    ->features()
-                    ->attach($feature->id);
+                $category = $categories->where('slug', $categorySlug)->first();
+
+                if ($category) {
+                    $category->features()->attach($feature->id);
+                }
             }
         }
 
@@ -68,16 +75,21 @@ class DatabaseSeeder extends Seeder
         foreach (include resource_path('data/demo_products.php') as $productData) {
             $category = $categories->where('slug', $productData['category'])->first();
 
-            // Товары для основного пользователя
-            $products = Product::factory(random_int(0,10))
-                ->fromDemo($productData)
-                ->for($category)
-                ->for($mainUser)
-                ->create();
+            $products = new Collection();
 
-            for ($i = 0; $i < random_int(4, 12); $i++) {
+            // Товары для основного пользователя
+            if (random_int(1, 100) <= 24) {
+                $products = $products->merge(Product::factory(random_int(1,2))
+                    ->fromDemo($productData)
+                    ->for($category)
+                    ->for($mainUser)
+                    ->create()
+                );
+            }
+
+            for ($i = 0; $i < random_int(2, 12); $i++) {
                 $products = $products->merge(
-                    Product::factory(random_int(0,7))
+                    Product::factory(random_int(1,3))
                         ->fromDemo($productData)
                         ->for($category)
                         ->isActive()
@@ -87,14 +99,14 @@ class DatabaseSeeder extends Seeder
             }
 
             // Используем существующую связь features()
-            $products->each(function ($product) use ($category) {
+            $products->each(function (Product $product) use ($category) {
                 $attachments = [];
 
                 foreach ($category->features as $feature) {
                     $attachments[$feature->id] = $this->generateFeatureValue($feature);
                 }
 
-                $product->featuresAttachFrom($attachments);
+                $this->productService->changeFeatures($product, $attachments);
             });
 
             // Создаем позиции

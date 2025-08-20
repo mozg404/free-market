@@ -107,7 +107,7 @@ class SeoBuilder implements Arrayable
     {
         $title = $this->title ?? config('seo.title');
         $description = $this->description ?? config('seo.description');
-        $image = $this->image ?? config('seo.image');
+        $image = $this->image ?? asset('favicon.svg');
         $url = $this->url ?? url()->current();
 
         return [

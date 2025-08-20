@@ -22,13 +22,16 @@ const props = defineProps({
     <template v-if="level > 0">
       <Link
         :href="route('catalog.category', category.slug)"
+        :style="{ paddingLeft: `${level * 21 + 12}px` }"
         :class="cn(
         'flex items-center -mx-[0.5rem] px-0 my-1 whitespace-nowrap rounded-md text-sm text-muted-foreground transition-colors hover:text-accent-foreground h-8 py-1 cursor-pointer',
                 route().current('catalog.category', category.slug) ? 'text-primary hover:text-primary' : ''
           )"
       >
-        <Dot :class="cn('h-8 w-8', route().current('catalog.category', category.slug) ? 'text-primary' : '')" /> {{ category.name }}
+        <Dot :class="cn('h-7 w-7 -ml-[37px]', route().current('catalog.category', category.slug) ? 'text-primary' : '')" /> {{ category.name }}
       </Link>
+
+      <CategoriesNavTree :categories="category.children" :level="level + 1"/>
     </template>
 
     <template v-else-if="category.children?.length > 0">

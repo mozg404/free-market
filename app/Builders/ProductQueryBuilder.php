@@ -9,6 +9,7 @@ use App\Enum\ProductStatus;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -151,6 +152,22 @@ class ProductQueryBuilder extends Builder
         }
 
         return $this->where('user_id', '!=', $user);
+    }
+
+    public function forCategoryAndDescendants(Category|int $id): self
+    {
+        if ($id instanceof Category) {
+            $id = $id->id;
+        }
+
+        return $this->forCategories(
+            Category::query()->getDescendantsAndSelfIds($id)->toArray()
+        );
+    }
+
+    public function forCategories(array $ids): self
+    {
+        return $this->whereIn('category_id', $ids);
     }
 
     public function forCategory(Category|int $category): self

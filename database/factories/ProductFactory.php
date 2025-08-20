@@ -86,28 +86,21 @@ class ProductFactory extends Factory
     public function fromDemo(?array $data = null): self
     {
         return $this->state(function (array $attributes) use ($data) {
-            // Если нет данных или нет списка - возвращаем пустой массив (не изменяем атрибуты)
-            if (empty($data['list'])) {
-                return [];
-            }
-
-            $demoItem = $this->faker->randomElement($data['list']);
-
-            // Обработка name (может быть строкой или массивом)
-            $name = is_array($demoItem['name'] ?? null)
-                ? $this->faker->randomElement($demoItem['name'])
-                : ($demoItem['name'] ?? $this->faker->sentence(2));
+             // Обработка name (может быть строкой или массивом)
+            $name = is_array($data['name'] ?? null)
+                ? $this->faker->randomElement($data['name'])
+                : ($data['name'] ?? $this->faker->sentence(2));
 
             // Обработка image (может быть строкой, массивом или отсутствовать)
             $imagePath = null;
-            if (isset($demoItem['image'])) {
-                $imagePath = is_array($demoItem['image'])
-                    ? $this->faker->randomElement($demoItem['image'])
-                    : $demoItem['image'];
+            if (isset($data['image'])) {
+                $imagePath = is_array($data['image'])
+                    ? $this->faker->randomElement($data['image'])
+                    : $data['image'];
             }
 
             return array_filter([
-                'name' => TextGenerator::decoratedText($name, $data['name_modifiers'], random_int(0, 2), $this->faker->randomElement(['. ', ' | '])),
+                'name' => TextGenerator::decoratedText($name, $data['name_modifiers'] ?? [], random_int(0, 2), $this->faker->randomElement(['. ', ', ', ' '])),
                 'image' => $imagePath
                     ? Image::createFromAbsolutePath($imagePath)->getRelativePath()
                     : null,

@@ -10,7 +10,7 @@ return [
 
     [
         'categories' => [
-            'games'
+            'keys/games'
         ],
         'type' => FeatureType::SELECT,
         'name' => 'Жанры',
@@ -39,7 +39,8 @@ return [
     ],
     [
         'categories' => [
-            'games'
+            'keys/games',
+            'game-currency',
         ],
         'type' => FeatureType::SELECT,
         'name' => 'Платформа',
@@ -64,7 +65,7 @@ return [
     ],
     [
         'categories' => [
-            'games'
+            'keys/games'
         ],
         'type' => FeatureType::SELECT,
         'name' => 'Тип издания',
@@ -83,7 +84,7 @@ return [
     ],
     [
         'categories' => [
-            'games'
+            'keys/games'
         ],
         'type' => FeatureType::SELECT,
         'name' => 'Особенности издания',
@@ -100,7 +101,7 @@ return [
 
     [
         'categories' => [
-            'windows'
+            'keys/windows'
         ],
         'type' => FeatureType::SELECT,
         'name' => 'Версия',
@@ -114,7 +115,7 @@ return [
     ],
     [
         'categories' => [
-            'windows'
+            'keys/windows'
         ],
         'type' => FeatureType::SELECT,
         'name' => 'Разрядность',
@@ -126,7 +127,7 @@ return [
     ],
     [
         'categories' => [
-            'windows'
+            'keys/windows'
         ],
         'type' => FeatureType::SELECT,
         'name' => 'Дополнительные функции',
@@ -161,6 +162,19 @@ return [
             'audiobooks' => 'Аудиокниги',
             'ebooks' => 'Электронные книги'
         ]
+    ],
+    [
+        'categories' => [
+            'game-currency'
+        ],
+        'type' => FeatureType::SELECT,
+        'name' => 'Номинал',
+        'options' => [
+            '100' => '100',
+            '500' => '500',
+            '800' => '800',
+            '1000' => '1000',
+        ],
     ],
     [
         'categories' => [
@@ -206,7 +220,7 @@ return [
     ],
     [
         'categories' => [
-            'subscriptions'
+            'subscriptions/streaming'
         ],
         'type' => FeatureType::SELECT,
         'name' => 'Качество контента',
@@ -234,7 +248,9 @@ return [
     ],
     [
         'categories' => [
-            'subscriptions'
+            'keys',
+            'certificates',
+            'subscriptions',
         ],
         'type' => FeatureType::SELECT,
         'name' => 'Дополнительно',
@@ -255,43 +271,12 @@ return [
         'options' => [
             '50+' => '50+ стран',
             '100+' => '100+ стран',
-            'specific' => 'Конкретные страны',
-            'p2p' => 'P2P-оптимизированные',
-            'dedicated' => 'Выделенные IP'
         ]
     ],
 
     [
         'categories' => [
-            'software'
-        ],
-        'type' => FeatureType::SELECT,
-        'name' => 'Тип ПО',
-        'options' => [
-            'office' => 'Офисное',
-            'graphics' => 'Графика',
-            'video_edit' => 'Видеомонтаж',
-            'development' => 'Разработка',
-            'security' => 'Безопасность'
-        ]
-    ],
-    [
-        'categories' => [
-            'software'
-        ],
-        'type' => FeatureType::SELECT,
-        'name' => 'Продукт',
-        'options' => [
-            'microsoft_office' => 'Microsoft Office',
-            'adobe_photoshop' => 'Adobe Photoshop',
-            'final_cut' => 'Final Cut Pro',
-            'jetbrains' => 'JetBrains Suite',
-            'norton' => 'Norton Antivirus'
-        ]
-    ],
-    [
-        'categories' => [
-            'software'
+            'keys/windows'
         ],
         'type' => FeatureType::SELECT,
         'name' => 'Лицензия',
@@ -305,7 +290,8 @@ return [
     ],
     [
         'categories' => [
-            'software'
+            'keys/software',
+            'keys/windows'
         ],
         'type' => FeatureType::SELECT,
         'name' => 'Версия',
@@ -332,21 +318,24 @@ return [
         ]
     ],
 
-
-    // ------------------------------------------------------
-    // Общее
-    // ------------------------------------------------------
+    [
+        'categories' => [
+            'keys',
+            'subscriptions/software',
+        ],
+        'type' => FeatureType::SELECT,
+        'name' => 'Локализация на русский',
+        'options' => [
+            'yes' => 'Да',
+            'no' => 'Нет',
+        ]
+    ],
 
     [
         'categories' => [
-            'games',
-            'software',
-            'office',
-            'graphics',
-            'antivirus',
-            'programming',
-            'windows',
+            'keys',
             'certificates',
+            'game-currency',
             'subscriptions',
         ],
         'type' => FeatureType::SELECT,
@@ -356,7 +345,7 @@ return [
             'us' => 'США',
             'eu' => 'Европа',
             'asia' => 'Азия',
-            'global' => 'Глобальная'
+            'global' => 'Весь мир'
         ]
     ],
 

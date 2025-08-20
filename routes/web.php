@@ -166,9 +166,9 @@ Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show')
 // Каталог
 // ---------------------------------------------
 
-Route::get('/catalog/product/{product}', [CatalogController::class, 'show'])->name('catalog.product');
-Route::get('/catalog/category/{category:slug}', [CatalogController::class, 'category'])->name('catalog.category');
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog');
+Route::get('/catalog/product/{product}', [CatalogController::class, 'show'])->name('catalog.product');
+Route::get('/catalog/{category}', [CatalogController::class, 'category'])->where('category', '.*')->name('catalog.category');
 
 // ---------------------------------------------
 // Эмуляция кассы
