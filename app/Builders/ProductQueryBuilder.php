@@ -44,16 +44,16 @@ class ProductQueryBuilder extends Builder
 
     public function filterFromArray(array $data): self
     {
-        if (isset($data['priceMin'])) {
-            $this->wherePriceMin((int) $data['priceMin']);
+        if (isset($data['price_min'])) {
+            $this->wherePriceMin((int) $data['price_min']);
         }
 
-        if (isset($data['priceMax'])) {
-            $this->wherePriceMax((int) $data['priceMax']);
+        if (isset($data['price_max'])) {
+            $this->wherePriceMax((int) $data['price_max']);
         }
 
-        if (isset($data['onlyDiscounted']) && in_array($data['onlyDiscounted'], ['true', '1', 1, true], true)) {
-            $this->onlyDiscounted();
+        if (isset($data['is_discounted']) && in_array($data['is_discounted'], ['true', '1', 1, true], true)) {
+            $this->isDiscounted();
         }
 
         if (isset($data['features'])) {
@@ -155,7 +155,7 @@ class ProductQueryBuilder extends Builder
     /**
      * Только товары со скидкой (current_price < base_price)
      */
-    public function onlyDiscounted(): self
+    public function isDiscounted(): self
     {
         return $this->whereColumn('current_price', '<', 'base_price');
     }

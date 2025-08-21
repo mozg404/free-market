@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Data\Products\ProductDetailedData;
 use App\Data\Products\ProductForListingData;
+use App\Http\Requests\Catalog\CatalogFilterableRequest;
 use App\Http\Requests\CatalogRequest;
 use App\Models\Category;
 use App\Models\Feature;
@@ -15,19 +16,18 @@ use Inertia\Response;
 
 class CatalogController extends Controller
 {
-    public function index(CatalogRequest $request)
+    public function index(CatalogFilterableRequest $request)
     {
-        $filters = $request->all();
         $categories = Category::query()->get()->toTree();
         $products = Product::query()
-            ->filterFromArray($filters)
             ->forListing()
             ->withAvailableStockItemsCount()
-            ->latest()
-            ->paginate(20);
+            ->filterFromArray($request->getValues())
+            ->paginate(20)
+            ->appends($request->getValues());
 
         return Inertia::render('catalog/CatalogPage', [
-            'filters' => $filters,
+            'filters' => $request->getValues(),
             'categories' => $categories,
             'products' => ProductForListingData::collect($products),
             'seo' => new SeoBuilder('Каталог товаров')
@@ -47,7 +47,7 @@ class CatalogController extends Controller
             ->latest()
             ->paginate(20);
 
-        return Inertia::render('catalog/CatalogPage', [
+        return Inertia::render('catalog/CatalogCategoryPage', [
             'isCategory' => true,
             'category' => $category,
             'features' => $features,

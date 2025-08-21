@@ -1,5 +1,5 @@
 <script setup>
-import CategoriesNavTreeItem from "@/components/modules/categories/CategoriesNavTreeItem.vue";
+import CategoriesNavTreeItem from "@/components/modules/catalog/category-selector/CategoriesNavTreeItem.vue";
 import { Dot } from 'lucide-vue-next';
 import {Link} from "@inertiajs/vue3";
 import {cn} from "@/lib/utils.ts";

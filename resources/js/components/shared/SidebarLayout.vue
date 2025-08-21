@@ -27,7 +27,7 @@ const props = defineProps({
     <!-- Левый сайдбар -->
     <aside
       v-if="$slots.sidebar_left"
-      :class="cn('w-64 flex-none min-w-[20rem]', 'pr-8', props.class, leftClass)"
+      :class="cn('w-64 flex-none min-w-[20rem] space-y-8', 'pr-8', props.class, leftClass)"
     >
       <slot name="sidebar_left"/>
     </aside>
