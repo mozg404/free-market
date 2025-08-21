@@ -17,26 +17,19 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('orders_items', function (Blueprint $table) {
+        Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->foreignId('stock_item_id')->constrained()->cascadeOnDelete();
             $table->integer('current_price');
             $table->integer('base_price');
-        });
-
-        Schema::table('stock_items', function (Blueprint $table) {
-            $table->foreignId('order_id')->nullable()->constrained()->cascadeOnDelete();
         });
     }
 
     public function down(): void
     {
-        Schema::table('stock_items', function (Blueprint $table) {
-            $table->dropForeign(['order_id']);
-            $table->dropColumn('order_id');
-        });
-        Schema::dropIfExists('orders_items');
+        Schema::dropIfExists('order_items');
         Schema::dropIfExists('orders');
     }
 };
