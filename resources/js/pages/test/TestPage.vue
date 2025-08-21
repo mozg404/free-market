@@ -1,9 +1,9 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
-import CategorySelect from "@/components/products/CategorySelect.vue";
+import CategorySelect from "@/components/modules/products/CategorySelect.vue";
 import {Label} from "@/components/ui/label/index.js";
-import ErrorMessage from "@/components/support/ErrorMessage.vue";
+import ErrorMessage from "@/components/shared/ErrorMessage.vue";
 import { ref } from "vue"
 
 import { Button } from "@/components/ui/button"

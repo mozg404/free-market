@@ -5,7 +5,7 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import {Link} from "@inertiajs/vue3";
 import TableBordered from "@/components/shared/table/TableBordered.vue";
 import LaravelPagination from "@/components/shared/LaravelPagination.vue";
-import AccountAge from "@/components/support/AccountAge.vue";
+import AccountAge from "@/components/shared/AccountAge.vue";
 
 const props = defineProps({
   users: Array,

@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card/index.js'
-import PriceFormatter from "@/components/support/PriceFormatter.vue";
+import PriceFormatter from "@/components/shared/PriceFormatter.vue";
 
 const props = defineProps({
   hash: String,

@@ -1,6 +1,6 @@
 <script setup>
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
-import ProductCard from "@/components/products/ProductCard.vue";
+import ProductCard from "@/components/modules/products/ProductCard.vue";
 import {Link, useForm, router} from "@inertiajs/vue3";
 import Input from "@/components/ui/input/Input.vue";
 import InputError from "@/components/ui/input/InputError.vue";
@@ -15,7 +15,7 @@ import LaravelPagination from "@/components/shared/LaravelPagination.vue";
 import PageLayout from "@/layouts/PageLayout.vue";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card/index.js";
 import SidebarLayout from "@/components/shared/SidebarLayout.vue";
-import CategoriesNavTree from "@/components/categories/CategoriesNavTree.vue";
+import CategoriesNavTree from "@/components/modules/categories/CategoriesNavTree.vue";
 import {cn} from "@/lib/utils.js";
 
 const props = defineProps({

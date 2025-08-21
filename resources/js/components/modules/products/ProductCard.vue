@@ -1,7 +1,7 @@
 <script setup>
 import {Link} from "@inertiajs/vue3";
-import ProductImage from "@/components/products/ProductImage.vue";
-import PriceFormatter from "@/components/support/PriceFormatter.vue";
+import ProductImage from "@/components/modules/products/ProductImage.vue";
+import PriceFormatter from "@/components/shared/PriceFormatter.vue";
 
 const props = defineProps({
   product: Object,

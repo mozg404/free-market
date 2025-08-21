@@ -2,9 +2,9 @@
 import PageLayout from "@/layouts/PageLayout.vue";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import LaravelPagination from "@/components/shared/LaravelPagination.vue";
-import ProductCard from "@/components/products/ProductCard.vue";
+import ProductCard from "@/components/modules/products/ProductCard.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
-import AccountAge from "@/components/support/AccountAge.vue";
+import AccountAge from "@/components/shared/AccountAge.vue";
 import Section from "@/components/shared/layout/Section.vue";
 import SectionTitle from "@/components/shared/layout/SectionTitle.vue";
 

@@ -1,8 +1,8 @@
 <script setup>
-import CategoriesNavTreeItem from "@/components/categories/CategoriesNavTreeItem.vue";
+import CategoriesNavTreeItem from "@/components/modules/categories/CategoriesNavTreeItem.vue";
 import { Dot } from 'lucide-vue-next';
 import {Link} from "@inertiajs/vue3";
-import {cn} from "@/lib/utils.js";
+import {cn} from "@/lib/utils.ts";
 
 const props = defineProps({
   categories: {

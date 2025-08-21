@@ -8,7 +8,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
+} from '@/components/ui/breadcrumb/index.js'
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 
 const page = usePage()

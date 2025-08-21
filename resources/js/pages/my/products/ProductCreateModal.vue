@@ -5,9 +5,9 @@ import {Label} from "@/components/ui/label/index.js";
 import {LoaderCircle} from 'lucide-vue-next';
 import {Button} from '@/components/ui/button/index.js'
 import {useForm} from "@inertiajs/vue3";
-import ErrorMessage from "@/components/support/ErrorMessage.vue";
+import ErrorMessage from "@/components/shared/ErrorMessage.vue";
 import {Input} from "@/components/ui/input/index.js";
-import CategorySelect from "@/components/products/CategorySelect.vue";
+import CategorySelect from "@/components/modules/products/CategorySelect.vue";
 import {
   NumberField,
   NumberFieldContent,

@@ -14,11 +14,11 @@ import {
   Card,
   CardContent,
 } from '@/components/ui/card/index.js'
-import DateTime from "@/components/support/DateTime.vue";
-import PriceFormatter from "@/components/support/PriceFormatter.vue";
+import DateTime from "@/components/shared/DateTime.vue";
+import PriceFormatter from "@/components/shared/PriceFormatter.vue";
 import FormNumberInput from "@/components/shared/form/FormNumberInput.vue";
 import {Link, useForm} from "@inertiajs/vue3";
-import ErrorMessage from "@/components/support/ErrorMessage.vue";
+import ErrorMessage from "@/components/shared/ErrorMessage.vue";
 import { useUser } from '@/composables/useUser.js'
 import LaravelPagination from "@/components/shared/LaravelPagination.vue";
 import TableBordered from "@/components/shared/table/TableBordered.vue";

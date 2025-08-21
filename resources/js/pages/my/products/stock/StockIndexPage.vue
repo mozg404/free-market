@@ -1,9 +1,9 @@
 <script setup>
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card/index.js";
-import DateTime from "@/components/support/DateTime.vue";
+import DateTime from "@/components/shared/DateTime.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
-import ProductImage from "@/components/products/ProductImage.vue";
+import ProductImage from "@/components/modules/products/ProductImage.vue";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table/index.js";
 import {Settings, PlusIcon, Search} from "lucide-vue-next";
 import {Button} from "@/components/ui/button/index.js";
@@ -14,7 +14,7 @@ import {Separator} from "@/components/ui/separator/index.js"
 import LaravelPagination from "@/components/shared/LaravelPagination.vue";
 import {ModalLink} from '@inertiaui/modal-vue'
 import {useForm} from "@inertiajs/vue3";
-import ProductStatus from "@/components/products/ProductStatus.vue";
+import ProductStatus from "@/components/modules/products/ProductStatus.vue";
 import PageLayout from "@/layouts/PageLayout.vue";
 
 const props = defineProps({

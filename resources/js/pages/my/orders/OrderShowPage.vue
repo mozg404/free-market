@@ -1,15 +1,15 @@
 <script setup>
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {Card, CardContent} from "@/components/ui/card/index.js";
-import OrderItemCart from "@/components/orders/OrderItemCart.vue";
-import PriceFormatter from "@/components/support/PriceFormatter.vue";
+import OrderItemCart from "@/components/modules/orders/OrderItemCart.vue";
+import PriceFormatter from "@/components/shared/PriceFormatter.vue";
 import {
   DescriptionItem,
   DescriptionSeparator,
   DescriptionTitle,
   DescriptionValue
 } from "@/components/shared/description/index.js";
-import DateTime from "@/components/support/DateTime.vue";
+import DateTime from "@/components/shared/DateTime.vue";
 import PageLayout from "@/layouts/PageLayout.vue";
 import SidebarLayout from "@/components/shared/SidebarLayout.vue";
 import {Button} from "@/components/ui/button/index.js";

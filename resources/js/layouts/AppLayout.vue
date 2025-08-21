@@ -3,7 +3,7 @@ import {Toaster, toast} from 'vue-sonner'
 import 'vue-sonner/style.css'
 import {Head, usePage} from "@inertiajs/vue3";
 import {watch} from "vue";
-import PageLoaderWrapper from "@/components/support/PageLoaderWrapper.vue";
+import PageLoaderWrapper from "@/components/shared/PageLoaderWrapper.vue";
 
 const {seo, toasts} = usePage().props;
 

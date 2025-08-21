@@ -1,6 +1,6 @@
 <script setup>
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
-import CartItemCard from "@/components/cart/CartItemCard.vue";
+import CartItemCard from "@/components/modules/cart/CartItemCard.vue";
 import {Link} from '@inertiajs/vue3'
 import {Button} from '@/components/ui/button/index.js'
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card/index.js'
-import PriceFormatter from "@/components/support/PriceFormatter.vue";
+import PriceFormatter from "@/components/shared/PriceFormatter.vue";
 import {Trash,ShoppingBasket} from 'lucide-vue-next'
 import {useCart} from "@/composables/useCart.js";
 import PageLayout from "@/layouts/PageLayout.vue";

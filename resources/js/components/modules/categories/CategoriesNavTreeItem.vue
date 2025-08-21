@@ -3,7 +3,7 @@ import { ChevronDown, ChevronUp } from 'lucide-vue-next';
 import {onMounted, ref} from "vue";
 import autoAnimate from '@formkit/auto-animate'
 import {Link} from "@inertiajs/vue3";
-import {cn} from "@/lib/utils.js";
+import {cn} from "@/lib/utils.ts";
 import {Button} from "@/components/ui/button/index.js";
 
 const props = defineProps({

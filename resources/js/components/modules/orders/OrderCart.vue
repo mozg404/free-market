@@ -2,9 +2,9 @@
   import {Minus, Plus, Trash} from "lucide-vue-next";
   import {Link} from "@inertiajs/vue3";
   import {Button} from "@/components/ui/button/index.js";
-  import {Separator} from "@/components/ui/separator";
-  import PriceFormatter from "@/components/support/PriceFormatter.vue";
-  import ProductImage from "@/components/products/ProductImage.vue";
+  import {Separator} from "@/components/ui/separator/index.js";
+  import PriceFormatter from "@/components/shared/PriceFormatter.vue";
+  import ProductImage from "@/components/modules/products/ProductImage.vue";
   import {
     Card,
     CardContent,
@@ -12,8 +12,8 @@
     CardFooter,
     CardHeader,
     CardTitle,
-  } from '@/components/ui/card'
-  import OrderItemCart from "@/components/orders/OrderItemCart.vue";
+  } from '@/components/ui/card/index.js'
+  import OrderItemCart from "@/components/modules/orders/OrderItemCart.vue";
 
   const props = defineProps({
     order: Object,

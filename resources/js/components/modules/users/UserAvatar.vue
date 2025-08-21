@@ -1,5 +1,5 @@
 <script setup>
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar/index.js'
 import { User2Icon } from 'lucide-vue-next'
 
 const props = defineProps({

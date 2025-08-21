@@ -2,12 +2,12 @@
 import PageLayout from "@/layouts/PageLayout.vue";
 import {Link} from "@inertiajs/vue3";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table/index.js";
-import DateTime from "@/components/support/DateTime.vue";
+import DateTime from "@/components/shared/DateTime.vue";
 import TableBordered from "@/components/shared/table/TableBordered.vue";
-import PriceFormatter from "@/components/support/PriceFormatter.vue";
-import ProductImage from "@/components/products/ProductImage.vue";
+import PriceFormatter from "@/components/shared/PriceFormatter.vue";
+import ProductImage from "@/components/modules/products/ProductImage.vue";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
-import UserShortInfo from "@/components/users/UserShortInfo.vue";
+import UserShortInfo from "@/components/modules/users/UserShortInfo.vue";
 import {Badge} from "@/components/ui/badge/index.js";
 import LaravelPagination from "@/components/shared/LaravelPagination.vue";
 

@@ -1,9 +1,9 @@
 <script setup>
 import {Link} from "@inertiajs/vue3";
-import PriceFormatter from "@/components/support/PriceFormatter.vue";
-import ProductImage from "@/components/products/ProductImage.vue";
+import PriceFormatter from "@/components/shared/PriceFormatter.vue";
+import ProductImage from "@/components/modules/products/ProductImage.vue";
 import {Card, CardContent} from "@/components/ui/card/index.js";
-import UserAvatar from "@/components/users/UserAvatar.vue";
+import UserAvatar from "@/components/modules/users/UserAvatar.vue";
 
 const props = defineProps({
     item: Object,

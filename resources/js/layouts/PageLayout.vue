@@ -3,8 +3,8 @@ import {Badge} from "@/components/ui/badge/index.js";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
 import AppLayout from "@/layouts/AppLayout.vue";
-import AppHeader from "@/layouts/parts/AppHeader.vue";
-import AppBreadcrumbs from "@/layouts/parts/AppBreadcrumbs.vue";
+import AppHeader from "@/components/modules/app/AppHeader.vue";
+import AppBreadcrumbs from "@/components/modules/app/AppBreadcrumbs.vue";
 
 const props = defineProps({
   withBreadcrumbs: {

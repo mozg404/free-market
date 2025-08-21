@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button/index.js'
 import {Link, useForm} from '@inertiajs/vue3'
 import {Minus,Plus,Trash} from 'lucide-vue-next'
 import {Card, CardContent} from "@/components/ui/card/index.js";
-import PriceFormatter from "@/components/support/PriceFormatter.vue";
-import ProductImage from "@/components/products/ProductImage.vue";
+import PriceFormatter from "@/components/shared/PriceFormatter.vue";
+import ProductImage from "@/components/modules/products/ProductImage.vue";
 import {useCart} from "@/composables/useCart.js";
 
 const props = defineProps({

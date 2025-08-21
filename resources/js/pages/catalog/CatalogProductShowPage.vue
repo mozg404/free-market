@@ -4,8 +4,8 @@ import {Link} from "@inertiajs/vue3";
 import {Button} from '@/components/ui/button/index.js'
 import {Badge} from '@/components/ui/badge/index.js'
 import {Minus, Plus, ShoppingCart, Pencil, TriangleAlert, Eye} from 'lucide-vue-next';
-import ProductImage from "@/components/products/ProductImage.vue";
-import PriceFormatter from "@/components/support/PriceFormatter.vue";
+import ProductImage from "@/components/modules/products/ProductImage.vue";
+import PriceFormatter from "@/components/shared/PriceFormatter.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
 import {
   DescriptionList,
@@ -18,7 +18,7 @@ import Section from "@/components/shared/layout/Section.vue";
 import SectionTitle from "@/components/shared/layout/SectionTitle.vue";
 import { useCart } from '@/composables/useCart.js'
 import {Card, CardContent} from "@/components/ui/card/index.js";
-import UserAvatar from "@/components/users/UserAvatar.vue";
+import UserAvatar from "@/components/modules/users/UserAvatar.vue";
 import PageLayout from "@/layouts/PageLayout.vue";
 import SidebarLayout from "@/components/shared/SidebarLayout.vue";
 

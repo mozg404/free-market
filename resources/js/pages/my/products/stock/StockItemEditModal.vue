@@ -6,7 +6,7 @@ import {LoaderCircle} from 'lucide-vue-next';
 import {Button} from '@/components/ui/button/index.js'
 import {Textarea} from '@/components/ui/textarea/index.js'
 import {useForm} from "@inertiajs/vue3";
-import ErrorMessage from "@/components/support/ErrorMessage.vue";
+import ErrorMessage from "@/components/shared/ErrorMessage.vue";
 
 const props = defineProps({
   product: {

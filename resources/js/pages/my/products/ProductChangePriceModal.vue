@@ -5,7 +5,7 @@ import {Label} from "@/components/ui/label/index.js";
 import {LoaderCircle} from 'lucide-vue-next';
 import {Button} from '@/components/ui/button/index.js'
 import {useForm} from "@inertiajs/vue3";
-import ErrorMessage from "@/components/support/ErrorMessage.vue";
+import ErrorMessage from "@/components/shared/ErrorMessage.vue";
 import {NumberField, NumberFieldContent, NumberFieldInput} from "@/components/ui/number-field/index.js";
 
 const props = defineProps({

@@ -2,15 +2,15 @@
 import TableBordered from "@/components/shared/table/TableBordered.vue";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table/index.js";
 import LaravelPagination from "@/components/shared/LaravelPagination.vue";
-import DateTime from "@/components/support/DateTime.vue";
-import PriceFormatter from "@/components/support/PriceFormatter.vue";
+import DateTime from "@/components/shared/DateTime.vue";
+import PriceFormatter from "@/components/shared/PriceFormatter.vue";
 import {Badge} from "@/components/ui/badge/index.js";
 import {Button} from "@/components/ui/button/index.js";
 import {ChevronRight} from "lucide-vue-next";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {Link} from "@inertiajs/vue3";
 import PageLayout from "@/layouts/PageLayout.vue";
-import OrderStatus from "@/components/orders/OrderStatus.vue";
+import OrderStatus from "@/components/modules/orders/OrderStatus.vue";
 
 const props = defineProps({
   orders: Array,

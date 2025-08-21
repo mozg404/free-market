@@ -1,5 +1,5 @@
 <script setup>
-import ProductCard from "@/components/products/ProductCard.vue";
+import ProductCard from "@/components/modules/products/ProductCard.vue";
 
 const props = defineProps({
   products: Array,

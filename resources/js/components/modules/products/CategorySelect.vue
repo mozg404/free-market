@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button/index.js'
 import {
   Command,
   CommandEmpty,
@@ -8,9 +8,9 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command'
+} from '@/components/ui/command/index.js'
 import { ChevronsUpDown } from 'lucide-vue-next'
-import CategoryItems from "@/components/products/CategoryItems.vue";
+import CategoryItems from "@/components/modules/products/CategoryItems.vue";
 
 const props = defineProps({
   categories: {

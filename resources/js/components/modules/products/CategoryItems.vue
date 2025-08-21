@@ -1,5 +1,5 @@
 <script setup>
-import { CommandItem } from '@/components/ui/command'
+import { CommandItem } from '@/components/ui/command/index.js'
 import { CornerDownRight } from 'lucide-vue-next';
 
 const props = defineProps({

@@ -1,7 +1,7 @@
 <script setup>
 import {Link} from "@inertiajs/vue3";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
-import logoUrl from "../../../img/logo.svg";
+import logoUrl from "../../../../img/logo.svg";
 import {Button} from "@/components/ui/button/index.js";
 import {ShoppingCart, LogIn, RussianRuble} from 'lucide-vue-next'
 import {useCart} from '@/composables/useCart.js'
@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu/index.js'
-import UserAvatar from "@/components/users/UserAvatar.vue";
+import UserAvatar from "@/components/modules/users/UserAvatar.vue";
 
 const {cart} = useCart()
 const {user, isAuth} = useUser()

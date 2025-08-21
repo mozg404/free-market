@@ -1,7 +1,7 @@
 <script setup>
-import UserAvatar from "@/components/users/UserAvatar.vue";
+import UserAvatar from "@/components/modules/users/UserAvatar.vue";
 import {Link} from "@inertiajs/vue3";
-import AccountAge from "@/components/support/AccountAge.vue";
+import AccountAge from "@/components/shared/AccountAge.vue";
 
 const props = defineProps({
   user: {

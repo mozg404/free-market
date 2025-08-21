@@ -5,7 +5,7 @@ import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import Main from "@/components/shared/layout/Main.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
 import ImageUploader from "@/components/shared/form/ImageUploader.vue";
-import ErrorMessage from "@/components/support/ErrorMessage.vue";
+import ErrorMessage from "@/components/shared/ErrorMessage.vue";
 import {Button} from "@/components/ui/button/index.js";
 
 const props = defineProps({
