@@ -8,6 +8,10 @@ use App\Models\StockItem;
 use App\Support\Price;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * (!!!) НАРУШЕНИЕ КОНСИСТЕНТНОСТИ ИЗ-ЗА ДЕНОРМАЛИЗАЦИИ
+ * Использовать с методами forProduct или forStockItem, иначе создаются лишние записи
+ */
 class OrderItemFactory extends Factory
 {
     protected $model = OrderItem::class;
@@ -27,11 +31,27 @@ class OrderItemFactory extends Factory
     public function configure(): self
     {
         return $this->afterCreating(function (OrderItem $orderItem) {
-            if ($orderItem->product_id !== $orderItem->stockItem->product_id) {
+            if ($orderItem->stockItem->product_id !== $orderItem->product_id) {
                 $orderItem->update([
-                    'product_id' => $orderItem->stockItem->product_id,
+                    'product_id' => $orderItem->stockItem->product_id
                 ]);
             }
         });
+    }
+
+    public function forStockItem(StockItem $stockItem): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'product_id' => $stockItem->product_id,
+            'stock_item_id' => $stockItem->id,
+        ]);
+    }
+
+    public function forProduct(Product $product): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'product_id' => $product->id,
+            'stock_item_id' => StockItem::factory()->for($product),
+        ]);
     }
 }

@@ -18,8 +18,9 @@ class StockItemFactory extends Factory
     {
         return [
             'product_id' => Product::factory(),
-            'status' => $this->faker->randomElement(StockItemStatus::cases()),
+            'status' => StockItemStatus::AVAILABLE,
             'content' => $this->faker->regexify('[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}'),
+            'order_item_id' => null,
         ];
     }
 
