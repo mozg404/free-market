@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
         // Создаем рандомных 25 пользователей
-        $users = User::factory(25)
+        $users = User::factory(10)
             ->withPublishedAvatar()
             ->create();
 
@@ -78,7 +78,7 @@ class DatabaseSeeder extends Seeder
             $products = new Collection();
 
             // Товары для основного пользователя
-            if (random_int(1, 100) <= 24) {
+            if (random_int(1, 100) <= 25) {
                 $products = $products->merge(Product::factory(random_int(1,2))
                     ->fromDemo($productData)
                     ->for($category)
@@ -87,7 +87,7 @@ class DatabaseSeeder extends Seeder
                 );
             }
 
-            for ($i = 0; $i < random_int(2, 12); $i++) {
+            for ($i = 0; $i < random_int(2, 5); $i++) {
                 $products = $products->merge(
                     Product::factory(random_int(1,3))
                         ->fromDemo($productData)
@@ -111,7 +111,7 @@ class DatabaseSeeder extends Seeder
 
             // Создаем позиции
             $products->each(function ($product) {
-                StockItem::factory(random_int(0,10))
+                StockItem::factory(random_int(1,5))
                     ->for($product)
                     ->available()
                     ->create();
