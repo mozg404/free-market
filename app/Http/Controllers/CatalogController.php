@@ -16,7 +16,7 @@ use Inertia\Response;
 
 class CatalogController extends Controller
 {
-    public function index(CatalogFilterableRequest $request)
+    public function index(CatalogFilterableRequest $request): Response
     {
         $categories = Category::query()->get()->toTree();
         $products = Product::query()

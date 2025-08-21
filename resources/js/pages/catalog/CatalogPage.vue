@@ -18,7 +18,6 @@ import {Button} from "@/components/ui/button/index.js";
 import {X} from 'lucide-vue-next';
 
 const props = defineProps({
-  category: Object,
   categories: Array,
   products: Object,
   filters: Object,
