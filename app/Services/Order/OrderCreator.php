@@ -38,7 +38,7 @@ readonly class OrderCreator
                 'user_id' => $user->id,
                 'amount' => $items->getTotalPrice()->getCurrentPrice(),
                 'status' => OrderStatus::PENDING,
-            ]);;
+            ]);
 
             $items->each(function (CreatableOrderItemData $creatableItem) use ($order) {
                 // Запрашиваем у менеджера свободные позиции со склада
