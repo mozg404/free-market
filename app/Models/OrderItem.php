@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Builders\OrderItemQueryBuilder;
 use App\Builders\OrderQueryBuilder;
+use App\Builders\ProductQueryBuilder;
 use App\Builders\StockItemQueryBuilder;
 use App\Collections\OrderItemCollection;
 use App\Contracts\Transactionable;
@@ -19,12 +20,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property int $id
  * @property int $order_id
+ * @property int $product_id
  * @property int $stock_item_id
  * @property int $current_price
  * @property int $base_price
- * @property-read \App\Models\Order $order
  * @property Price $price
- * @property-read \App\Models\StockItem $stockItem
+ * @property-read Order $order
+ * @property-read StockItem $stockItem
+ * @property-read Product $product
  * @method static OrderItemCollection<int, static> all($columns = ['*'])
  * @method static OrderItemQueryBuilder<static>|OrderItem descOrder()
  * @method static \Database\Factories\OrderItemFactory factory($count = null, $state = [])
@@ -56,9 +59,7 @@ class OrderItem extends Model implements Transactionable
 
     public $timestamps = false;
 
-    protected $table = 'orders_items';
-
-    protected $fillable = ['order_id', 'stock_item_id', 'base_price', 'current_price'];
+    protected $fillable = ['order_id', 'product_id', 'stock_item_id', 'base_price', 'current_price'];
 
     protected $casts = [
         'current_price' => 'int',
@@ -82,6 +83,11 @@ class OrderItem extends Model implements Transactionable
     public function order(): BelongsTo|OrderQueryBuilder
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function product(): BelongsTo|ProductQueryBuilder
+    {
+        return $this->belongsTo(Product::class);
     }
 
     public function stockItem(): BelongsTo|StockItemQueryBuilder

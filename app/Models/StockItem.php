@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use App\Builders\OrderQueryBuilder;
+use App\Builders\OrderItemQueryBuilder;
 use App\Builders\ProductQueryBuilder;
-use App\Contracts\Transactionable;
 use App\Enum\StockItemStatus;
 use App\Builders\StockItemQueryBuilder;
 use Database\Factories\StockItemFactory;
@@ -13,14 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property int $id
  * @property int $product_id
  * @property StockItemStatus $status
  * @property string $content
- * @property int|null $order_id
- * @property Order|null $order
+ * @property int|null $order_item_id
+ * @property OrderItem|null $orderItem
  * @property \Illuminate\Support\Carbon|null $pinned_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -52,7 +49,7 @@ class StockItem extends Model
 
     protected $table = 'stock_items';
 
-    protected $fillable = ['product_id', 'status', 'content'];
+    protected $fillable = ['product_id', 'order_item_id', 'status', 'content'];
 
     protected $hidden = ['content'];
 
@@ -78,18 +75,6 @@ class StockItem extends Model
     public function isAvailable(): bool
     {
         return $this->status === StockItemStatus::AVAILABLE;
-    }
-
-    /**
-     * Резервирует позицию для заказа $order
-     * @param Order $order
-     * @return void
-     */
-    public function reserveFor(Order $order): void
-    {
-        $this->status = StockItemStatus::RESERVED;
-        $this->order_id = $order->id;
-        $this->save();
     }
 
     public function isReserved(): bool
@@ -127,9 +112,9 @@ class StockItem extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function order(): BelongsTo|OrderQueryBuilder|null
+    public function orderItem(): BelongsTo|OrderItemQueryBuilder|null
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(OrderItem::class);
     }
 
     public function newEloquentBuilder($query): StockItemQueryBuilder

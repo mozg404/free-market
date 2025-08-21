@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Services\Order;
 
-use App\Collections\CreatableOrderItemCollection;
-use App\Data\Orders\CreatableOrderItemData;
 use App\Enum\OrderStatus;
 use App\Exceptions\Product\NotEnoughStockException;
 use App\Exceptions\Product\ProductUnavailableException;

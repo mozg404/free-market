@@ -72,15 +72,6 @@ class Order extends Model implements Transactionable, Sourceable, Seoble
         'amount',
     ];
 
-    public static function new(User $user, Price $amount): static
-    {
-        return static::create([
-            'user_id' => $user->id,
-            'amount' => $amount->getCurrentPrice(),
-            'status' => OrderStatus::PENDING,
-        ]);
-    }
-
     public function isPending(): bool
     {
         return $this->status === OrderStatus::PENDING;
@@ -106,18 +97,6 @@ class Order extends Model implements Transactionable, Sourceable, Seoble
         $this->save();
 
         return $this;
-    }
-
-    /**
-     * Добавляет позицию в заказ
-     */
-    public function createItem(StockItem $item, Price $price): OrderItem
-    {
-        return $this->items()->create([
-            'stock_item_id' => $item->id,
-            'current_price' => $price->getCurrentPrice(),
-            'base_price' => $price->getBasePrice(),
-        ]);
     }
 
     public function seo(): SeoBuilder

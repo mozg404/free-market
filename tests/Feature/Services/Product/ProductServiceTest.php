@@ -4,6 +4,7 @@ namespace Tests\Feature\Services\Product;
 
 use App\Enum\TransactionType;
 use App\Exceptions\Product\NotEnoughStockException;
+use App\Models\Category;
 use App\Models\Feature;
 use App\Models\Product;
 use App\Models\ProductFeatureValue;
@@ -37,8 +38,9 @@ class ProductServiceTest extends TestCase
         $user = User::factory()->create();
         $name = 'Тестовый товар';
         $price = new Price(100, 50);
+        $category = Category::factory()->create();
 
-        $product = $this->productService->createProduct($user, $name, $price);
+        $product = $this->productService->createProduct($user, $category, $name, $price);
 
         $this->assertInstanceOf(Product::class, $product);
         $this->assertSame($product->user_id, $user->id);

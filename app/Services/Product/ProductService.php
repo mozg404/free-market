@@ -3,10 +3,12 @@
 namespace App\Services\Product;
 
 use App\Enum\ProductStatus;
+use App\Enum\StockItemStatus;
 use App\Exceptions\Product\ProductUnavailableException;
 use App\Exceptions\Product\NotEnoughStockException;
 use App\Models\Category;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
@@ -145,8 +147,10 @@ class ProductService
     /**
      * Резервирует позицию на складе за заказом
      */
-    public function reserveStockItem(StockItem $stockItem, Order $order): void
+    public function reserveStockItem(StockItem $stockItem, OrderItem $orderItem): void
     {
-        $stockItem->reserveFor($order);
+        $stockItem->status = StockItemStatus::RESERVED;
+        $stockItem->order_item_id = $orderItem->id;
+        $stockItem->save();
     }
 }

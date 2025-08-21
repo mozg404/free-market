@@ -79,8 +79,9 @@ class OrderFactory extends Factory
             $stockItems->each(function (StockItem $stockItem) use ($order, &$amount) {
                 $product = $stockItem->product;
 
-                OrderItem::create([
+                $orderItem = OrderItem::create([
                     'order_id' => $order->id,
+                    'product_id' => $stockItem->product_id,
                     'stock_item_id' => $stockItem->id,
                     'current_price' => $product->current_price,
                     'base_price' => $product->base_price,
@@ -89,7 +90,7 @@ class OrderFactory extends Factory
                 $amount += $product->current_price;
                 $stockItem->update([
                     'status' => StockItemStatus::RESERVED->value,
-                    'order_id' => $order->id,
+                    'order_item_id' => $orderItem->id,
                 ]);
             });
 
