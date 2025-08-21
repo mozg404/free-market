@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Catalog;
 
 use App\Http\Requests\FilterableRequest;
-use Illuminate\Foundation\Http\FormRequest;
 
 class CatalogFilterableRequest extends FilterableRequest
 {

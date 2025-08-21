@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Data\Products\ProductDetailedData;
 use App\Data\Products\ProductForListingData;
+use App\Http\Requests\Catalog\CatalogCategoryFilterableRequest;
 use App\Http\Requests\Catalog\CatalogFilterableRequest;
-use App\Http\Requests\CatalogRequest;
 use App\Models\Category;
 use App\Models\Feature;
 use App\Models\Product;
 use App\Support\SeoBuilder;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -34,24 +33,22 @@ class CatalogController extends Controller
         ]);
     }
 
-    public function category(Category $category, CatalogRequest $request)
+    public function category(Category $category, CatalogCategoryFilterableRequest $request): Response
     {
-        $filters = $request->all();
         $categories = Category::query()->get()->toTree();
         $features = Feature::query()->forCategoryAndAncestors($category)->get();
         $products = Product::query()
-            ->filterFromArray($filters)
             ->forListing()
             ->withAvailableStockItemsCount()
             ->forCategoryAndDescendants($category)
-            ->latest()
-            ->paginate(20);
+            ->filterFromArray($request->getValues())
+            ->paginate(20)
+            ->appends($request->getValues());
 
         return Inertia::render('catalog/CatalogCategoryPage', [
-            'isCategory' => true,
             'category' => $category,
             'features' => $features,
-            'filters' => $filters,
+            'filters' => $request->getValues(),
             'categories' => $categories,
             'products' => ProductForListingData::collect($products),
             'seo' => new SeoBuilder($category),

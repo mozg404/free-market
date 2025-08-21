@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script setup>
-import FormMultipleCheckbox from "@/components/shared/form/FormMultipleCheckbox.vue";
+import MultipleCheckbox from "@/components/shared/form/MultipleCheckbox.vue";
 import {computed} from "vue";
 
 const props = defineProps({
@@ -39,7 +39,7 @@ const checkedValues = computed({
 </script>
 
 <template>
-  <FormMultipleCheckbox
+  <MultipleCheckbox
     v-for="option in options"
     :key="option[valueKey]"
     :value="option[valueKey]"

@@ -1,13 +1,7 @@
-<script>
-export default {
-  inheritAttrs: false
-}
-</script>
-
 <script setup>
-import { Checkbox } from '@/components/ui/checkbox'
-import FormLabel from '@/components/shared/form/FormLabel.vue'
-import { computed, useAttrs, ref, watch } from 'vue'
+import {Checkbox} from '@/components/ui/checkbox'
+import {Label} from '@/components/ui/label'
+import {computed,} from 'vue'
 import {cn} from "@/lib/utils.js";
 import {generateUniqueId} from "@/lib/support.js";
 
@@ -21,17 +15,20 @@ const props = defineProps({
     required: true
   },
   label: String,
-  id: {
-    type: String,
-    default: null
-  },
   class: {
     type: String,
-  }
+  },
+  labelClass: {
+    type: String,
+  },
+  labelActiveClass: {
+    type: String,
+    default: "",
+  },
 })
 
 const emit = defineEmits(['update:modelValue'])
-const localId = computed(() => props.id || generateUniqueId('checkbox'))
+const localId = computed(() => generateUniqueId('checkbox'))
 const internalValue = computed({
   get: () => props.modelValue.includes(props.value),
   set: (val) => {
@@ -41,6 +38,9 @@ const internalValue = computed({
     emit('update:modelValue', newArr);
   }
 });
+
+const getLabelClasses = () => internalValue.value ? props.labelActiveClass : ''
+
 </script>
 
 <template>
@@ -50,8 +50,10 @@ const internalValue = computed({
       :id="localId"
       class="cursor-pointer"
     />
-    <FormLabel v-if="label" :for="localId" class="cursor-pointer text-xs">
-      {{ label }}
-    </FormLabel>
+    <Label
+      v-if="label"
+      :for="localId"
+      :class="cn(props.labelClass, getLabelClasses())"
+    >{{ label }}</Label>
   </div>
 </template>
