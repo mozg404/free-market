@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
                 'is_admin' => true,
             ]);
 
-        $users = User::factory(10)
+        $users = User::factory(15)
             ->withPublishedAvatar()
             ->create();
 
@@ -134,7 +134,7 @@ class DatabaseSeeder extends Seeder
         // Рандомные заказы от других пользователей
         $users->each(function ($user) {
 //            if (random_int(1, 100) <= 75) {
-                for ($i = 0; $i < 100; $i++) {
+                for ($i = 0; $i < 60; $i++) {
                     $order = $this->createOrder($user);
 
                     // Выполненный заказ с вероятностью 80%
