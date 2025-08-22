@@ -23,7 +23,7 @@ class OrderFactory extends Factory
             'user_id' => User::factory(),
             'amount' => random_int(1000, 5000),
             'status' => $this->faker->randomElement(OrderStatus::cases()),
-            'paid_at' => null,
+            'paid_at' => $this->faker->dateTimeBetween('-1 year'),
             'created_at' => $createdAt,
             'updated_at' => $this->faker->dateTimeBetween($createdAt),
         ];
@@ -40,10 +40,6 @@ class OrderFactory extends Factory
             $order->update([
                 'amount' => $order->items->sum('current_price')
             ]);
-
-            if ($order->status === OrderStatus::COMPLETED && !$order->paid_at) {
-                $order->update(['paid_at' => now()]);
-            }
         });
     }
 
@@ -51,7 +47,6 @@ class OrderFactory extends Factory
     {
         return $this->state([
             'status' => OrderStatus::CANCELLED,
-            'paid_at' => now(),
         ]);
     }
 
@@ -59,7 +54,6 @@ class OrderFactory extends Factory
     {
         return $this->state([
             'status' => OrderStatus::COMPLETED,
-            'paid_at' => now(),
         ]);
     }
 
@@ -67,7 +61,6 @@ class OrderFactory extends Factory
     {
         return $this->state([
             'status' => OrderStatus::PENDING,
-            'paid_at' => null,
         ]);
     }
 

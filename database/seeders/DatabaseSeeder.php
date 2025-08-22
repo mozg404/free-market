@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enum\FeatureType;
+use App\Enum\OrderStatus;
 use App\Enum\TransactionType;
 use App\Models\Category;
 use App\Models\Feature;
@@ -207,7 +208,9 @@ class DatabaseSeeder extends Seeder
     {
         $balanceService = app(BalanceService::class);
         $order->fresh();
-        $order->markAsPaid();
+        $order->update([
+            'status' => OrderStatus::COMPLETED
+        ]);
         $order
             ->items()
             ->with('stockItem', function ($builder) {
