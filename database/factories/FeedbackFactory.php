@@ -14,12 +14,16 @@ class FeedbackFactory extends Factory
 
     public function definition(): array
     {
+        $createdAt = $this->faker->dateTimeBetween('-1 year', 'now');
+
         return [
             'user_id' => User::factory(),
             'order_item_id' => OrderItem::factory(),
             'product_id' => Product::factory(),
             'seller_id' => User::factory(),
             'is_positive' => $this->faker->boolean(),
+            'created_at' => $createdAt,
+            'updated_at' => $this->faker->dateTimeBetween($createdAt),
         ];
     }
 
