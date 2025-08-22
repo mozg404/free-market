@@ -4,41 +4,13 @@ import 'vue-sonner/style.css'
 import {Head, usePage} from "@inertiajs/vue3";
 import {watch} from "vue";
 import PageLoaderWrapper from "@/components/shared/PageLoaderWrapper.vue";
+import {showToasts} from "@/composables/useToasts.js";
 
 const {seo, toasts} = usePage().props;
 
 watch(
   () => toasts,
-  (toasts) => {
-    if (!toasts?.length) {
-      return
-    }
-
-    toasts.forEach((toastData, index) => {
-      setTimeout(() => {
-        const params = {
-          description: toastData.description,
-        }
-
-        switch (toastData.type) {
-          case 'error':
-            toast.error(toastData.message, params);
-            break
-          case 'success':
-            toast.success(toastData.message, params);
-            break
-          case 'warning':
-            toast.warning(toastData.message, params);
-            break
-          case 'info':
-            toast.info(toastData.message, params);
-            break
-          default:
-            toast(toastData.message, params)
-        }
-      }, index * 300)
-    })
-  },
+  (toasts) => showToasts(toasts),
   {
     deep: true,
     immediate: true
@@ -47,10 +19,12 @@ watch(
 </script>
 
 <template>
+  <Toaster closeButton richColors position="top-right"/>
+
   <Head>
     <title>{{ seo.title }}</title>
     <meta name="description" :content="seo.description">
-    
+
     <!-- Open Graph -->
     <meta property="og:title" :content="seo.openGraph.title" />
     <meta property="og:description" :content="seo.openGraph.description" />
@@ -70,8 +44,6 @@ watch(
       :content="seo.twitterCard.site"
     />
   </Head>
-
-  <Toaster closeButton richColors position="top-right"/>
 
   <PageLoaderWrapper>
     <div class="min-h-screen">
