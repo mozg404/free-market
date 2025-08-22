@@ -1340,7 +1340,24 @@ return [
             'Подписка PS Plus',
             'PlayStation Plus'
         ],
-        'image' => resource_path('demo/products_images/playstation/ps_network.jpg'),
+        'image' => [
+            resource_path('demo/products_images/playstation/ps_network.jpg'),
+            resource_path('demo/products_images/playstation/psn-sert-10-usd.png')
+        ],
+        'category' => 'certificates',
+        'name_modifiers' => $nameModifiers['game_shop_subscriptions'],
+    ],
+    [
+        'name' => [
+            'Nintendo eShop',
+            'eShop',
+            'Nintendo',
+            'Магазин Нинтендо',
+            'Пополнить счет Нинтендо',
+        ],
+        'image' => [
+            resource_path('demo/products_images/nintendo/nintendo-eshop-sert-10-usd.png'),
+        ],
         'category' => 'certificates',
         'name_modifiers' => $nameModifiers['game_shop_subscriptions'],
     ],
@@ -1351,9 +1368,98 @@ return [
             'Пополнение кошелька Steam',
             'Цифровой Steam'
         ],
-        'image' => resource_path('demo/products_images/steam/steam.jpg'),
+        'image' => [
+            resource_path('demo/products_images/steam/steam.jpg'),
+            resource_path('demo/products_images/steam/steam-sert-10-usd.png')
+        ],
         'category' => 'certificates',
         'name_modifiers' => $nameModifiers['game_shop_subscriptions'],
+    ],
+    [
+        'name' => [
+            'Riot Games',
+            'Riot пополнение',
+            'League of Legends',
+            'Карта лиги легенд'
+        ],
+        'image' => [
+            resource_path('demo/products_images/riot-games/riot-5-eur.png'),
+        ],
+        'category' => 'certificates',
+        'name_modifiers' => $nameModifiers['game_shop_subscriptions'],
+    ],
+    [
+        'name' => [
+            'Google Play',
+            'Гугл плей',
+            'Гугл плей сертификат',
+            'Google пополнить',
+            'Google Play пополнение',
+        ],
+        'image' => [
+            resource_path('demo/products_images/google-play/google-play-5-usd.png'),
+        ],
+        'category' => 'certificates',
+        'name_modifiers' => $nameModifiers['game_currency'],
+    ],
+    [
+        'name' => [
+            'iTunes',
+            'Apple пополнить',
+            'Apple ITunes',
+            'Пополнить эпл аккаунт',
+        ],
+        'image' => [
+            resource_path('demo/products_images/itunes/appstore-itunes-karta.jpg'),
+            resource_path('demo/products_images/itunes/itunes-500-rub.png'),
+            resource_path('demo/products_images/itunes/itunes-500-try.png'),
+        ],
+        'category' => 'certificates',
+        'name_modifiers' => $nameModifiers['game_currency'],
+    ],
+    [
+        'name' => [
+            'Meta',
+            'Мета',
+            'Мета Квест',
+            'Meta пополнение',
+            'Meta Quest',
+            'Meta Quest 25 USD',
+            'Meta 50 USD',
+            'Meta Quest 100 USD',
+            'Meta Quest 200 USD',
+            'Meta 500 USD',
+        ],
+        'image' => [
+            resource_path('demo/products_images/meta-quest/meta-25-usd.png'),
+        ],
+        'category' => 'certificates',
+        'name_modifiers' => $nameModifiers['social_subscriptions'],
+    ],
+    [
+        'name' => [
+            'Netflix',
+            'Netflix пополнение',
+            'Нетфликс',
+            'NETFLIX',
+            'NFLX счет',
+            'NET FLIX',
+            'НФ',
+            'Netflix Premium 4K',
+            'Netflix Family',
+            'Подарочная карта Netflix',
+            'Карта Netflix',
+            'Netflix карта',
+            'Netflix (No Ads)',
+            'Netflix UHD'
+        ],
+        'image' => [
+            resource_path('demo/products_images/netflix/Netflix.jpg'),
+            resource_path('demo/products_images/netflix/netflix-25-eur.png'),
+            resource_path('demo/products_images/netflix/netflix-120-pln.png'),
+        ],
+        'category' => 'certificates',
+        'name_modifiers' => $nameModifiers['video_streaming'],
     ],
 
     // ------------------------------------------------------
