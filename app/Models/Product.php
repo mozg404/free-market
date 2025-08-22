@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Builders\FeedbackQueryBuilder;
 use App\Builders\ProductQueryBuilder;
 use App\Builders\StockItemQueryBuilder;
 use App\Casts\ImageCast;
@@ -50,6 +51,7 @@ use Mews\Purifier\Casts\CleanHtmlInput;
  * @property-read int|null $features_count
  * @property Price $price
  * @property-read Collection<int, \App\Models\StockItem> $stockItems
+ * @property-read Collection<int,Feedback> $feedbacks
  * @property-read int|null $stock_items_count
  * @property-read \App\Models\User $user
  * @method static ProductCollection<int, static> all($columns = ['*'])
@@ -210,6 +212,11 @@ class Product extends Model implements Seoble
     public function stockItems(): HasMany|StockItemQueryBuilder
     {
         return $this->hasMany(StockItem::class);
+    }
+
+    public function feedbacks(): HasMany|FeedbackQueryBuilder
+    {
+        return $this->hasMany(Feedback::class);
     }
 
     public function newCollection(array $models = []): ProductCollection

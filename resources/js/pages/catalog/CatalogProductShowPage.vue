@@ -21,9 +21,11 @@ import {Card, CardContent} from "@/components/ui/card/index.js";
 import UserAvatar from "@/components/modules/users/UserAvatar.vue";
 import PageLayout from "@/layouts/PageLayout.vue";
 import SidebarLayout from "@/components/shared/SidebarLayout.vue";
+import FeedbackCard from "@/components/modules/feedback/FeedbackCard.vue";
 
 const props = defineProps({
   product: Object,
+  feedbacks: Array,
   isOwner: {
     type: Boolean,
     default: false,
@@ -180,6 +182,15 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
             <div v-html="product.instruction"></div>
           </article>
         </Section>
+
+        <Section v-if="feedbacks?.length > 0">
+          <SectionTitle class="mb-7">Отзывы</SectionTitle>
+
+          <div class="space-y-7">
+            <FeedbackCard v-for="feedback in feedbacks" :key="feedback.id" :feedback="feedback"/>
+          </div>
+        </Section>
+
       </SidebarLayout>
 
     </Wrapper>

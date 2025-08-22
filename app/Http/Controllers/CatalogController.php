@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Feedback\FeedbackData;
 use App\Data\Products\ProductDetailedData;
 use App\Data\Products\ProductForListingData;
 use App\Http\Requests\Catalog\CatalogCategoryFilterableRequest;
@@ -55,14 +56,21 @@ class CatalogController extends Controller
         ]);
     }
 
-    public function show(Product $product): Response
+    public function show(Product $product)
     {
         if ($product->isDraft() && (!auth()->check() || auth()->id() !== $product->user_id)) {
             abort(403);
         }
 
+        $feedbacks = $product
+            ->feedbacks()
+            ->hasComments()
+            ->withUser()
+            ->get();
+
         return Inertia::render('catalog/CatalogProductShowPage', [
             'product' => ProductDetailedData::from($product),
+            'feedbacks' => FeedbackData::collect($feedbacks),
             'isOwner' => auth()?->id() === $product->user_id,
             'seo' => new SeoBuilder($product),
         ]);

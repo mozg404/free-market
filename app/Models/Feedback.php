@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Builders\FeedbackQueryBuilder;
 use App\Builders\OrderItemQueryBuilder;
 use App\Builders\ProductQueryBuilder;
 use App\Builders\UserQueryBuilder;
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool $is_positive
  * @property ?string $comment
  * @method static FeedbackFactory factory($count = null, $state = [])
+ * @method static FeedbackQueryBuilder query()
  */
 #[ObservedBy([FeedbackObserver::class])]
 class Feedback extends Model
@@ -79,6 +81,11 @@ class Feedback extends Model
     public function seller(): BelongsTo|UserQueryBuilder
     {
         return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    public function newEloquentBuilder($query): FeedbackQueryBuilder
+    {
+        return new FeedbackQueryBuilder($query);
     }
 
     protected static function newFactory(): FeedbackFactory
