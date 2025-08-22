@@ -3,7 +3,7 @@ import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {Link} from "@inertiajs/vue3";
 import {Button} from '@/components/ui/button/index.js'
 import {Badge} from '@/components/ui/badge/index.js'
-import {Minus, Plus, ShoppingCart, Pencil, Eye} from 'lucide-vue-next';
+import {Minus, Plus, ShoppingCart, Pencil, Eye, Star, ThumbsUp, ThumbsDown} from 'lucide-vue-next';
 import ProductImage from "@/components/modules/products/ProductImage.vue";
 import PriceFormatter from "@/components/shared/PriceFormatter.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";
@@ -61,6 +61,64 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
 
     <Wrapper>
       <SidebarLayout class="lg:sticky lg:top-6 lg:self-start">
+
+
+        <div class="mb-12">
+          <Badge variant="secondary">{{ product.category.name }}</Badge>
+          <PageTitle class="mt-4">{{ product.name }}</PageTitle>
+
+          <div class="flex items-center space-x-6 mt-4">
+            <div class="flex items-center ">
+              <Star class="h-5 w-5 mr-2" />
+              <span class="text-sm">{{ product.rating }}%</span>
+            </div>
+
+            <div class="flex items-center">
+              <ThumbsUp class="h-5 w-5 mr-2 text-green-800"/>
+              <span class="text-sm">{{ product.positive_feedbacks_count }}</span>
+            </div>
+
+            <div class="flex items-center">
+              <ThumbsDown class="h-5 w-5 mr-2 text-destructive" />
+              <span class="text-sm">{{ product.negative_feedbacks_count }}</span>
+            </div>
+          </div>
+        </div>
+
+        <Section v-if="product.features" class="mt-6">
+          <DescriptionList>
+            <DescriptionItem v-for="feature in product.features" :key="feature.id">
+              <DescriptionTitle>{{ feature.name }}</DescriptionTitle>
+              <DescriptionSeparator />
+              <DescriptionValue>{{ feature.value }}</DescriptionValue>
+            </DescriptionItem>
+          </DescriptionList>
+        </Section>
+
+        <Section v-if="product.description" class="mt-12">
+          <SectionTitle>Описание</SectionTitle>
+
+          <article class="mt-2 prose prose-md max-w-full">
+            <div v-html="product.description"></div>
+          </article>
+        </Section>
+
+        <Section v-if="product.instruction">
+          <SectionTitle>Инструкция по активации</SectionTitle>
+
+          <article class="mt-2 prose prose-md">
+            <div v-html="product.instruction"></div>
+          </article>
+        </Section>
+
+        <Section v-if="feedbacks?.length > 0">
+          <SectionTitle class="mb-7">Отзывы</SectionTitle>
+
+          <div class="space-y-7">
+            <FeedbackCard v-for="feedback in feedbacks" :key="feedback.id" :feedback="feedback"/>
+          </div>
+        </Section>
+
         <template #sidebar_right>
           <ProductImage :product="product" class="mb-4"/>
 
@@ -151,45 +209,6 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
             </CardContent>
           </Card>
         </template>
-
-        <div class="mb-12">
-          <Badge variant="secondary">{{ product.category.name }}</Badge>
-          <PageTitle class="mt-3">{{ product.name }}</PageTitle>
-        </div>
-
-        <Section v-if="product.features" class="mt-6">
-          <DescriptionList>
-            <DescriptionItem v-for="feature in product.features" :key="feature.id">
-              <DescriptionTitle>{{ feature.name }}</DescriptionTitle>
-              <DescriptionSeparator />
-              <DescriptionValue>{{ feature.value }}</DescriptionValue>
-            </DescriptionItem>
-          </DescriptionList>
-        </Section>
-
-        <Section v-if="product.description" class="mt-12">
-          <SectionTitle>Описание</SectionTitle>
-
-          <article class="mt-2 prose prose-md max-w-full">
-            <div v-html="product.description"></div>
-          </article>
-        </Section>
-
-        <Section v-if="product.instruction">
-          <SectionTitle>Инструкция по активации</SectionTitle>
-
-          <article class="mt-2 prose prose-md">
-            <div v-html="product.instruction"></div>
-          </article>
-        </Section>
-
-        <Section v-if="feedbacks?.length > 0">
-          <SectionTitle class="mb-7">Отзывы</SectionTitle>
-
-          <div class="space-y-7">
-            <FeedbackCard v-for="feedback in feedbacks" :key="feedback.id" :feedback="feedback"/>
-          </div>
-        </Section>
 
       </SidebarLayout>
 
