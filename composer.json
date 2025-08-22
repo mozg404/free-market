@@ -6,7 +6,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "diglactic/laravel-breadcrumbs": "^10.0",
         "filament/filament": "^3.3",
         "giggsey/libphonenumber-for-php": "^9.0",
