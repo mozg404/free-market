@@ -202,6 +202,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
 
           <Card class="py-4 mb-4">
             <CardContent class="px-4 flex items-center">
+
               <UserAvatar class="mr-3" :src="product.user.avatar_url"/>
               <div class="flex justify-between flex-1">
                 <div>
@@ -211,7 +212,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
                 <div class="text-right">
                   <div class="text-muted-foreground text-xs mb-[-4px]">Рейтинг</div>
                   <div class="font-semibold text-sm">
-                    <RatingColor :rating="product.rating"/>%
+                    <RatingColor :rating="product.user.seller_rating"/>%
                   </div>
                 </div>
               </div>
