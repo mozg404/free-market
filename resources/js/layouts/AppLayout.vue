@@ -1,5 +1,5 @@
 <script setup>
-import {Toaster, toast} from 'vue-sonner'
+import {Toaster} from 'vue-sonner'
 import 'vue-sonner/style.css'
 import {Head, usePage} from "@inertiajs/vue3";
 import {watch} from "vue";

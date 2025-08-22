@@ -3,7 +3,7 @@ import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {Link} from "@inertiajs/vue3";
 import {Button} from '@/components/ui/button/index.js'
 import {Badge} from '@/components/ui/badge/index.js'
-import {Minus, Plus, ShoppingCart, Pencil, TriangleAlert, Eye} from 'lucide-vue-next';
+import {Minus, Plus, ShoppingCart, Pencil, Eye} from 'lucide-vue-next';
 import ProductImage from "@/components/modules/products/ProductImage.vue";
 import PriceFormatter from "@/components/shared/PriceFormatter.vue";
 import PageTitle from "@/components/shared/layout/PageTitle.vue";

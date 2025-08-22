@@ -1,6 +1,6 @@
 import '../css/app.css';
 import axios from 'axios';
-import {createApp, h} from 'vue'
+import {createApp} from 'vue'
 import {createInertiaApp} from '@inertiajs/vue3'
 import {Modal, ModalLink, renderApp} from '@inertiaui/modal-vue'
 import {ZiggyVue} from '../../vendor/tightenco/ziggy';
