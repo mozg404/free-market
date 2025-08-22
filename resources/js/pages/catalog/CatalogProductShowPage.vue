@@ -210,7 +210,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
                   <Link :href="route('users.show', product.user.id)" class="font-semibold text-sm hover:opacity-50 transition-opacity">{{product.user.name}}</Link>
                 </div>
                 <div class="text-right">
-                  <div class="text-muted-foreground text-xs mb-[-4px]">Рейтинг</div>
+                  <div class="text-muted-foreground text-xs">Рейтинг</div>
                   <div class="font-semibold text-sm">
                     <RatingColor :rating="product.user.seller_rating"/>%
                   </div>
