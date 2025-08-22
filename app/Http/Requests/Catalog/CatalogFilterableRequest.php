@@ -34,12 +34,13 @@ class CatalogFilterableRequest extends FilterableRequest
     protected function normalizeSort(?string $sort): string
     {
         $allowed = [
+            'rating',
+            'price_asc',
+            'price_desc',
             'latest',
             'oldest',
-            'price_asc',
-            'price_desc'
         ];
 
-        return in_array($sort, $allowed, true) ? $sort : 'latest';
+        return in_array($sort, $allowed, true) ? $sort : 'rating';
     }
 }

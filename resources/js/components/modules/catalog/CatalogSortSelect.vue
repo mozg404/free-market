@@ -21,6 +21,7 @@ const handleChange = (value) => {
     </SelectTrigger>
     <SelectContent>
       <SelectGroup>
+        <SelectItem value="rating">По рейтингу</SelectItem>
         <SelectItem value="latest">Сначала новые</SelectItem>
         <SelectItem value="oldest">Сначала старые</SelectItem>
         <SelectItem value="price_desc">Сначала дорогие</SelectItem>

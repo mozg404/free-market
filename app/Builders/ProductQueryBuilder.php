@@ -83,6 +83,10 @@ class ProductQueryBuilder extends Builder
         }
 
         if (isset($data['sort'])) {
+            if ($data['sort'] === 'rating') {
+                $this->orderByRating();
+            }
+
             if ($data['sort'] === 'latest') {
                 $this->latest();
             }
@@ -302,6 +306,15 @@ class ProductQueryBuilder extends Builder
         return $this->withCount(['stockItems as reserved_stock_items_count' => static function (StockItemQueryBuilder $builder) {
             return $builder->isReserved();
         }]);
+    }
+
+    // -----------------------------------------------
+    // Order
+    // -----------------------------------------------
+
+    public function orderByRating(): self
+    {
+        return $this->orderByDesc('rating');
     }
 
     // -----------------------------------------------
