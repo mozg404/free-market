@@ -119,9 +119,15 @@ class DatabaseSeeder extends Seeder
             });
         }
 
-        // 2 неоплаченных заказа и 3 оплаченных для основного пользователя
+
         $this->createOrder($mainUser);
         $this->payOrder($mainUser, $this->createOrder($mainUser));
+        $this->payOrder($mainUser, $this->createOrder($mainUser));
+        $this->payOrder($mainUser, $this->createOrder($mainUser));
+        $this->createOrder($mainUser);
+        $this->createOrder($mainUser);
+        $this->payOrder($mainUser, $this->createOrder($mainUser));
+        $this->createOrder($mainUser);
         $this->createOrder($mainUser);
         $this->payOrder($mainUser, $this->createOrder($mainUser));
         $this->payOrder($mainUser, $this->createOrder($mainUser));
@@ -129,8 +135,8 @@ class DatabaseSeeder extends Seeder
 
         // Рандомные заказы от других пользователей
         $users->each(function ($user) {
-            if (random_int(1, 100) <= 50) {
-                for ($i = 0; $i < random_int(1, 3); $i++) {
+            if (random_int(1, 100) <= 75) {
+                for ($i = 0; $i < random_int(2, 7); $i++) {
                     $order = $this->createOrder($user);
 
                     // Выполненный заказ с вероятностью 80%
@@ -225,9 +231,15 @@ class DatabaseSeeder extends Seeder
                 // Зачисляем средства на баланс продавца
                 $balanceService->deposit($item->stockItem->product->user, $order->amount, TransactionType::SELLER_PAYOUT, $item);
 
+                // 80% на отзыв
+                if (random_int(1, 100) <= 80) {
 
-                if (random_int(1, 100) <= 50) {
-                    Feedback::factory()->for($user)->forOrderItem($item)->create();
+                    // 75% на отзыв с текстом
+                    if (random_int(1, 100) <= 75) {
+                        Feedback::factory()->for($user)->forOrderItem($item)->withComment()->create();
+                    } else {
+                        Feedback::factory()->for($user)->forOrderItem($item)->create();
+                    }
                 }
             });
     }

@@ -23,6 +23,21 @@ class FeedbackFactory extends Factory
         ];
     }
 
+    public function withComment(): static
+    {
+        return $this->state(function (array $attributes) {
+            $isPositive = $this->faker->boolean();
+
+            return [
+                'is_positive' => $isPositive,
+                'comment' => $this->faker->randomElement(match ($isPositive) {
+                    false => include resource_path('data/negative_feedback_comments.php'),
+                    true => include resource_path('data/positive_feedback_comments.php'),
+                }),
+            ];
+        });
+    }
+
     public function isPositive(): static
     {
         return $this->state(fn (array $attributes) => [
