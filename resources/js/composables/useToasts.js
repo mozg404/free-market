@@ -34,5 +34,7 @@ export function showToasts(toasts) {
 }
 
 export function showToastsFromInertiaModal(modalRef, data) {
-    modalRef.value.emit('showToasts', data.props?.toasts);
+    if (data.props?.toasts) {
+        showToasts(data.props?.toasts)
+    }
 }

@@ -6,6 +6,7 @@ use App\Builders\OrderItemQueryBuilder;
 use App\Builders\OrderQueryBuilder;
 use App\Builders\ProductQueryBuilder;
 use App\Builders\StockItemQueryBuilder;
+use App\Builders\UserQueryBuilder;
 use App\Collections\OrderItemCollection;
 use App\Contracts\Transactionable;
 use App\Support\Price;
@@ -14,10 +15,10 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 /**
- * 
- *
  * @property int $id
  * @property int $order_id
  * @property int $product_id
@@ -28,30 +29,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read Order $order
  * @property-read StockItem $stockItem
  * @property-read Product $product
+ * @property-read User $buyer
+ * @property-read User $seller
+ * @property-read Feedback $feedback
  * @method static OrderItemCollection<int, static> all($columns = ['*'])
- * @method static OrderItemQueryBuilder<static>|OrderItem descOrder()
- * @method static \Database\Factories\OrderItemFactory factory($count = null, $state = [])
- * @method static OrderItemQueryBuilder<static>|OrderItem for(\App\Models\Order|\App\Models\User $model)
- * @method static OrderItemQueryBuilder<static>|OrderItem forOrder(\App\Models\Order|int $order)
- * @method static OrderItemQueryBuilder<static>|OrderItem forUser(\App\Models\User|int $user)
+ * @method static OrderItemFactory factory($count = null, $state = [])
  * @method static OrderItemCollection<int, static> get($columns = ['*'])
- * @method static OrderItemQueryBuilder<static>|OrderItem isNew()
- * @method static OrderItemQueryBuilder<static>|OrderItem isPaid()
  * @method static OrderItemQueryBuilder<static>|OrderItem newModelQuery()
  * @method static OrderItemQueryBuilder<static>|OrderItem newQuery()
  * @method static OrderItemQueryBuilder<static>|OrderItem query()
- * @method static OrderItemQueryBuilder<static>|OrderItem whereBasePrice($value)
- * @method static OrderItemQueryBuilder<static>|OrderItem whereCurrentPrice($value)
- * @method static OrderItemQueryBuilder<static>|OrderItem whereId($value)
- * @method static OrderItemQueryBuilder<static>|OrderItem whereOrderId($value)
- * @method static OrderItemQueryBuilder<static>|OrderItem whereSeller(int $id)
- * @method static OrderItemQueryBuilder<static>|OrderItem whereStockItemId($value)
- * @method static OrderItemQueryBuilder<static>|OrderItem withOrder()
- * @method static OrderItemQueryBuilder<static>|OrderItem withOrderUser()
- * @method static OrderItemQueryBuilder<static>|OrderItem withProduct()
- * @method static OrderItemQueryBuilder<static>|OrderItem withProductUser()
- * @method static OrderItemQueryBuilder<static>|OrderItem withStockItem()
- * @mixin \Eloquent
  */
 class OrderItem extends Model implements Transactionable
 {
@@ -78,6 +64,35 @@ class OrderItem extends Model implements Transactionable
                 'current_price' => $price->getCurrentPrice()
             ]
         );
+    }
+
+    public function seller(): HasOneThrough|UserQueryBuilder
+    {
+        return $this->hasOneThrough(
+            User::class,
+            Product::class,
+            'id',
+            'id',
+            'product_id',
+            'user_id'
+        );
+    }
+
+    public function buyer(): HasOneThrough|UserQueryBuilder
+    {
+        return $this->hasOneThrough(
+            User::class,
+            Order::class,
+            'id',
+            'id',
+            'order_id',
+            'user_id'
+        );
+    }
+
+    public function feedback(): HasOne
+    {
+        return $this->hasOne(Feedback::class);
     }
 
     public function order(): BelongsTo|OrderQueryBuilder

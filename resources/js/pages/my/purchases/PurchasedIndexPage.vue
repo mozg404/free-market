@@ -14,6 +14,7 @@ import UserShortInfo from "@/components/modules/users/UserShortInfo.vue";
 import {Badge} from "@/components/ui/badge/index.js";
 import {ModalLink} from "@inertiaui/modal-vue";
 import LaravelPagination from "@/components/shared/LaravelPagination.vue";
+import FeedbackControlButton from "@/components/modules/feedback/FeedbackControlButton.vue";
 
 const props = defineProps({
   purchasedProducts: Array,
@@ -47,13 +48,14 @@ const props = defineProps({
                   </div>
                   <div>
                     {{product.name}}
-                    <div class="mt-4">
+                    <div class="mt-4 flex space-x-2">
                       <Button  variant="secondary" as-child>
                         <ModalLink :href="route('my.purchases.show', product.stock_item_id)">
                           <Key />
                           Получить
                         </ModalLink>
                       </Button>
+                      <FeedbackControlButton variant="ghost" :order-item-id="product.order_item_id" :feedback="product.feedback"/>
                     </div>
                   </div>
                 </div>

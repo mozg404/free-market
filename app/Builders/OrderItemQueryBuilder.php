@@ -14,21 +14,18 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class OrderItemQueryBuilder extends Builder
 {
-    /**
-     * Ищем по владельцу проданного товара
-     */
-    public function forProductUser(User|int $user): static
+    public function whereSeller(User|int $user): static
     {
         if (is_object($user)) {
             $user = $user->id;
         }
 
-        return $this->whereHas('stockItem', function (StockItemQueryBuilder $query) use ($user) {
+        return $this->whereHas('product', function (ProductQueryBuilder $query) use ($user) {
             return $query->forUser($user);
         });
     }
 
-    public function forUser(User|int $user): static
+    public function whereBuyer(User|int $user): static
     {
         if (is_object($user)) {
             $user = $user->id;
@@ -39,7 +36,7 @@ class OrderItemQueryBuilder extends Builder
         });
     }
 
-    public function forOrder(Order|int $order): static
+    public function whereOrder(Order|int $order): static
     {
         if (is_object($order)) {
             $order = $order->id;
@@ -51,11 +48,11 @@ class OrderItemQueryBuilder extends Builder
     public function for(Order|User $model): static
     {
         if (is_a($model, Order::class)) {
-            return $this->forOrder($model);
+            return $this->whereOrder($model);
         }
 
         if (is_a($model, User::class)) {
-            return $this->forUser($model);
+            return $this->whereBuyer($model);
         }
 
         return $this;
@@ -80,27 +77,33 @@ class OrderItemQueryBuilder extends Builder
         return $this->with('order');
     }
 
-    public function withOrderUser(): static
-    {
-        return $this->with('order.user');
-    }
-
     public function withStockItem(): static
     {
         return $this->with('stockItem');
     }
 
-    public function withProduct(): static
+    public function withBuyer(): static
     {
-        return $this->with('stockItem.product');
+        return $this->with('buyer');
     }
 
-    public function withProductUser(): static
+    public function withSeller(): static
     {
-        return $this->with('stockItem.product.user');
+        return $this->with('seller');
     }
+
+    public function withProduct(): static
+    {
+        return $this->with('product');
+    }
+
     public function withProductCategory(): static
     {
-        return $this->with('stockItem.product.category');
+        return $this->with('product.category');
+    }
+
+    public function withFeedback(): static
+    {
+        return $this->with('feedback');
     }
 }

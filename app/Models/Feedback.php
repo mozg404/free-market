@@ -38,7 +38,21 @@ class Feedback extends Model
         'is_positive' => 'boolean',
     ];
 
-    // Отношения
+    public function isNegative(): bool
+    {
+        return !$this->is_positive;
+    }
+
+    public function isPositive(): bool
+    {
+        return $this->is_positive;
+    }
+
+    public function hasComment(): bool
+    {
+        return isset($this->comment);
+    }
+
     public function user(): BelongsTo|UserQueryBuilder
     {
         return $this->belongsTo(User::class);

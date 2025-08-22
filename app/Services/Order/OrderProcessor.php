@@ -33,7 +33,7 @@ readonly class OrderProcessor
             // Меняем статус позиций на складе и пополняем баланс продавца
             $order->items()
                 ->withStockItem()
-                ->withProductUser()
+                ->withSeller()
                 ->get()->each(function (OrderItem $item) use ($order) {
                     // Выплачиваем продавцу средства
                     $this->balanceService->deposit(

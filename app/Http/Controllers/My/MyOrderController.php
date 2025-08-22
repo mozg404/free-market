@@ -47,7 +47,8 @@ class MyOrderController extends Controller
         $items = OrderItem::query()
             ->for($order)
             ->withProduct()
-            ->withProductUser()
+            ->withSeller()
+            ->withFeedback()
             ->get();
 
         return Inertia::render('my/orders/OrderShowPage', [

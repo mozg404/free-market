@@ -11,6 +11,7 @@ use App\Http\Controllers\My\MyBalanceController;
 use App\Http\Controllers\My\MyOrderController;
 use App\Http\Controllers\My\MyPurchaseController;
 use App\Http\Controllers\My\MySaleController;
+use App\Http\Controllers\My\Order\OrderItemFeedbackController;
 use App\Http\Controllers\My\Product\ProductChangeCategoryController;
 use App\Http\Controllers\My\Product\ProductChangeDescriptionController;
 use App\Http\Controllers\My\Product\ProductChangeFeaturesController;
@@ -88,9 +89,6 @@ Route::middleware('auth')->prefix('/my')->group(function () {
         });
     });
 
-
-
-
     // ---------------------------------------------
     // Настройки профиля
     // ---------------------------------------------
@@ -102,16 +100,29 @@ Route::middleware('auth')->prefix('/my')->group(function () {
     // Мои заказы
     // ---------------------------------------------
 
-    Route::get('/orders/{order}/cancel', [MyOrderController::class, 'cancel'])
-        ->can('cancel', 'order')
-        ->name('my.orders.cancel');
-    Route::get('/orders/{order}/pay', [MyOrderController::class, 'pay'])
-        ->can('pay', 'order')
-        ->name('my.orders.pay');
-    Route::get('/orders/{order}', [MyOrderController::class, 'show'])
-        ->can('view', 'order')
-        ->name('my.orders.show');
-    Route::get('/orders', [MyOrderController::class, 'index'])->name('my.orders');
+    Route::prefix('/orders')->group(function () {
+
+        Route::prefix('/item/{order_item}/feedback')->group(function () {
+            Route::get('/create', [OrderItemFeedbackController::class, 'create'])->name('my.orders.item.feedback.create');
+            Route::post('/', [OrderItemFeedbackController::class, 'store'])->name('my.orders.item.feedback.store');
+            Route::get('/{feedback}/edit', [OrderItemFeedbackController::class, 'edit'])->name('my.orders.item.feedback.edit');
+            Route::put('/{feedback}', [OrderItemFeedbackController::class, 'update'])->name('my.orders.item.feedback.update');
+            Route::delete('/{feedback}', [OrderItemFeedbackController::class, 'destroy'])->name('my.orders.item.feedback.destroy');
+        });
+
+        // Заказы
+        Route::get('/{order}/cancel', [MyOrderController::class, 'cancel'])->can('cancel', 'order')->name('my.orders.cancel');
+        Route::get('/{order}/pay', [MyOrderController::class, 'pay'])->can('pay', 'order')->name('my.orders.pay');
+        Route::get('/{order}', [MyOrderController::class, 'show'])->can('view', 'order')->name('my.orders.show');
+        Route::get('/', [MyOrderController::class, 'index'])->name('my.orders');
+    });
+
+
+    // ---------------------------------------------
+    // Отзывы
+    // ---------------------------------------------
+
+
 
     // ---------------------------------------------
     // Мой баланс
@@ -133,6 +144,8 @@ Route::middleware('auth')->prefix('/my')->group(function () {
 
     Route::get('/sales', [MySaleController::class, 'index'])->name('my.sales');
 });
+
+
 
 // ---------------------------------------------
 // Корзина

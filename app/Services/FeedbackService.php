@@ -31,6 +31,18 @@ class FeedbackService
         ]);
     }
 
+    public function updateFeedback(Feedback $feedback, bool $isPositive = true, ?string $comment = null): void
+    {
+        $feedback->is_positive = $isPositive;
+        $feedback->comment = $comment;
+        $feedback->save();
+    }
+
+    public function removeFeedback(Feedback $feedback): void
+    {
+        $feedback->delete();
+    }
+
     public function ensureUniqueFeedback(int $orderItemId): void
     {
         if ($this->checkExists($orderItemId)) {

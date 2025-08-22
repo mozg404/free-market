@@ -19,10 +19,11 @@ class MyPurchaseController extends Controller
             ->withOrder()
             ->withStockItem()
             ->withProduct()
-            ->withProductUser()
+            ->withSeller()
             ->withProductCategory()
+            ->withFeedback()
             ->isPaid()
-            ->forUser(auth()->user())
+            ->whereBuyer(auth()->user())
             ->paginate(10);
 
         return Inertia::render('my/purchases/PurchasedIndexPage', [

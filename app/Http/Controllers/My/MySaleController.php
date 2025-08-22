@@ -17,9 +17,9 @@ class MySaleController extends Controller
             ->withOrder()
             ->withStockItem()
             ->withProduct()
-            ->withOrderUser()
+            ->withBuyer()
             ->isPaid()
-            ->forProductUser(auth()->user())
+            ->whereSeller(auth()->user())
             ->paginate(10);
 
         return Inertia::render('my/sales/SaleIndexPage', [
