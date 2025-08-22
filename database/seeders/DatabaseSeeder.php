@@ -27,7 +27,6 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        // Создаем главного пользователя
         $mainUser = User::factory()
             ->withPublishedAvatar()
             ->create([
@@ -35,12 +34,10 @@ class DatabaseSeeder extends Seeder
                 'is_admin' => true,
             ]);
 
-        // Создаем рандомных 25 пользователей
         $users = User::factory(10)
             ->withPublishedAvatar()
             ->create();
 
-        // Создаем категории с учетом вложенности
         $this->recursiveCreateCategory(
             include resource_path('data/demo_categories.php'),
         );
@@ -79,18 +76,19 @@ class DatabaseSeeder extends Seeder
             $products = new Collection();
 
             // Товары для основного пользователя
-            if (random_int(1, 100) <= 25) {
+            if (random_int(1, 100) <= 50) {
                 $products = $products->merge(Product::factory(random_int(1,2))
                     ->fromDemo($productData)
+                    ->isActive()
                     ->for($category)
                     ->for($mainUser)
                     ->create()
                 );
             }
 
-            for ($i = 0; $i < random_int(2, 5); $i++) {
+            for ($i = 0; $i < 2; $i++) {
                 $products = $products->merge(
-                    Product::factory(random_int(1,3))
+                    Product::factory(2)
                         ->fromDemo($productData)
                         ->for($category)
                         ->for($users->random())
@@ -112,7 +110,7 @@ class DatabaseSeeder extends Seeder
 
             // Создаем позиции
             $products->each(function ($product) {
-                StockItem::factory(random_int(1,5))
+                StockItem::factory(25)
                     ->for($product)
                     ->available()
                     ->create();
@@ -135,16 +133,16 @@ class DatabaseSeeder extends Seeder
 
         // Рандомные заказы от других пользователей
         $users->each(function ($user) {
-            if (random_int(1, 100) <= 75) {
-                for ($i = 0; $i < random_int(2, 7); $i++) {
+//            if (random_int(1, 100) <= 75) {
+                for ($i = 0; $i < 100; $i++) {
                     $order = $this->createOrder($user);
 
                     // Выполненный заказ с вероятностью 80%
-                    if (random_int(1, 100) <= 80) {
+                    if (random_int(1, 100) <= 90) {
                         $this->payOrder($user, $order);
                     }
                 }
-            }
+//            }
         });
     }
 
@@ -231,11 +229,11 @@ class DatabaseSeeder extends Seeder
                 // Зачисляем средства на баланс продавца
                 $balanceService->deposit($item->stockItem->product->user, $order->amount, TransactionType::SELLER_PAYOUT, $item);
 
-                // 80% на отзыв
-                if (random_int(1, 100) <= 80) {
+                // 90% на отзыв
+                if (random_int(1, 100) <= 90) {
 
-                    // 75% на отзыв с текстом
-                    if (random_int(1, 100) <= 75) {
+                    // 80% на отзыв с текстом
+                    if (random_int(1, 100) <= 80) {
                         Feedback::factory()->for($user)->forOrderItem($item)->withComment()->create();
                     } else {
                         Feedback::factory()->for($user)->forOrderItem($item)->create();
