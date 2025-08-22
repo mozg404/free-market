@@ -823,7 +823,14 @@ return [
             'Xbox Live подписка',
             'Xbox Премиум'
         ],
-        'image' => resource_path('demo/products_images/xbox/xbox.jpg'),
+        'image' => [
+            resource_path('demo/products_images/xbox/xbox.jpg'),
+            resource_path('demo/products_images/xbox/xbox-10-usd.png'),
+            resource_path('demo/products_images/xbox/xbox-20-usd.png'),
+            resource_path('demo/products_images/xbox/xbox-25-usd.png'),
+            resource_path('demo/products_images/xbox/xbox-50-usd.png'),
+            resource_path('demo/products_images/xbox/xbox-100-usd.png'),
+        ],
         'category' => 'subscriptions/games',
         'name_modifiers' => $nameModifiers['game_shop_subscriptions'],
     ],
