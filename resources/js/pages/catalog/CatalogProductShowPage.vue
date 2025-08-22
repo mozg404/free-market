@@ -22,6 +22,7 @@ import UserAvatar from "@/components/modules/users/UserAvatar.vue";
 import PageLayout from "@/layouts/PageLayout.vue";
 import SidebarLayout from "@/components/shared/SidebarLayout.vue";
 import FeedbackCard from "@/components/modules/feedback/FeedbackCard.vue";
+import RatingColor from "@/components/shared/RatingColor.vue";
 
 const props = defineProps({
   product: Object,
@@ -202,9 +203,17 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
           <Card class="py-4 mb-4">
             <CardContent class="px-4 flex items-center">
               <UserAvatar class="mr-3" :src="product.user.avatar_url"/>
-              <div>
-                <div class="text-muted-foreground text-xs mb-[-4px]">Продавец</div>
-                <Link :href="route('users.show', product.user.id)" class="font-semibold text-sm hover:text-primary">{{product.user.name}}</Link>
+              <div class="flex justify-between flex-1">
+                <div>
+                  <div class="text-muted-foreground text-xs mb-[-4px]">Продавец</div>
+                  <Link :href="route('users.show', product.user.id)" class="font-semibold text-sm hover:opacity-50 transition-opacity">{{product.user.name}}</Link>
+                </div>
+                <div class="text-right">
+                  <div class="text-muted-foreground text-xs mb-[-4px]">Рейтинг</div>
+                  <div class="font-semibold text-sm">
+                    <RatingColor :rating="product.rating"/>%
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>

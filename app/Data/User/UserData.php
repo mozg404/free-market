@@ -17,6 +17,9 @@ class UserData extends Data
         public ?Image $avatar,
         public Carbon $created_at,
         public ?string $avatar_url = null,
+        public ?float $rating = null,
+        public ?float $positive_feedback_count = null,
+        public ?float $negative_feedback_count = null,
     ) {
         if (isset($avatar)) {
             $this->avatar_url = $this->avatar->getUrl();
