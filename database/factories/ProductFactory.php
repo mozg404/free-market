@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Support\Image;
 use App\Support\Price;
+use App\Support\RatingCalculator;
 use App\Support\TextGenerator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -81,6 +82,17 @@ class ProductFactory extends Factory
     public function isPaused(): self
     {
         return $this->state(fn (array $attributes) => ['status' => ProductStatus::PAUSED->value]);
+    }
+
+    public function withCalculatedRating(int $positiveCounter, int $negativeCounter): static
+    {
+        return $this->state(function (array $attributes) use ($positiveCounter, $negativeCounter) {
+            return [
+                'positive_feedbacks_count' => $positiveCounter,
+                'negative_feedbacks_count' => $negativeCounter,
+                'rating' => RatingCalculator::calculate($positiveCounter, $negativeCounter),
+            ];
+        });
     }
 
     public function fromDemo(?array $data = null): self

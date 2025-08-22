@@ -5,6 +5,10 @@ namespace App\Models;
 use App\Builders\OrderItemQueryBuilder;
 use App\Builders\ProductQueryBuilder;
 use App\Builders\UserQueryBuilder;
+use App\Observers\FeedbackObserver;
+use Database\Factories\FeedbackFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -20,9 +24,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read User $seller
  * @property bool $is_positive
  * @property ?string $comment
+ * @method static FeedbackFactory factory($count = null, $state = [])
  */
+#[ObservedBy([FeedbackObserver::class])]
 class Feedback extends Model
 {
+    use HasFactory;
+
     public $table = 'feedbacks';
 
     protected $fillable = [
@@ -71,5 +79,10 @@ class Feedback extends Model
     public function seller(): BelongsTo|UserQueryBuilder
     {
         return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    protected static function newFactory(): FeedbackFactory
+    {
+        return FeedbackFactory::new();
     }
 }

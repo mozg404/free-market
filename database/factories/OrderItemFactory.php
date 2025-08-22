@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\StockItem;
@@ -21,6 +22,7 @@ class OrderItemFactory extends Factory
         $price = Price::random();
 
         return [
+            'order_id' => Order::factory(),
             'product_id' => Product::factory(),
             'stock_item_id' => StockItem::factory(),
             'current_price' => $price->getCurrentPrice(),

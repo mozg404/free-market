@@ -41,6 +41,9 @@ use Mews\Purifier\Casts\CleanHtmlInput;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int|null $category_id
+ * @property int $positive_feedbacks_count
+ * @property int $negative_feedbacks_count
+ * @property float $rating
  * @property-read \App\Models\Category|null $category
  * @property-read \App\Models\ProductFeatureValue|null $pivot
  * @property-read FeatureCollection $features

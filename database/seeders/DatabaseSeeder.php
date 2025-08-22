@@ -6,6 +6,7 @@ use App\Enum\FeatureType;
 use App\Enum\TransactionType;
 use App\Models\Category;
 use App\Models\Feature;
+use App\Models\Feedback;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -223,6 +224,12 @@ class DatabaseSeeder extends Seeder
 
                 // Зачисляем средства на баланс продавца
                 $balanceService->deposit($item->stockItem->product->user, $order->amount, TransactionType::SELLER_PAYOUT, $item);
+
+
+                if (random_int(1, 100) <= 50) {
+                    Feedback::factory()->for($user)->forOrderItem($item)->create();
+                }
             });
     }
+
 }
