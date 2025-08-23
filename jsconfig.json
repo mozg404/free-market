@@ -4,7 +4,11 @@
       "module": "ESNext",
       "baseUrl": "./",
       "paths": {
-        "@/*": ["resources/js/*"]
+        "@/*": ["resources/js/*"],
+        "@components/*": ["./resources/js/components/*"],
+        "@resources/*": ["./resources/*"],
+        "@img/*": ["./resources/img/*"],
+        "@css/*": ["./resources/css/*"]
       }
     },
     "include": [
