@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Data\UserRegisteringData;
-use App\Services\Auth\UserRegistrar;
+use App\Services\User\UserRegistrar;
 use Illuminate\Console\Command;
 use Illuminate\Validation\ValidationException;
 

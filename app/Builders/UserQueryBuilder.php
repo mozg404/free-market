@@ -21,4 +21,9 @@ class UserQueryBuilder extends Builder
             return $builder->isAvailable();
         });
     }
+
+    public function checkExistsByEmail(string $email): bool
+    {
+        return $this->where('email', $email)->exists();
+    }
 }

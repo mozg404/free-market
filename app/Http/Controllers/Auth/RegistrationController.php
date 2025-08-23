@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Data\UserRegisteringData;
 use App\Http\Controllers\Controller;
-use App\Services\Auth\UserRegistrar;
+use App\Services\User\UserRegistrar;
 use App\Support\SeoBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 

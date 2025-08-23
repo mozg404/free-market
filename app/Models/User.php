@@ -78,7 +78,7 @@ class User extends Authenticatable implements Seoble
             'is_admin' => 'bool',
             'balance' => 'int',
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+//            'password' => 'hashed', // Убрано, так как хэш создает сервис регистрации
             'avatar' => ImageCast::class,
         ];
     }
