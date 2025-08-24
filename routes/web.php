@@ -10,6 +10,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\My\Settings\PasswordChangeController;
 use App\Http\Controllers\My\MyBalanceController;
 use App\Http\Controllers\My\MyOrderController;
 use App\Http\Controllers\My\MyPurchaseController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\My\Product\ProductCreateController;
 use App\Http\Controllers\My\Product\ProductEditController;
 use App\Http\Controllers\My\Product\ProductIndexController as CabinetProductController;
 use App\Http\Controllers\My\Product\StockController;
+use App\Http\Controllers\My\Settings\ProfileUpdateController;
 use App\Http\Controllers\My\SettingsController;
 use App\Http\Controllers\PaymentCallbackController;
 use App\Http\Controllers\SandboxController;
@@ -96,8 +98,18 @@ Route::middleware('auth')->prefix('/my')->group(function () {
     // Настройки профиля
     // ---------------------------------------------
 
-    Route::get('/settings', [SettingsController::class, 'index'])->name('my.settings');
-    Route::patch('/settings/change-avatar', [SettingsController::class, 'changeAvatar'])->name('my.settings.change-avatar');
+//    Route::get('/settings', [SettingsController::class, 'index'])->name('my.settings');
+//    Route::patch('/settings/change-avatar', [SettingsController::class, 'changeAvatar'])->name('my.settings.change-avatar');
+
+    Route::prefix('/settings')->group(function () {
+        // Изменение профиля
+        Route::get('/', [ProfileUpdateController::class, 'index'])->name('my.settings');
+        Route::patch('/', [ProfileUpdateController::class, 'update'])->name('my.settings.change.profile.update');
+        // Изменение пароля
+        Route::get('/change-password', [PasswordChangeController::class, 'index'])->name('my.settings.change.password');
+        Route::patch('/change-password', [PasswordChangeController::class, 'update'])->name('my.settings.change.password.update');
+    });
+
 
     // ---------------------------------------------
     // Мои заказы
@@ -120,13 +132,6 @@ Route::middleware('auth')->prefix('/my')->group(function () {
         Route::get('/', [MyOrderController::class, 'index'])->name('my.orders');
     });
 
-
-    // ---------------------------------------------
-    // Отзывы
-    // ---------------------------------------------
-
-
-
     // ---------------------------------------------
     // Мой баланс
     // ---------------------------------------------
@@ -146,9 +151,8 @@ Route::middleware('auth')->prefix('/my')->group(function () {
     // ---------------------------------------------
 
     Route::get('/sales', [MySaleController::class, 'index'])->name('my.sales');
+
 });
-
-
 
 // ---------------------------------------------
 // Корзина

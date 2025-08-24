@@ -21,7 +21,7 @@ const {user, isAuth} = useUser()
 </script>
 
 <template>
-  <header class="border-b-1">
+  <header >
     <Wrapper>
       <div class="flex items-center justify-between py-5" aria-label="Global">
 

@@ -2,15 +2,13 @@
 
 namespace App\Http\Middleware;
 
-use App\Data\User\UserData;
+use App\Data\User\AuthUserData;
 use App\Services\BreadcrumbsManager;
 use App\Services\Cart\CartService;
-use App\Services\Seo;
 use App\Services\Toaster;
 use App\Support\SeoBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -53,7 +51,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'isAuth' => Auth::check(),
-            'user' => Auth::check() ? UserData::from(Auth::user()->fresh()) : null,
+            'user' => Auth::check() ? AuthUserData::from(Auth::user()->fresh()) : null,
             'cart' => $this->cart->getItems(),
             'toasts' => $this->toaster->pull(),
             'breadcrumbs' => $this->breadcrumbs->generateFromRequest($request),

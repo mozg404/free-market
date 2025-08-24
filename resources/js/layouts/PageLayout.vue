@@ -5,6 +5,7 @@ import PageTitle from "@/components/shared/layout/PageTitle.vue";
 import AppLayout from "@/layouts/AppLayout.vue";
 import AppHeader from "@/components/modules/app/AppHeader.vue";
 import AppBreadcrumbs from "@/components/modules/app/AppBreadcrumbs.vue";
+import {Separator} from "@components/ui/separator/index.js";
 
 const props = defineProps({
   withBreadcrumbs: {
@@ -17,6 +18,7 @@ const props = defineProps({
 <template>
   <AppLayout>
     <AppHeader/>
+    <Separator/>
     <slot name="after-header"/>
     <AppBreadcrumbs v-if="withBreadcrumbs" />
 

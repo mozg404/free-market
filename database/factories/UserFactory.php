@@ -16,7 +16,7 @@ class UserFactory extends Factory
     /**
      * The current password being used by the factory.
      */
-    protected static string $password = '123456';
+    protected static string $password = '12345678';
 
     private static array $avatars = [
         'demo/avatars/0.jpg',

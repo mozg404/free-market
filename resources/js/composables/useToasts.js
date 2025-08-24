@@ -33,6 +33,12 @@ export function showToasts(toasts) {
     })
 }
 
+export function showToastsFromFormData(data) {
+    if (data.props?.toasts) {
+        showToasts(data.props.toasts)
+    }
+}
+
 export function showToastsFromInertiaModal(modalRef, data) {
     if (data.props?.toasts) {
         showToasts(data.props?.toasts)
