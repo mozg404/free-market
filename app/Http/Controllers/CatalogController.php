@@ -66,6 +66,7 @@ class CatalogController extends Controller
             ->feedbacks()
             ->hasComments()
             ->withUser()
+            ->latest()
             ->get();
 
         return Inertia::render('catalog/CatalogProductShowPage', [
