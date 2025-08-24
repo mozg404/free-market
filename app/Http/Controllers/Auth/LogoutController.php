@@ -3,18 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\Auth\Authenticator;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class LogoutController extends Controller
 {
-    public function __invoke(Request $request): RedirectResponse
+    public function __invoke(Authenticator $authorizer): RedirectResponse
     {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $authorizer->logout();
 
         return redirect()->route('home');
     }

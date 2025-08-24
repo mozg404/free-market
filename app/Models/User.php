@@ -7,6 +7,7 @@ use App\Casts\ImageCast;
 use App\Contracts\Seoble;
 use App\Support\Image;
 use App\Support\SeoBuilder;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -56,7 +57,7 @@ use Illuminate\Notifications\Notifiable;
  * @method static UserQueryBuilder<static>|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements Seoble
+class User extends Authenticatable implements Seoble, MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;

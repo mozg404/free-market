@@ -2,37 +2,52 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Data\UserRegisteringData;
+use App\Exceptions\User\UserAlreadyRegisteredException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\RegistrationStoreRequest;
+use App\Services\Auth\WebEmailVerificator;
+use App\Services\Toaster;
 use App\Services\User\UserRegistrar;
 use App\Support\SeoBuilder;
+use App\ValueObjects\Email;
+use App\ValueObjects\Password;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use InvalidArgumentException;
 
 class RegistrationController extends Controller
 {
-    public function __construct(
-        private readonly UserRegistrar $registrar
-    ) {
-    }
-
     public function show(): Response
     {
-        return Inertia::render('Auth/Registration', [
+        return Inertia::render('auth/RegistrationPage', [
             'seo' => new SeoBuilder('Регистрация'),
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
-    {
-        $this->registrar->register(UserRegisteringData::validateAndCreate([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
-        ]));
+    public function store(
+        RegistrationStoreRequest $request,
+        UserRegistrar $userRegistrar,
+        WebEmailVerificator $emailVerificator,
+        Toaster $toaster,
+    ): RedirectResponse {
+        try {
+            // Регистрируем аккаунт
+            $user = $userRegistrar->register(
+                $request->input('name'),
+                new Email($request->input('email')),
+                new Password($request->input('password'))
+            );
 
-        return redirect()->intended();
+            // Отправляем письмо для подтверждения почты
+            $emailVerificator->sendVerificationNotification($user);
+
+            // Редирект на сообщение об отправленном подтверждении
+            return redirect()->route('verification.notice');
+        } catch (InvalidArgumentException|UserAlreadyRegisteredException $exception) {
+            $toaster->error($exception->getMessage());
+
+            return back()->withInput();
+        }
     }
 }

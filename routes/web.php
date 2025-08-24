@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegistrationController;
+use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CheckoutController;
@@ -203,10 +204,20 @@ Route::get('/payment/callback', PaymentCallbackController::class)->name('payment
 // ---------------------------------------------
 
 Route::middleware('guest')->group(function () {
-    Route::post('/registration/store', [RegistrationController::class, 'store'])->name('auth.registration.store');
-    Route::get('/registration', [RegistrationController::class, 'show'])->name('auth.registration.show');
+    Route::post('/registration/store', [RegistrationController::class, 'store'])->name('registration.store');
+    Route::get('/registration', [RegistrationController::class, 'show'])->name('registration');
+
     Route::post('/login/store', [LoginController::class, 'store'])->name('login.store');
     Route::get('/login', [LoginController::class, 'show'])->name('login');
+
+    // Верификация Email
+    Route::get('/email/verify', [VerifyEmailController::class, 'notice'])->name('verification.notice');
+    Route::get('/email/verify/resend', [VerifyEmailController::class, 'resend'])
+        ->middleware(['throttle:4,1'])
+        ->name('verification.resend');
+    Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, 'verify'])
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
 });
 Route::get('/logout', LogoutController::class)
     ->middleware('auth')

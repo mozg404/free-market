@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\User;
 
+use App\Events\UserRegistered;
 use App\Exceptions\User\UserAlreadyRegisteredException;
 use App\Models\User;
 use App\ValueObjects\Email;
@@ -27,6 +28,8 @@ class UserRegistrar
         $user->email = $email->value;
         $user->password = $password->hashed();
         $user->save();
+
+        event(new UserRegistered($user));
 
         return $user;
     }

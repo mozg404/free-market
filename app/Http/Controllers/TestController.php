@@ -14,7 +14,9 @@ class TestController extends Controller
 
     public function test(Request $request): mixed
     {
-        return 123;
+        dd(auth()->user()->hasVerifiedEmail());
+
+        return auth()->user()->hasVerifiedEmail();
     }
 
 

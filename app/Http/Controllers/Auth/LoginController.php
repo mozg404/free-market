@@ -2,34 +2,62 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\Auth\AuthenticationFailedException;
+use App\Exceptions\Auth\EmailVerification\EmailNotVerifiedException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginStoreRequest;
+use App\Models\User;
+use App\Services\Auth\Authenticator;
+use App\Services\Auth\WebEmailVerificator;
+use App\Services\Toaster;
 use App\Support\SeoBuilder;
+use App\ValueObjects\Email;
+use App\ValueObjects\Password;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 class LoginController extends Controller
 {
     public function show(): Response
     {
-        return Inertia::render('Auth/Login', [
+        return Inertia::render('auth/LoginPage', [
             'seo' => new SeoBuilder('Авторизация'),
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
-    {
-        $data = $request->validate([
-            'email' => ['required', 'min:5', 'max:255'],
-            'password' => ['required', 'min:5', 'max:255']
-        ]);
+    public function store(
+        LoginStoreRequest $request,
+        Authenticator $authenticator,
+        WebEmailVerificator $verificator,
+        Toaster $toaster,
+    ): RedirectResponse {
+        try {
+            $authenticator->authenticate(
+                email: new Email($request->input('email')),
+                password: new Password($request->input('password')),
+            );
+            $toaster->success('Успешная авторизация');
 
-        if (Auth::attempt($data)) {
-            return redirect()->intended();
+            return redirect()->intended(route('home'));
+        } catch (AuthenticationFailedException $exception) {
+            return back()
+                ->withErrors(['email' => $exception->getMessage()])
+                ->withInput();
+        } catch (EmailNotVerifiedException $exception) {
+            $toaster->error($exception->getMessage());
+            $verificator->sendVerificationNotification(
+                User::query()->getByEmail($request->input('email'))
+            );
+
+            return redirect()->route('verification.notice');
+        } catch (Throwable $exception) { // Ловим ЛЮБОЕ другое исключение
+            Log::error('Login error', ['exception' => $exception]); // Обязательно логируем
+            $toaster->error('Непредвиденная ошибка', 'Попробуйте позже');
+
+            return back()->withInput();
         }
-
-        return back()->withErrors(['email' => 'Пользователь не найден']);
     }
 }

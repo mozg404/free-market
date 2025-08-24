@@ -14,7 +14,7 @@
         @vite('resources/js/app.js')
         @inertiaHead
     </head>
-    <body>
+    <body style="margin-bottom: 0 !important;">
         @inertia
     </body>
 </html>
