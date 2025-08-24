@@ -91,21 +91,6 @@ class User extends Authenticatable implements Seoble, MustVerifyEmail
         );
     }
 
-    /**
-     * Изменяет аватар пользователя
-     * @param Image $image
-     * @return void
-     * @throws \ErrorException
-     */
-    public function changeAvatar(Image $image): self
-    {
-        $this->avatar = $image->publishIfTemporary();
-        $this->save();
-        $this->fresh();
-
-        return $this;
-    }
-
     public function toArray(): array
     {
         $arr = parent::toArray();

@@ -28,9 +28,11 @@ const props = defineProps({
       <Wrapper>
         <div class="flex items-center py-10">
           <div class="w-30 shrink-0 mr-4">
-            <AspectRatio :ratio="1" class="bg-muted rounded-full overflow-hidden relative">
-              <img :src="authUser.avatar_url" class="object-cover rounded-full w-full" :alt="authUser.name"/>
-            </AspectRatio>
+            <ModalLink :href="route('my.settings.change.avatar')">
+              <AspectRatio :ratio="1" class="bg-muted rounded-full overflow-hidden relative">
+                <img :src="authUser.avatar_url" class="object-cover rounded-full w-full" :alt="authUser.name"/>
+              </AspectRatio>
+            </ModalLink>
           </div>
           <div>
             <PageTitle>{{ authUser.name }}</PageTitle>
@@ -50,6 +52,9 @@ const props = defineProps({
             </SidebarLink>
             <SidebarLink :active="route().current('my.settings.change.password')" as-child>
               <Link :href="route('my.settings.change.password')">Изменить пароль</Link>
+            </SidebarLink>
+            <SidebarLink as-child>
+              <ModalLink :href="route('my.settings.change.avatar')">Изменить аватарку</ModalLink>
             </SidebarLink>
           </div>
         </aside>

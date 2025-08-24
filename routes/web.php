@@ -10,6 +10,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\My\Settings\ChangeAvatarController;
 use App\Http\Controllers\My\Settings\PasswordChangeController;
 use App\Http\Controllers\My\MyBalanceController;
 use App\Http\Controllers\My\MyOrderController;
@@ -98,9 +99,6 @@ Route::middleware('auth')->prefix('/my')->group(function () {
     // Настройки профиля
     // ---------------------------------------------
 
-//    Route::get('/settings', [SettingsController::class, 'index'])->name('my.settings');
-//    Route::patch('/settings/change-avatar', [SettingsController::class, 'changeAvatar'])->name('my.settings.change-avatar');
-
     Route::prefix('/settings')->group(function () {
         // Изменение профиля
         Route::get('/', [ProfileUpdateController::class, 'index'])->name('my.settings');
@@ -108,8 +106,10 @@ Route::middleware('auth')->prefix('/my')->group(function () {
         // Изменение пароля
         Route::get('/change-password', [PasswordChangeController::class, 'index'])->name('my.settings.change.password');
         Route::patch('/change-password', [PasswordChangeController::class, 'update'])->name('my.settings.change.password.update');
+        // Изменение аватара
+        Route::get('/change-avatar', [ChangeAvatarController::class, 'index'])->name('my.settings.change.avatar');
+        Route::patch('/change-avatar', [ChangeAvatarController::class, 'update'])->name('my.settings.change.avatar.update');
     });
-
 
     // ---------------------------------------------
     // Мои заказы

@@ -7,6 +7,9 @@ import {Button} from "@/components/ui/button/index.js";
 import {Upload, Save, Crop, X} from "lucide-vue-next";
 import {AspectRatio} from "@/components/ui/aspect-ratio/index.js";
 import {cn} from "@/lib/utils.js";
+import {Input} from "@components/ui/input/index.js";
+import ErrorMessage from "@components/shared/ErrorMessage.vue";
+import {showToastsFromFormData} from "@/composables/useToasts.js";
 
 const props = defineProps({
   imageUrl: [String, null],
@@ -95,7 +98,8 @@ async function applyCrop() {
 const save = () => {
   return form.post(props.saveRoute, {
     forceFormData: true,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      showToastsFromFormData(data)
       modalRef.value.close()
     }
   })
@@ -109,6 +113,8 @@ function isNewImage() {
 <template>
   <Modal max-width="2xl" ref="modalRef">
     <div :class="cn('space-y-4 min-w-44 p-4', props.class)">
+
+      <ErrorMessage :message="form.errors.image"/>
 
       <!-- Предпросмотр -->
       <template v-if="currentImageUrl && !showCropper">
