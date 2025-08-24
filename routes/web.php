@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\PasswordForgotController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\CartController;
@@ -218,10 +220,15 @@ Route::middleware('guest')->group(function () {
     Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, 'verify'])
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
+
+    // Сброс пароля
+    Route::get('forgot-password', [PasswordForgotController::class, 'form'])->name('password.forgot');
+    Route::post('forgot-password', [PasswordForgotController::class, 'store'])->name('password.forgot.store');
+    Route::get('forgot-password/notify', [PasswordForgotController::class, 'notify'])->name('password.forgot.notify');
+    Route::get('reset-password/{token}', [PasswordResetController::class, 'reset'])->name('password.reset');
+    Route::post('reset-password', [PasswordResetController::class, 'update'])->name('password.update');
 });
-Route::get('/logout', LogoutController::class)
-    ->middleware('auth')
-    ->name('logout');
+Route::get('/logout', LogoutController::class)->middleware('auth')->name('logout');
 
 // ---------------------------------------------
 // Главная

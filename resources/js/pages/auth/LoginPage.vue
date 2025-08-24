@@ -46,7 +46,12 @@ const submit = () => form.post(route('login.store'))
                   </div>
 
                   <div class="grid gap-2">
-                    <Label html-for="password">Пароль</Label>
+                    <div class="flex items-center">
+                      <Label html-for="password">Пароль</Label>
+                      <Link :href="route('password.forgot')" class="ml-auto text-sm underline-offset-4 hover:underline">
+                        Забыли пароль?
+                      </Link>
+                    </div>
                     <Input id="password" type="password" v-model="form.password" required />
                     <ErrorMessage :message="form.errors.password"/>
                   </div>
