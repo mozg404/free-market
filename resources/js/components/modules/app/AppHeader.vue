@@ -3,7 +3,7 @@ import {Link} from "@inertiajs/vue3";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import logoUrl from "../../../../img/logo.svg";
 import {Button} from "@/components/ui/button/index.js";
-import {ShoppingCart, LogIn, RussianRuble} from 'lucide-vue-next'
+import {ShoppingCart, LogIn, RussianRuble, Wallet} from 'lucide-vue-next'
 import {useCart} from '@/composables/useCart.js'
 import {useUser} from '@/composables/useUser.js'
 import {
@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu/index.js'
 import UserAvatar from "@/components/modules/users/UserAvatar.vue";
+import PriceFormatter from "@components/shared/PriceFormatter.vue";
 
 const {cart} = useCart()
 const {user, isAuth} = useUser()
@@ -59,8 +60,8 @@ const {user, isAuth} = useUser()
           <div class="flex gap-2">
             <Button variant="outline" class="rounded-3xl" v-if="isAuth" as-child>
               <Link :href="route('my.balance')">
-                <RussianRuble class="w-4 h-4"/>
-                {{ user.balance }}
+                <Wallet class="w-4 h-4"/>
+                <PriceFormatter :value="user.balance"/>
               </Link>
             </Button>
 
