@@ -5,9 +5,13 @@ import ProductImage from "@/components/modules/products/ProductImage.vue";
 import {Card, CardContent} from "@/components/ui/card/index.js";
 import UserAvatar from "@/components/modules/users/UserAvatar.vue";
 import FeedbackControlButton from "@/components/modules/feedback/FeedbackControlButton.vue";
+import {Button} from "@components/ui/button/index.js";
+import {Key} from "lucide-vue-next";
+import {ModalLink} from "@inertiaui/modal-vue";
 
 const props = defineProps({
   item: Object,
+  completed: Boolean,
 })
 </script>
 
@@ -23,7 +27,6 @@ const props = defineProps({
           </div>
           <div>
             <div class="line-clamp-2">{{ item.product.name }}</div>
-
           </div>
         </div>
 
@@ -49,7 +52,15 @@ const props = defineProps({
           </div>
         </div>
 
-        <FeedbackControlButton :order-item-id="item.id" :feedback="item.feedback" />
+        <div v-if="completed" class="flex space-x-3">
+          <FeedbackControlButton :order-item-id="item.id" :feedback="item.feedback" />
+          <Button as-child>
+            <ModalLink :href="route('my.purchases.content', item.id)">
+              <Key />
+              Получить
+            </ModalLink>
+          </Button>
+        </div>
       </div>
     </CardContent>
   </Card>

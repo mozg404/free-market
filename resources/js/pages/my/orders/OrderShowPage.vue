@@ -14,7 +14,6 @@ import PageLayout from "@/layouts/PageLayout.vue";
 import SidebarLayout from "@/components/shared/SidebarLayout.vue";
 import {Button} from "@/components/ui/button/index.js";
 import {Link} from "@inertiajs/vue3";
-import {Separator} from "@/components/ui/separator";
 
 const props = defineProps({
   order: Object,
@@ -31,7 +30,7 @@ const props = defineProps({
     <Wrapper>
       <SidebarLayout>
         <div class="space-y-6">
-          <OrderItemCart v-for="item in items" :key="item.product.id" :item="item" />
+          <OrderItemCart v-for="item in items" :key="item.product.id" :item="item" :completed="order.status === 'completed'" />
         </div>
 
         <template #sidebar_right>
@@ -98,7 +97,6 @@ const props = defineProps({
                 <Button :as="Link" :href="route('my.orders.pay', order.id)" class="w-full py-6">Оплатить</Button>
                 <Button :as="Link" :href="route('my.orders.cancel', order.id)" class="w-full mt-2" variant="ghost">Отменить заказ</Button>
               </div>
-
             </CardContent>
           </Card>
         </template>
