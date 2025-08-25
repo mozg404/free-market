@@ -6,7 +6,6 @@ namespace App\Data\Products;
 
 use App\Data\User\UserData;
 use App\Enum\ProductStatus;
-use App\Support\Image;
 use App\Support\Price;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Data;
