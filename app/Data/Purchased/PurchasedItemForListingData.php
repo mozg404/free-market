@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Products;
+namespace App\Data\Purchased;
 
 use App\Data\Categories\CategorydData;
 use App\Data\User\UserData;
@@ -11,13 +11,14 @@ use App\Support\Price;
 use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 
-class ProductPurchasedData extends Data
+class PurchasedItemForListingData extends Data
 {
     public function __construct(
         public int $id,
         public int $order_id,
         public int $order_item_id,
         public int $stock_item_id,
+        public int $product_id,
         public string $name,
         public Price $price,
         public ?string $image_url,
@@ -32,10 +33,11 @@ class ProductPurchasedData extends Data
     public static function fromModel(OrderItem $orderItem): self
     {
         return new self(
-            id: $orderItem->product_id,
+            id: $orderItem->id,
             order_id: $orderItem->order_id,
             order_item_id: $orderItem->id,
             stock_item_id: $orderItem->stock_item_id,
+            product_id: $orderItem->product_id,
             name: $orderItem->product->name,
             price: $orderItem->price,
             image_url: $orderItem->product->image_url,

@@ -144,7 +144,7 @@ Route::middleware('auth')->prefix('/my')->group(function () {
     // ---------------------------------------------
 
     Route::get('/purchases', [MyPurchaseController::class, 'index'])->name('my.purchases');
-    Route::get('/purchases/{stock_item}', [MyPurchaseController::class, 'show'])->name('my.purchases.show');
+    Route::get('/purchases/{order_item}', [MyPurchaseController::class, 'content'])->name('my.purchases.content');
 
     // ---------------------------------------------
     // Мои продажи

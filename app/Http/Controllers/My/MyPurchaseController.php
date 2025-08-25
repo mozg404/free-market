@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\My;
 
-use App\Data\Products\ProductPurchasedData;
-use App\Data\Products\ProductPurchasedDetailedData;
+use App\Data\Purchased\PurchasedItemContentData;
+use App\Data\Purchased\PurchasedItemForListingData;
 use App\Http\Controllers\Controller;
 use App\Models\OrderItem;
-use App\Models\StockItem;
 use App\Support\SeoBuilder;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -15,7 +14,7 @@ class MyPurchaseController extends Controller
 {
     public function index(): Response
     {
-        $purchasedProducts = OrderItem::query()
+        $purchasedItems = OrderItem::query()
             ->withOrder()
             ->withStockItem()
             ->withProduct()
@@ -27,15 +26,15 @@ class MyPurchaseController extends Controller
             ->paginate(10);
 
         return Inertia::render('my/purchases/PurchasedIndexPage', [
-            'purchasedProducts' => ProductPurchasedData::collect($purchasedProducts),
+            'purchasedItems' => PurchasedItemForListingData::collect($purchasedItems),
             'seo' => new SeoBuilder('Мои покупки'),
         ]);
     }
 
-    public function show(StockItem $stockItem): Response
+    public function content(OrderItem $orderItem): Response
     {
-        return Inertia::render('my/purchases/PurchasedProductShowModal', [
-            'purchasedProduct' => ProductPurchasedDetailedData::from($stockItem),
+        return Inertia::render('my/purchases/PurchasedItemContentModal', [
+            'purchasedItem' => PurchasedItemContentData::from($orderItem),
         ]);
     }
 }

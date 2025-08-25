@@ -1,5 +1,4 @@
 <script setup>
-
 import PageLayout from "@/layouts/PageLayout.vue";
 import {Link} from "@inertiajs/vue3";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table/index.js";
@@ -17,14 +16,14 @@ import LaravelPagination from "@/components/shared/LaravelPagination.vue";
 import FeedbackControlButton from "@/components/modules/feedback/FeedbackControlButton.vue";
 
 const props = defineProps({
-  purchasedProducts: Array,
+  purchasedItems: Array,
 })
 </script>
 
 <template>
   <PageLayout>
     <template #title>Мои покупки</template>
-    <template #counter>{{ purchasedProducts.total }}</template>
+    <template #counter>{{ purchasedItems.total }}</template>
 
     <wrapper>
       <TableBordered>
@@ -38,57 +37,57 @@ const props = defineProps({
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="product in purchasedProducts.data" :key="product.id">
+            <TableRow v-for="purchasedItem in purchasedItems.data" :key="purchasedItem.id">
               <TableCell class="whitespace-normal w-1/2">
                 <div class="flex items-center">
                   <div class="w-24 shrink-0 mr-4">
-                    <Link :href="route('catalog.product', product.id)" class="block">
-                      <ProductImage :product="product" />
+                    <Link :href="route('catalog.product', purchasedItem.product_id)" class="block">
+                      <ProductImage :product="purchasedItem" />
                     </Link>
                   </div>
                   <div>
-                    {{product.name}}
+                    {{purchasedItem.name}}
                     <div class="mt-4 flex space-x-2">
                       <Button  variant="secondary" as-child>
-                        <ModalLink :href="route('my.purchases.show', product.stock_item_id)">
+                        <ModalLink :href="route('my.purchases.content', purchasedItem.id)">
                           <Key />
                           Получить
                         </ModalLink>
                       </Button>
-                      <FeedbackControlButton variant="ghost" :order-item-id="product.order_item_id" :feedback="product.feedback"/>
+                      <FeedbackControlButton variant="ghost" :order-item-id="purchasedItem.id" :feedback="purchasedItem.feedback"/>
                     </div>
                   </div>
                 </div>
               </TableCell>
               <TableCell>
                 <div class="flex flex-col space-y-2">
-                  <Badge variant="ghost">{{ product.category.name }}</Badge>
-                  <Link :href="route('my.orders.show', product.order_id)">
-                    <Badge variant="ghost" class="hover:opacity-70 transition-opacity">Заказ #{{ product.order_id }}</Badge>
+                  <Badge variant="ghost">{{ purchasedItem.category.name }}</Badge>
+                  <Link :href="route('my.orders.show', purchasedItem.order_id)">
+                    <Badge variant="ghost" class="hover:opacity-70 transition-opacity">Заказ #{{ purchasedItem.order_id }}</Badge>
                   </Link>
                   <Badge variant="ghost">
-                    <DateTime :value="product.purchased_at" format="D MMMM YYYY"/>
+                    <DateTime :value="purchasedItem.purchased_at" format="D MMMM YYYY"/>
                   </Badge>
                 </div>
               </TableCell>
 
               <TableCell>
-                <UserShortInfo :user="product.seller"/>
+                <UserShortInfo :user="purchasedItem.seller"/>
               </TableCell>
 
               <TableCell class="text-right">
-                <template v-if="product.price.has_discount">
-                  <PriceFormatter :value="product.price.discount" class="font-semibold text-destructive block"/>
-                  <PriceFormatter :value="product.price.base" class="text-xs text-muted-foreground line-through block"/>
+                <template v-if="purchasedItem.price.has_discount">
+                  <PriceFormatter :value="purchasedItem.price.discount" class="font-semibold text-destructive block"/>
+                  <PriceFormatter :value="purchasedItem.price.base" class="text-xs text-muted-foreground line-through block"/>
                 </template>
-                <PriceFormatter v-else :value="product.price.current" class="font-semibold"/>
+                <PriceFormatter v-else :value="purchasedItem.price.current" class="font-semibold"/>
               </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </TableBordered>
 
-      <LaravelPagination class="mt-8 justify-center" :pagination="purchasedProducts"/>
+      <LaravelPagination class="mt-8 justify-center" :pagination="purchasedItems"/>
 
     </wrapper>
   </PageLayout>
