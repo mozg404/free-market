@@ -2,7 +2,6 @@
 
 namespace App\Data\User;
 
-use App\Models\User;
 use App\Support\Image;
 use Carbon\Carbon;
 use Spatie\LaravelData\Data;
@@ -16,11 +15,11 @@ class UserForListingData extends Data
         public ?Image $avatar,
         public ?string $avatar_url = null,
         public Carbon $created_at,
+        public float $seller_rating,
+        public int $positive_feedbacks_count,
+        public int $negative_feedbacks_count,
         public ?int $available_products_count,
         public ?int $sold_stock_count,
-        public ?float $seller_rating,
-        public ?int $positive_feedbacks_count,
-        public ?int $negative_feedbacks_count,
     ) {
         if (isset($avatar)) {
             $this->avatar_url = $this->avatar->getUrl();

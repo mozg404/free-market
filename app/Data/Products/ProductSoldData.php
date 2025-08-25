@@ -3,7 +3,7 @@
 namespace App\Data\Products;
 
 use App\Data\Categories\CategorydData;
-use App\Data\User\UserShortData;
+use App\Data\User\UserData;
 use App\Enum\ProductStatus;
 use App\Models\OrderItem;
 use App\Support\Price;
@@ -20,7 +20,7 @@ class ProductSoldData extends Data
         public Price $price,
         public ?string $image_url,
         public ProductStatus $status,
-        public ?UserShortData $buyer = null,
+        public ?UserData $buyer = null,
         public Carbon $sold_at,
     ) {}
 
@@ -34,7 +34,7 @@ class ProductSoldData extends Data
             price: $orderItem->price,
             image_url: $orderItem->stockItem->product->image_url,
             status: $orderItem->stockItem->product->status,
-            buyer: UserShortData::from($orderItem->order->user),
+            buyer: UserData::from($orderItem->order->user),
             sold_at: $orderItem->order->paid_at
         );
     }

@@ -5,7 +5,6 @@ namespace App\Data\Products;
 use App\Data\Categories\CategorydData;
 use App\Data\FeatureData;
 use App\Data\User\UserData;
-use App\Data\User\UserForListingData;
 use App\Enum\ProductStatus;
 use App\Models\Product;
 use App\Support\Price;
@@ -27,7 +26,7 @@ class ProductDetailedData extends Data
         public ProductStatus $status,
         public ?int $available_stock_items_count,
         public ?CategorydData $category,
-        public ?UserForListingData $user,
+        public ?UserData $user,
         public ?Collection $features = null,
     ) {
     }
@@ -47,7 +46,7 @@ class ProductDetailedData extends Data
             status: $product->status,
             available_stock_items_count: $product->getQuantityInStock() ?? 0,
             category: CategorydData::from($product->category),
-            user: UserForListingData::from($product->user),
+            user: UserData::from($product->user),
             features: FeatureData::collect($product->features),
         );
     }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Data\Products\ProductForListingData;
 use App\Data\User\UserForListingData;
-use App\Data\User\UserShortData;
+use App\Data\User\UserData;
 use App\Models\Product;
 use App\Models\User;
 use App\Support\SeoBuilder;
@@ -36,7 +36,7 @@ class UserController extends Controller
 
         return Inertia::render('users/UsersShowPage', [
             'products' => ProductForListingData::collect($products),
-            'concreateUser' => UserShortData::from($user),
+            'concreateUser' => UserData::from($user),
             'seo' => new SeoBuilder($user),
         ]);
     }

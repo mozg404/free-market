@@ -4,10 +4,7 @@ namespace App\Data\Orders;
 
 use App\Data\Products\ProductForListingData;
 use App\Data\User\UserData;
-use App\Data\User\UserForListingData;
 use App\Models\Feedback;
-use App\Models\OrderItem;
-use App\Models\Product;
 use App\Support\Price;
 use Spatie\LaravelData\Data;
 
@@ -18,7 +15,7 @@ class OrderItemForListingData extends Data
         public int $order_id,
         public Price $price,
         public ProductForListingData $product,
-        public UserForListingData $seller,
+        public UserData $seller,
         public ?Feedback $feedback = null,
     ) {
     }

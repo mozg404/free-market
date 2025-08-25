@@ -2,7 +2,7 @@
 
 namespace App\Data\Feedback;
 
-use App\Data\User\UserForListingData;
+use App\Data\User\UserData;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Data;
 
@@ -12,7 +12,7 @@ class FeedbackData extends Data
         public int $id,
         public bool $is_positive,
         public ?string $comment,
-        public UserForListingData $user,
+        public UserData $user,
         public Carbon $created_at,
     ) {}
 }

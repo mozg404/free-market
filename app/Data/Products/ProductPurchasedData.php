@@ -3,7 +3,7 @@
 namespace App\Data\Products;
 
 use App\Data\Categories\CategorydData;
-use App\Data\User\UserShortData;
+use App\Data\User\UserData;
 use App\Enum\ProductStatus;
 use App\Models\Feedback;
 use App\Models\OrderItem;
@@ -23,7 +23,7 @@ class ProductPurchasedData extends Data
         public ?string $image_url,
         public ?CategorydData $category,
         public ProductStatus $status,
-        public ?UserShortData $seller = null,
+        public ?UserData $seller = null,
         public ?Feedback $feedback = null,
         public Carbon $purchased_at,
     ) {
@@ -41,7 +41,7 @@ class ProductPurchasedData extends Data
             image_url: $orderItem->product->image_url,
             category: CategorydData::from($orderItem->product->category),
             status: $orderItem->product->status,
-            seller: UserShortData::from($orderItem->seller),
+            seller: UserData::from($orderItem->seller),
             feedback: $orderItem->feedback,
             purchased_at: $orderItem->order->paid_at
         );
