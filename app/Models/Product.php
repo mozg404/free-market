@@ -9,7 +9,6 @@ use App\Casts\ImageCast;
 use App\Collections\FeatureCollection;
 use App\Collections\ProductCollection;
 use App\Contracts\Seoble;
-use App\Data\Products\ProductEditableData;
 use App\Enum\ProductStatus;
 use App\Support\Image;
 use App\Support\Price;
@@ -23,12 +22,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
+use Laravel\Scout\Searchable;
 use Mews\Purifier\Casts\CleanHtmlInput;
 
 /**
- * 
- *
  * @property int $id
  * @property int $user_id
  * @property string $name
@@ -101,6 +98,7 @@ use Mews\Purifier\Casts\CleanHtmlInput;
 class Product extends Model implements Seoble
 {
     use HasFactory;
+    use Searchable;
 
     protected $fillable = [
         'name',
