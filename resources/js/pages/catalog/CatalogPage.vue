@@ -20,17 +20,17 @@ import {X} from 'lucide-vue-next';
 const props = defineProps({
   categories: Array,
   products: Object,
-  filters: Object,
+  filtersValues: Object,
 })
 
 const currentUrl = route(route().current())
 
 const filters = useForm({
-  price_min: props.filters?.price_min ?? null,
-  price_max: props.filters?.price_max ?? null,
-  is_discounted: props.filters?.is_discounted ?? false,
-  sort: props.filters?.sort,
-  search: props.filters?.search ?? '',
+  price_min: props.filtersValues?.price_min ?? null,
+  price_max: props.filtersValues?.price_max ?? null,
+  is_discounted: props.filtersValues?.is_discounted ?? false,
+  sort: props.filtersValues?.sort,
+  search: props.filtersValues?.search ?? '',
 })
 
 const applyFilters = debounce(() => {
@@ -60,6 +60,10 @@ onUnmounted(() => {
   <PageLayout :with-breadcrumbs="false">
     <template #title>Каталог товаров</template>
     <template #counter>{{ products.total }}</template>
+
+    <pre>
+      {{props.filters}}
+    </pre>
 
     <Wrapper>
       <SidebarLayout>

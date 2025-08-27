@@ -7,6 +7,7 @@ namespace App\Builders;
 use App\Collections\ProductCollection;
 use App\Enum\ProductStatus;
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -78,10 +79,6 @@ class ProductQueryBuilder extends Builder
             }
         }
 
-        if (!empty($data['search'])) {
-            $this->searchByName($data['search']);
-        }
-
         if (isset($data['sort'])) {
             if ($data['sort'] === 'rating') {
                 $this->orderByRating();
@@ -109,6 +106,14 @@ class ProductQueryBuilder extends Builder
 
             if ($data['sort'] === 'id_asc') {
                 $this->orderBy('id');
+            }
+        }
+
+        if (!empty($data['search'])) {
+            if (!isset($data['sort'])) {
+                $this->searchAndSort($data['search']);
+            } else {
+                $this->search($data['search']);
             }
         }
 
@@ -253,13 +258,34 @@ class ProductQueryBuilder extends Builder
     }
 
     /**
-     * Оставляет только те строки, подстрока $search содержится в названии
-     * @param string $search
-     * @return $this
+     * Выполняет поиск через Meilisearch
      */
-    public function searchByName(string $search): self
+    public function search(string $string): self
     {
-        return $this->whereRaw('name LIKE ?', ['%' . $search . '%']);
+        $ids = collect(Product::search($string)->raw()['hits'])
+            ->pluck('id')
+            ->all();
+
+        return $this->whereIn('id', $ids);
+    }
+
+    /**
+     * Выполняет поиск через Meilisearch + сортирует по релевантности
+     */
+    public function searchAndSort(string $string): self
+    {
+        $ids = collect(Product::search($string)->raw()['hits'])
+            ->pluck('id')
+            ->all();
+
+        $builder = $this->whereIn('id', $ids);
+
+        if (!empty($ids)) {
+            $orderString = implode(',', $ids);
+            $builder = $builder->orderByRaw("array_position(ARRAY[{$orderString}], id)");
+        }
+
+        return $builder;
     }
 
     /**

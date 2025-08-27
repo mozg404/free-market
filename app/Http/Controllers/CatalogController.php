@@ -27,10 +27,10 @@ class CatalogController extends Controller
             ->appends($request->getValues());
 
         return Inertia::render('catalog/CatalogPage', [
-            'filters' => $request->getValues(),
+            'filtersValues' => $request->getValues(),
             'categories' => $categories,
             'products' => ProductForListingData::collect($products),
-            'seo' => new SeoBuilder('Каталог товаров')
+            'seo' => new SeoBuilder('Каталог товаров'),
         ]);
     }
 
@@ -49,7 +49,7 @@ class CatalogController extends Controller
         return Inertia::render('catalog/CatalogCategoryPage', [
             'category' => $category,
             'features' => $features,
-            'filters' => $request->getValues(),
+            'filtersValues' => $request->getValues(),
             'categories' => $categories,
             'products' => ProductForListingData::collect($products),
             'seo' => new SeoBuilder($category),

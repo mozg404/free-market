@@ -181,6 +181,19 @@ class Product extends Model implements Seoble
             ->image($this->image_url);
     }
 
+    public function toSearchableArray(): array
+    {
+        $this->load('category');
+
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'category' => [
+                'name' => $this->category->name,
+            ],
+        ];
+    }
+
     public function toArray(): array
     {
         $array = parent::toArray();

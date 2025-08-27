@@ -23,18 +23,18 @@ const props = defineProps({
   categories: Array,
   features: Array,
   products: Object,
-  filters: Object,
+  filtersValues: Object,
 })
 
 const currentUrl = route('catalog.category', props.category.full_path)
 
 const filters = useForm({
-  price_min: props.filters?.price_min ?? null,
-  price_max: props.filters?.price_max ?? null,
-  is_discounted: props.filters?.is_discounted ?? false,
-  sort: props.filters?.sort,
-  search: props.filters?.search ?? '',
-  features: props.filters?.features ?? {},
+  price_min: props.filtersValues?.price_min ?? null,
+  price_max: props.filtersValues?.price_max ?? null,
+  is_discounted: props.filtersValues?.is_discounted ?? false,
+  sort: props.filtersValues?.sort,
+  search: props.filtersValues?.search ?? '',
+  features: props.filtersValues?.features ?? {},
 })
 
 const applyFilters = debounce(() => {
