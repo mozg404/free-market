@@ -33,6 +33,7 @@ const updateValue = (event) => {
       type="text"
       :placeholder="placeholder"
       class="pl-8"
+      :default-value="modelValue"
       @input="updateValue"
     />
     <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
