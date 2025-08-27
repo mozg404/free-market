@@ -5,7 +5,7 @@
 init: restart
 up: docker-up
 down: docker-down
-restart: down up migrate-fresh clear seed frontend-up
+restart: down up migrate-fresh scout-flush clear seed scout-import frontend-up
 start: up frontend-up
 
 # ========================
@@ -33,6 +33,14 @@ migrate-refresh:
 
 seed:
 	./vendor/bin/sail php artisan db:seed
+
+scout-flush:
+	@echo "Очистка Meilisearch..."
+	./vendor/bin/sail artisan scout:flush "App\Models\Product"
+
+scout-import:
+	@echo "Импорт в Meilisearch..."
+	./vendor/bin/sail artisan scout:import "App\Models\Product"
 
 # ========================
 # Фронтенд
