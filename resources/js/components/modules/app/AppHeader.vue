@@ -3,7 +3,7 @@ import {Link} from "@inertiajs/vue3";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import logoUrl from "../../../../img/logo.svg";
 import {Button} from "@/components/ui/button/index.js";
-import {ShoppingCart, LogIn, RussianRuble, Wallet} from 'lucide-vue-next'
+import {ShoppingCart, LogIn, Search, Wallet} from 'lucide-vue-next'
 import {useCart} from '@/composables/useCart.js'
 import {useUser} from '@/composables/useUser.js'
 import {
@@ -33,7 +33,7 @@ const {user, isAuth} = useUser()
           </Link>
 
           <div class="hidden lg:flex lg:gap-x-2">
-            <Button variant="ghost" class="rounded-3xl" as-child>
+            <Button variant="ghost"  class="rounded-3xl" as-child>
               <Link :href="route('catalog')">Каталог</Link>
             </Button>
           </div>
@@ -58,6 +58,12 @@ const {user, isAuth} = useUser()
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
 
           <div class="flex gap-2">
+            <Button variant="outline" size="icon" class="rounded-3xl" as-child>
+              <ModalLink :href="route('search')">
+                <Search class="w-4 h-4"/>
+              </ModalLink>
+            </Button>
+
             <Button variant="outline" class="rounded-3xl" v-if="isAuth" as-child>
               <Link :href="route('my.balance')">
                 <Wallet class="w-4 h-4"/>

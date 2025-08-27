@@ -32,6 +32,7 @@ use App\Http\Controllers\My\Settings\ProfileUpdateController;
 use App\Http\Controllers\My\SettingsController;
 use App\Http\Controllers\PaymentCallbackController;
 use App\Http\Controllers\SandboxController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckoutAccess;
@@ -235,6 +236,13 @@ Route::middleware('guest')->group(function () {
     Route::post('reset-password', [PasswordResetController::class, 'update'])->name('password.update');
 });
 Route::get('/logout', LogoutController::class)->middleware('auth')->name('logout');
+
+// ---------------------------------------------
+// Поиск
+// ---------------------------------------------
+
+Route::get('search', [SearchController::class, 'form'])->name('search');
+Route::post('search', [SearchController::class, 'store'])->name('search.store');
 
 // ---------------------------------------------
 // Главная
