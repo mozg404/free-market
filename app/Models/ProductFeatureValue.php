@@ -29,7 +29,7 @@ class ProductFeatureValue extends Pivot
 {
     use HasFactory;
 
-    public const TABLE = 'product_feature_values';
+    public const string TABLE = 'product_feature_values';
     protected $table = self::TABLE;
     public $timestamps = false;
     protected $fillable = ['value'];
