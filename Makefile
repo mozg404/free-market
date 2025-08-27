@@ -2,7 +2,7 @@
 # Основные команды
 # ========================
 
-init: restart
+init: docker-down-clear docker-pull docker-build docker-up scout-flush clear
 up: docker-up
 down: docker-down
 restart: down up migrate-fresh scout-flush clear seed scout-import frontend-up
@@ -16,7 +16,16 @@ docker-up:
 	./vendor/bin/sail up -d
 
 docker-down:
-	./vendor/bin/sail down
+	./vendor/bin/sail down --remove-orphans
+
+docker-down-clear:
+	./vendor/bin/sail down -v --remove-orphans
+
+docker-pull:
+	./vendor/bin/sail pull
+
+docker-build:
+	./vendor/bin/sail build
 
 # ========================
 # Миграции и данные
