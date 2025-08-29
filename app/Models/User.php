@@ -3,9 +3,7 @@
 namespace App\Models;
 
 use App\Builders\UserQueryBuilder;
-use App\Casts\ImageCast;
 use App\Contracts\Seoble;
-use App\Support\Image;
 use App\Support\SeoBuilder;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -20,8 +18,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
 /**
- *
- *
  * @property int $id
  * @property string $name
  * @property string $email
