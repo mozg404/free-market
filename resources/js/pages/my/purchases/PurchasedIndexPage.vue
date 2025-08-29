@@ -42,7 +42,7 @@ const props = defineProps({
                 <div class="flex items-center">
                   <div class="w-24 shrink-0 mr-4">
                     <Link :href="route('catalog.product', purchasedItem.product_id)" class="block">
-                      <ProductImage :product="purchasedItem" />
+                      <ProductImage :product="purchasedItem" conversion="small" />
                     </Link>
                   </div>
                   <div>

@@ -22,7 +22,7 @@ const props = defineProps({
         <div class="flex items-center min-w-0">
           <div class="w-20 shrink-0 mr-4">
             <Link :href="route('catalog.product', item.product.id)" class="block">
-              <ProductImage :product="item.product" />
+              <ProductImage :product="item.product" conversion="small" />
             </Link>
           </div>
           <div>

@@ -2,16 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Enum\FeatureType;
 use App\Enum\ProductStatus;
-use App\Models\Feature;
 use App\Models\Product;
 use App\Models\User;
-use App\Support\Image;
 use App\Support\Price;
 use App\Support\RatingCalculator;
 use App\Support\TextGenerator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,19 +16,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class ProductFactory extends Factory
 {
     protected $model = Product::class;
-
-    private static array $images = [
-        'demo/products_images/1_win10.jpg',
-        'demo/products_images/2_office_professional.jpg',
-        'demo/products_images/3_win11.jpg',
-        'demo/products_images/4_adobe_creative.jpg',
-        'demo/products_images/5_jetbrains.jpg',
-        'demo/products_images/6_phpstorm.jpg',
-        'demo/products_images/7_webstorm.jpg',
-        'demo/products_images/8_itunes.jpg',
-        'demo/products_images/9_eset_nod32.jpg',
-        'demo/products_images/10_autocad.jpg',
-    ];
 
     private static array $names = [
         'Ключ Autodesk AutoCAD 2026',
@@ -95,28 +78,25 @@ class ProductFactory extends Factory
         });
     }
 
-    public function fromDemo(?array $data = null): self
+    public function withModifiedName(string|array $name, ?array $modifiers = null): self
     {
-        return $this->state(function (array $attributes) use ($data) {
-             // Обработка name (может быть строкой или массивом)
-            $name = is_array($data['name'] ?? null)
-                ? $this->faker->randomElement($data['name'])
-                : ($data['name'] ?? $this->faker->sentence(2));
+        return $this->state(function (array $attributes) use ($name, $modifiers) {
+            $name = is_array($name) ? $this->faker->randomElement($name) : $name;
 
-            // Обработка image (может быть строкой, массивом или отсутствовать)
-            $imagePath = null;
-            if (isset($data['image'])) {
-                $imagePath = is_array($data['image'])
-                    ? $this->faker->randomElement($data['image'])
-                    : $data['image'];
-            }
+            return [
+                'name' => TextGenerator::decoratedText($name, $modifiers ?? [], random_int(0, 2), $this->faker->randomElement(['. ', ', ', ' '])),
+            ];
+        });
+    }
 
-            return array_filter([
-                'name' => TextGenerator::decoratedText($name, $data['name_modifiers'] ?? [], random_int(0, 2), $this->faker->randomElement(['. ', ', ', ' '])),
-                'image' => $imagePath
-                    ? Image::createFromAbsolutePath($imagePath)->getRelativePath()
-                    : null,
-            ]);
+    public function withConcretePreview(string|array $path): self
+    {
+        return $this->afterCreating(function (Product $product) use ($path) {
+            $path = is_array($path) ? $this->faker->randomElement($path) : $path;
+            $product
+                ->addMedia($path)
+                ->preservingOriginal()
+                ->toMediaCollection($product::MEDIA_COLLECTION_PREVIEW);
         });
     }
 
@@ -130,12 +110,4 @@ class ProductFactory extends Factory
         });
     }
 
-    public function withImage(): self
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'image' => Image::createFromAbsolutePath(resource_path($this->faker->randomElement(static::$images)))->getRelativePath(),
-            ];
-        });
-    }
 }

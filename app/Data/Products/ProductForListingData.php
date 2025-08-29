@@ -16,7 +16,7 @@ class ProductForListingData extends Data
         public int $id,
         public string $name,
         public Price $price,
-        public ?string $image_url,
+        public ?ProductPreviewData $preview,
         public ProductStatus $status,
         public ?UserData $user = null,
         public Carbon $created_at,

@@ -78,7 +78,8 @@ class DatabaseSeeder extends Seeder
             // Добавляем товар к главному пользователю с вероятностью 25%
             if (random_int(1, 100) <= 25) {
                 $product = Product::factory()
-                    ->fromDemo($productData)
+                    ->withModifiedName($productData['name'], $productData['name_modifiers'] ?? [])
+                    ->withConcretePreview($productData['image'])
                     ->isActive()
                     ->for($category)
                     ->for($mainUser)
@@ -89,7 +90,8 @@ class DatabaseSeeder extends Seeder
             // Добавляем 5 вариаций случайному пользователю
             for ($i = 0; $i < 5; $i++) {
                 $product = Product::factory()
-                    ->fromDemo($productData)
+                    ->withModifiedName($productData['name'], $productData['name_modifiers'] ?? [])
+                    ->withConcretePreview($productData['image'])
                     ->for($category)
                     ->for($users->random())
                     ->isActive()

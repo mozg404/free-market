@@ -1,20 +1,28 @@
 <script setup>
 import { AspectRatio } from '@/components/ui/aspect-ratio/index.js';
 import { ImageOff } from 'lucide-vue-next';
+import {cn} from "@/lib/utils.js";
 
-defineProps({
+const props = defineProps({
   product: {
     type: Object,
     required: true,
-  }
+  },
+  conversion: {
+    type: String,
+    default: 'medium',
+  },
+  class: {
+    type: String,
+  },
 });
 </script>
 
 <template>
-  <AspectRatio :ratio="3 / 4" class="bg-muted rounded-md overflow-hidden relative">
+  <AspectRatio :ratio="3 / 4" :class="cn('bg-muted rounded-md overflow-hidden relative', props.class)">
     <img
-      v-if="product?.image_url"
-      :src="product?.image_url"
+      v-if="product?.preview[conversion]"
+      :src="product?.preview[conversion]"
       :alt="product?.name ?? 'Изображение товара'"
       class="object-cover rounded-md w-full h-full transition-transform duration-300 ease-in-out hover:scale-105"
     />

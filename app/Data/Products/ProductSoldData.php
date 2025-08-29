@@ -18,7 +18,7 @@ class ProductSoldData extends Data
         public int $stock_item_id,
         public string $name,
         public Price $price,
-        public ?string $image_url,
+        public ?ProductPreviewData $preview,
         public ProductStatus $status,
         public ?UserData $buyer = null,
         public Carbon $sold_at,
@@ -27,13 +27,13 @@ class ProductSoldData extends Data
     public static function fromModel(OrderItem $orderItem): self
     {
         return new self(
-            id: $orderItem->stockItem->product_id,
+            id: $orderItem->product_id,
             order_id: $orderItem->order_id,
             stock_item_id: $orderItem->stock_item_id,
-            name: $orderItem->stockItem->product->name,
+            name: $orderItem->product->name,
             price: $orderItem->price,
-            image_url: $orderItem->stockItem->product->image_url,
-            status: $orderItem->stockItem->product->status,
+            preview: $orderItem->product->preview,
+            status: $orderItem->product->status,
             buyer: UserData::from($orderItem->order->user),
             sold_at: $orderItem->order->paid_at
         );

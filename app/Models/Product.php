@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Builders\FeedbackQueryBuilder;
 use App\Builders\ProductQueryBuilder;
 use App\Builders\StockItemQueryBuilder;
-use App\Casts\ImageCast;
 use App\Collections\FeatureCollection;
 use App\Collections\ProductCollection;
 use App\Contracts\Seoble;
@@ -24,6 +23,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Laravel\Scout\Searchable;
 use Mews\Purifier\Casts\CleanHtmlInput;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
@@ -32,8 +34,7 @@ use Mews\Purifier\Casts\CleanHtmlInput;
  * @property int $current_price
  * @property int $base_price
  * @property ProductStatus $status
- * @property ?Image $image
- * @property ?string|null $image_url
+ * @property ?array $preview
  * @property array|null $description
  * @property array|null $instruction
  * @property Carbon|null $created_at
@@ -95,10 +96,13 @@ use Mews\Purifier\Casts\CleanHtmlInput;
  * @method static ProductQueryBuilder<static>|Product withStockItemsCount()
  * @mixin \Eloquent
  */
-class Product extends Model implements Seoble
+class Product extends Model implements Seoble, HasMedia
 {
     use HasFactory;
     use Searchable;
+    use InteractsWithMedia;
+
+    public const string MEDIA_COLLECTION_PREVIEW = 'preview';
 
     protected $fillable = [
         'name',
@@ -115,10 +119,68 @@ class Product extends Model implements Seoble
             'current_price' => 'int',
             'base_price' => 'int',
             'status' => ProductStatus::class,
-            'image' => ImageCast::class,
             'description' => CleanHtmlInput::class,
             'instruction' => CleanHtmlInput::class,
         ];
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection(self::MEDIA_COLLECTION_PREVIEW)
+            ->singleFile()
+            ->registerMediaConversions(function (Media $media) {
+                $this
+                    ->addMediaConversion('thumb')
+                    ->width(90)
+                    ->height(120)
+                    ->format('webp')
+                    ->quality(80)
+                    ->nonQueued();
+
+                $this
+                    ->addMediaConversion('small')
+                    ->width(180)
+                    ->height(240)
+                    ->format('webp')
+                    ->quality(85)
+                    ->nonQueued();
+
+                $this
+                    ->addMediaConversion('medium')
+                    ->width(300)
+                    ->height(400)
+                    ->format('webp')
+                    ->quality(85)
+                    ->nonQueued();
+
+
+                $this
+                    ->addMediaConversion('large')
+                    ->width(600)
+                    ->height(800)
+                    ->format('webp')
+                    ->quality(85)
+                    ->nonQueued();
+            });
+    }
+
+    protected function preview(): Attribute
+    {
+        return Attribute::get(function () {
+            $media = $this->getFirstMedia(self::MEDIA_COLLECTION_PREVIEW);
+
+            if (!$media) {
+                return null;
+            }
+
+            return [
+                'thumb' => $media->getUrl('thumb'),
+                'small' => $media->getUrl('small'),
+                'medium' => $media->getUrl('medium'),
+                'large' => $media->getUrl('large'),
+                'original' => $media->getUrl(),
+            ];
+        });
     }
 
     protected function price(): Attribute
@@ -132,13 +194,6 @@ class Product extends Model implements Seoble
                 'base_price' => $price->getBasePrice(),
                 'current_price' => $price->getCurrentPrice()
             ]
-        );
-    }
-
-    protected function imageUrl(): Attribute
-    {
-        return Attribute::make(
-            get: fn (mixed $value, array $attributes) => Image::from($attributes['image'])?->getUrl(),
         );
     }
 
@@ -198,7 +253,7 @@ class Product extends Model implements Seoble
     {
         $array = parent::toArray();
         $array['price'] = $this->price->toArray();
-        $array['image_url'] = $this->image_url;
+        $array['preview'] = $this->preview;
 
         return $array;
     }

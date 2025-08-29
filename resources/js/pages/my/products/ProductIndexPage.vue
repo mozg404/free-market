@@ -147,7 +147,7 @@ watch([search, status, sort], applyFilters);
                 <div class="flex items-center">
                   <div class="w-14 shrink-0 mr-4">
                     <Link :href="route('catalog.product', product.id)" class="block">
-                      <ProductImage :product="product" />
+                      <ProductImage :product="product" conversion="small"/>
                     </Link>
                   </div>
                   <Link :href="route('my.products.edit', product.id)" class="text-sm">

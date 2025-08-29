@@ -121,7 +121,7 @@ const { inCart, addToCart, decreaseQuantity, getCartItemQuantity, form } = useCa
         </Section>
 
         <template #sidebar_right>
-          <ProductImage :product="product" class="mb-4"/>
+          <ProductImage :product="product" conversion="large" class="mb-4"/>
 
           <Card class="py-4 mb-4">
             <CardContent class="px-4">

@@ -5,6 +5,7 @@ namespace App\Services\Cart;
 use App\Contracts\Cart;
 use App\Data\Cart\CartData;
 use App\Data\Cart\CartItemData;
+use App\Data\Products\ProductPreviewData;
 use App\Models\Product;
 use App\Services\Product\StockService;
 
@@ -55,7 +56,7 @@ class CartService
             id: $product->id,
             name: $product->name,
             price: $product->price,
-            image_url: $product->image?->getUrl(),
+            preview: ProductPreviewData::from($product->preview),
             status: $product->status,
             created_at: $product->created_at,
             available_stock_items_count: $this->stockService->getAvailableCount($product),
@@ -80,7 +81,7 @@ class CartService
                     id: $product->id,
                     name: $product->name,
                     price: $product->price,
-                    image_url: $product->image?->getUrl(),
+                    preview: ProductPreviewData::from($product->preview),
                     status: $product->status,
                     created_at: $product->created_at,
                     available_stock_items_count: $product->available_stock_items_count,

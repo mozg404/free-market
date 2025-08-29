@@ -77,7 +77,7 @@ watch(searchValue, (newValue) => {
         class="py-3 border-b hover:bg-muted/50 cursor-pointer transition-colors flex"
       >
         <div class="w-8 mr-3">
-          <ProductImage :product="product"/>
+          <ProductImage :product="product" conversion="thumb"/>
         </div>
 
         <div class="flex-1">
