@@ -20,6 +20,7 @@
         "meilisearch/meilisearch-php": "^1.15",
         "mews/purifier": "^3.4",
         "spatie/laravel-data": "^4.15",
+        "spatie/laravel-medialibrary": "^11.14",
         "tightenco/ziggy": "^2.5",
         "webmozart/assert": "^1.11"
     },
