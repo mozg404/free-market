@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
+        echo PHP_EOL . 'Регистрация пользователей...' . PHP_EOL;
+
         $mainUser = User::factory()
             ->withRandomAvatar()
             ->create([
@@ -38,6 +40,8 @@ class DatabaseSeeder extends Seeder
         $users = User::factory(10)
             ->withRandomAvatar()
             ->create();
+
+        echo 'Создание категорий и характеристик...' . PHP_EOL;
 
         $this->recursiveCreateCategory(
             include resource_path('data/demo_categories.php'),
@@ -70,6 +74,8 @@ class DatabaseSeeder extends Seeder
             ->with('features')
             ->get();
 
+        echo 'Создание товаров...' . PHP_EOL;
+
         // Создаем товары
         foreach (include resource_path('data/demo_products.php') as $productData) {
             $category = $categories->where('full_path', $productData['category'])->first();
@@ -87,8 +93,8 @@ class DatabaseSeeder extends Seeder
                 $products->push($product);
             }
 
-            // Добавляем 5 вариаций случайному пользователю
-            for ($i = 0; $i < 5; $i++) {
+            // Добавляем 2 вариации случайному пользователю
+            for ($i = 0; $i < 2; $i++) {
                 $product = Product::factory()
                     ->withModifiedName($productData['name'], $productData['name_modifiers'] ?? [])
                     ->withConcretePreview($productData['image'])
@@ -119,6 +125,8 @@ class DatabaseSeeder extends Seeder
             });
         }
 
+        echo 'Создание заказов для основного пользователя...' . PHP_EOL;
+
         $this->createOrder($mainUser);
         $this->payOrder($mainUser, $this->createOrder($mainUser));
         $this->payOrder($mainUser, $this->createOrder($mainUser));
@@ -131,6 +139,8 @@ class DatabaseSeeder extends Seeder
         $this->payOrder($mainUser, $this->createOrder($mainUser));
         $this->payOrder($mainUser, $this->createOrder($mainUser));
         $this->payOrder($mainUser, $this->createOrder($mainUser));
+
+        echo 'Создание заказов для случайных пользователей...' . PHP_EOL;
 
         // 50 выполненных заказов для пользователя
         $users->each(function ($user) {

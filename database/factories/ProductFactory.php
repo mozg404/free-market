@@ -46,7 +46,6 @@ class ProductFactory extends Factory
             'status' => fake()->randomElement(ProductStatus::cases())->value,
             'description' => TextGenerator::paragraphs(include resource_path('data/demo_product_descriptions.php'), random_int(3, 7)),
             'instruction' => TextGenerator::paragraphs(include resource_path('data/demo_product_instructions.php'), random_int(1, 4)),
-            'image' => null,
             'created_at' => $createdAt,
             'updated_at' => $this->faker->dateTimeBetween($createdAt),
         ];

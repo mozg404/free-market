@@ -522,7 +522,6 @@ return [
             resource_path('demo/products_images/kasperky/password_kas.jpg'),
             resource_path('demo/products_images/kasperky/kaspersky-premium.jpg'),
             resource_path('demo/products_images/kasperky/kaspersky-standard.jpg'),
-            resource_path('demo/products_images/kasperky/kaspersky-standard.png'),
             resource_path('demo/products_images/kasperky/kasperky-total-security.jpg'),
             resource_path('demo/products_images/kasperky/Kaspersky_safe_kids.png'),
         ],
@@ -576,7 +575,6 @@ return [
         'image' => [
             resource_path('demo/products_images/windows/windows-11-pro.jpg'),
             resource_path('demo/products_images/windows/windows-11-pro-0902346.jpg'),
-            resource_path('demo/products_images/windows/windows-11-pro-9175923.png'),
         ],
         'category' => 'keys/windows',
         'name_modifiers' => $nameModifiers['windows'],
@@ -591,7 +589,6 @@ return [
             'ОС Windows 11 Дом'
         ],
         'image' => [
-            resource_path('demo/products_images/windows/windows-11-home-93456.png'),
             resource_path('demo/products_images/windows/windows-11-home.jpg'),
         ],
         'category' => 'keys/windows',
@@ -1068,7 +1065,6 @@ return [
             resource_path('demo/products_images/kasperky/password_kas.jpg'),
             resource_path('demo/products_images/kasperky/kaspersky-premium.jpg'),
             resource_path('demo/products_images/kasperky/kaspersky-standard.jpg'),
-            resource_path('demo/products_images/kasperky/kaspersky-standard.png'),
             resource_path('demo/products_images/kasperky/kasperky-total-security.jpg'),
             resource_path('demo/products_images/kasperky/Kaspersky_safe_kids.png'),
         ],
