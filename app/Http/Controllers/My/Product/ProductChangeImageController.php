@@ -3,26 +3,21 @@
 namespace App\Http\Controllers\My\Product;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MyProduct\ProductChangeImageRequest;
 use App\Models\Product;
 use App\Services\Product\ProductService;
 use App\Services\Toaster;
-use App\Support\Image;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 
 class ProductChangeImageController extends Controller
 {
-    public function __construct(
-        private readonly Toaster $toaster
-    ) {
-    }
-
     public function index(Product $product): Response
     {
         return Inertia::render('common/ImageUploaderModal', [
-            'imageUrl' => $product->image->getUrl(),
+            'imageUrl' => $product->getFirstMediaUrl($product::MEDIA_COLLECTION_PREVIEW),
             'aspectRatio' => 3/4,
             'saveRoute' => route('my.products.change.image.update', $product->id),
             'product' => $product,
@@ -31,15 +26,19 @@ class ProductChangeImageController extends Controller
 
     public function update(
         Product $product,
-        Request $request,
+        ProductChangeImageRequest $request,
         ProductService $productService,
+        Toaster $toaster
     ): RedirectResponse {
-        $data = $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,svg|max:5120',
-        ]);
-        $productService->changeImage($product, Image::createFromUploadedFile($data['image']));
-        $this->toaster->success('Изображение сохранено');
+        try {
+            $productService->changeImage($product, $request->file('image'));
+            $toaster->success('Изображение сохранено');
 
-        return back();
+            return redirect()->back();
+        } catch (FileCannotBeAdded $e) {
+            $toaster->error('Не удалось загрузить изображение');
+
+            return redirect()->back()->withErrors(['image' => 'Не удалось загрузить аватар']);
+        }
     }
 }

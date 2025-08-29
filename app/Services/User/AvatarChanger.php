@@ -4,7 +4,6 @@ namespace App\Services\User;
 
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 
 class AvatarChanger
 {
