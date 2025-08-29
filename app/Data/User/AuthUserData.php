@@ -18,14 +18,11 @@ class AuthUserData extends Data
         public int $balance,
         public Carbon $created_at,
         public Carbon $updated_at,
-        public ?Image $avatar = null,
-        public ?string $avatar_url = null,
+        public ?UserAvatarData $avatar = null,
         public ?float $seller_rating = null,
         public ?float $positive_feedbacks_count = null,
         public ?float $negative_feedbacks_count = null,
     ) {
-        if (isset($avatar)) {
-            $this->avatar_url = $this->avatar->getUrl();
-        }
+
     }
 }

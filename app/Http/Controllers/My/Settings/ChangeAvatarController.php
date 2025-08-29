@@ -10,13 +10,14 @@ use App\Support\Image;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 
 class ChangeAvatarController extends Controller
 {
     public function index(): Response
     {
         return Inertia::render('common/ImageUploaderModal', [
-            'imageUrl' => auth()->user()->avatar->getUrl(),
+            'imageUrl' => auth()->user()->avatar_url,
             'aspectRatio' => 1,
             'saveRoute' => route('my.settings.change.avatar.update'),
         ]);
@@ -27,12 +28,18 @@ class ChangeAvatarController extends Controller
         AvatarChanger $avatarChanger,
         Toaster $toaster,
     ): RedirectResponse {
-        $avatarChanger->change(
-            auth()->user(),
-            Image::createFromUploadedFile($request->file('image'))
-        );
-        $toaster->success('Аватар обновлен');
+        try {
+            $avatarChanger->change(
+                auth()->user(),
+                $request->file('image')
+            );
+            $toaster->success('Аватар обновлен');
 
-        return redirect()->back();
+            return redirect()->back();
+        } catch (FileCannotBeAdded $e) {
+            $toaster->error('Не удалось загрузить аватар');
+
+            return redirect()->back()->withErrors(['image' => 'Не удалось загрузить аватар']);
+        }
     }
 }

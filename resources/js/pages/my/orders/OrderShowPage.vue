@@ -1,7 +1,7 @@
 <script setup>
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import {Card, CardContent} from "@/components/ui/card/index.js";
-import OrderItemCart from "@/components/modules/orders/OrderItemCart.vue";
+import OrderItemCard from "@components/modules/orders/OrderItemCard.vue";
 import PriceFormatter from "@/components/shared/PriceFormatter.vue";
 import {
   DescriptionItem,
@@ -30,7 +30,7 @@ const props = defineProps({
     <Wrapper>
       <SidebarLayout>
         <div class="space-y-6">
-          <OrderItemCart v-for="item in items" :key="item.product.id" :item="item" :completed="order.status === 'completed'" />
+          <OrderItemCard v-for="item in items" :key="item.product.id" :item="item" :completed="order.status === 'completed'" />
         </div>
 
         <template #sidebar_right>

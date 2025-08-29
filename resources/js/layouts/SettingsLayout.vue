@@ -7,6 +7,7 @@ import {useUser} from '@/composables/useUser.js'
 import Wrapper from "@components/shared/layout/Wrapper.vue";
 import SidebarLink from "@components/shared/sidebar/SidebarLink.vue";
 import {Link} from "@inertiajs/vue3";
+import UserAvatar from "@components/modules/users/UserAvatar.vue";
 
 const {user} = useUser()
 const authUser = user
@@ -29,9 +30,7 @@ const props = defineProps({
         <div class="flex items-center py-10">
           <div class="w-30 shrink-0 mr-4">
             <ModalLink :href="route('my.settings.change.avatar')">
-              <AspectRatio :ratio="1" class="bg-muted rounded-full overflow-hidden relative">
-                <img :src="authUser.avatar_url" class="object-cover rounded-full w-full" :alt="authUser.name"/>
-              </AspectRatio>
+              <UserAvatar :user="authUser" conversion="large"/>
             </ModalLink>
           </div>
           <div>

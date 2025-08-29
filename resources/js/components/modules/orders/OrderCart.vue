@@ -13,7 +13,7 @@
     CardHeader,
     CardTitle,
   } from '@/components/ui/card/index.js'
-  import OrderItemCart from "@/components/modules/orders/OrderItemCart.vue";
+  import OrderItemCard from "@components/modules/orders/OrderItemCard.vue";
 
   const props = defineProps({
     order: Object,
@@ -38,7 +38,7 @@
 
     <CardContent class="px-4">
       <div class="space-y-4">
-        <OrderItemCart v-for="item in order.items" :key="item.id" :item="item" />
+        <OrderItemCard v-for="item in order.items" :key="item.id" :item="item" />
       </div>
     </CardContent>
   </Card>

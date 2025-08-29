@@ -1,5 +1,5 @@
 <script setup>
-import UserAvatar from "@/components/modules/users/UserAvatar.vue";
+import UserAvatarIcon from "@components/modules/users/UserAvatarIcon.vue";
 import DateTime from "@/components/shared/DateTime.vue";
 import {ThumbsDown, ThumbsUp} from "lucide-vue-next";
 import {Link} from "@inertiajs/vue3";
@@ -16,7 +16,7 @@ const props = defineProps({
   <div>
     <div class="flex space-x-3 items-center">
       <div class="flex items-center">
-        <UserAvatar class="mr-2" :src="feedback.user.avatar_url"/>
+        <UserAvatarIcon class="mr-2" :src="feedback.user.avatar_url"/>
         <div class="text-accent-foreground text-sm font-medium">
           <Link class="hover:opacity-50 transition-opacity" :href="route('users.show', feedback.user.id)">
             {{ feedback.user.name }}

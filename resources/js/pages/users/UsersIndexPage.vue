@@ -6,6 +6,7 @@ import {Link} from "@inertiajs/vue3";
 import TableBordered from "@/components/shared/table/TableBordered.vue";
 import LaravelPagination from "@/components/shared/LaravelPagination.vue";
 import AccountAge from "@/components/shared/AccountAge.vue";
+import UserAvatar from "@components/modules/users/UserAvatar.vue";
 
 const props = defineProps({
   users: Array,
@@ -32,9 +33,7 @@ const props = defineProps({
               <TableCell class="whitespace-normal w-1/2">
                 <div class="flex items-center">
                   <div class="w-16 shrink-0 mr-4">
-                    <AspectRatio :ratio="1" class="bg-muted rounded-full overflow-hidden relative">
-                      <img :src="user.avatar_url" class="object-cover rounded-full w-full" :alt="user.name"/>
-                    </AspectRatio>
+                    <UserAvatar :user="user"/>
                   </div>
                   <div>
                     <Link :href="route('users.show', user.id)" class="font-semibold hover:text-primary transition-colors">

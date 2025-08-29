@@ -3,7 +3,7 @@ import {Link} from "@inertiajs/vue3";
 import PriceFormatter from "@/components/shared/PriceFormatter.vue";
 import ProductImage from "@/components/modules/products/ProductImage.vue";
 import {Card, CardContent} from "@/components/ui/card/index.js";
-import UserAvatar from "@/components/modules/users/UserAvatar.vue";
+import UserAvatarIcon from "@components/modules/users/UserAvatarIcon.vue";
 import FeedbackControlButton from "@/components/modules/feedback/FeedbackControlButton.vue";
 import {Button} from "@components/ui/button/index.js";
 import {Key} from "lucide-vue-next";
@@ -45,7 +45,7 @@ const props = defineProps({
       <div class="flex items-center justify-between space-x-4">
 
         <div class="flex items-center">
-          <UserAvatar class="mr-2" :src="item.seller.avatar_url"/>
+          <UserAvatarIcon class="mr-2" :user="item.seller"/>
           <div>
             <div class="text-muted-foreground text-xs -mb-[4px]">Продавец</div>
             <Link :href="route('users.show', item.seller.id)" class="font-semibold text-sm hover:text-primary">{{item.seller.name}}</Link>

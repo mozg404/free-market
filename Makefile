@@ -89,24 +89,24 @@ storage-unlink:
 # Система очистки (единый интерфейс)
 # ========================
 
-clear: clear-purifier clear-storage-images clear-storage-tmp clear-laravel-cache clear-logs
+clear: clear-purifier clear-storage clear-storage-tmp clear-laravel-cache clear-logs
 
 clear-purifier:
 	@echo "Очистка кэша Purifier..."
 	./vendor/bin/sail bash -c "rm -rf storage/app/purifier/*"
 
-clear-storage-images:
+clear-storage:
 	@echo "Очистка изображений..."
 	./vendor/bin/sail bash -c "\
-		mkdir -p storage/app/public/images && \
-		find storage/app/public/images -mindepth 1 -not -name '.gitkeep' -delete \
+		mkdir -p storage/app/public && \
+		find storage/app/public -mindepth 1 -not -name '.gitkeep' -delete \
 	"
 
 clear-storage-tmp:
 	@echo "Очистка временных файлов..."
 	./vendor/bin/sail bash -c "\
-		mkdir -p storage/app/public/tmp && \
-		find storage/app/public/tmp -mindepth 1 -not -name '.gitkeep' -delete \
+		mkdir -p storage/media-library/temp && \
+		find storage/media-library/temp -mindepth 1 -not -name '.gitkeep' -delete \
 	"
 
 clear-laravel-cache:

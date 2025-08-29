@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu/index.js'
-import UserAvatar from "@/components/modules/users/UserAvatar.vue";
+import UserAvatarIcon from "@components/modules/users/UserAvatarIcon.vue";
 import PriceFormatter from "@components/shared/PriceFormatter.vue";
 
 const {cart} = useCart()
@@ -81,7 +81,7 @@ const {user, isAuth} = useUser()
             <template v-if="isAuth">
               <DropdownMenu>
                 <DropdownMenuTrigger as-child>
-                  <UserAvatar :src="user.avatar_url" class="hover:opacity-50 transition-opacity cursor-pointer"/>
+                  <UserAvatarIcon :user="user" class="hover:opacity-50 transition-opacity cursor-pointer"/>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent class="w-44">
                   <DropdownMenuLabel>

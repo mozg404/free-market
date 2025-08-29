@@ -17,7 +17,7 @@ import {
 import Section from "@/components/shared/layout/Section.vue";
 import SectionTitle from "@/components/shared/layout/SectionTitle.vue";
 import {Card, CardContent} from "@/components/ui/card/index.js";
-import UserAvatar from "@/components/modules/users/UserAvatar.vue";
+import UserAvatarIcon from "@components/modules/users/UserAvatarIcon.vue";
 import PageLayout from "@/layouts/PageLayout.vue";
 import SidebarLayout from "@/components/shared/SidebarLayout.vue";
 import {
@@ -202,7 +202,7 @@ const props = defineProps({
 
           <Card class="py-4 mb-4">
             <CardContent class="px-4 flex items-center">
-              <UserAvatar class="mr-3" :src="product.user.avatar_url"/>
+              <UserAvatarIcon class="mr-3" :src="product.user.avatar_url"/>
               <div>
                 <div class="text-muted-foreground text-xs mb-[-4px]">Продавец</div>
                 <Link :href="route('users.show', product.user.id)" class="font-semibold text-sm hover:text-primary">{{product.user.name}}</Link>

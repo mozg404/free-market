@@ -7,9 +7,10 @@ import PageTitle from "@/components/shared/layout/PageTitle.vue";
 import AccountAge from "@/components/shared/AccountAge.vue";
 import Section from "@/components/shared/layout/Section.vue";
 import SectionTitle from "@/components/shared/layout/SectionTitle.vue";
+import UserAvatar from "@components/modules/users/UserAvatar.vue";
 
 const props = defineProps({
-  concreateUser: Array,
+  concreateUser: Object,
   products: Array,
 })
 </script>
@@ -20,9 +21,7 @@ const props = defineProps({
 
       <div class="mb-12 flex items-center">
         <div class="w-30 shrink-0 mr-4">
-          <AspectRatio :ratio="1" class="bg-muted rounded-full overflow-hidden relative">
-            <img :src="concreateUser.avatar_url" class="object-cover rounded-full w-full" :alt="concreateUser.avatar"/>
-          </AspectRatio>
+          <UserAvatar :user="concreateUser" conversion="large"/>
         </div>
         <div>
           <PageTitle>{{ concreateUser.name }}</PageTitle>

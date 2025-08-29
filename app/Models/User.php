@@ -13,6 +13,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
 /**
@@ -22,13 +26,12 @@ use Illuminate\Notifications\Notifiable;
  * @property string $name
  * @property string $email
  * @property bool $is_admin
- * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property Carbon|null $email_verified_at
  * @property string $password
- * @property ?Image $avatar
- * @property ?string $avatar_url
+ * @property ?array $avatar
  * @property string|null $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property int $balance
  * @property int $positive_feedbacks_count
  * @property int $negative_feedbacks_count
@@ -57,10 +60,12 @@ use Illuminate\Notifications\Notifiable;
  * @method static UserQueryBuilder<static>|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements Seoble, MustVerifyEmail
+class User extends Authenticatable implements Seoble, MustVerifyEmail, HasMedia
 {
+    public const string MEDIA_COLLECTION_AVATAR = 'avatar';
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, InteractsWithMedia;
 
     protected $fillable = [
         'name',
@@ -73,6 +78,49 @@ class User extends Authenticatable implements Seoble, MustVerifyEmail
         'remember_token',
     ];
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection(self::MEDIA_COLLECTION_AVATAR)
+            ->singleFile()
+            ->registerMediaConversions(function (Media $media) {
+                $this
+                    ->addMediaConversion('thumb')
+                    ->width(36)
+                    ->height(36)
+                    ->format('webp')
+                    ->quality(75)
+                    ->optimize()
+                    ->nonQueued();
+
+                $this
+                    ->addMediaConversion('thumb_2')
+                    ->width(72)
+                    ->height(72)
+                    ->format('webp')
+                    ->quality(75)
+                    ->optimize()
+                    ->nonQueued();
+
+                $this
+                    ->addMediaConversion('medium')
+                    ->width(150)
+                    ->height(150)
+                    ->format('webp')
+                    ->quality(80)
+                    ->optimize()
+                    ->nonQueued();
+
+                $this
+                    ->addMediaConversion('large')
+                    ->width(300)
+                    ->height(300)
+                    ->format('webp')
+                    ->quality(85)
+                    ->optimize()
+                    ->nonQueued();
+            });
+    }
+
     protected function casts(): array
     {
         return [
@@ -80,21 +128,32 @@ class User extends Authenticatable implements Seoble, MustVerifyEmail
             'balance' => 'int',
             'email_verified_at' => 'datetime',
 //            'password' => 'hashed', // Убрано, так как хэш создает сервис регистрации
-            'avatar' => ImageCast::class,
         ];
     }
 
-    protected function imageUrl(): Attribute
+    protected function avatar(): Attribute
     {
-        return Attribute::make(
-            get: static fn (mixed $value, array $attributes) => Image::from($attributes['avatar'])?->getUrl(),
-        );
+        return Attribute::get(function () {
+            $media = $this->getFirstMedia(self::MEDIA_COLLECTION_AVATAR);
+
+            if (!$media) {
+                return null;
+            }
+
+            return [
+                'thumb' => $media->getUrl('thumb'),
+                'thumb_2' => $media->getUrl('thumb_2'),
+                'medium' => $media->getUrl('medium'),
+                'large' => $media->getUrl('large'),
+                'original' => $media->getUrl(),
+            ];
+        });
     }
 
     public function toArray(): array
     {
         $arr = parent::toArray();
-        $arr['avatar'] = $this->avatar?->getUrl();
+        $arr['avatar'] = $this->avatar;
 
         return $arr;
     }

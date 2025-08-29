@@ -12,8 +12,7 @@ class UserForListingData extends Data
         public int $id,
         public string $name,
         public string $email,
-        public ?Image $avatar,
-        public ?string $avatar_url = null,
+        public ?UserAvatarData $avatar = null,
         public Carbon $created_at,
         public float $seller_rating,
         public int $positive_feedbacks_count,
@@ -21,8 +20,5 @@ class UserForListingData extends Data
         public ?int $available_products_count,
         public ?int $sold_stock_count,
     ) {
-        if (isset($avatar)) {
-            $this->avatar_url = $this->avatar->getUrl();
-        }
     }
 }

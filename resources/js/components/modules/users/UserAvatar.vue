@@ -1,47 +1,33 @@
 <script setup>
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar/index.js'
-import { User2Icon } from 'lucide-vue-next'
+import {ImageOff} from 'lucide-vue-next'
+import {AspectRatio} from "@components/ui/aspect-ratio/index.js";
+import {cn} from "@/lib/utils.js";
 
 const props = defineProps({
-  src: {
-    type: String,
-    default: null
+  user: {
+    type: Object,
+    required: true,
   },
-  size: {
+  conversion: {
     type: String,
-    default: 'md',
-    validator: (val) => ['sm', 'md', 'lg'].includes(val)
+    default: 'medium',
+  },
+  class: {
+    type: String,
   }
 })
-
-// Размеры как у кнопок shadcn
-const sizeClasses = {
-  sm: 'h-8 w-8',
-  md: 'h-9 w-9',
-  lg: 'h-11 w-11'
-}
-
-// Размер иконки
-const iconSize = {
-  sm: 16,
-  md: 18,
-  lg: 20
-}
 </script>
 
 <template>
-  <Avatar :class="['bg-gray-100', sizeClasses[size]]">
-    <AvatarImage
-      v-if="src"
-      :src="src"
-      :alt="'User avatar'"
-      class="object-cover"
+  <AspectRatio :ratio="1" :class="cn('bg-muted rounded-full overflow-hidden relative', props.class)">
+    <img
+      v-if="user?.avatar"
+      :src="user?.avatar[conversion]"
+      :alt="user?.name ?? 'Аватар'"
+      class="object-cover rounded-md w-full h-full transition-transform duration-300 ease-in-out hover:scale-105"
     />
-    <AvatarFallback
-      v-else
-      class="text-gray-500 bg-gray-100"
-    >
-      <User2Icon :size="iconSize[size]" />
-    </AvatarFallback>
-  </Avatar>
+    <div v-else class="flex items-center justify-center h-full text-muted-foreground rounded-md">
+      <ImageOff class="h-6 w-6" />
+    </div>
+  </AspectRatio>
 </template>
