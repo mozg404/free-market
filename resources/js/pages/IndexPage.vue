@@ -12,9 +12,9 @@ defineProps({
 
 <template>
   <PageLayout>
-    <template #title>Последние товары</template>
+    <template #title>Новинки</template>
 
-    <Wrapper class="mt-10">
+    <Wrapper>
       <ProductList :products="products" />
     </Wrapper>
   </PageLayout>

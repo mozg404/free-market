@@ -23,7 +23,7 @@ const props = defineProps({
     <PriceFormatter v-else class="text-2xl font-semibold" :value="product.price.current"/>
   </div>
 
-  <div class="mt-3 line-clamp-3 leading-5" :title="product.name">
+  <div class="mt-3 line-clamp-3 text-sm leading-5" :title="product.name">
     <Link :href="route('catalog.product', product.id)" class="hover:text-black transition-colors">
       {{ product.name }}
     </Link>

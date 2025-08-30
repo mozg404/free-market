@@ -13,9 +13,8 @@ class IndexController extends Controller
     {
         $products = Product::query()
             ->forListing()
-            ->withAvailableStockItemsCount()
             ->latest()
-            ->take(10)
+            ->take(12)
             ->get();
 
         return Inertia::render('IndexPage', [
