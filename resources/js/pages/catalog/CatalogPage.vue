@@ -61,10 +61,6 @@ onUnmounted(() => {
     <template #title>Каталог товаров</template>
     <template #counter>{{ products.total }}</template>
 
-    <pre>
-      {{props.filters}}
-    </pre>
-
     <Wrapper>
       <SidebarLayout>
         <template #sidebar_left>
