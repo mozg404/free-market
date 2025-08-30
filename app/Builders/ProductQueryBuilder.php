@@ -225,17 +225,17 @@ class ProductQueryBuilder extends Builder
             $id = $id->id;
         }
 
-        return $this->forCategories(
-            Category::query()->getDescendantsAndSelfIds($id)->toArray()
+        return $this->whereCategories(
+            Category::query()->getDescendantsAndSelfIds($id)
         );
     }
 
-    public function forCategories(array $ids): self
+    public function whereCategories(array $ids): self
     {
         return $this->whereIn('category_id', $ids);
     }
 
-    public function forCategory(Category|int $category): self
+    public function whereCategory(Category|int $category): self
     {
         if (is_object($category)) {
             $category = $category->id;
@@ -251,7 +251,7 @@ class ProductQueryBuilder extends Builder
         }
 
         if (is_a($object, Category::class)) {
-            return $this->forCategory($object);
+            return $this->whereCategory($object);
         }
 
         return $this;

@@ -19,27 +19,48 @@ class CategoryQueryBuilder extends QueryBuilder
         return $this->with('features');
     }
 
+    public function whereFullPath(string $fullPath): self
+    {
+        return $this->where('full_path', $fullPath);
+    }
+
+    public function getIdByFullPath(string $fullPath): ?int
+    {
+        return $this->whereFullPath($fullPath)->first('id')?->id;
+    }
+
     /**
      * Возвращает коллекцию ID для указанной категории + всех ее родителей
      */
-    public function getAncestorAndSelfIds(Category|int $id): SupportCollection
+    public function getAncestorAndSelfIds(Category|int $id): array
     {
         if ($id instanceof Category) {
             $id = $id->id;
         }
 
-        return $this->ancestorsAndSelf($id)->pluck('id');
+        return $this->ancestorsAndSelf($id)->pluck('id')->toArray();
     }
 
     /**
      * Возвращает коллекцию ID для указанной категории + всех ее детей
      */
-    public function getDescendantsAndSelfIds(Category|int $id): SupportCollection
+    public function getDescendantsAndSelfIds(Category|int $id): array
     {
         if ($id instanceof Category) {
             $id = $id->id;
         }
 
-        return $this->descendantsAndSelf($id)->pluck('id');
+        return $this->descendantsAndSelf($id, ['id'])->pluck('id')->toArray();
+    }
+
+    /**
+     * Возвращает коллекцию ID для указанного full_path категории + всех ее детей
+     * (!!!) Без Category::query() с прямым $this почему-то не работает, надо разобраться
+     */
+    public function getDescendantsAndSelfIdsByFullPath(string $fullPath): array
+    {
+        return $this->getDescendantsAndSelfIds(
+            Category::query()->getIdByFullPath($fullPath) ?? 0
+        );
     }
 }
