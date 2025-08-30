@@ -1,9 +1,9 @@
 <script setup>
 import {Link} from "@inertiajs/vue3";
 import Wrapper from "@/components/shared/layout/Wrapper.vue";
-import logoUrl from "../../../../img/logo.svg";
 import {Button} from "@/components/ui/button/index.js";
-import {ShoppingCart, LogIn, Search, Wallet} from 'lucide-vue-next'
+import logoUrl from "@img/logo.svg";
+import {ShoppingCart, LogIn, Search, Wallet, Menu} from 'lucide-vue-next'
 import {useCart} from '@/composables/useCart.js'
 import {useUser} from '@/composables/useUser.js'
 import {
@@ -22,41 +22,47 @@ const {user, isAuth} = useUser()
 </script>
 
 <template>
-  <header >
+  <header>
     <Wrapper>
       <div class="flex items-center justify-between py-5" aria-label="Global">
 
         <div class="flex items-center gap-x-6">
-          <Link :href="route('home')" class="-m-1.5 p-1.5">
-            <span class="sr-only">Your Company</span>
-            <img class="h-14 w-auto" :src="logoUrl" alt="">
+          <Link :href="route('home')" class="-m-1.5 p-1.5 hover:opacity-50 transition-opacity">
+            <img class="h-10 lg:h-12 w-auto" :src="logoUrl" alt="Free маркетплейс">
           </Link>
 
-          <div class="hidden lg:flex lg:gap-x-2">
-            <Button variant="ghost"  class="rounded-3xl" as-child>
+          <div class="md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger as-child>
+                <Button variant="secondary" class="rounded-3xl -ml-2">
+                  <Menu class="w-8 h-8" /> Меню
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent class="w-44">
+                <DropdownMenuItem>
+                  <Link :href="route('catalog')">Каталог</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link :href="route('users')">Продавцы</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          <div class="hidden md:flex md:gap-x-2">
+            <Button variant="ghost" class="rounded-3xl" as-child>
               <Link :href="route('catalog')">Каталог</Link>
             </Button>
           </div>
 
-          <div class="hidden lg:flex lg:gap-x-2">
+          <div class="hidden md:flex md:gap-x-2">
             <Button variant="ghost" class="rounded-3xl" as-child>
               <Link :href="route('users')">Продавцы</Link>
             </Button>
           </div>
         </div>
 
-        <div class="flex lg:hidden">
-          <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
-            <span class="sr-only">Open main menu</span>
-            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                 aria-hidden="true" data-slot="icon">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-            </svg>
-          </button>
-        </div>
-
-        <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-
+        <div class="flex flex-1 justify-end">
           <div class="flex gap-2">
             <Button variant="outline" size="icon" class="rounded-3xl" as-child>
               <ModalLink :href="route('search')">
@@ -64,7 +70,7 @@ const {user, isAuth} = useUser()
               </ModalLink>
             </Button>
 
-            <Button variant="outline" class="rounded-3xl" v-if="isAuth" as-child>
+            <Button variant="outline" class="rounded-3xl hidden md:flex" v-if="isAuth" as-child>
               <Link :href="route('my.balance')">
                 <Wallet class="w-4 h-4"/>
                 <PriceFormatter :value="user.balance"/>
@@ -78,7 +84,7 @@ const {user, isAuth} = useUser()
               </Link>
             </Button>
 
-            <template v-if="isAuth">
+            <template v-if="isAuth" class="hidden">
               <DropdownMenu>
                 <DropdownMenuTrigger as-child>
                   <UserAvatarIcon :user="user" class="hover:opacity-50 transition-opacity cursor-pointer"/>
@@ -124,6 +130,7 @@ const {user, isAuth} = useUser()
                 Вход
               </Link>
             </Button>
+
           </div>
         </div>
       </div>
@@ -131,7 +138,3 @@ const {user, isAuth} = useUser()
     </Wrapper>
   </header>
 </template>
-
-<style scoped>
-
-</style>
