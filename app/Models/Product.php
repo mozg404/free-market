@@ -56,10 +56,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static ProductQueryBuilder<static>|Product descOrder()
  * @method static ProductFactory factory($count = null, $state = [])
  * @method static ProductQueryBuilder<static>|Product filterFromArray(array $data)
- * @method static ProductQueryBuilder<static>|Product for((User|Category) $object)
- * @method static ProductQueryBuilder<static>|Product forCategory((Category|int) $category)
+ * @method static ProductQueryBuilder<static>|Product for(User|Category $object)
+ * @method static ProductQueryBuilder<static>|Product forCategory(Category|int $category)
  * @method static ProductQueryBuilder<static>|Product forListing()
- * @method static ProductQueryBuilder<static>|Product forUser((User|int) $user)
+ * @method static ProductQueryBuilder<static>|Product forUser(User|int $user)
  * @method static ProductCollection<int, static> get($columns = ['*'])
  * @method static ProductQueryBuilder<static>|Product hasAvailableStock()
  * @method static ProductQueryBuilder<static>|Product hasStockItems()
@@ -94,7 +94,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static ProductQueryBuilder<static>|Product withReservedStockItemsCount()
  * @method static ProductQueryBuilder<static>|Product withSoldStockItemsCount()
  * @method static ProductQueryBuilder<static>|Product withStockItemsCount()
- * @mixin \Eloquent
  */
 class Product extends Model implements Seoble, HasMedia
 {
@@ -190,7 +189,7 @@ class Product extends Model implements Seoble, HasMedia
                 $this->base_price,
                 $this->current_price
             ),
-            set: fn(Price $price) => [
+            set: static fn(Price $price) => [
                 'base_price' => $price->getBasePrice(),
                 'current_price' => $price->getCurrentPrice()
             ]

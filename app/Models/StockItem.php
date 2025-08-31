@@ -25,9 +25,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $updated_at
  * @property-read Product $product
  * @method static StockItemFactory factory($count = null, $state = [])
- * @method static StockItemQueryBuilder<static>|StockItem forPinnedUser((User|int) $id)
- * @method static StockItemQueryBuilder<static>|StockItem forProduct((Product|int) $id)
- * @method static StockItemQueryBuilder<static>|StockItem forUser((User|int) $id)
+ * @method static StockItemQueryBuilder<static>|StockItem forPinnedUser(User|int $id)
+ * @method static StockItemQueryBuilder<static>|StockItem forProduct(Product|int $id)
+ * @method static StockItemQueryBuilder<static>|StockItem forUser(User|int $id)
  * @method static StockItemQueryBuilder<static>|StockItem isAvailable()
  * @method static StockItemQueryBuilder<static>|StockItem isReserved()
  * @method static StockItemQueryBuilder<static>|StockItem isSold()
@@ -43,7 +43,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static StockItemQueryBuilder<static>|StockItem whereStatus($value)
  * @method static StockItemQueryBuilder<static>|StockItem whereUpdatedAt($value)
  * @method static StockItemQueryBuilder<static>|StockItem withPinnedUser()
- * @mixin \Eloquent
  */
 class StockItem extends Model
 {
