@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Collections\OrderItemCollection;
 use App\Contracts\Seoble;
 use App\Contracts\Sourceable;
 use App\Contracts\Transactionable;
@@ -9,17 +11,13 @@ use App\Enum\OrderStatus;
 use App\Builders\OrderItemQueryBuilder;
 use App\Builders\OrderQueryBuilder;
 use App\Builders\UserQueryBuilder;
-use App\Support\Price;
 use App\Support\SeoBuilder;
 use Carbon\Carbon;
 use Database\Factories\OrderFactory;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\DB;
 
 /**
  * /**
@@ -31,11 +29,11 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Carbon|null $paid_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Collections\OrderItemCollection<int, \App\Models\OrderItem> $items
+ * @property-read OrderItemCollection<int, OrderItem> $items
  * @property-read int|null $items_count
- * @property-read \App\Models\User $user
+ * @property-read User $user
  * @method static OrderQueryBuilder<static>|Order descOrder()
- * @method static \Database\Factories\OrderFactory factory($count = null, $state = [])
+ * @method static OrderFactory factory($count = null, $state = [])
  * @method static OrderQueryBuilder<static>|Order isNew()
  * @method static OrderQueryBuilder<static>|Order isPaid()
  * @method static OrderQueryBuilder<static>|Order newModelQuery()
@@ -139,7 +137,7 @@ class Order extends Model implements Transactionable, Sourceable, Seoble
         return new OrderQueryBuilder($query);
     }
 
-    protected static function newFactory(): OrderFactory|\Illuminate\Database\Eloquent\Factories\Factory
+    protected static function newFactory(): OrderFactory|Factory
     {
         return OrderFactory::new();
     }

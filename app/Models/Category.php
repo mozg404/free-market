@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 use App\Builders\CategoryQueryBuilder;
 use App\Contracts\Seoble;
 use App\Observers\CategoryObserver;
@@ -15,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Kalnoy\Nestedset\NodeTrait;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -24,11 +26,11 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property string $full_path
  * @property int $parent_id
  * @property ?Category $parent
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property BelongsToMany|Collection $features
  * @property-read int|null $features_count
- * @method static \Database\Factories\CategoryFactory factory($count = null, $state = [])
+ * @method static CategoryFactory factory($count = null, $state = [])
  * @method static CategoryQueryBuilder<static>|Category newModelQuery()
  * @method static CategoryQueryBuilder<static>|Category newQuery()
  * @method static CategoryQueryBuilder<static>|Category query()
@@ -62,7 +64,7 @@ class Category extends Model implements Seoble
         return new CategoryQueryBuilder($query);
     }
 
-    protected static function newFactory(): CategoryFactory|\Illuminate\Database\Eloquent\Factories\Factory
+    protected static function newFactory(): CategoryFactory|Factory
     {
         return CategoryFactory::new();
     }

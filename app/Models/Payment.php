@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use App\Contracts\Sourceable;
 use App\Contracts\Transactionable;
 use App\Enum\PaymentSource;
@@ -14,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -24,24 +27,24 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property PaymentSource|null $source
  * @property string|null $sourceable_type
  * @property int|null $sourceable_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Model|Order|\Eloquent|null $sourceable
- * @property-read \App\Models\User $user
- * @method static \Database\Factories\PaymentFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereExternalId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereSource($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereSourceableId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereSourceableType($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereUserId($value)
+ * @property-read User $user
+ * @method static PaymentFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Payment newModelQuery()
+ * @method static Builder<static>|Payment newQuery()
+ * @method static Builder<static>|Payment query()
+ * @method static Builder<static>|Payment whereAmount($value)
+ * @method static Builder<static>|Payment whereCreatedAt($value)
+ * @method static Builder<static>|Payment whereExternalId($value)
+ * @method static Builder<static>|Payment whereId($value)
+ * @method static Builder<static>|Payment whereSource($value)
+ * @method static Builder<static>|Payment whereSourceableId($value)
+ * @method static Builder<static>|Payment whereSourceableType($value)
+ * @method static Builder<static>|Payment whereStatus($value)
+ * @method static Builder<static>|Payment whereUpdatedAt($value)
+ * @method static Builder<static>|Payment whereUserId($value)
  * @mixin \Eloquent
  */
 class Payment extends Model implements Transactionable
@@ -163,7 +166,7 @@ class Payment extends Model implements Transactionable
         return $this->belongsTo(User::class);
     }
 
-    protected static function newFactory(): PaymentFactory|\Illuminate\Database\Eloquent\Factories\Factory
+    protected static function newFactory(): PaymentFactory|Factory
     {
         return PaymentFactory::new();
     }

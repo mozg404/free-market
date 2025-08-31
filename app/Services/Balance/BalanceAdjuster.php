@@ -2,6 +2,8 @@
 
 namespace App\Services\Balance;
 
+use InvalidArgumentException;
+use Throwable;
 use App\Enum\TransactionType;
 use App\Models\Transaction;
 use App\Models\User;
@@ -14,14 +16,14 @@ readonly class BalanceAdjuster
     {}
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function setBalance(User $user, int $targetBalance): Transaction
     {
         $difference = $targetBalance - $user->balance;
 
         if ($difference === 0) {
-            throw new \InvalidArgumentException('Баланс итак целевой');
+            throw new InvalidArgumentException('Баланс итак целевой');
         }
 
         if ($difference > 0) {

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 use App\Builders\OrderItemQueryBuilder;
 use App\Builders\ProductQueryBuilder;
 use App\Enum\StockItemStatus;
@@ -18,14 +20,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $content
  * @property int|null $order_item_id
  * @property OrderItem|null $orderItem
- * @property \Illuminate\Support\Carbon|null $pinned_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Product $product
- * @method static \Database\Factories\StockItemFactory factory($count = null, $state = [])
- * @method static StockItemQueryBuilder<static>|StockItem forPinnedUser(\App\Models\User|int $id)
- * @method static StockItemQueryBuilder<static>|StockItem forProduct(\App\Models\Product|int $id)
- * @method static StockItemQueryBuilder<static>|StockItem forUser(\App\Models\User|int $id)
+ * @property Carbon|null $pinned_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Product $product
+ * @method static StockItemFactory factory($count = null, $state = [])
+ * @method static StockItemQueryBuilder<static>|StockItem forPinnedUser((User|int) $id)
+ * @method static StockItemQueryBuilder<static>|StockItem forProduct((Product|int) $id)
+ * @method static StockItemQueryBuilder<static>|StockItem forUser((User|int) $id)
  * @method static StockItemQueryBuilder<static>|StockItem isAvailable()
  * @method static StockItemQueryBuilder<static>|StockItem isReserved()
  * @method static StockItemQueryBuilder<static>|StockItem isSold()
@@ -122,7 +124,7 @@ class StockItem extends Model
         return new StockItemQueryBuilder($query);
     }
 
-    protected static function newFactory(): StockItemFactory|\Illuminate\Database\Eloquent\Factories\Factory
+    protected static function newFactory(): StockItemFactory|Factory
     {
         return StockItemFactory::new();
     }

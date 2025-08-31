@@ -2,6 +2,7 @@
 
 namespace App\Services\Cart;
 
+use InvalidArgumentException;
 use App\Contracts\Cart;
 use Illuminate\Contracts\Session\Session;
 
@@ -88,22 +89,22 @@ class SessionCart implements Cart
     private function ensureCorrectQuantity(int $quantity): void
     {
         if ($quantity < 0) {
-            throw new \InvalidArgumentException('Quantity cannot be negative');
+            throw new InvalidArgumentException('Quantity cannot be negative');
         }
 
         if ($quantity === 0) {
-            throw new \InvalidArgumentException('Quantity cannot be zero');
+            throw new InvalidArgumentException('Quantity cannot be zero');
         }
     }
 
     private function ensureCorrectId(int $productId): void
     {
         if ($productId < 0) {
-            throw new \InvalidArgumentException('ID cannot be negative');
+            throw new InvalidArgumentException('ID cannot be negative');
         }
 
         if ($productId === 0) {
-            throw new \InvalidArgumentException('ID cannot be zero');
+            throw new InvalidArgumentException('ID cannot be zero');
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Carbon;
 use App\Enum\TransactionType;
 use App\Builders\TransactionQueryBuilder;
 use App\Builders\UserQueryBuilder;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -18,9 +19,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property TransactionType $type
  * @property string|null $transactionable_type
  * @property int|null $transactionable_id
- * @property \Illuminate\Support\Carbon|null $created_at
+ * @property Carbon|null $created_at
  * @property-read Model|\Eloquent|null $transactionable
- * @property-read \App\Models\User $user
+ * @property-read User $user
  * @method static TransactionQueryBuilder<static>|Transaction descOrder()
  * @method static TransactionQueryBuilder<static>|Transaction newModelQuery()
  * @method static TransactionQueryBuilder<static>|Transaction newQuery()

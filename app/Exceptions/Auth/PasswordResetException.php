@@ -2,9 +2,10 @@
 
 namespace App\Exceptions\Auth;
 
+use DomainException;
 use Throwable;
 
-class PasswordResetException extends \DomainException
+class PasswordResetException extends DomainException
 {
     protected string $status;
 

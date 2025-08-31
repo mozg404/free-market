@@ -2,6 +2,7 @@
 
 namespace App\Services\PaymentGateway;
 
+use Throwable;
 use App\Enum\TransactionType;
 use App\Exceptions\Payment\PaymentAlreadyCompletedException;
 use App\Exceptions\Payment\PaymentFailedException;
@@ -20,7 +21,7 @@ readonly class PaymentProcessor
     {}
 
     /**
-     * @throws PaymentAlreadyCompletedException|\Throwable
+     * @throws PaymentAlreadyCompletedException|Throwable
      */
     public function process(Payment $payment): Payment
     {

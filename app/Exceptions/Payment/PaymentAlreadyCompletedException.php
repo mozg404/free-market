@@ -2,7 +2,9 @@
 
 namespace App\Exceptions\Payment;
 
-class PaymentAlreadyCompletedException extends \ErrorException
+use ErrorException;
+
+class PaymentAlreadyCompletedException extends ErrorException
 {
     protected $message = 'Платеж уже обработан';
     protected $code = 422;

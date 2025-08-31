@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Builders\FeedbackQueryBuilder;
 use App\Builders\ProductQueryBuilder;
 use App\Builders\StockItemQueryBuilder;
@@ -9,7 +10,6 @@ use App\Collections\FeatureCollection;
 use App\Collections\ProductCollection;
 use App\Contracts\Seoble;
 use App\Enum\ProductStatus;
-use App\Support\Image;
 use App\Support\Price;
 use App\Support\SeoBuilder;
 use Database\Factories\ProductFactory;
@@ -43,23 +43,23 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $positive_feedbacks_count
  * @property int $negative_feedbacks_count
  * @property float $rating
- * @property-read \App\Models\Category|null $category
- * @property-read \App\Models\ProductFeatureValue|null $pivot
+ * @property-read Category|null $category
+ * @property-read ProductFeatureValue|null $pivot
  * @property-read FeatureCollection $features
  * @property-read int|null $features_count
  * @property Price $price
- * @property-read Collection<int, \App\Models\StockItem> $stockItems
+ * @property-read Collection<int, StockItem> $stockItems
  * @property-read Collection<int,Feedback> $feedbacks
  * @property-read int|null $stock_items_count
- * @property-read \App\Models\User $user
+ * @property-read User $user
  * @method static ProductCollection<int, static> all($columns = ['*'])
  * @method static ProductQueryBuilder<static>|Product descOrder()
- * @method static \Database\Factories\ProductFactory factory($count = null, $state = [])
+ * @method static ProductFactory factory($count = null, $state = [])
  * @method static ProductQueryBuilder<static>|Product filterFromArray(array $data)
- * @method static ProductQueryBuilder<static>|Product for(\App\Models\User|\App\Models\Category $object)
- * @method static ProductQueryBuilder<static>|Product forCategory(\App\Models\Category|int $category)
+ * @method static ProductQueryBuilder<static>|Product for((User|Category) $object)
+ * @method static ProductQueryBuilder<static>|Product forCategory((Category|int) $category)
  * @method static ProductQueryBuilder<static>|Product forListing()
- * @method static ProductQueryBuilder<static>|Product forUser(\App\Models\User|int $user)
+ * @method static ProductQueryBuilder<static>|Product forUser((User|int) $user)
  * @method static ProductCollection<int, static> get($columns = ['*'])
  * @method static ProductQueryBuilder<static>|Product hasAvailableStock()
  * @method static ProductQueryBuilder<static>|Product hasStockItems()
@@ -295,7 +295,7 @@ class Product extends Model implements Seoble, HasMedia
         return new ProductQueryBuilder($query);
     }
 
-    protected static function newFactory(): ProductFactory|\Illuminate\Database\Eloquent\Factories\Factory
+    protected static function newFactory(): ProductFactory|Factory
     {
         return ProductFactory::new();
     }

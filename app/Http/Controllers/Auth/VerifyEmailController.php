@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Exception;
 use App\Exceptions\Auth\EmailVerification\NoPendingEmailVerificationException;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -11,7 +12,6 @@ use App\Services\Toaster;
 use App\Support\SeoBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -37,7 +37,7 @@ class VerifyEmailController extends Controller
             $this->toaster->error($exception->getMessage(), 'Войдите в аккаунт');
 
             return redirect()->route('login');
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->toaster->error('Ошибка', 'Войдите в аккаунт');
 
             return redirect()->route('login');
@@ -60,7 +60,7 @@ class VerifyEmailController extends Controller
 
             // Редирект на главную
             return redirect()->route('home');
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->toaster->error($exception->getMessage());
 
             return redirect()->route('login');

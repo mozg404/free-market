@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Throwable;
 use App\Contracts\PaymentGateway;
 use App\Exceptions\Payment\PaymentAlreadyCompletedException;
 use App\Exceptions\Payment\PaymentCancelledException;
@@ -38,7 +39,7 @@ class PaymentCallbackController extends Controller
 
                 return $this->redirectTo($payment);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             report($e);
             $toaster->error('Ошибка при оплате');
 

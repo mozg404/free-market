@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 use App\Builders\FeatureQueryBuilder;
 use App\Collections\FeatureCollection;
 use App\Enum\FeatureType;
 use Database\Factories\FeatureFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $category_id
@@ -20,8 +21,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property FeatureType $type
  * @property array<array-key, mixed>|null $options
  * @property bool $is_required
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Category $category
  * @method static FeatureFactory factory($count = null, $state = [])
  * @method static FeatureQueryBuilder<static>|Feature newModelQuery()
@@ -70,7 +71,7 @@ class Feature extends Model
         return new FeatureQueryBuilder($query);
     }
 
-    protected static function newFactory(): FeatureFactory|\Illuminate\Database\Eloquent\Factories\Factory
+    protected static function newFactory(): FeatureFactory|Factory
     {
         return FeatureFactory::new();
     }

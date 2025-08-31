@@ -2,9 +2,12 @@
 
 namespace App\Support;
 
+use JsonSerializable;
+use InvalidArgumentException;
+use Random\RandomException;
 use Illuminate\Contracts\Support\Arrayable;
 
-class Price implements Arrayable, \JsonSerializable
+class Price implements Arrayable, JsonSerializable
 {
     private int $base;
     private int $current;
@@ -15,7 +18,7 @@ class Price implements Arrayable, \JsonSerializable
         $this->current = $current ?? $base;
 
         if ($this->current > $this->base) {
-            throw new \InvalidArgumentException('Current price cannot be higher than base');
+            throw new InvalidArgumentException('Current price cannot be higher than base');
         }
     }
 
@@ -39,7 +42,7 @@ class Price implements Arrayable, \JsonSerializable
     public static function fromBaseAndDiscount(int $base, int|null $discount = null): static
     {
         if (isset($discount) && $discount >= $base) {
-            throw new \InvalidArgumentException('Discount not must be greater than base price');
+            throw new InvalidArgumentException('Discount not must be greater than base price');
         }
 
         return new static($base, $discount ?? $base);
@@ -51,7 +54,7 @@ class Price implements Arrayable, \JsonSerializable
      * @param int $maxBase
      * @param int $maxDiscountPercent
      * @return static
-     * @throws \Random\RandomException
+     * @throws RandomException
      */
     public static function random(int $minBase = 200, int $maxBase = 10000, int $maxDiscountPercent = 50): static
     {

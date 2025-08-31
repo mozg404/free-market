@@ -2,29 +2,35 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\KeyValue;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\FeatureResource\RelationManagers\CategoriesRelationManager;
+use App\Filament\Resources\FeatureResource\Pages\ListFeatures;
+use App\Filament\Resources\FeatureResource\Pages\CreateFeature;
+use App\Filament\Resources\FeatureResource\Pages\EditFeature;
 use App\Enum\FeatureType;
-use App\Filament\Resources\FeatureResource\Pages;
-use App\Filament\Resources\FeatureResource\RelationManagers;
 use App\Models\Feature;
-use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class FeatureResource extends Resource
 {
     protected static ?string $model = Feature::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('categories')
+        return $schema
+            ->components([
+                Select::make('categories')
                     ->relationship('categories', 'name')
                     ->multiple()
                     ->required()
@@ -33,7 +39,7 @@ class FeatureResource extends Resource
                     ->native(false)
                     ->hint('Выберите одну или несколько категорий'),
 
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
 
@@ -44,14 +50,14 @@ class FeatureResource extends Resource
 //                    ->regex('/^[a-z0-9_]+$/') // Только латиница и подчёркивания
 //                    ->hint('Например: edition_type'),
 
-                Forms\Components\Select::make('type')
+                Select::make('type')
                     ->options(FeatureType::names())
                     ->required()
                     ->live(),
 
-                Forms\Components\KeyValue::make('options')
+                KeyValue::make('options')
                     ->nullable()
-                    ->visible(fn (Forms\Get $get) => $get('type') === 'select')
+                    ->visible(fn (Get $get) => $get('type') === 'select')
                     ->keyLabel('Значение (для кода)')
                     ->valueLabel('Отображаемый текст'),
 
@@ -62,24 +68,24 @@ class FeatureResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('ID')
                     ->sortable(),
 
                 // Обновляем отображение категорий (теперь их может быть несколько)
-                Tables\Columns\TextColumn::make('categories.name')
+                TextColumn::make('categories.name')
                     ->label('Категории')
                     ->badge()
                     ->separator(', ')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable(),
 
 //                Tables\Columns\TextColumn::make('key')
 //                    ->searchable(),
 
-                Tables\Columns\TextColumn::make('type')
+                TextColumn::make('type')
                     ->badge()
                     ->formatStateUsing(fn ($state) => match ($state->value) {
                         'select' => 'Select',
@@ -93,33 +99,33 @@ class FeatureResource extends Resource
             ])
             ->filters([
                 // Обновляем фильтр для работы с Many-to-Many
-                Tables\Filters\SelectFilter::make('categories')
+                SelectFilter::make('categories')
                     ->relationship('categories', 'name')
                     ->multiple()
                     ->searchable()
                     ->preload(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            RelationManagers\CategoriesRelationManager::class,
+            CategoriesRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListFeatures::route('/'),
-            'create' => Pages\CreateFeature::route('/create'),
-            'edit' => Pages\EditFeature::route('/{record}/edit'),
+            'index' => ListFeatures::route('/'),
+            'create' => CreateFeature::route('/create'),
+            'edit' => EditFeature::route('/{record}/edit'),
         ];
     }
 }

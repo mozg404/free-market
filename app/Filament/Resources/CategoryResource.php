@@ -2,28 +2,33 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoryResource\Pages;
-use App\Filament\Resources\CategoryResource\RelationManagers;
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\CategoryResource\Pages\ListCategories;
+use App\Filament\Resources\CategoryResource\Pages\CreateCategory;
+use App\Filament\Resources\CategoryResource\Pages\EditCategory;
 use App\Models\Category;
-use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
 
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack'; // Более подходящая иконка
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack'; // Более подходящая иконка
     protected static ?string $modelLabel = 'Категория';
     protected static ?string $pluralModelLabel = 'Категории';
     protected static ?int $navigationSort = 1; // Позиция в меню
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('parent_id')
+        return $schema
+            ->components([
+                Select::make('parent_id')
                     ->label('Родительская категория')
                     ->relationship('parent', 'name')
                     ->searchable()
@@ -31,17 +36,17 @@ class CategoryResource extends Resource
                     ->nullable()
                     ->columnSpanFull(),
 
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label('Название')
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
 
-                Forms\Components\TextInput::make('slug')
+                TextInput::make('slug')
                     ->maxLength(255)
                     ->columnSpanFull(),
 
-                Forms\Components\TextInput::make('title')
+                TextInput::make('title')
                     ->label('Заголовок')
                     ->maxLength(255)
                     ->columnSpanFull(),
@@ -52,27 +57,27 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('full_path')
+                TextColumn::make('full_path')
                     ->label('URI')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('parent.name')
+                TextColumn::make('parent.name')
                     ->label('Родитель')
                     ->searchable() // Если нужно
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
             ])
             ->defaultSort('_lft') // Сортировка по вложенности
             ->reorderable('_lft') // Включение drag-and-drop
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -87,9 +92,9 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'index' => ListCategories::route('/'),
+            'create' => CreateCategory::route('/create'),
+            'edit' => EditCategory::route('/{record}/edit'),
         ];
     }
 }

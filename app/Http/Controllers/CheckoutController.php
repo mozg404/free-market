@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\PaymentGateway;
+use Throwable;
 use App\Exceptions\Balance\InsufficientFundsException;
 use App\Exceptions\Product\ProductUnavailableException;
 use App\Exceptions\Product\NotEnoughStockException;
@@ -44,7 +44,7 @@ class CheckoutController extends Controller
             $this->toaster->error($e->getMessage());
 
             return back();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             report($e);
             $this->toaster->error('Ошибка при оформлении заказа');
 
@@ -76,7 +76,7 @@ class CheckoutController extends Controller
             $this->toaster->error($e->getMessage());
 
             return back();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             report($e);
             $this->toaster->error('Ошибка при оформлении заказа');
 

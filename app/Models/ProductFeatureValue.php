@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Database\Factories\ProductFeatureValueFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $product_id
@@ -16,13 +17,13 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property Feature $feature
  * @property Product $product
  * @property string $value
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ProductFeatureValue newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ProductFeatureValue newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ProductFeatureValue query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ProductFeatureValue whereFeatureId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ProductFeatureValue whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ProductFeatureValue whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ProductFeatureValue whereValue($value)
+ * @method static Builder<static>|ProductFeatureValue newModelQuery()
+ * @method static Builder<static>|ProductFeatureValue newQuery()
+ * @method static Builder<static>|ProductFeatureValue query()
+ * @method static Builder<static>|ProductFeatureValue whereFeatureId($value)
+ * @method static Builder<static>|ProductFeatureValue whereId($value)
+ * @method static Builder<static>|ProductFeatureValue whereProductId($value)
+ * @method static Builder<static>|ProductFeatureValue whereValue($value)
  * @mixin \Eloquent
  */
 class ProductFeatureValue extends Pivot

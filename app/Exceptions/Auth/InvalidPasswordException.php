@@ -2,7 +2,9 @@
 
 namespace App\Exceptions\Auth;
 
-class InvalidPasswordException extends \DomainException
+use DomainException;
+
+class InvalidPasswordException extends DomainException
 {
     protected $message = 'Неверный пароль';
 }

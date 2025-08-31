@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Builders\OrderItemQueryBuilder;
 use App\Builders\OrderQueryBuilder;
 use App\Builders\ProductQueryBuilder;
@@ -130,7 +131,7 @@ class OrderItem extends Model implements Transactionable
         return new OrderItemQueryBuilder($query);
     }
 
-    protected static function newFactory(): OrderItemFactory|\Illuminate\Database\Eloquent\Factories\Factory
+    protected static function newFactory(): OrderItemFactory|Factory
     {
         return OrderItemFactory::new();
     }

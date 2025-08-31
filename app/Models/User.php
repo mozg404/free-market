@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Notifications\DatabaseNotificationCollection;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Database\Eloquent\Collection;
+use App\Collections\ProductCollection;
+use Database\Factories\UserFactory;
 use App\Builders\UserQueryBuilder;
 use App\Contracts\Seoble;
 use App\Support\SeoBuilder;
@@ -32,15 +37,15 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $positive_feedbacks_count
  * @property int $negative_feedbacks_count
  * @property float $seller_rating
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Payment> $payments
+ * @property-read Collection<int, Payment> $payments
  * @property-read int|null $payments_count
- * @property-read \App\Collections\ProductCollection<int, \App\Models\Product> $products
+ * @property-read ProductCollection<int, Product> $products
  * @property-read int|null $products_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Transaction> $transactions
+ * @property-read Collection<int, Transaction> $transactions
  * @property-read int|null $transactions_count
- * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static UserFactory factory($count = null, $state = [])
  * @method static UserQueryBuilder<static>|User newModelQuery()
  * @method static UserQueryBuilder<static>|User newQuery()
  * @method static UserQueryBuilder<static>|User query()
@@ -60,7 +65,7 @@ class User extends Authenticatable implements Seoble, MustVerifyEmail, HasMedia
 {
     public const string MEDIA_COLLECTION_AVATAR = 'avatar';
 
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, InteractsWithMedia;
 
     protected $fillable = [

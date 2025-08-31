@@ -2,7 +2,9 @@
 
 namespace App\Exceptions\Payment;
 
-class UnknownPaymentStatusException extends \ErrorException
+use ErrorException;
+
+class UnknownPaymentStatusException extends ErrorException
 {
 
 }

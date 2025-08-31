@@ -2,6 +2,7 @@
 
 namespace App\Services\Balance;
 
+use Throwable;
 use App\Contracts\Transactionable;
 use App\Enum\TransactionType;
 use App\Exceptions\Balance\InsufficientFundsException;
@@ -17,7 +18,7 @@ readonly class BalanceService
     {}
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function deposit(User $user, int $amount, TransactionType $type, Transactionable $transactionable = null): Transaction
     {
@@ -38,7 +39,7 @@ readonly class BalanceService
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function withdraw(User $user, int $amount, TransactionType $type, Transactionable $transactionable = null): Transaction
     {

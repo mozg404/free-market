@@ -2,7 +2,9 @@
 
 namespace App\Exceptions\Product;
 
-class NotEnoughStockException extends \DomainException
+use DomainException;
+
+class NotEnoughStockException extends DomainException
 {
     protected $message = 'Недостаточно товара на складе';
     protected $code = 422;

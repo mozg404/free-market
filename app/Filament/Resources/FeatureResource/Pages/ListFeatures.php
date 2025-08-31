@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\FeatureResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\FeatureResource;
-use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListFeatures extends ListRecords
@@ -13,7 +13,7 @@ class ListFeatures extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

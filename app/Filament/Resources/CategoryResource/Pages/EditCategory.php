@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\CategoryResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Exceptions\Category\CategoryFullPathConflictException;
 use App\Filament\Resources\CategoryResource;
-use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +31,7 @@ class EditCategory extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

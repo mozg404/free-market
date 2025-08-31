@@ -2,7 +2,9 @@
 
 namespace App\Exceptions\Product;
 
-class ProductUnavailableException extends \DomainException
+use DomainException;
+
+class ProductUnavailableException extends DomainException
 {
     protected $message = 'Недоступно для покупки';
     protected $code = 400;

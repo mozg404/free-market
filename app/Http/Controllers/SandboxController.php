@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use JsonException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class SandboxController extends Controller
 {
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function index(string $hash): Response
     {

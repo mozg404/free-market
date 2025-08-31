@@ -2,15 +2,14 @@
 
 namespace App\Services\Balance;
 
+use Throwable;
 use App\Exceptions\Balance\NegativeAmountException;
 use App\Exceptions\Balance\ZeroAmountException;
-use App\Exceptions\Product\NotEnoughStockException;
-use App\Models\Product;
 
 class BalanceChecker
 {
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function ensureNonNegativeAmount(int $amount): void
     {
@@ -18,7 +17,7 @@ class BalanceChecker
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function ensureNonZeroAmount(int $amount): void
     {

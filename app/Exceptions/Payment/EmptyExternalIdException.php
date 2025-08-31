@@ -2,7 +2,9 @@
 
 namespace App\Exceptions\Payment;
 
-class EmptyExternalIdException extends \ErrorException
+use ErrorException;
+
+class EmptyExternalIdException extends ErrorException
 {
 
 }
