@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\FeatureResource\Pages;
+namespace App\Filament\Resources\Features\Pages;
 
 use Filament\Actions\DeleteAction;
-use App\Filament\Resources\FeatureResource;
+use App\Filament\Resources\Features\FeatureResource;
 use Filament\Resources\Pages\EditRecord;
 
 class EditFeature extends EditRecord

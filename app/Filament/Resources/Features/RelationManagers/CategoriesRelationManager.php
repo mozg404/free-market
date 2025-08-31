@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\FeatureResource\RelationManagers;
+namespace App\Filament\Resources\Features\RelationManagers;
 
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;

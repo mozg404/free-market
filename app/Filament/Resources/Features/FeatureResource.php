@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Features;
 
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
@@ -11,10 +11,10 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteBulkAction;
-use App\Filament\Resources\FeatureResource\RelationManagers\CategoriesRelationManager;
-use App\Filament\Resources\FeatureResource\Pages\ListFeatures;
-use App\Filament\Resources\FeatureResource\Pages\CreateFeature;
-use App\Filament\Resources\FeatureResource\Pages\EditFeature;
+use App\Filament\Resources\Features\RelationManagers\CategoriesRelationManager;
+use App\Filament\Resources\Features\Pages\ListFeatures;
+use App\Filament\Resources\Features\Pages\CreateFeature;
+use App\Filament\Resources\Features\Pages\EditFeature;
 use App\Enum\FeatureType;
 use App\Models\Feature;
 use Filament\Resources\Resource;

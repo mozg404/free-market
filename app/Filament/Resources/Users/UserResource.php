@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Users;
 
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
@@ -14,10 +14,10 @@ use Filament\Actions\Action;
 use Exception;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use App\Filament\Resources\UserResource\RelationManagers\ProductsRelationManager;
-use App\Filament\Resources\UserResource\Pages\ListUsers;
-use App\Filament\Resources\UserResource\Pages\CreateUser;
-use App\Filament\Resources\UserResource\Pages\EditUser;
+use App\Filament\Resources\Users\RelationManagers\ProductsRelationManager;
+use App\Filament\Resources\Users\Pages\ListUsers;
+use App\Filament\Resources\Users\Pages\CreateUser;
+use App\Filament\Resources\Users\Pages\EditUser;
 use App\Models\User;
 use App\Services\Balance\BalanceAdjuster;
 use Filament\Notifications\Notification;
