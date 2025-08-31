@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Features;
 
+use Filament\Actions\DeleteAction;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\KeyValue;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Actions\EditAction;
@@ -23,8 +25,9 @@ use Filament\Tables\Table;
 class FeatureResource extends Resource
 {
     protected static ?string $model = Feature::class;
-
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $modelLabel = 'Характеристика';
+    protected static ?string $pluralModelLabel = 'Характеристики';
+    protected static string | \BackedEnum | null $navigationIcon = Heroicon::OutlinedListBullet;
 
     public static function form(Schema $schema): Schema
     {
@@ -107,6 +110,7 @@ class FeatureResource extends Resource
             ])
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 DeleteBulkAction::make(),

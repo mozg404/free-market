@@ -6,6 +6,7 @@ use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Actions\EditAction;
@@ -28,8 +29,9 @@ use Illuminate\Database\Eloquent\Builder;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
-
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
+    protected static ?string $modelLabel = 'Пользователь';
+    protected static ?string $pluralModelLabel = 'Пользователи';
+    protected static string | \BackedEnum | null $navigationIcon = Heroicon::OutlinedUsers;
 
     public static function form(Schema $schema): Schema
     {
