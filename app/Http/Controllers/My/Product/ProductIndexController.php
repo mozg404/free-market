@@ -16,7 +16,7 @@ class ProductIndexController extends Controller
     public function index(ProductFilterableRequest $request): Response
     {
         $products = Product::query()
-            ->forUser(Auth::id())
+            ->whereSeller(Auth::id())
             ->withStockItemsCount()
             ->withAvailableStockItemsCount()
             ->filterFromArray($request->getFiltersValues())

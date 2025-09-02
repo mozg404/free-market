@@ -20,8 +20,7 @@ class CatalogController extends Controller
     {
         $categories = Category::query()->get()->toTree();
         $products = Product::query()
-            ->forListing()
-            ->withAvailableStockItemsCount()
+            ->forListingPreset()
             ->filterFromArray($request->getValues())
             ->paginate(20)
             ->appends($request->getValues());
@@ -39,9 +38,8 @@ class CatalogController extends Controller
         $categories = Category::query()->get()->toTree();
         $features = Feature::query()->forCategoryAndAncestors($category)->get();
         $products = Product::query()
-            ->forListing()
-            ->withAvailableStockItemsCount()
-            ->forCategoryAndDescendants($category)
+            ->forListingPreset()
+            ->whereCategoryAndDescendants($category)
             ->filterFromArray($request->getValues())
             ->paginate(20)
             ->appends($request->getValues());

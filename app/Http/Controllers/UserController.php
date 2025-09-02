@@ -29,8 +29,8 @@ class UserController extends Controller
     public function show(User $user): Response
     {
         $products = Product::query()
-            ->forListing()
-            ->for($user)
+            ->forListingPreset()
+            ->whereSeller($user)
             ->latest()
             ->paginate(20);
 

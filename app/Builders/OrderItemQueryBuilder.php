@@ -21,7 +21,7 @@ class OrderItemQueryBuilder extends Builder
         }
 
         return $this->whereHas('product', function (ProductQueryBuilder $query) use ($user) {
-            return $query->forUser($user);
+            return $query->whereSeller($user);
         });
     }
 

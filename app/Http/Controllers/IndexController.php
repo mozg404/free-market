@@ -13,25 +13,25 @@ class IndexController extends Controller
     public function __invoke(): Response
     {
         $discounted = Product::query()
-            ->forListing()
+            ->forListingPreset()
             ->latest()
             ->isDiscounted()
             ->take(12)
             ->get();
         $games = Product::query()
-            ->forListing()
+            ->forListingPreset()
             ->latest()
             ->whereCategories(Category::query()->getDescendantsAndSelfIdsByFullPath('keys/games'))
             ->take(12)
             ->get();
         $certificates = Product::query()
-            ->forListing()
+            ->forListingPreset()
             ->latest()
             ->whereCategories(Category::query()->getDescendantsAndSelfIdsByFullPath('certificates'))
             ->take(12)
             ->get();
         $subscriptions = Product::query()
-            ->forListing()
+            ->forListingPreset()
             ->latest()
             ->whereCategories(Category::query()->getDescendantsAndSelfIdsByFullPath('subscriptions'))
             ->take(12)

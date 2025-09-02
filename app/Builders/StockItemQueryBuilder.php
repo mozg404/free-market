@@ -60,7 +60,7 @@ class StockItemQueryBuilder extends Builder
         }
 
         return $this->whereHas('product', function (ProductQueryBuilder $query) use ($user) {
-            $query->forUser($user);
+            $query->whereSeller($user);
         });
     }
 

@@ -18,31 +18,6 @@ use Illuminate\Support\Facades\DB;
  */
 class ProductQueryBuilder extends Builder
 {
-    /**
-     * Выполняет поиск по характеристикам
-     * Формат: [feature_id => [value1, value2, ...]]
-     * @param array $filters
-     * @return $this
-     */
-    public function whereFeatureValues(array $filters): self
-    {
-        foreach ($filters as $featureId => $values) {
-            if (empty($values)) {
-                continue;
-            }
-
-            if (!is_array($values)) {
-                $values = [$values];
-            }
-
-            $this->whereHas('features', function ($query) use ($featureId, $values) {
-                $query->where('features.id', $featureId)->whereIn('product_feature_values.value', (array)$values);
-            });
-        }
-
-        return $this;
-    }
-
     public function filterFromArray(array $data): self
     {
         if (isset($data['price_min'])) {
@@ -146,6 +121,31 @@ class ProductQueryBuilder extends Builder
     }
 
     /**
+     * Выполняет поиск по характеристикам
+     * Формат: [feature_id => [value1, value2, ...]]
+     * @param array $filters
+     * @return $this
+     */
+    public function whereFeatureValues(array $filters): self
+    {
+        foreach ($filters as $featureId => $values) {
+            if (empty($values)) {
+                continue;
+            }
+
+            if (!is_array($values)) {
+                $values = [$values];
+            }
+
+            $this->whereHas('features', function ($query) use ($featureId, $values) {
+                $query->where('features.id', $featureId)->whereIn('product_feature_values.value', (array)$values);
+            });
+        }
+
+        return $this;
+    }
+
+    /**
      * Фильтр по минимальной цене (current_price)
      */
     public function wherePriceMin(float $minPrice): self
@@ -192,16 +192,8 @@ class ProductQueryBuilder extends Builder
     {
         return $this->whereHas('stockItems');
     }
-    
-    /**
-     * Сортировка по актуальной цене
-     */
-    public function orderByActualPrice(string $direction = 'asc'): self
-    {
-        return $this->orderByRaw('COALESCE(price_discount, price_base) ' . $direction);
-    }
 
-    public function forUser(User|int $user): self
+    public function whereSeller(User|int $user): self
     {
         if (is_object($user)) {
             $user = $user->id;
@@ -219,7 +211,7 @@ class ProductQueryBuilder extends Builder
         return $this->where('user_id', '!=', $user);
     }
 
-    public function forCategoryAndDescendants(Category|int $id): self
+    public function whereCategoryAndDescendants(Category|int $id): self
     {
         if ($id instanceof Category) {
             $id = $id->id;
@@ -242,19 +234,6 @@ class ProductQueryBuilder extends Builder
         }
 
         return $this->where('category_id', $category);
-    }
-
-    public function for(User|Category $object): self
-    {
-        if (is_a($object, User::class)) {
-            return $this->forUser($object);
-        }
-
-        if (is_a($object, Category::class)) {
-            return $this->whereCategory($object);
-        }
-
-        return $this;
     }
 
     /**
@@ -344,16 +323,17 @@ class ProductQueryBuilder extends Builder
     }
 
     // -----------------------------------------------
-    // Combined
+    // Presets
     // -----------------------------------------------
 
     /**
      * Возвращает только активные опубликованные товары с доступными для продажи позициями
      */
-    public function forListing(): self
+    public function forListingPreset(): self
     {
         return $this
             ->isActive()
-            ->hasAvailableStock();
+            ->hasAvailableStock()
+            ->withAvailableStockItemsCount();
     }
 }
