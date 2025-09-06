@@ -2,8 +2,6 @@
 FROM composer:2 as vendor-builder
 
 WORKDIR /app
-COPY .env.production .env
-RUN chown www-data:www-data .env && chmod 644 .env
 COPY . .
 RUN composer install \
     --ignore-platform-reqs \
@@ -60,15 +58,30 @@ COPY docker/production/nginx/nginx.conf /etc/nginx/sites-available/default
 COPY --from=vendor-builder /app /var/www/html
 COPY --from=frontend-builder /app/public/build ./public/build/
 
+# Копируем .env еще раз
+COPY .env.production .env
+RUN chown www-data:www-data .env && chmod 644 .env
+
+# Создаем символическую ссылку на storage
+RUN ln -sf /var/www/html/storage/app/public /var/www/html/public/storage
+
 # Настраиваем права
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage \
+    && find /var/www/html/storage/ -type d -exec chmod 775 {} \; \
+    && find /var/www/html/storage/ -type f -exec chmod 664 {} \;
 
 # Создаем необходимые папки для Laravel
 RUN mkdir -p storage/framework/cache && \
     mkdir -p storage/framework/sessions && \
     mkdir -p storage/framework/views && \
     chmod -R 775 storage
+
+# Temp для spatie media-library
+RUN mkdir -p /var/www/html/storage/media-library/temp && \
+    chown -R www-data:www-data /var/www/html/storage/media-library && \
+    chmod -R 775 /var/www/html/storage/media-library
 
 # Создаем папки
 RUN mkdir -p /run/php && \

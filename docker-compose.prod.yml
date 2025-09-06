@@ -13,6 +13,9 @@ services:
       - app_storage:/var/www/html/storage
     networks:
       - marketplace-network
+    environment:
+      - MEILISEARCH_HOST=http://meilisearch:7700
+      - MEILISEARCH_KEY=9HqsQJBxwCzkjcLK5nzBvE5h9MqxHUpPc2AHRX2ieh0=
     depends_on:
       pgsql:
         condition: service_healthy
@@ -44,7 +47,7 @@ services:
     container_name: marketplace_meilisearch
     restart: unless-stopped
     environment:
-      MEILI_MASTER_KEY: ${SCOUT_MEILISEARCH_KEY}
+      MEILI_MASTER_KEY: "9HqsQJBxwCzkjcLK5nzBvE5h9MqxHUpPc2AHRX2ieh0="
       MEILI_NO_ANALYTICS: 'true'
     volumes:
       - meilisearch_data:/meili_data
