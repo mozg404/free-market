@@ -1,0 +1,81 @@
+# Этап 1: Сборка бэкенда (Composer)
+FROM composer:2 as vendor-builder
+
+WORKDIR /app
+COPY .env.production .env
+RUN chown www-data:www-data .env && chmod 644 .env
+COPY . .
+RUN composer install \
+    --ignore-platform-reqs \
+    --no-interaction \
+    --no-plugins \
+    --no-scripts \
+    --prefer-dist \
+    --no-dev
+
+# Этап 2: Сборка фронтенда (Node.js)
+FROM node:lts-bookworm as frontend-builder
+
+WORKDIR /app
+# Копируем vendor из предыдущего этапа ПЕРЕД установкой npm
+COPY --from=vendor-builder /app /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Этап 3: Финальный образ на основе Ubuntu
+FROM ubuntu:22.04
+
+WORKDIR /var/www/html
+
+# Добавляем репозиторий с PHP 8.4
+RUN apt-get update && apt-get install -y software-properties-common
+RUN add-apt-repository ppa:ondrej/php -y
+RUN apt-get update
+
+# Устанавливаем ВСЁ необходимое (включая nginx)
+RUN apt-get install -y \
+    nginx \
+    supervisor \
+    php8.4-fpm \
+    php8.4-pgsql \
+    php8.4-mbstring \
+    php8.4-zip \
+    php8.4-gd \
+    php8.4-bcmath \
+    php8.4-xml \
+    php8.4-curl \
+    php8.4-imagick \
+    ghostscript \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Копируем конфиги
+COPY docker/production/php/php.ini /etc/php/8.4/fpm/conf.d/custom.ini
+COPY docker/production/php/php-fpm.conf /etc/php/8.4/fpm/pool.d/www.conf
+COPY docker/production/nginx/nginx.conf /etc/nginx/sites-available/default
+
+# Копируем приложение
+COPY --from=vendor-builder /app /var/www/html
+COPY --from=frontend-builder /app/public/build ./public/build/
+
+# Настраиваем права
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 storage bootstrap/cache
+
+# Создаем необходимые папки для Laravel
+RUN mkdir -p storage/framework/cache && \
+    mkdir -p storage/framework/sessions && \
+    mkdir -p storage/framework/views && \
+    chmod -R 775 storage
+
+# Создаем папки
+RUN mkdir -p /run/php && \
+    chown -R www-data:www-data /run/php storage
+
+# Открываем порты
+EXPOSE 80 9000
+
+# Запускаем и Nginx и PHP-FPM
+CMD ["sh", "-c", "php-fpm8.4 -D && nginx -g 'daemon off;'"]

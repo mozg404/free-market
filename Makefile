@@ -123,3 +123,27 @@ clear-logs:
 		mkdir -p storage/logs && \
 		find storage/logs -mindepth 1 -not -name '.gitignore' -delete \
 	"
+
+# ========================
+# Подакшн
+# ========================
+
+prod-init: prod-down-clear prod-build prod-up prod-migrate
+
+prod-up:
+	docker compose -f docker-compose.prod.yml up -d
+
+prod-down:
+	docker compose -f docker-compose.prod.yml down
+
+prod-down-clear:
+	docker compose -f docker-compose.prod.yml down -v --remove-orphans
+
+prod-build:
+	docker compose -f docker-compose.prod.yml build
+
+prod-migrate:
+	docker compose -f docker-compose.prod.yml exec app php artisan migrate
+
+build:
+	docker compose -f docker-compose.prod.yml build

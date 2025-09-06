@@ -1,0 +1,65 @@
+services:
+  # Приложение + PHP-FPM
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    image: free-marketplace-app:prod
+    container_name: marketplace_app
+    restart: unless-stopped
+    ports:
+      - "9080:80"  # ← Пробрасываем 80 порт контейнера на 9080 хоста
+    volumes:
+      - app_storage:/var/www/html/storage
+    networks:
+      - marketplace-network
+    depends_on:
+      pgsql:
+        condition: service_healthy
+      meilisearch:
+        condition: service_started
+
+  # База данных
+  pgsql:
+    image: postgres:17
+    container_name: marketplace_pgsql
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgsql_data:/var/lib/postgresql/data
+    networks:
+      - marketplace-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Поиск
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: marketplace_meilisearch
+    restart: unless-stopped
+    environment:
+      MEILI_MASTER_KEY: ${SCOUT_MEILISEARCH_KEY}
+      MEILI_NO_ANALYTICS: 'true'
+    volumes:
+      - meilisearch_data:/meili_data
+    networks:
+      - marketplace-network
+
+volumes:
+  app_code:
+  app_storage:
+    driver: local
+  pgsql_data:
+    driver: local
+  meilisearch_data:
+    driver: local
+
+networks:
+  marketplace-network:
+    driver: bridge

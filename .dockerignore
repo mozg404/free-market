@@ -1,0 +1,71 @@
+# Dependency directories
+/node_modules
+/vendor
+
+# Build directories
+/public/build
+/public/hot
+
+# Storage and logs
+/storage
+!/storage/app
+!/storage/app/public
+/storage/logs/*
+/storage/framework/cache/*
+/storage/debugbar/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/media-library/temp/*
+
+# Laravel specific cache files
+bootstrap/cache/config.php
+bootstrap/cache/services.php
+bootstrap/cache/packages.php
+bootstrap/cache/routes.php
+bootstrap/cache/events.php
+
+# Environment files
+#.env
+#.env.*
+#!.env.production
+
+# IDE and editor files
+/.idea
+/.vscode
+/.fleet
+/.nova
+/.zed
+/.phpstorm.meta.php
+
+# Build and cache files
+/.phpunit.cache
+/.phpunit.result.cache
+/composer.phar
+/npm-debug.log
+/yarn-error.log
+
+# Runtime files
+/public/storage
+!/public/storage/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker itself
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml
+.dockerignore
+
+# Application specific
+Homestead.json
+Homestead.yaml
+/auth.json
+/phpactor.json
