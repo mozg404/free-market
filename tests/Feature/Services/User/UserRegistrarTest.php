@@ -4,7 +4,7 @@ namespace Tests\Feature\Services\User;
 
 use App\Exceptions\User\UserAlreadyRegisteredException;
 use App\Models\User;
-use App\Services\Auth\UserRegistrar;
+use App\Services\User\UserRegistrar;
 use App\ValueObjects\Email;
 use App\ValueObjects\Password;
 use Illuminate\Foundation\Testing\RefreshDatabase;

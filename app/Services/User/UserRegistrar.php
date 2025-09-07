@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Auth;
+namespace App\Services\User;
 
 use App\Events\UserRegistered;
 use App\Exceptions\User\UserAlreadyRegisteredException;

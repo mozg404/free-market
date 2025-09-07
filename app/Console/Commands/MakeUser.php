@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Data\UserRegisteringData;
-use App\Services\Auth\UserRegistrar;
+use App\Services\User\UserRegistrar;
+use App\ValueObjects\Email;
+use App\ValueObjects\Password;
 use Illuminate\Console\Command;
-use Illuminate\Validation\ValidationException;
 
 class MakeUser extends Command
 {
@@ -13,15 +13,15 @@ class MakeUser extends Command
 
     protected $description = 'Register new user';
 
-    public function handle(UserRegistrar $registrar)
+    public function handle(UserRegistrar $registrar): void
     {
         try {
-            $registrar->register(UserRegisteringData::validateAndCreate([
-                'name' =>  $this->argument('name'),
-                'email' => $this->argument('email'),
-                'password' => $this->argument('password'),
-            ]));
-        } catch (ValidationException $exception) {
+            $registrar->register(
+                name: $this->argument('name'),
+                email: new Email($this->argument('email')),
+                password: new Password($this->argument('password')),
+            );
+        } catch (\Exception $exception) {
             $this->error($exception->getMessage());
         }
     }
