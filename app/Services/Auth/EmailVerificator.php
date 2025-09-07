@@ -28,6 +28,12 @@ class EmailVerificator
         event(new Verified($user));
     }
 
+    public function verifyWithoutToken(User $user): void
+    {
+        $user->markEmailAsVerified();
+        event(new Verified($user));
+    }
+
     public function hasVerifiedEmail(User $user): bool
     {
         return $user->hasVerifiedEmail();
