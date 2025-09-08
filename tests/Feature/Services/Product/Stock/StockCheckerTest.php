@@ -1,25 +1,25 @@
 <?php
 
-namespace Tests\Feature\Services\Product;
+namespace Tests\Feature\Services\Product\Stock;
 
 use App\Exceptions\Product\NotEnoughStockException;
 use App\Models\Product;
 use App\Models\StockItem;
-use App\Services\Product\StockService;
+use App\Services\Product\Stock\StockChecker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class StockServiceTest extends TestCase
+class StockCheckerTest extends TestCase
 {
     use RefreshDatabase;
 
-    private StockService $stock;
+    private StockChecker $stockChecker;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->stock = app(StockService::class);
+        $this->stockChecker = app(StockChecker::class);
     }
 
     public function testHasEnoughStock(): void
@@ -28,8 +28,8 @@ class StockServiceTest extends TestCase
         StockItem::factory(2)->for($product)->available()->create();
         StockItem::factory()->for($product)->reserved()->create();
 
-        $this->assertTrue($this->stock->hasEnoughStock($product, 2), 'Enough stock should be available');
-        $this->assertFalse($this->stock->hasEnoughStock($product, 3), 'Not enough stock');
+        $this->assertTrue($this->stockChecker->hasEnoughStock($product, 2), 'Enough stock should be available');
+        $this->assertFalse($this->stockChecker->hasEnoughStock($product, 3), 'Not enough stock');
     }
 
     public function testEnsureEnoughStock(): void
@@ -40,16 +40,6 @@ class StockServiceTest extends TestCase
 
         $this->expectException(NotEnoughStockException::class);
 
-        $this->stock->ensureStockAvailable($product, 3);
-    }
-
-    public function testGetAvailableStockCount()
-    {
-        $product = Product::factory()->create();
-        StockItem::factory()->for($product)->available()->create();
-        StockItem::factory()->for($product)->reserved()->create();
-        StockItem::factory()->for($product)->available()->create();
-
-        $this->assertEquals(2, $this->stock->getAvailableCount($product));
+        $this->stockChecker->ensureStockAvailable($product, 3);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\My\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MyProduct\ProductCreateRequest;
 use App\Models\Category;
+use App\Services\Product\ProductCreator;
 use App\Services\Product\ProductService;
 use App\Support\Price;
 use Illuminate\Http\RedirectResponse;
@@ -20,9 +21,11 @@ class ProductCreateController extends Controller
         ]);
     }
 
-    public function store(ProductCreateRequest $request, ProductService $productService): RedirectResponse
-    {
-        $product = $productService->createProduct(
+    public function store(
+        ProductCreateRequest $request,
+        ProductCreator $creator
+    ): RedirectResponse {
+        $product = $creator->createBaseProduct(
             user: auth()->user(),
             category: Category::find($request->input('category_id')),
             name: $request->input('name'),

@@ -7,19 +7,19 @@ use App\Data\Cart\CartData;
 use App\Data\Cart\CartItemData;
 use App\Data\Products\ProductPreviewData;
 use App\Models\Product;
-use App\Services\Product\StockService;
+use App\Services\Product\Stock\StockChecker;
 
 class CartService
 {
     public function __construct(
         private Cart $cart,
-        private StockService $stockService,
+        private StockChecker $stockChecker,
     ) {
     }
 
     public function add(Product $product, int $quantity = 1): void
     {
-        $this->stockService->ensureStockAvailable($product, $this->cart->getQuantityFor($product->id) + $quantity);
+        $this->stockChecker->ensureStockAvailable($product, $this->cart->getQuantityFor($product->id) + $quantity);
 
         $this->cart->add($product->id, $quantity);
     }
@@ -59,7 +59,7 @@ class CartService
             preview: ProductPreviewData::from($product->preview),
             status: $product->status,
             created_at: $product->created_at,
-            available_stock_items_count: $this->stockService->getAvailableCount($product),
+            available_stock_items_count: $this->stockChecker->getAvailableCount($product),
             quantity: $quantity,
         );
     }

@@ -6,7 +6,7 @@ use App\Services\User\DemoUserCreator;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
-class CreateDemoUser implements ShouldQueue
+class CreateRandomDemoUser implements ShouldQueue
 {
     use Queueable;
 

@@ -7,6 +7,7 @@ use App\Http\Requests\MyProduct\ProductChangeCategoryRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\Product\ProductService;
+use App\Services\Product\ProductUpdater;
 use App\Services\Toaster;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,11 +16,6 @@ use Inertia\Response;
 
 class ProductChangeCategoryController extends Controller
 {
-    public function __construct(
-        private readonly Toaster $toaster
-    ) {
-    }
-
     public function index(Product $product): Response
     {
         return Inertia::render('my/products/ProductChangeCategoryModal', [
@@ -31,10 +27,11 @@ class ProductChangeCategoryController extends Controller
     public function update(
         Product $product,
         ProductChangeCategoryRequest $request,
-        ProductService $productService,
+        ProductUpdater $productUpdater,
+        Toaster $toaster,
     ): RedirectResponse {
-        $productService->changeCategory($product, $request->getModel());
-        $this->toaster->success('Категория успешно изменена');
+        $productUpdater->updateCategory($product, $request->getModel());
+        $toaster->success('Категория успешно изменена');
 
         return back();
     }

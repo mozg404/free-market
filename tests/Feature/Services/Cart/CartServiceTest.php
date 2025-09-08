@@ -5,7 +5,7 @@ namespace Tests\Feature\Services\Cart;
 use App\Contracts\Cart;
 use App\Models\Product;
 use App\Services\Cart\CartService;
-use App\Services\Product\StockService;
+use App\Services\Product\Stock\StockChecker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -20,16 +20,16 @@ class CartServiceTest extends TestCase
     public function testCorrectAdd(): void
     {
         $cartMock = $this->createMock(Cart::class);
-        $stockServiceMock = $this->createMock(StockService::class);
+        $stockCheckerMock = $this->createMock(StockChecker::class);
         $product = Product::factory()->make(['id' => 123]);
 
         $cartMock->expects($this->once())
             ->method('add')
             ->with($product->id, 1);
-        $stockServiceMock->expects($this->once())
+        $stockCheckerMock->expects($this->once())
             ->method('ensureStockAvailable')
             ->with($product, 1);
-        $cartService = new CartService($cartMock, $stockServiceMock);
+        $cartService = new CartService($cartMock, $stockCheckerMock);
 
         $cartService->add($product);
     }
@@ -37,17 +37,17 @@ class CartServiceTest extends TestCase
     public function testAddWithCustomQuantity(): void
     {
         $cartMock = $this->createMock(Cart::class);
-        $stockServiceMock = $this->createMock(StockService::class);
+        $stockCheckerMock = $this->createMock(StockChecker::class);
         $product = Product::factory()->make(['id' => 123]);
         $quantity = 5;
 
         $cartMock->expects($this->once())
             ->method('add')
             ->with($product->id, $quantity);
-        $stockServiceMock->expects($this->once())
+        $stockCheckerMock->expects($this->once())
             ->method('ensureStockAvailable')
             ->with($product, $quantity);
-        $cartService = new CartService($cartMock, $stockServiceMock);
+        $cartService = new CartService($cartMock, $stockCheckerMock);
 
         $cartService->add($product, $quantity);
     }
@@ -59,13 +59,13 @@ class CartServiceTest extends TestCase
     public function testCorrectRemove(): void
     {
         $cartMock = $this->createMock(Cart::class);
-        $stockServiceMock = $this->createMock(StockService::class);
+        $stockCheckerMock = $this->createMock(StockChecker::class);
         $product = Product::factory()->make(['id' => 123]);
 
         $cartMock->expects($this->once())
             ->method('remove')
             ->with($product->id, 1);
-        $cartService = new CartService($cartMock, $stockServiceMock);
+        $cartService = new CartService($cartMock, $stockCheckerMock);
 
         $cartService->remove($product);
     }
@@ -73,14 +73,14 @@ class CartServiceTest extends TestCase
     public function testRemoveWithCustomQuantity(): void
     {
         $cartMock = $this->createMock(Cart::class);
-        $stockServiceMock = $this->createMock(StockService::class);
+        $stockCheckerMock = $this->createMock(StockChecker::class);
         $product = Product::factory()->make(['id' => 123]);
         $quantity = 5;
 
         $cartMock->expects($this->once())
             ->method('remove')
             ->with($product->id, $quantity);
-        $cartService = new CartService($cartMock, $stockServiceMock);
+        $cartService = new CartService($cartMock, $stockCheckerMock);
 
         $cartService->remove($product, $quantity);
     }
@@ -92,13 +92,13 @@ class CartServiceTest extends TestCase
     public function testCorrectHas(): void
     {
         $cartMock = $this->createMock(Cart::class);
-        $stockServiceMock = $this->createMock(StockService::class);
+        $stockCheckerMock = $this->createMock(StockChecker::class);
         $product = Product::factory()->make(['id' => 123]);
 
         $cartMock->expects($this->once())
             ->method('has')
             ->with($product->id);
-        $cartService = new CartService($cartMock, $stockServiceMock);
+        $cartService = new CartService($cartMock, $stockCheckerMock);
 
         $cartService->has($product);
     }
@@ -110,13 +110,13 @@ class CartServiceTest extends TestCase
     public function testCorrectRemoveItem(): void
     {
         $cartMock = $this->createMock(Cart::class);
-        $stockServiceMock = $this->createMock(StockService::class);
+        $stockCheckerMock = $this->createMock(StockChecker::class);
         $product = Product::factory()->make(['id' => 123]);
 
         $cartMock->expects($this->once())
             ->method('removeItem')
             ->with($product->id);
-        $cartService = new CartService($cartMock, $stockServiceMock);
+        $cartService = new CartService($cartMock, $stockCheckerMock);
 
         $cartService->removeItem($product);
     }
@@ -128,11 +128,11 @@ class CartServiceTest extends TestCase
     public function testClear(): void
     {
         $cartMock = $this->createMock(Cart::class);
-        $stockServiceMock = $this->createMock(StockService::class);
+        $stockCheckerMock = $this->createMock(StockChecker::class);
 
         $cartMock->expects($this->once())
             ->method('clear');
-        $cartService = new CartService($cartMock, $stockServiceMock);
+        $cartService = new CartService($cartMock, $stockCheckerMock);
 
         $cartService->clear();
     }
@@ -144,7 +144,7 @@ class CartServiceTest extends TestCase
     public function testCorrectGetItem(): void
     {
         $cartMock = $this->createMock(Cart::class);
-        $stockServiceMock = $this->createMock(StockService::class);
+        $stockCheckerMock = $this->createMock(StockChecker::class);
         $product = Product::factory()->make(['id' => 123]);
 
         $cartMock->expects($this->once())
@@ -156,7 +156,7 @@ class CartServiceTest extends TestCase
             ->with($product->id)
             ->willReturn(5);
 
-        $cartService = new CartService($cartMock, $stockServiceMock);
+        $cartService = new CartService($cartMock, $stockCheckerMock);
 
         $item = $cartService->getItem($product);
 
@@ -169,14 +169,14 @@ class CartServiceTest extends TestCase
     public function testGetNonExistsItem(): void
     {
         $cartMock = $this->createMock(Cart::class);
-        $stockServiceMock = $this->createMock(StockService::class);
+        $stockCheckerMock = $this->createMock(StockChecker::class);
         $product = Product::factory()->make(['id' => 123]);
 
         $cartMock->expects($this->once())
             ->method('has')
             ->with($product->id)
             ->willReturn(false);
-        $cartService = new CartService($cartMock, $stockServiceMock);
+        $cartService = new CartService($cartMock, $stockCheckerMock);
 
         $item = $cartService->getItem($product);
 
@@ -190,11 +190,11 @@ class CartServiceTest extends TestCase
     public function testCorrectIsEmpty(): void
     {
         $cartMock = $this->createMock(Cart::class);
-        $stockServiceMock = $this->createMock(StockService::class);
+        $stockCheckerMock = $this->createMock(StockChecker::class);
 
         $cartMock->expects($this->once())
             ->method('isEmpty');
-        $cartService = new CartService($cartMock, $stockServiceMock);
+        $cartService = new CartService($cartMock, $stockCheckerMock);
 
         $cartService->isEmpty();
     }
@@ -206,7 +206,7 @@ class CartServiceTest extends TestCase
     public function testGetItems(): void
     {
         $cartMock = $this->createMock(Cart::class);
-        $stockServiceMock = $this->createMock(StockService::class);
+        $stockCheckerMock = $this->createMock(StockChecker::class);
         $product = Product::factory()->create(['id' => 123]);
         $quantity = 5;
 
@@ -216,7 +216,7 @@ class CartServiceTest extends TestCase
         $cartMock->expects($this->once())
             ->method('getQuantityFor')
             ->willReturn($quantity);
-        $cartService = new CartService($cartMock, $stockServiceMock);
+        $cartService = new CartService($cartMock, $stockCheckerMock);
 
         $cart = $cartService->getItems();
 

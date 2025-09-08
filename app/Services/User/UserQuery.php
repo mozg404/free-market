@@ -11,4 +11,9 @@ class UserQuery
     {
         return User::query();
     }
+
+    public function getRandomUser(): User
+    {
+        return $this->query()->inRandomOrder()->first();
+    }
 }

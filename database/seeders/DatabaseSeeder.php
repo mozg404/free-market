@@ -2,30 +2,30 @@
 
 namespace Database\Seeders;
 
-use App\Enum\FeatureType;
 use App\Enum\OrderStatus;
 use App\Enum\TransactionType;
-use App\Jobs\CreateDemoUser;
+use App\Jobs\CreateRandomDemoUser;
+use App\Jobs\CreateSpecificDemoProduct;
 use App\Models\Category;
 use App\Models\Feature;
 use App\Models\Feedback;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
 use App\Services\Balance\BalanceService;
-use App\Services\Product\ProductService;
+use App\Services\Demo\DemoProductCreator;
+use App\Services\Demo\DemoProductList;
 use App\Services\User\DemoUserCreator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
     public function __construct(
         private readonly DemoUserCreator $userCreator,
-        private readonly ProductService $productService,
+        private readonly DemoProductList $productList,
+        private readonly DemoProductCreator $productCreator,
     ) {
     }
 
@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
         $this->command->info('Ставим доп. пользователей для регистрации в очереди..');
 
         for ($i = 0; $i < config('demo.random_users_seed_queue_count'); ++$i) {
-            CreateDemoUser::dispatch();
+            CreateRandomDemoUser::dispatch();
         }
 
         $this->command->info('Создаем категории...');
@@ -86,60 +86,21 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Еще раз подгружаем категории, уже вместе с характеристиками
-        $categories = Category::query()
-            ->with('features')
-            ->get();
+        $this->command->info('Создаем товары...');
 
-        echo 'Создание товаров...' . PHP_EOL;
+        // Товары для основного пользователя
+        for ($i = 0; $i < config('demo.products_seed_count_for_main'); ++$i) {
+            $this->productCreator->create($mainUser, $this->productList->random());
+        }
 
-        // Создаем товары
-        foreach (include resource_path('data/demo_products.php') as $productData) {
-            $category = $categories->where('full_path', $productData['category'])->first();
-            $products = new Collection();
+        // Товары для случайных пользователей
+        for ($i = 0; $i < config('demo.products_seed_count'); ++$i) {
+            $this->productCreator->create($mainUser, $this->productList->random());
+        }
 
-            // Добавляем товар к главному пользователю с вероятностью 25%
-            if (random_int(1, 100) <= 25) {
-                $product = Product::factory()
-                    ->withModifiedName($productData['name'], $productData['name_modifiers'] ?? [])
-                    ->withConcretePreview($productData['image'])
-                    ->isActive()
-                    ->for($category)
-                    ->for($mainUser)
-                    ->create();
-                $products->push($product);
-            }
-
-            // Добавляем 2 вариации случайному пользователю
-            for ($i = 0; $i < 2; $i++) {
-                $product = Product::factory()
-                    ->withModifiedName($productData['name'], $productData['name_modifiers'] ?? [])
-                    ->withConcretePreview($productData['image'])
-                    ->for($category)
-                    ->for($users->random())
-                    ->isActive()
-                    ->create();
-                $products->push($product);
-            }
-
-            // Используем существующую связь features()
-            $products->each(function (Product $product) use ($category) {
-                $attachments = [];
-
-                foreach ($category->features as $feature) {
-                    $attachments[$feature->id] = $this->generateFeatureValue($feature);
-                }
-
-                $this->productService->changeFeatures($product, $attachments);
-            });
-
-            // Создаем позиции
-            $products->each(function ($product) {
-                StockItem::factory(20)
-                    ->for($product)
-                    ->available()
-                    ->create();
-            });
+        // Ставим весь список товаров в очередь, каждого по 3 вариации
+        foreach ($this->productList->all() as $data) {
+            CreateSpecificDemoProduct::dispatch($data);
         }
 
         echo 'Создание заказов для основного пользователя...' . PHP_EOL;
@@ -159,9 +120,9 @@ class DatabaseSeeder extends Seeder
 
         echo 'Создание заказов для случайных пользователей...' . PHP_EOL;
 
-        // 50 выполненных заказов для пользователя
+        // 5 выполненных заказов для пользователя
         $users->each(function ($user) {
-            for ($i = 0; $i < 60; $i++) {
+            for ($i = 0; $i < 5; $i++) {
                 $order = $this->createOrder($user);
                 $this->payOrder($user, $order);
             }
@@ -184,18 +145,6 @@ class DatabaseSeeder extends Seeder
                 $this->recursiveCreateCategory($categoryData['children'], $category);
             }
         }
-    }
-
-
-    private function generateFeatureValue(Feature $feature)
-    {
-        return match($feature->type) {
-            FeatureType::TEXT => fake()->word(),
-            FeatureType::NUMBER => fake()->randomNumber(2),
-            FeatureType::SELECT => fake()->randomElement(array_keys($feature->options)),
-            FeatureType::CHECK => fake()->boolean(),
-            default => 'DEFAULT',
-        };
     }
 
     // Генерирует новый заказ для пользователя

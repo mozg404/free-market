@@ -237,14 +237,9 @@ class Product extends Model implements Seoble, HasMedia
 
     public function toSearchableArray(): array
     {
-        $this->load('category');
-
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'category' => [
-                'name' => $this->category->name,
-            ],
         ];
     }
 

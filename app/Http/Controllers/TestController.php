@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\CreateRandomDemoUser;
+use App\Jobs\CreateSpecificDemoProduct;
 use App\Models\Category;
 use App\Models\User;
+use App\Services\Demo\DemoProductList;
 use App\Services\User\UserAvatarChanger;
 use App\Services\User\UserRegistrar;
 use Illuminate\Http\Request;
@@ -16,15 +19,17 @@ class TestController extends Controller
     {}
 
     public function test(
-        Request $request,
-        UserRegistrar $registrar,
-        UserAvatarChanger $avatarChanger,
-    ): mixed {
+        DemoProductList $productList,
+    ): mixed
+    {
 
+        $raw = $productList->raw()[3];
 
+        CreateSpecificDemoProduct::dispatch($productList->toData($raw));
+//        CreateSpecificDemoProduct::dispatch($raw);
 
-
-
+//        CreateSpecificDemoProduct::dispatch([1,2,3]);
+//        CreateSpecificDemoProduct::dispatch();
 
 
         return  123;

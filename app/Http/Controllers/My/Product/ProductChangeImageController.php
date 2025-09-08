@@ -5,7 +5,7 @@ namespace App\Http\Controllers\My\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MyProduct\ProductChangeImageRequest;
 use App\Models\Product;
-use App\Services\Product\ProductService;
+use App\Services\Product\ProductPreviewAttacher;
 use App\Services\Toaster;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -27,11 +27,11 @@ class ProductChangeImageController extends Controller
     public function update(
         Product $product,
         ProductChangeImageRequest $request,
-        ProductService $productService,
+        ProductPreviewAttacher $previewAttacher,
         Toaster $toaster
     ): RedirectResponse {
         try {
-            $productService->changeImage($product, $request->file('image'));
+            $previewAttacher->attachPreviewFromUploadedFile($product, $request->file('image'));
             $toaster->success('Изображение сохранено');
 
             return redirect()->back();
