@@ -8,17 +8,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 
-class CreateRandomDemoOrder implements ShouldQueue
+class CreateRandomOrder implements ShouldQueue
 {
     use Dispatchable, Queueable;
 
     public function handle(UserQuery $userQuery, DemoOrderCreator $creator): void
     {
-        $user = $userQuery->query()
-            ->withoutAdmin()
-            ->inRandomOrder()
-            ->first();
-
-        $creator->createAndComplete($user);
+        $creator->createAndComplete($userQuery->getRandomUser());
     }
 }

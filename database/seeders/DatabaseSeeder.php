@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Jobs\CreateRandomDemoFeedback;
-use App\Jobs\CreateRandomDemoOrder;
-use App\Jobs\CreateRandomDemoUser;
-use App\Jobs\CreateSpecificDemoProduct;
+use App\Jobs\CreateRandomFeedback;
+use App\Jobs\CreateRandomOrder;
+use App\Jobs\CreateRandomUser;
+use App\Jobs\CreateSpecificProduct;
 use App\Models\Category;
 use App\Models\Feature;
 use App\Models\Order;
@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
         $this->command->info('Ставим доп. пользователей для регистрации в очереди..');
 
         for ($i = 0; $i < config('demo.random_users_seed_queue_count'); ++$i) {
-            CreateRandomDemoUser::dispatch();
+            CreateRandomUser::dispatch();
         }
 
         $this->command->info('Создаем категории...');
@@ -87,7 +87,7 @@ class DatabaseSeeder extends Seeder
 
         // Ставим весь список товаров в очередь, каждого по 3 вариации
         foreach ($this->productList->all() as $data) {
-            CreateSpecificDemoProduct::dispatch($data);
+            CreateSpecificProduct::dispatch($data);
         }
 
         $this->command->info('Делаем заказы...');
@@ -109,7 +109,7 @@ class DatabaseSeeder extends Seeder
         }
 
         for ($i = 0; $i < config('demo.random_orders_count_in_queue_from_seeder'); ++$i) {
-            CreateRandomDemoOrder::dispatch();
+            CreateRandomOrder::dispatch();
         }
 
         $this->command->info('Оставляем отзывы...');
@@ -119,7 +119,7 @@ class DatabaseSeeder extends Seeder
         });
 
         for ($i = 0; $i < config('demo.random_orders_count_in_queue_from_seeder'); ++$i) {
-            CreateRandomDemoFeedback::dispatch();
+            CreateRandomFeedback::dispatch();
         }
     }
 

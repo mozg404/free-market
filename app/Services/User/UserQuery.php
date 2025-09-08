@@ -14,6 +14,6 @@ class UserQuery
 
     public function getRandomUser(): User
     {
-        return $this->query()->inRandomOrder()->first();
+        return $this->query()->withoutAdmin()->inRandomOrder()->first();
     }
 }

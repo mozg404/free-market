@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 
-class CreateRandomDemoFeedback implements ShouldQueue
+class CreateRandomFeedback implements ShouldQueue
 {
     use Dispatchable, Queueable;
 

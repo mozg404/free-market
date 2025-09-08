@@ -11,7 +11,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 
-class CreateSpecificDemoProduct implements ShouldQueue
+class CreateSpecificProduct implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
@@ -22,11 +22,6 @@ class CreateSpecificDemoProduct implements ShouldQueue
 
     public function handle(UserQuery $userQuery, DemoProductCreator $productCreator): void
     {
-        $user = $userQuery->query()
-            ->withoutAdmin()
-            ->inRandomOrder()
-            ->first();
-
-        $productCreator->create($user, $this->data);
+        $productCreator->create($userQuery->getRandomUser(), $this->data);
     }
 }
