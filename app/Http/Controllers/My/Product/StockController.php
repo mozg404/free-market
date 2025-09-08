@@ -6,12 +6,15 @@ use App\Data\Products\ProductDetailedData;
 use App\Data\Products\ProductForListingData;
 use App\Data\Products\StockItemDetailedData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MyProduct\Stock\StockStoreRequest;
+use App\Http\Requests\MyProduct\Stock\StockUpdateRequest;
 use App\Models\Product;
 use App\Models\StockItem;
+use App\Services\Product\Stock\StockCreator;
+use App\Services\Product\Stock\StockUpdater;
 use App\Services\Toaster;
 use App\Support\SeoBuilder;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,9 +29,8 @@ class StockController extends Controller
     {
         return Inertia::render('my/products/stock/StockIndexPage', [
             'product' => ProductDetailedData::from($product),
-            'itemsPaginated' => StockItemDetailedData::collect($product->stockItems()->orderByDesc('id')->paginate(10)),
+            'itemsPaginated' => StockItemDetailedData::collect($product->stockItems()->latest()->paginate(10)),
             'availableItemsCount' => $product->stockItems()->isAvailable()->count(),
-            'soldItemsCount' => '---',
             'reservedItemsCount' => $product->stockItems()->isReserved()->count(),
             'seo' => new SeoBuilder('Позиции товара #' . $product->id),
         ]);
@@ -41,16 +43,19 @@ class StockController extends Controller
         ]);
     }
 
-    public function store(Product $product, Request $request): RedirectResponse
-    {
-        $data = $request->validate([
-            'content' => 'required|string|max:255',
-        ]);
+    public function store(
+        Product $product,
+        StockStoreRequest $request,
+        StockCreator $creator,
+    ): RedirectResponse {
+        try {
+            $creator->create($product, $request->input('content'));
+            $this->toaster->success("Позиция успешно добавлена");
 
-        StockItem::new($product, $data['content']);
-        $this->toaster->success("Позиция успешно добавлена");
-
-        return back();
+            return back();
+        } catch (\Exception $exception) {
+            return back()->withErrors(['content' => $exception->getMessage()]);
+        }
     }
 
     public function edit(Product $product, StockItem $stockItem): Response
@@ -61,15 +66,19 @@ class StockController extends Controller
         ]);
     }
 
-    public function update(Product $product, StockItem $stockItem, Request $request): RedirectResponse
-    {
-        $data = $request->validate([
-            'content' => 'required|string|max:255',
-        ]);
+    public function update(
+        Product $product,
+        StockItem $stockItem,
+        StockUpdateRequest $request,
+        StockUpdater $updater,
+    ): RedirectResponse {
+        try {
+            $updater->update($stockItem, $request->input('content'));
+            $this->toaster->success("Позиция успешно изменена");
 
-        $stockItem->edit($data['content']);
-        $this->toaster->success("Позиция #$stockItem->id успешно изменена");
-
-        return back();
+            return back();
+        } catch (\Exception $exception) {
+            return back()->withErrors(['content' => $exception->getMessage()]);
+        }
     }
 }

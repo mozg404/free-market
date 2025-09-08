@@ -64,17 +64,6 @@ class StockItem extends Model
         ];
     }
 
-    /**
-     * Помечает позицию как доступную для продажи
-     * @return void
-     */
-    public function markAsAvailable(): void
-    {
-        $this->status = StockItemStatus::AVAILABLE;
-        $this->order_id = null;
-        $this->save();
-    }
-
     public function isAvailable(): bool
     {
         return $this->status === StockItemStatus::AVAILABLE;
@@ -83,31 +72,6 @@ class StockItem extends Model
     public function isReserved(): bool
     {
         return $this->status === StockItemStatus::RESERVED;
-    }
-
-    /**
-     * Создает новую позицию
-     * @param Product $product
-     * @param string $content
-     * @return StockItem
-     */
-    public static function new(Product $product, string $content): StockItem
-    {
-        return $product->stockItems()->create([
-            'content' => $content,
-            'status' => StockItemStatus::AVAILABLE,
-        ]);
-    }
-
-    /**
-     * Изменяет содержимое позиции
-     * @param string $content
-     * @return void
-     */
-    public function edit(string $content): void
-    {
-        $this->content = $content;
-        $this->save();
     }
 
     public function product(): BelongsTo|ProductQueryBuilder

@@ -21,7 +21,6 @@ const props = defineProps({
   product: Object,
   itemsPaginated: Array,
   availableItemsCount: Number,
-  soldItemsCount: Number,
   reservedItemsCount: Number,
 })
 const form = useForm()
