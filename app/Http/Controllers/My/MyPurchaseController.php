@@ -21,7 +21,7 @@ class MyPurchaseController extends Controller
             ->withSeller()
             ->withProductCategory()
             ->withFeedback()
-            ->isPaid()
+            ->isCompleted()
             ->whereBuyer(auth()->user())
             ->paginate(10);
 

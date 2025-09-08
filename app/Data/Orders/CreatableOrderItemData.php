@@ -12,4 +12,9 @@ class CreatableOrderItemData extends Data
         public int $quantity = 1,
     ) {
     }
+
+    public static function fromModel(Product $product): self
+    {
+        return new self($product);
+    }
 }

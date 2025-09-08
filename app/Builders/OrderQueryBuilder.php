@@ -20,7 +20,7 @@ class OrderQueryBuilder extends Builder
         return $this->where('user_id', $id);
     }
 
-    public function isPaid(): static
+    public function isCompleted(): static
     {
         return $this->where('status', OrderStatus::COMPLETED);
     }

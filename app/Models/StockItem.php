@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Builders\UserQueryBuilder;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Carbon;
 use App\Builders\OrderItemQueryBuilder;
 use App\Builders\ProductQueryBuilder;
@@ -116,6 +118,18 @@ class StockItem extends Model
     public function orderItem(): BelongsTo|OrderItemQueryBuilder|null
     {
         return $this->belongsTo(OrderItem::class);
+    }
+
+    public function seller(): HasOneThrough|UserQueryBuilder
+    {
+        return $this->hasOneThrough(
+            User::class,
+            Product::class,
+            'id',
+            'id',
+            'product_id',
+            'user_id'
+        );
     }
 
     public function newEloquentBuilder($query): StockItemQueryBuilder

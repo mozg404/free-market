@@ -20,7 +20,7 @@ readonly class BalanceService
     /**
      * @throws Throwable
      */
-    public function deposit(User $user, int $amount, TransactionType $type, Transactionable $transactionable = null): Transaction
+    public function deposit(User $user, int $amount, TransactionType $type, ?Transactionable $transactionable = null): Transaction
     {
         $this->balanceChecker->ensureNonNegativeAmount($amount);
         $this->balanceChecker->ensureNonZeroAmount($amount);
@@ -41,7 +41,7 @@ readonly class BalanceService
     /**
      * @throws Throwable
      */
-    public function withdraw(User $user, int $amount, TransactionType $type, Transactionable $transactionable = null): Transaction
+    public function withdraw(User $user, int $amount, TransactionType $type, ?Transactionable $transactionable = null): Transaction
     {
         $this->balanceChecker->ensureNonNegativeAmount($amount);
         $this->balanceChecker->ensureNonZeroAmount($amount);

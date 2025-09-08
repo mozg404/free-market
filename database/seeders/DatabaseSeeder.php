@@ -2,18 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Enum\OrderStatus;
-use App\Enum\TransactionType;
+use App\Jobs\CreateRandomDemoFeedback;
+use App\Jobs\CreateRandomDemoOrder;
 use App\Jobs\CreateRandomDemoUser;
 use App\Jobs\CreateSpecificDemoProduct;
 use App\Models\Category;
 use App\Models\Feature;
-use App\Models\Feedback;
 use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\StockItem;
-use App\Models\User;
-use App\Services\Balance\BalanceService;
+use App\Services\Demo\DemoFeedbackCreator;
+use App\Services\Demo\DemoOrderCreator;
 use App\Services\Demo\DemoProductCreator;
 use App\Services\Demo\DemoProductList;
 use App\Services\Demo\DemoUserCreator;
@@ -26,6 +23,8 @@ class DatabaseSeeder extends Seeder
         private readonly DemoUserCreator $userCreator,
         private readonly DemoProductList $productList,
         private readonly DemoProductCreator $productCreator,
+        private readonly DemoOrderCreator $orderCreator,
+        private readonly DemoFeedbackCreator $feedbackCreator,
     ) {
     }
 
@@ -91,30 +90,37 @@ class DatabaseSeeder extends Seeder
             CreateSpecificDemoProduct::dispatch($data);
         }
 
-        echo 'Создание заказов для основного пользователя...' . PHP_EOL;
+        $this->command->info('Делаем заказы...');
+        $orders = new Collection();
 
-        $this->createOrder($mainUser);
-        $this->payOrder($mainUser, $this->createOrder($mainUser));
-        $this->payOrder($mainUser, $this->createOrder($mainUser));
-        $this->payOrder($mainUser, $this->createOrder($mainUser));
-        $this->createOrder($mainUser);
-        $this->createOrder($mainUser);
-        $this->payOrder($mainUser, $this->createOrder($mainUser));
-        $this->createOrder($mainUser);
-        $this->createOrder($mainUser);
-        $this->payOrder($mainUser, $this->createOrder($mainUser));
-        $this->payOrder($mainUser, $this->createOrder($mainUser));
-        $this->payOrder($mainUser, $this->createOrder($mainUser));
+        // Завершенные заказы
+        for ($i = 0; $i < config('demo.orders_seed_count_for_main_user'); ++$i) {
+            $orders->push($this->orderCreator->createAndComplete($mainUser));
+        }
 
-        echo 'Создание заказов для случайных пользователей...' . PHP_EOL;
+        // Незавершенные заказы для основного пользователя
+        for ($i = 0; $i < config('demo.orders_pending_seed_count_for_main_user'); ++$i) {
+            $this->orderCreator->create($mainUser);
+        }
 
-        // 5 выполненных заказов для пользователя
-        $users->each(function ($user) {
-            for ($i = 0; $i < 5; $i++) {
-                $order = $this->createOrder($user);
-                $this->payOrder($user, $order);
-            }
+        // Завершенные заказы для случайных пользователей
+        for ($i = 0; $i < config('demo.orders_seed_count_for_random_users'); ++$i) {
+            $orders->push($this->orderCreator->createAndComplete($users->random()));
+        }
+
+        for ($i = 0; $i < config('demo.random_orders_count_in_queue_from_seeder'); ++$i) {
+            CreateRandomDemoOrder::dispatch();
+        }
+
+        $this->command->info('Оставляем отзывы...');
+
+        $orders->each(function (Order $order) {
+            $this->feedbackCreator->createForOrder($order);
         });
+
+        for ($i = 0; $i < config('demo.random_orders_count_in_queue_from_seeder'); ++$i) {
+            CreateRandomDemoFeedback::dispatch();
+        }
     }
 
     // Рекурсивное создание категорий
@@ -134,73 +140,4 @@ class DatabaseSeeder extends Seeder
             }
         }
     }
-
-    // Генерирует новый заказ для пользователя
-    private function createOrder(User $user): Order
-    {
-        // Получаем случайно количество доступных для покупки позиций товара со склада
-        $stock = StockItem::query()
-            ->inRandomOrder()
-            ->whereNotBelongsToUser($user)
-            ->canByPurchased()
-            ->with('product', function ($query) {
-                return $query
-                    ->select('id', 'user_id', 'category_id', 'status', 'current_price', 'base_price')
-                    ->with('user', fn ($q) => $q->select('id', 'name', 'balance'));
-            })
-            ->take(random_int(3, 8))
-            ->get();
-
-        // Генерируем заказ из позиций на складе
-        $order = Order::factory()
-            ->for($user)
-            ->pending()
-            ->withStockItems($stock)
-            ->create();
-
-        return $order;
-    }
-
-    // Оплачивает заказ
-    private function payOrder(User $user, Order $order): void
-    {
-        $balanceService = app(BalanceService::class);
-        $order->fresh();
-        $order->update([
-            'status' => OrderStatus::COMPLETED
-        ]);
-        $order
-            ->items()
-            ->with('stockItem', function ($builder) {
-                return $builder
-                    ->with(['product' => function ($query) {
-                        return $query
-                            ->select('id', 'user_id', 'category_id', 'status', 'current_price', 'base_price')
-                            ->with('user', fn ($q) => $q->select('id', 'name', 'balance'));
-                    }]);
-            })
-            ->get()
-            ->each(function (OrderItem $item) use ($balanceService, $user, $order) {
-                // Зачисляем на баланс пользователя сумму заказа
-                $balanceService->deposit($user, $order->amount, TransactionType::GATEWAY_DEPOSIT);
-
-                // Списываем с баланса пользователя сумму заказа
-                $balanceService->withdraw($user, $order->amount, TransactionType::ORDER_PAYMENT, $order);
-
-                // Зачисляем средства на баланс продавца
-                $balanceService->deposit($item->stockItem->product->user, $order->amount, TransactionType::SELLER_PAYOUT, $item);
-
-                // 80% на отзыв
-                if (random_int(1, 100) <= 80) {
-
-                    // 80% на отзыв с текстом
-                    if (random_int(1, 100) <= 80) {
-                        Feedback::factory()->for($user)->forOrderItem($item)->withComment()->create();
-                    } else {
-                        Feedback::factory()->for($user)->forOrderItem($item)->create();
-                    }
-                }
-            });
-    }
-
 }

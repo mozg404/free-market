@@ -22,6 +22,11 @@ class CreateSpecificDemoProduct implements ShouldQueue
 
     public function handle(UserQuery $userQuery, DemoProductCreator $productCreator): void
     {
-        $productCreator->create($userQuery->getRandomUser(), $this->data);
+        $user = $userQuery->query()
+            ->withoutAdmin()
+            ->inRandomOrder()
+            ->first();
+
+        $productCreator->create($user, $this->data);
     }
 }

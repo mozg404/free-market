@@ -18,7 +18,7 @@ class MySaleController extends Controller
             ->withStockItem()
             ->withProduct()
             ->withBuyer()
-            ->isPaid()
+            ->isCompleted()
             ->whereSeller(auth()->user())
             ->paginate(10);
 

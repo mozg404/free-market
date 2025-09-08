@@ -6,11 +6,13 @@ namespace App\Builders;
 
 use App\Collections\OrderItemCollection;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
  * @method OrderItemCollection get(array|string $column = ['*'])
+ * @method OrderItem|null first($columns = ['*'])
  */
 class OrderItemQueryBuilder extends Builder
 {
@@ -58,10 +60,10 @@ class OrderItemQueryBuilder extends Builder
         return $this;
     }
 
-    public function isPaid(): static
+    public function isCompleted(): static
     {
         return $this->whereHas('order', function (OrderQueryBuilder $query) {
-            $query->isPaid();
+            $query->isCompleted();
         });
     }
 
@@ -105,5 +107,10 @@ class OrderItemQueryBuilder extends Builder
     public function withFeedback(): static
     {
         return $this->with('feedback');
+    }
+
+    public function doesntHaveFeedback(): static
+    {
+        return $this->doesntHave('feedback');
     }
 }

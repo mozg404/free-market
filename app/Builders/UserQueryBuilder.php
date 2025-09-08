@@ -46,6 +46,11 @@ class UserQueryBuilder extends Builder
         return $this->where('email', $email)->exists();
     }
 
+    public function withoutAdmin(): self
+    {
+        return $this->where('is_admin', 0);
+    }
+
     public function ensureExistsByEmail(string $email): void
     {
         if (!$this->checkExistsByEmail($email)) {

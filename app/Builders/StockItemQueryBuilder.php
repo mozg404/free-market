@@ -77,4 +77,14 @@ class StockItemQueryBuilder extends Builder
             $query->whereNotBelongsToUser($user);
         });
     }
+
+    public function withProduct(): self
+    {
+        return $this->with('product');
+    }
+
+    public function withSeller(): self
+    {
+        return $this->with('seller');
+    }
 }

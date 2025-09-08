@@ -2,8 +2,8 @@
 
 namespace App\Collections;
 
-use App\Data\Orders\CreatableOrderData;
 use App\Data\Orders\CreatableOrderItemData;
+use App\Models\Product;
 use App\Support\Price;
 use Illuminate\Support\Collection;
 
@@ -21,5 +21,16 @@ class CreatableOrderItemCollection extends Collection
         });
 
         return $price;
+    }
+
+    public static function fromProductCollection(ProductCollection $products): self
+    {
+        $items = new self();
+
+        $products->each(function (Product $product) use ($items) {
+            $items->push(CreatableOrderItemData::from($product));
+        });
+
+        return $items;
     }
 }
