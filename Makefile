@@ -62,6 +62,9 @@ frontend:
 # Утилиты проекта
 # ========================
 
+schedule:
+	./vendor/bin/sail php artisan schedule:work
+
 queue:
 	./vendor/bin/sail php artisan queue:work --queue=high,default
 
