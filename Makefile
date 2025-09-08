@@ -5,7 +5,7 @@
 init: docker-down-clear docker-pull docker-build docker-up scout-flush clear
 up: docker-up
 down: docker-down
-restart: down up migrate-fresh scout-flush clear seed scout-import frontend-up
+restart: down up migrate-fresh scout-flush clear seed
 start: up frontend-up
 
 # ========================
@@ -55,12 +55,15 @@ scout-import:
 # Фронтенд
 # ========================
 
-frontend-up:
+frontend:
 	./vendor/bin/sail npm run dev
 
 # ========================
 # Утилиты проекта
 # ========================
+
+queue:
+	./vendor/bin/sail php artisan queue:work --queue=high,default
 
 project-init:
 	./vendor/bin/sail php artisan project:init
