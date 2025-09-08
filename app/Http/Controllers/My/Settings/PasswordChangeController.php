@@ -6,7 +6,7 @@ use App\Exceptions\Auth\InvalidPasswordException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MySettings\PasswordChangeRequest;
 use App\Services\Toaster;
-use App\Services\User\PasswordChanger;
+use App\Services\User\UserPasswordChanger;
 use App\ValueObjects\Password;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -21,7 +21,7 @@ class PasswordChangeController extends Controller
 
     public function update(
         PasswordChangeRequest $request,
-        PasswordChanger $passwordChanger,
+        UserPasswordChanger $passwordChanger,
         Toaster $toaster,
     ): RedirectResponse
     {

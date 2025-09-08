@@ -5,9 +5,8 @@ namespace App\Http\Controllers\My\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MySettings\ProfileUpdateRequest;
 use App\Services\Toaster;
-use App\Services\User\UserService;
+use App\Services\User\UserProfileUpdater;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -22,7 +21,7 @@ class ProfileUpdateController extends Controller
 
     public function update(
         ProfileUpdateRequest $request,
-        UserService $userService,
+        UserProfileUpdater $userService,
         Toaster $toaster,
     ): RedirectResponse {
         $userService->updateProfile(auth()->user(), $request->input('name'));

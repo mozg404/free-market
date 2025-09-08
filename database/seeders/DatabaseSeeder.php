@@ -15,6 +15,7 @@ use App\Models\StockItem;
 use App\Models\User;
 use App\Services\Balance\BalanceService;
 use App\Services\Product\ProductService;
+use App\Services\User\DemoUserCreator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -22,24 +23,32 @@ use Illuminate\Support\Str;
 class DatabaseSeeder extends Seeder
 {
     public function __construct(
-        private ProductService $productService,
+        private readonly DemoUserCreator $userCreator,
+        private readonly ProductService $productService,
     ) {
     }
 
     public function run(): void
     {
-        echo PHP_EOL . 'Регистрация пользователей...' . PHP_EOL;
+        $this->command->info('Создание пользователей');
+        $mainUser = $this->userCreator->create(
+            name: fake()->userName(),
+            email: config('demo.main_user_email'),
+            password: config('demo.main_user_password'),
+            avatarPath: fake()->randomElement(include resource_path('data/user_avatars.php')),
+            isAdmin: true
+        );
+        $users = new Collection();
 
-        $mainUser = User::factory()
-            ->withRandomAvatar()
-            ->create([
-                'email' => 'user@gmail.com',
-                'is_admin' => true,
-            ]);
-
-        $users = User::factory(10)
-            ->withRandomAvatar()
-            ->create();
+        for ($i = 0; $i < config('demo.random_users_seed_count'); ++$i) {
+            $user = $this->userCreator->create(
+                name: fake()->userName(),
+                email: fake()->unique()->email(),
+                password: config('demo.random_user_password'),
+                avatarPath: fake()->randomElement(include resource_path('data/user_avatars.php')),
+            );
+            $users->push($user);
+        }
 
         echo 'Создание категорий и характеристик...' . PHP_EOL;
 

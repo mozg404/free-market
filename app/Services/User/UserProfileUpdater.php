@@ -4,7 +4,7 @@ namespace App\Services\User;
 
 use App\Models\User;
 
-class UserService
+class UserProfileUpdater
 {
     public function updateProfile(User $user, string $name): void
     {

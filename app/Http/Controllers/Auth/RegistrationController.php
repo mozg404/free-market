@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Exceptions\User\UserAlreadyRegisteredException;
+use App\Exceptions\User\EmailAlreadyExistsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegistrationStoreRequest;
 use App\Services\Auth\WebEmailVerificator;
@@ -44,7 +44,7 @@ class RegistrationController extends Controller
 
             // Редирект на сообщение об отправленном подтверждении
             return redirect()->route('verification.notice');
-        } catch (InvalidArgumentException|UserAlreadyRegisteredException $exception) {
+        } catch (InvalidArgumentException|EmailAlreadyExistsException $exception) {
             $toaster->error($exception->getMessage());
 
             return back()->withInput();

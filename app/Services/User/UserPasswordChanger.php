@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Services\Auth\PasswordHasher;
 use App\ValueObjects\Password;
 
-readonly class PasswordChanger
+readonly class UserPasswordChanger
 {
     public function __construct(
         private PasswordHasher $hasher
