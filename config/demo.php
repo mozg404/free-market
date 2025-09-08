@@ -32,6 +32,5 @@ return [
     'products_seed_count' => 10,
 
     // Кол-во позиций на складе для каждого создающегося товара
-    'product_stock_count' => 10,
-
+    'product_stock_count' => 25,
 ];
