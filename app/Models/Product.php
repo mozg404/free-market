@@ -128,38 +128,31 @@ class Product extends Model implements Seoble, HasMedia
         $this->addMediaCollection(self::MEDIA_COLLECTION_PREVIEW)
             ->singleFile()
             ->registerMediaConversions(function (Media $media) {
-                $this
-                    ->addMediaConversion('thumb')
+                $this->addMediaConversion('thumb')
                     ->width(90)
                     ->height(120)
                     ->format('webp')
-                    ->quality(80)
-                    ->nonQueued();
+                    ->quality(80);
 
-                $this
-                    ->addMediaConversion('small')
+                $this->addMediaConversion('small')
                     ->width(180)
                     ->height(240)
                     ->format('webp')
-                    ->quality(85)
-                    ->nonQueued();
+                    ->quality(85);
 
-                $this
-                    ->addMediaConversion('medium')
+                // Создается сразу
+                $this->addMediaConversion('medium')
                     ->width(300)
                     ->height(400)
                     ->format('webp')
                     ->quality(85)
                     ->nonQueued();
 
-
-                $this
-                    ->addMediaConversion('large')
+                $this->addMediaConversion('large')
                     ->width(600)
                     ->height(800)
                     ->format('webp')
-                    ->quality(85)
-                    ->nonQueued();
+                    ->quality(85);
             });
     }
 
@@ -172,11 +165,13 @@ class Product extends Model implements Seoble, HasMedia
                 return null;
             }
 
+            $mediumUrl = $media->getUrl('medium');
+
             return [
-                'thumb' => $media->getUrl('thumb'),
-                'small' => $media->getUrl('small'),
-                'medium' => $media->getUrl('medium'),
-                'large' => $media->getUrl('large'),
+                'thumb' => $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $mediumUrl,
+                'small' => $media->hasGeneratedConversion('small') ? $media->getUrl('small') : $mediumUrl,
+                'medium' => $mediumUrl,
+                'large' => $media->hasGeneratedConversion('large') ? $media->getUrl('large') : $mediumUrl,
                 'original' => $media->getUrl(),
             ];
         });

@@ -84,26 +84,22 @@ class User extends Authenticatable implements Seoble, MustVerifyEmail, HasMedia
         $this->addMediaCollection(self::MEDIA_COLLECTION_AVATAR)
             ->singleFile()
             ->registerMediaConversions(function (Media $media) {
-                $this
-                    ->addMediaConversion('thumb')
+                $this->addMediaConversion('thumb')
                     ->width(36)
                     ->height(36)
                     ->format('webp')
                     ->quality(75)
-                    ->optimize()
-                    ->nonQueued();
+                    ->optimize();
 
-                $this
-                    ->addMediaConversion('thumb_2')
+                $this->addMediaConversion('thumb_2')
                     ->width(72)
                     ->height(72)
                     ->format('webp')
                     ->quality(75)
-                    ->optimize()
-                    ->nonQueued();
+                    ->optimize();
 
-                $this
-                    ->addMediaConversion('medium')
+                // Создается сразу
+                $this->addMediaConversion('medium')
                     ->width(150)
                     ->height(150)
                     ->format('webp')
@@ -111,14 +107,12 @@ class User extends Authenticatable implements Seoble, MustVerifyEmail, HasMedia
                     ->optimize()
                     ->nonQueued();
 
-                $this
-                    ->addMediaConversion('large')
+                $this->addMediaConversion('large')
                     ->width(300)
                     ->height(300)
                     ->format('webp')
                     ->quality(85)
-                    ->optimize()
-                    ->nonQueued();
+                    ->optimize();
             });
     }
 
@@ -141,11 +135,13 @@ class User extends Authenticatable implements Seoble, MustVerifyEmail, HasMedia
                 return null;
             }
 
+            $mediumUrl = $media->getUrl('medium');
+
             return [
-                'thumb' => $media->getUrl('thumb'),
-                'thumb_2' => $media->getUrl('thumb_2'),
-                'medium' => $media->getUrl('medium'),
-                'large' => $media->getUrl('large'),
+                'thumb' => $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $mediumUrl,
+                'thumb_2' => $media->hasGeneratedConversion('thumb_2') ? $media->getUrl('thumb_2') : $mediumUrl,
+                'medium' => $mediumUrl,
+                'large' => $media->hasGeneratedConversion('large') ? $media->getUrl('large') : $mediumUrl,
                 'original' => $media->getUrl(),
             ];
         });
