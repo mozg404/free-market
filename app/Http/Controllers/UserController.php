@@ -7,15 +7,17 @@ use App\Data\User\UserForListingData;
 use App\Data\User\UserData;
 use App\Models\Product;
 use App\Models\User;
+use App\Services\User\UserQuery;
 use App\Support\SeoBuilder;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class UserController extends Controller
 {
-    public function index(): Response
+    public function index(UserQuery $userQuery): Response
     {
-        $users = User::query()
+        $users = $userQuery->query()
+            ->withMedia()
             ->withAvailableProductsCount()
             ->hasAvailableProducts()
             ->paginate(20);

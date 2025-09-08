@@ -51,10 +51,8 @@ class UserQueryBuilder extends Builder
         return $this->where('is_admin', 0);
     }
 
-    public function ensureExistsByEmail(string $email): void
+    public function withMedia(): self
     {
-        if (!$this->checkExistsByEmail($email)) {
-            throw new UserNotFoundByEmailException();
-        }
+        return $this->with('media');
     }
 }
