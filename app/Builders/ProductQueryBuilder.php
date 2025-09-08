@@ -313,6 +313,11 @@ class ProductQueryBuilder extends Builder
         }]);
     }
 
+    public function withMedia(): self
+    {
+        return $this->with('media');
+    }
+
     // -----------------------------------------------
     // Order
     // -----------------------------------------------
@@ -333,6 +338,7 @@ class ProductQueryBuilder extends Builder
     {
         return $this
             ->isActive()
+            ->withMedia()
             ->hasAvailableStock()
             ->withAvailableStockItemsCount();
     }
