@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enum\FeatureType;
 use App\Enum\OrderStatus;
 use App\Enum\TransactionType;
+use App\Jobs\CreateDemoUser;
 use App\Models\Category;
 use App\Models\Feature;
 use App\Models\Feedback;
@@ -30,7 +31,7 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        $this->command->info('Создание пользователей');
+        $this->command->info('Регистрируем пользователей..');
         $mainUser = $this->userCreator->create(
             name: fake()->userName(),
             email: config('demo.main_user_email'),
@@ -50,14 +51,21 @@ class DatabaseSeeder extends Seeder
             $users->push($user);
         }
 
-        echo 'Создание категорий и характеристик...' . PHP_EOL;
+        $this->command->info('Ставим доп. пользователей для регистрации в очереди..');
 
+        for ($i = 0; $i < config('demo.random_users_seed_queue_count'); ++$i) {
+            CreateDemoUser::dispatch();
+        }
+
+        $this->command->info('Создаем категории...');
         $this->recursiveCreateCategory(
             include resource_path('data/demo_categories.php'),
         );
 
         // Подгружаем получившийся список категорий
         $categories = Category::query()->get();
+
+        $this->command->info('Создаем динамические характеристики...');
 
         // Создам характеристики
         foreach (include resource_path('data/demo_features.php') as $featureData) {
