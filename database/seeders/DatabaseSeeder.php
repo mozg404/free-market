@@ -16,7 +16,7 @@ use App\Models\User;
 use App\Services\Balance\BalanceService;
 use App\Services\Demo\DemoProductCreator;
 use App\Services\Demo\DemoProductList;
-use App\Services\User\DemoUserCreator;
+use App\Services\Demo\DemoUserCreator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
 
@@ -32,23 +32,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->command->info('Регистрируем пользователей..');
-        $mainUser = $this->userCreator->create(
-            name: fake()->userName(),
-            email: config('demo.main_user_email'),
-            password: config('demo.main_user_password'),
-            avatarPath: fake()->randomElement(include resource_path('data/user_avatars.php')),
-            isAdmin: true
-        );
+        $mainUser = $this->userCreator->createMainUser();
         $users = new Collection();
 
         for ($i = 0; $i < config('demo.random_users_seed_count'); ++$i) {
-            $user = $this->userCreator->create(
-                name: fake()->userName(),
-                email: fake()->unique()->email(),
-                password: config('demo.random_user_password'),
-                avatarPath: fake()->randomElement(include resource_path('data/user_avatars.php')),
-            );
-            $users->push($user);
+            $users->push($this->userCreator->createRandomUser());
         }
 
         $this->command->info('Ставим доп. пользователей для регистрации в очереди..');
@@ -95,7 +83,7 @@ class DatabaseSeeder extends Seeder
 
         // Товары для случайных пользователей
         for ($i = 0; $i < config('demo.products_seed_count'); ++$i) {
-            $this->productCreator->create($mainUser, $this->productList->random());
+            $this->productCreator->create($users->random(), $this->productList->random());
         }
 
         // Ставим весь список товаров в очередь, каждого по 3 вариации

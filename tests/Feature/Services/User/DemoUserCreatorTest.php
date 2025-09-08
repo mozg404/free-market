@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Services\User;
 
+use App\Services\Demo\DemoUserCreator;
 use App\Services\User\UserAvatarChanger;
-use App\Services\User\DemoUserCreator;
 use App\Services\User\UserCreator;
 use App\ValueObjects\Email;
 use App\ValueObjects\Password;
