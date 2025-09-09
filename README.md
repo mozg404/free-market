@@ -13,7 +13,7 @@
 ## ⚡ Быстрый старт
 
 ```bash
-git clone https://github.com/mozg404/free-marketplace.git
+git clone https://github.com/mozg404/free-market.git
 cd free-marketplace
 make init
 ```
@@ -37,6 +37,8 @@ make frontend
 make init
 make frontend
 ```
+**Примечание:** Если порты 80, 5432, 1025 или 8025 заняты на вашей машине, измените их в файле `.env` перед запуском.
+
 
 ## Ссылки
 
