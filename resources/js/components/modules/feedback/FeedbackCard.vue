@@ -16,7 +16,7 @@ const props = defineProps({
   <div>
     <div class="flex space-x-3 items-center">
       <div class="flex items-center">
-        <UserAvatarIcon class="mr-2" :src="feedback.user.avatar_url"/>
+        <UserAvatarIcon class="mr-2" :user="feedback.user"/>
         <div class="text-accent-foreground text-sm font-medium">
           <Link class="hover:opacity-50 transition-opacity" :href="route('users.show', feedback.user.id)">
             {{ feedback.user.name }}
