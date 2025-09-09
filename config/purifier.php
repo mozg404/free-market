@@ -19,7 +19,7 @@
 return [
     'encoding' => 'UTF-8',
     'finalize' => true,
-    'cachePath' => storage_path('app/purifier'),
+    'cachePath' => storage_path('purifier'),
 
     'settings' => [
         'default' => [ // Настройки по умолчанию для всех CleanHtml-кастов

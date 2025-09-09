@@ -6,7 +6,7 @@ init: docker-down-clear docker-pull docker-build docker-up scout-flush clear
 up: docker-up
 down: docker-down
 restart: down up migrate-fresh scout-flush clear seed
-start: up frontend-up
+start: up frontend
 
 # ========================
 # Докер-команды
@@ -92,43 +92,33 @@ storage-unlink:
 	./vendor/bin/sail php artisan storage:unlink
 
 # ========================
-# Система очистки (единый интерфейс)
+# Система очистки
 # ========================
 
-clear: clear-purifier clear-storage clear-storage-tmp clear-laravel-cache clear-logs
+clear: clear-cache-laravel clear-cache-debugbar clear-cache-purifier clear-logs clear-media
 
-clear-purifier:
-	@echo "Очистка кэша Purifier..."
-	./vendor/bin/sail bash -c "rm -rf storage/app/purifier/*"
-
-clear-storage:
-	@echo "Очистка изображений..."
-	./vendor/bin/sail bash -c "\
-		mkdir -p storage/app/public && \
-		find storage/app/public -mindepth 1 -not -name '.gitkeep' -delete \
-	"
-
-clear-storage-tmp:
-	@echo "Очистка временных файлов..."
-	./vendor/bin/sail bash -c "\
-		mkdir -p storage/media-library/temp && \
-		find storage/media-library/temp -mindepth 1 -not -name '.gitkeep' -delete \
-	"
-
-clear-laravel-cache:
-	@echo "Очистка кэша Laravel..."
+clear-cache-laravel:
 	./vendor/bin/sail php artisan cache:clear
 	./vendor/bin/sail php artisan view:clear
 	./vendor/bin/sail php artisan route:clear
 	./vendor/bin/sail php artisan config:clear
 	./vendor/bin/sail php artisan event:clear
 
+clear-cache-debugbar:
+	./vendor/bin/sail php artisan debugbar:clear
+
+clear-cache-purifier:
+	rm -rf storage/purifier
+
 clear-logs:
-	@echo "Очистка логов..."
-	./vendor/bin/sail bash -c "\
-		mkdir -p storage/logs && \
-		find storage/logs -mindepth 1 -not -name '.gitignore' -delete \
-	"
+	./vendor/bin/sail php artisan log:clear
+
+clear-public-storage:
+	find storage/app/public/* -type f -not -name ".gitignore" -delete 2>/dev/null || true
+	find storage/app/public/* -type d -not -name ".gitignore" -exec rm -rf {} + 2>/dev/null || true
+
+clear-media:
+	./vendor/bin/sail php artisan media-library:clean
 
 # ========================
 # Подакшн
