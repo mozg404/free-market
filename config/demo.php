@@ -58,5 +58,5 @@ return [
     // Отзывы
     // ------------------------------------------
 
-    'random_feedbacks_count_in_queue_from_seeder' => 50,
+    'random_feedbacks_count_in_queue_from_seeder' => 100,
 ];
