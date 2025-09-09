@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Services\FeedbackService;
+use Illuminate\Support\Carbon;
 
 readonly class DemoFeedbackCreator
 {
@@ -33,7 +34,8 @@ readonly class DemoFeedbackCreator
             comment: fake()->randomElement(match ($isPositive) {
                 false => include resource_path('data/negative_feedback_comments.php'),
                 true => include resource_path('data/positive_feedback_comments.php'),
-            })
+            }),
+            createdAt: new Carbon(fake()->dateTimeBetween('-1 year'))
         );
     }
 }

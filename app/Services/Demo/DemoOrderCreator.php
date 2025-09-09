@@ -10,6 +10,7 @@ use App\Services\Balance\BalanceService;
 use App\Services\Order\OrderCreator;
 use App\Services\Order\OrderProcessor;
 use App\Services\Product\ProductQuery;
+use Illuminate\Support\Carbon;
 
 readonly class DemoOrderCreator
 {
@@ -29,7 +30,11 @@ readonly class DemoOrderCreator
             ->take(random_int(config('demo.min_order_random_items'), config('demo.max_order_random_items')))
             ->get();
 
-        return $this->orderCreator->create($user, CreatableOrderItemCollection::fromProductCollection($products));
+        return $this->orderCreator->create(
+            user: $user,
+            items: CreatableOrderItemCollection::fromProductCollection($products),
+            createdAt: new Carbon(fake()->dateTimeBetween('-1 year'))
+        );
     }
 
     public function complete(Order $order): void

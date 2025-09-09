@@ -7,6 +7,7 @@ use App\Models\Feedback;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Services\Order\OrderChecker;
+use Illuminate\Support\Carbon;
 
 class FeedbackService
 {
@@ -15,7 +16,7 @@ class FeedbackService
     )
     {}
 
-    public function createFeedback(User $user, OrderItem $orderItem, bool $isPositive = true, ?string $comment = null): Feedback
+    public function createFeedback(User $user, OrderItem $orderItem, bool $isPositive = true, ?string $comment = null, ?Carbon $createdAt = null): Feedback
     {
         $this->ensureUniqueFeedback($orderItem->id);
         $this->orderChecker->ensureOrderAccess($orderItem->order, $user);
@@ -28,6 +29,7 @@ class FeedbackService
             'seller_id' => $orderItem->product->user_id,
             'is_positive' => $isPositive,
             'comment' => $comment ?? null,
+            'created_at' => $createdAt ?? Carbon::now(),
         ]);
     }
 

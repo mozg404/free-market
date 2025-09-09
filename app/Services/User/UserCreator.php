@@ -9,6 +9,7 @@ use App\Services\Auth\EmailVerificator;
 use App\Services\Auth\PasswordHasher;
 use App\ValueObjects\Email;
 use App\ValueObjects\Password;
+use Illuminate\Support\Carbon;
 use Webmozart\Assert\Assert;
 
 readonly class UserCreator
@@ -20,7 +21,7 @@ readonly class UserCreator
     ) {
     }
 
-    public function create(string $name, Email $email, Password $password, bool $emailVerified = true, bool $isAdmin = false): User
+    public function create(string $name, Email $email, Password $password, bool $emailVerified = true, bool $isAdmin = false, ?Carbon $createdAt = null): User
     {
         Assert::stringNotEmpty($name);
         Assert::minLength($name, 3);
@@ -35,6 +36,10 @@ readonly class UserCreator
 
         if ($isAdmin) {
             $user->is_admin = true;
+        }
+
+        if ($createdAt) {
+            $user->created_at = $createdAt;
         }
 
         $user->save();

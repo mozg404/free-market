@@ -15,6 +15,7 @@ use App\Services\Product\ProductPreviewAttacher;
 use App\Services\Product\Stock\StockCreator;
 use App\Support\Price;
 use App\Support\TextGenerator;
+use Carbon\Carbon;
 
 readonly class DemoProductCreator
 {
@@ -40,6 +41,7 @@ readonly class DemoProductCreator
             status: ProductStatus::ACTIVE,
             description: TextGenerator::paragraphs(include resource_path('data/demo_product_descriptions.php'), random_int(3, 7)),
             instruction: TextGenerator::paragraphs(include resource_path('data/demo_product_instructions.php'), random_int(1, 4)),
+            createdAt: new Carbon(fake()->dateTimeBetween('-1 year'))
         );
 
         // Превью

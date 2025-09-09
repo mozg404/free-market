@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use App\Support\Price;
+use Carbon\Carbon;
 
 class ProductCreator
 {
@@ -23,6 +24,7 @@ class ProductCreator
         ProductStatus $status = ProductStatus::DRAFT,
         ?string $description = null,
         ?string $instruction = null,
+        ?Carbon $createdAt = null,
     ): Product {
         $product = new Product();
         $product->user_id = $user->id;
@@ -38,6 +40,10 @@ class ProductCreator
 
         if (isset($instruction)) {
             $product->instruction = $instruction;
+        }
+
+        if (isset($createdAt)) {
+            $product->created_at = $createdAt;
         }
 
         $product->save();

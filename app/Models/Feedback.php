@@ -41,7 +41,8 @@ class Feedback extends Model
         'product_id',
         'seller_id',
         'is_positive',
-        'comment'
+        'comment',
+        'created_at',
     ];
 
     protected $casts = [

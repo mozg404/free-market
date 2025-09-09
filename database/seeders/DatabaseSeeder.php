@@ -85,9 +85,11 @@ class DatabaseSeeder extends Seeder
             $this->productCreator->create($users->random(), $this->productList->random());
         }
 
-        // Ставим весь список товаров в очередь, каждого по 3 вариации
+        // Ставим весь список товаров в очередь, каждого по 2 вариации
         foreach ($this->productList->all() as $data) {
-            CreateSpecificProduct::dispatch($data);
+            for ($i = 0; $i < 2; ++$i) {
+                CreateSpecificProduct::dispatch($data);
+            }
         }
 
         $this->command->info('Делаем заказы...');

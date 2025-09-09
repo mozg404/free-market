@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Services\Product\ProductAvailabilityChecker;
 use App\Services\Product\Stock\StockQuery;
 use App\Services\Product\Stock\StockReserver;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -25,23 +26,20 @@ readonly class OrderCreator
     }
 
     /**
-     * Создает новый заказ
-     * @param User $user
-     * @param CreatableOrderItemCollection $items
-     * @return Order
-     * @throws ProductUnavailableException|Throwable
+     * @throws Throwable
      */
-    public function create(User $user, CreatableOrderItemCollection $items): Order
+    public function create(User $user, CreatableOrderItemCollection $items, ?Carbon $createdAt = null): Order
     {
         // Проверяем, что у товаров из списка есть нужное количество позиций на складе
         $items->each(fn(CreatableOrderItemData $item) => $this->availabilityChecker->ensureCanByPurchased($item->product, $item->quantity));
 
         // Создаем новый заказ
-        return DB::transaction(function () use ($user, $items) {
+        return DB::transaction(function () use ($user, $items, $createdAt) {
             $order = Order::create([
                 'user_id' => $user->id,
                 'amount' => $items->getTotalPrice()->getCurrentPrice(),
                 'status' => OrderStatus::PENDING,
+                'created_at' => $createdAt ?? Carbon::now(),
             ]);
 
             $items->each(function (CreatableOrderItemData $creatableItem) use ($order) {
