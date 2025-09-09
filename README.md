@@ -14,7 +14,7 @@
 
 ```bash
 git clone https://github.com/mozg404/free-market.git
-cd free-marketplace
+cd free-market
 make init
 ```
 
