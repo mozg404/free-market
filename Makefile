@@ -1,46 +1,55 @@
-# ========================
-# Основные команды
-# ========================
+init: init-vendor sail-down-clear sail-update sail-up storage-link init-npm migrate-fresh scout-flush clear seed
+up: sail-up
+down: sail-down
+restart: down up
+refresh: sail-down-clear sail-up migrate-fresh scout-flush clear seed
 
-init: docker-down-clear docker-pull docker-build docker-up scout-flush clear
-up: docker-up
-down: docker-down
-restart: down up migrate-fresh scout-flush clear seed
-start: up frontend
+# --------------------------
+# Инсталляция
+# --------------------------
 
-# ========================
-# Докер-команды
-# ========================
+init-vendor:
+	docker run --rm -v $(PWD):/app composer:2.7 install --ignore-platform-reqs
 
-docker-up:
+init-npm:
+	./vendor/bin/sail npm install
+
+regenerate-key:
+	./vendor/bin/sail php artisan key:generate
+
+# --------------------------
+# Sail
+# --------------------------
+
+sail-up:
 	./vendor/bin/sail up -d
 
-docker-down:
+sail-down:
 	./vendor/bin/sail down --remove-orphans
 
-docker-down-clear:
+sail-down-clear:
 	./vendor/bin/sail down -v --remove-orphans
 
-docker-pull:
-	./vendor/bin/sail pull
+sail-update:
+	./vendor/bin/sail pull pgsql mailpit meilisearch
+	./vendor/bin/sail build --no-cache
 
-docker-build:
-	./vendor/bin/sail build
-
-# ========================
+# --------------------------
 # Миграции и данные
-# ========================
+# --------------------------
 
 migrate:
 	./vendor/bin/sail php artisan migrate
 
 migrate-fresh:
+	sleep 2
 	./vendor/bin/sail php artisan migrate:fresh
 
 migrate-refresh:
 	./vendor/bin/sail php artisan migrate:refresh
 
 seed:
+	sleep 2
 	./vendor/bin/sail php artisan db:seed
 
 scout-flush:
@@ -51,16 +60,16 @@ scout-import:
 	@echo "Импорт в Meilisearch..."
 	./vendor/bin/sail artisan scout:import "App\Models\Product"
 
-# ========================
+# --------------------------
 # Фронтенд
-# ========================
+# --------------------------
 
 frontend:
 	./vendor/bin/sail npm run dev
 
-# ========================
-# Утилиты проекта
-# ========================
+# --------------------------
+# Утилиты
+# --------------------------
 
 schedule:
 	./vendor/bin/sail php artisan schedule:work
@@ -74,26 +83,15 @@ project-init:
 generate-models-phpdoc:
 	./vendor/bin/sail php artisan ide-helper:models -RW
 
-# ========================
-# Тестирование
-# ========================
-
 test:
 	./vendor/bin/sail php artisan test
-
-# ========================
-# Работа с хранилищем
-# ========================
 
 storage-link:
 	./vendor/bin/sail php artisan storage:link
 
-storage-unlink:
-	./vendor/bin/sail php artisan storage:unlink
-
-# ========================
+# --------------------------
 # Система очистки
-# ========================
+# --------------------------
 
 clear: clear-cache-laravel clear-cache-debugbar clear-cache-purifier clear-logs clear-media
 
@@ -120,9 +118,9 @@ clear-public-storage:
 clear-media:
 	./vendor/bin/sail php artisan media-library:clean
 
-# ========================
+# --------------------------
 # Подакшн
-# ========================
+# --------------------------
 
 prod: prod-down-clear prod-build prod-up prod-migrate prod-seed
 
