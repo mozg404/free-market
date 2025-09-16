@@ -20,12 +20,12 @@ const { addToCart, decreaseQuantity, deleteFromCart, form } = useCart()
         <div class="col-span-10">
           <div class="flex items-center min-w-0">
             <div class="w-20 shrink-0 mr-4">
-              <Link :href="route('catalog.product', item.id)" class="block">
-                <ProductImage :product="item" conversion="small"/>
+              <Link :href="route('catalog.product', item.product.id)" class="block">
+                <ProductImage :product="item.product" conversion="small"/>
               </Link>
             </div>
             <div>
-              <div>{{ item.name }}</div>
+              <div>{{ item.product.name }}</div>
 
               <div class="flex items-center gap-3 mt-4">
                 <Button
@@ -33,7 +33,7 @@ const { addToCart, decreaseQuantity, deleteFromCart, form } = useCart()
                   size="icon"
                   class="rounded-3xl cursor-pointer hover:bg-destructive hover:text-destructive-foreground hover:border-destructive"
                   :disabled="form.processing"
-                  @click="deleteFromCart(item.id)"
+                  @click="deleteFromCart(item.product.id)"
                 >
                   <Trash class="w-4 h-4" />
                 </Button>
@@ -44,7 +44,7 @@ const { addToCart, decreaseQuantity, deleteFromCart, form } = useCart()
                     class="rounded-3xl cursor-pointer hover:bg-destructive hover:text-destructive-foreground hover:border-destructive"
                     size="icon"
                     :disabled="form.processing || item.quantity < 2"
-                    @click="decreaseQuantity(item.id)"
+                    @click="decreaseQuantity(item.product.id)"
                   >
                     <Minus class="w-4 h-4"/>
                   </Button>
@@ -55,14 +55,14 @@ const { addToCart, decreaseQuantity, deleteFromCart, form } = useCart()
                     variant="outline"
                     class="rounded-3xl cursor-pointer hover:bg-primary hover:text-primary-foreground hover:border-primary"
                     size="icon"
-                    @click="addToCart(item.id)"
-                    :disabled="form.processing || item.quantity >= item.available_stock_items_count"
+                    @click="addToCart(item.product.id)"
+                    :disabled="form.processing || item.quantity >= item.product.available_stock_items_count"
                   >
                     <Plus class="w-4 h-4"/>
                   </Button>
                 </div>
 
-                <span class="text-muted-foreground text-sm">В наличии: {{ item.available_stock_items_count }}</span>
+                <span class="text-muted-foreground text-sm">В наличии: {{ item.product.available_stock_items_count }}</span>
               </div>
             </div>
           </div>
@@ -70,9 +70,9 @@ const { addToCart, decreaseQuantity, deleteFromCart, form } = useCart()
 
         <div class="col-span-2 text-right">
           <small v-if="item.quantity > 1" class="text-muted-foreground mb-1">
-            <PriceFormatter :value="item.price.current"/> за 1шт
+            <PriceFormatter :value="item.product.price.current"/> за 1шт
           </small>
-          <template v-if="item.price.isDiscount">
+          <template v-if="item.product.price.isDiscount">
             <div class="text-2xl text-destructive"><PriceFormatter :value="item.amount.discount"/></div>
             <div class="text-muted-foreground line-through"><PriceFormatter :value="item.amount.base"/></div>
           </template>

@@ -3,25 +3,18 @@
 namespace App\Data\Cart;
 
 use App\Support\Price;
+use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 
-/**
- * @property
- */
 class CartData extends Data
 {
-    /** @var int Сумма к оплате */
     public Price $amount;
-
-    /** @var int Количество уникальный товаров */
     public int $count = 0;
-
-    /** @var int Общее количество товаров */
     public int $quantity = 0;
 
     public function __construct(
         /** @var CartItemData[] $items */
-        public array $items = [],
+        public array|Collection $items = [],
     ) {
         $this->count = count($this->items);
 
@@ -33,6 +26,10 @@ class CartData extends Data
             }
 
             $this->quantity += $item->quantity;
+        }
+
+        if (!isset($this->amount)) {
+            $this->amount = new Price(0);
         }
     }
 }

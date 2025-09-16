@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\Product\NotEnoughStockException;
 use App\Models\Product;
+use App\Services\Cart\CartManager;
+use App\Services\Cart\CartQuery;
 use App\Services\Cart\CartService;
+use App\Services\Cart\CartValidator;
 use App\Services\Toaster;
 use App\Support\SeoBuilder;
 use Illuminate\Http\RedirectResponse;
@@ -14,26 +17,29 @@ use Inertia\Response;
 class CartController extends Controller
 {
     public function __construct(
-        private readonly CartService $cart,
+        private readonly CartManager $cartManager,
         private readonly Toaster $toaster,
-    )
-    {}
+    ) {
+    }
 
-    public function index(): Response
+    public function index(CartQuery $cartQuery): Response
     {
         $props = ['seo' => new SeoBuilder('Корзина')];
 
-        if ($this->cart->isEmpty()) {
+        if ($cartQuery->isEmpty()) {
             return Inertia::render('cart/EmptyCartIndexPage', $props);
         }
 
         return Inertia::render('cart/CartIndexPage', $props);
     }
 
-    public function store(Product $product): RedirectResponse
-    {
+    public function store(
+        Product $product,
+        CartValidator $cartValidator
+    ): RedirectResponse {
         try {
-            $this->cart->add($product);
+            $cartValidator->validateAdd($product);
+            $this->cartManager->add($product);
             $this->toaster->success('Добавлено в корзину');
 
             return back();
@@ -46,7 +52,7 @@ class CartController extends Controller
 
     public function decrease(Product $product): RedirectResponse
     {
-        $this->cart->remove($product);
+        $this->cartManager->remove($product);
         $this->toaster->info('Позиция убрана из корзины');
 
         return back();
@@ -54,7 +60,7 @@ class CartController extends Controller
 
     public function destroy(Product $product): RedirectResponse
     {
-        $this->cart->removeItem($product);
+        $this->cartManager->removeItem($product);
         $this->toaster->info('Товар удален из корзины');
 
         return back();
@@ -62,7 +68,7 @@ class CartController extends Controller
 
     public function clear(): RedirectResponse
     {
-        $this->cart->clear();
+        $this->cartManager->clear();
 
         return back();
     }

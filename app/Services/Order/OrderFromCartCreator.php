@@ -8,12 +8,12 @@ use App\Events\OrderCreatedFromCart;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
-use App\Services\Cart\CartService;
+use App\Services\Cart\CartQuery;
 
 readonly class OrderFromCartCreator
 {
     public function __construct(
-        private CartService $cartManager,
+        private CartQuery $cartQuery,
         private OrderCreator $creator,
     ) {
     }
@@ -22,9 +22,9 @@ readonly class OrderFromCartCreator
     {
         $collection = new CreatableOrderItemCollection();
 
-        foreach ($this->cartManager->getItems()->items as $item) {
+        foreach ($this->cartQuery->all()?->items ?? [] as $item) {
             $collection->add(new CreatableOrderItemData(
-                product: Product::find($item->id),
+                product: Product::find($item->product->id),
                 quantity: $item->quantity,
             ));
         }

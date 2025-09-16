@@ -3,7 +3,6 @@ import Wrapper from "@/components/shared/layout/Wrapper.vue";
 import CartItemCard from "@/components/modules/cart/CartItemCard.vue";
 import {Link} from '@inertiajs/vue3'
 import {Button} from '@/components/ui/button/index.js'
-import PageTitle from "@/components/shared/layout/PageTitle.vue";
 import {
   Card,
   CardDescription,
@@ -27,7 +26,7 @@ const { cart, clearCart, form } = useCart()
 
     <Wrapper>
       <SidebarLayout>
-        <CartItemCard v-for="item in cart.items" :key="item.id"  :item="item" />
+        <CartItemCard v-for="item in cart.items" :key="item.id" :item="item" />
         <Button
           variant="destructive"
           class="cursor-pointer"

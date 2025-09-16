@@ -6,8 +6,7 @@ use App\Enum\OrderStatus;
 use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\User;
-use App\Services\Cart\CartService;
-use App\Services\Order\OrderCreator;
+use App\Services\Cart\CartManager;
 use App\Services\Order\OrderFromCartCreator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -18,7 +17,7 @@ class OrderFromCartCreatorTest extends TestCase
     use RefreshDatabase;
 
     private OrderFromCartCreator $creator;
-    private CartService $cartService;
+    private CartManager $cartManager;
 
     protected function setUp(): void
     {
@@ -26,11 +25,8 @@ class OrderFromCartCreatorTest extends TestCase
 
         Event::fake();
 
-        $this->cartService = $this->app->make(CartService::class);
-        $this->orderCreator = new OrderFromCartCreator(
-            $this->cartService,
-            $this->app->make(OrderCreator::class),
-        );
+        $this->cartManager = $this->app->make(CartManager::class);
+        $this->creator = $this->app->make(OrderFromCartCreator::class);
     }
 
     public function testCorrectCreation(): void
@@ -45,14 +41,13 @@ class OrderFromCartCreatorTest extends TestCase
         StockItem::factory()->for($product1)->available()->create();
         StockItem::factory()->for($product2)->available()->create();
 
-        $this->cartService->add($product1, 2);
-        $this->cartService->add($product2);
+        $this->cartManager->add($product1, 2);
+        $this->cartManager->add($product2);
 
-        $order = $this->orderCreator->create($user);
+        $order = $this->creator->create($user);
 
         $this->assertEquals($user->id, $order->user_id);
 
-        // Проверяем наличие в БД
         $this->assertDatabaseHas('orders', [
             'id' => $order->id,
             'user_id' => $user->id,

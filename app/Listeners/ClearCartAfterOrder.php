@@ -3,12 +3,12 @@
 namespace App\Listeners;
 
 use App\Events\OrderCreatedFromCart;
-use App\Services\Cart\CartService;
+use App\Services\Cart\CartManager;
 
-class ClearCartAfterOrder
+readonly class ClearCartAfterOrder
 {
     public function __construct(
-        private readonly CartService $cartManager
+        private CartManager $cartManager
     ) {}
 
     public function handle(OrderCreatedFromCart $event): void

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\CreateRandomDemoUser;
-use App\Jobs\CreateSpecificDemoProduct;
+use App\Jobs\CreateRandomUser;
+use App\Jobs\CreateSpecificProduct;
 use App\Models\Category;
 use App\Models\User;
 use App\Services\Demo\DemoProductList;
@@ -25,7 +25,7 @@ class TestController extends Controller
 
         $raw = $productList->raw()[3];
 
-        CreateSpecificDemoProduct::dispatch($productList->toData($raw));
+        CreateSpecificProduct::dispatch($productList->toData($raw));
 //        CreateSpecificDemoProduct::dispatch($raw);
 
 //        CreateSpecificDemoProduct::dispatch([1,2,3]);

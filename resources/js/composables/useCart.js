@@ -12,6 +12,17 @@ import { usePage, useForm } from '@inertiajs/vue3'
  */
 
 /**
+ * @typedef {Object} Product
+ * @property {number} id ID товара
+ * @property {string} name Название товара
+ * @property {Price} price Цена за 1шт товара
+ * @property {Object} preview Варианты превью изображения
+ * @property {string} status Статус
+ * @property {string} created_at Дата создания
+ * @property {string} available_stock_items_count Количество доступных позиций на складе
+ */
+
+/**
  * Реактивный объект корзины
  * @typedef {Object} Cart
  * @property {Price} amount - Итоговые суммы
@@ -23,14 +34,8 @@ import { usePage, useForm } from '@inertiajs/vue3'
 /**
  * Элемент корзины
  * @typedef {Object} CartItem
- * @property {number} id ID товара
- * @property {string} name Название товара
- * @property {Price} amount Итоговая цена по позиции в корзине
- * @property {Price} price Цена за 1шт товара
- * @property {number} preview_image_url Цена за 1шт товара
- * @property {string} status Статус
- * @property {string} created_at Создан в
- * @property {string} available_stock_items_count Количество доступных позиций на складе
+ * @property {Price} amount Общая цена за товар с учетом количества
+ * @property {Product} product Товар
  * @property {string} quantity Количество позиций в корзине
  */
 
@@ -60,7 +65,7 @@ export function useCart() {
      */
     const inCart = (id) => {
         return Object.keys(cart.value.items).some(
-            key => cart.value.items[key].id === id
+            key => cart.value.items[key].product.id === id
         )
     }
 
@@ -71,7 +76,7 @@ export function useCart() {
      */
     const getCartItem = (id) => {
         const foundKey = Object.keys(cart.value.items).find(
-            key => cart.value.items[key].id === id
+            key => cart.value.items[key].product.id === id
         )
         return foundKey ? cart.value.items[foundKey] : null
     }
