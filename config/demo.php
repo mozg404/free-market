@@ -19,17 +19,17 @@ return [
     'random_users_seed_count' => 5,
 
     // Кол-во рандомных пользователей, которых сидер поставит в очередь
-    'random_users_seed_queue_count' => 10,
+    'random_users_seed_queue_count' => 20,
 
     // ------------------------------------------
     // Товары
     // ------------------------------------------
 
     // Кол-во товаров для основного пользователя, создающихся в сидере
-    'products_seed_count_for_main' => 5,
+    'products_seed_count_for_main' => 10,
 
     // Кол-во товаров для рандомных пользователей, для случайных пользователей
-    'products_seed_count' => 10,
+    'products_seed_count' => 30,
 
     // Кол-во позиций на складе для каждого создающегося товара
     'product_stock_count' => 25,
@@ -45,10 +45,10 @@ return [
     'orders_pending_seed_count_for_main_user' => 2,
 
     // Кол-во заказов для случайных пользователя
-    'orders_seed_count_for_random_users' => 10,
+    'orders_seed_count_for_random_users' => 20,
 
     // Кол-во случайных заказов в очереди после сидера
-    'random_orders_count_in_queue_from_seeder' => 20,
+    'random_orders_count_in_queue_from_seeder' => 40,
 
     // Минимальное и максимальное количество рандомных позиций в заказе
     'min_order_random_items' => 3,
@@ -58,5 +58,5 @@ return [
     // Отзывы
     // ------------------------------------------
 
-    'random_feedbacks_count_in_queue_from_seeder' => 100,
+    'random_feedbacks_count_in_queue_from_seeder' => 200,
 ];
