@@ -4,6 +4,7 @@ namespace App\Services\Auth;
 
 use App\Exceptions\Auth\AuthenticationFailedException;
 use App\Models\User;
+use App\Services\User\UserQuery;
 use App\ValueObjects\Email;
 use App\ValueObjects\Password;
 use Illuminate\Contracts\Session\Session;
@@ -14,6 +15,7 @@ readonly class Authenticator
     public function __construct(
         private EmailVerificator $emailVerificator,
         private Session $session,
+        private UserQuery $userQuery,
     ) {
     }
 
@@ -26,7 +28,7 @@ readonly class Authenticator
             throw new AuthenticationFailedException();
         }
 
-        $user = User::query()->getByEmail($email);
+        $user = $this->userQuery->getByEmail($email);
         $this->emailVerificator->ensureVerifiedEmail($user);
         $this->login($user, $remember);
     }

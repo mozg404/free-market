@@ -6,10 +6,10 @@ use App\Exceptions\Auth\AuthenticationFailedException;
 use App\Exceptions\Auth\EmailVerification\EmailNotVerifiedException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginStoreRequest;
-use App\Models\User;
 use App\Services\Auth\Authenticator;
 use App\Services\Auth\WebEmailVerificator;
 use App\Services\Toaster;
+use App\Services\User\UserQuery;
 use App\Support\SeoBuilder;
 use App\ValueObjects\Email;
 use App\ValueObjects\Password;
@@ -32,6 +32,7 @@ class LoginController extends Controller
         LoginStoreRequest $request,
         Authenticator $authenticator,
         WebEmailVerificator $verificator,
+        UserQuery $userQuery,
         Toaster $toaster,
     ): RedirectResponse {
         try {
@@ -49,7 +50,7 @@ class LoginController extends Controller
         } catch (EmailNotVerifiedException $exception) {
             $toaster->error($exception->getMessage());
             $verificator->sendVerificationNotification(
-                User::query()->getByEmail($request->input('email'))
+                $userQuery->getByEmail($request->input('email'))
             );
 
             return redirect()->route('verification.notice');

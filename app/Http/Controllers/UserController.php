@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Data\Products\ProductForListingData;
 use App\Data\User\UserForListingData;
 use App\Data\User\UserData;
-use App\Models\Product;
 use App\Models\User;
+use App\Services\Product\ProductQuery;
 use App\Services\User\UserQuery;
 use App\Support\SeoBuilder;
 use Inertia\Inertia;
@@ -28,9 +28,9 @@ class UserController extends Controller
         ]);
     }
 
-    public function show(User $user): Response
+    public function show(User $user, ProductQuery $productQuery): Response
     {
-        $products = Product::query()
+        $products = $productQuery->query()
             ->forListingPreset()
             ->whereSeller($user)
             ->latest()

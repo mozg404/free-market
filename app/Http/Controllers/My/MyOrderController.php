@@ -9,9 +9,9 @@ use App\Exceptions\Order\CompletedOrderCannotBeCanceledException;
 use App\Exceptions\Order\OrderAlreadyCanceledException;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Services\Order\OrderCancelService;
 use App\Services\Order\OrderProcessor;
+use App\Services\Order\OrderQuery;
 use App\Services\PaymentGateway\PaymentService;
 use App\Services\Toaster;
 use App\Support\SeoBuilder;
@@ -27,9 +27,9 @@ class MyOrderController extends Controller
     ) {
     }
 
-    public function index(): Response
+    public function index(OrderQuery $orderQuery): Response
     {
-        $orders = Order::query()
+        $orders = $orderQuery->query()
             ->whereUser(Auth::id())
             ->withItemsCount()
             ->descOrder()
@@ -43,9 +43,7 @@ class MyOrderController extends Controller
 
     public function show(Order $order): Response
     {
-        // Получаем список всех позиций заказа
-        $items = OrderItem::query()
-            ->for($order)
+        $items = $order->items()
             ->withProduct()
             ->withSeller()
             ->withFeedback()

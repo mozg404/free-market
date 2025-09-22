@@ -4,16 +4,16 @@ namespace App\Http\Controllers\My;
 
 use App\Data\Products\ProductSoldData;
 use App\Http\Controllers\Controller;
-use App\Models\OrderItem;
+use App\Services\Order\OrderItemQuery;
 use App\Support\SeoBuilder;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class MySaleController extends Controller
 {
-    public function index(): Response
+    public function index(OrderItemQuery $orderItemQuery): Response
     {
-        $items = OrderItem::query()
+        $items = $orderItemQuery->query()
             ->withOrder()
             ->withStockItem()
             ->withProduct()

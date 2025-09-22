@@ -8,18 +8,23 @@ use App\Data\Products\ProductForListingData;
 use App\Http\Requests\Catalog\CatalogCategoryFilterableRequest;
 use App\Http\Requests\Catalog\CatalogFilterableRequest;
 use App\Models\Category;
-use App\Models\Feature;
 use App\Models\Product;
+use App\Services\Category\CategoryQuery;
+use App\Services\Feature\FeatureQuery;
+use App\Services\Product\ProductQuery;
 use App\Support\SeoBuilder;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CatalogController extends Controller
 {
-    public function index(CatalogFilterableRequest $request): Response
-    {
-        $categories = Category::query()->get()->toTree();
-        $products = Product::query()
+    public function index(
+        CatalogFilterableRequest $request,
+        CategoryQuery $categoryQuery,
+        ProductQuery $productQuery,
+    ): Response {
+        $categories = $categoryQuery->query()->get()->toTree();
+        $products = $productQuery->query()
             ->forListingPreset()
             ->filterFromArray($request->getValues())
             ->paginate(20)
@@ -33,11 +38,16 @@ class CatalogController extends Controller
         ]);
     }
 
-    public function category(Category $category, CatalogCategoryFilterableRequest $request): Response
-    {
-        $categories = Category::query()->get()->toTree();
-        $features = Feature::query()->forCategoryAndAncestors($category)->get();
-        $products = Product::query()
+    public function category(
+        Category $category,
+        CatalogCategoryFilterableRequest $request,
+        CategoryQuery $categoryQuery,
+        ProductQuery $productQuery,
+        FeatureQuery $featureQuery,
+    ): Response {
+        $categories = $categoryQuery->query()->get()->toTree();
+        $features = $featureQuery->query()->forCategoryAndAncestors($category)->get();
+        $products = $productQuery->query()
             ->forListingPreset()
             ->whereCategoryAndDescendants($category)
             ->filterFromArray($request->getValues())
@@ -54,14 +64,13 @@ class CatalogController extends Controller
         ]);
     }
 
-    public function show(Product $product)
+    public function show(Product $product): Response
     {
         if ($product->isDraft() && (!auth()->check() || auth()->id() !== $product->user_id)) {
             abort(403);
         }
 
-        $feedbacks = $product
-            ->feedbacks()
+        $feedbacks = $product->feedbacks()
             ->hasComments()
             ->withUser()
             ->latest()

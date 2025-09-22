@@ -6,15 +6,16 @@ use App\Data\Purchased\PurchasedItemContentData;
 use App\Data\Purchased\PurchasedItemForListingData;
 use App\Http\Controllers\Controller;
 use App\Models\OrderItem;
+use App\Services\Order\OrderItemQuery;
 use App\Support\SeoBuilder;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class MyPurchaseController extends Controller
 {
-    public function index(): Response
+    public function index(OrderItemQuery $orderItemQuery): Response
     {
-        $purchasedItems = OrderItem::query()
+        $purchasedItems = $orderItemQuery->query()
             ->withOrder()
             ->withStockItem()
             ->withProduct()

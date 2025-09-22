@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Services\User\UserQuery;
 use Exception;
 use App\Exceptions\Auth\EmailVerification\NoPendingEmailVerificationException;
 use App\Http\Controllers\Controller;
@@ -21,6 +22,7 @@ class VerifyEmailController extends Controller
         private readonly Toaster $toaster,
         private readonly WebEmailVerificator $emailVerificator,
         private readonly Authenticator $authorizer,
+        private readonly UserQuery $userQuery,
     ) {
     }
 
@@ -47,7 +49,7 @@ class VerifyEmailController extends Controller
     public function verify(int $id, string $hash): RedirectResponse
     {
         try {
-            $user = User::findOrFail($id);
+            $user = $this->userQuery->get($id);
 
             // Верификация мыла
             $this->emailVerificator->verify($user, $hash);
