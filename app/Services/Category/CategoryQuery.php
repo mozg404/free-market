@@ -23,4 +23,14 @@ class CategoryQuery
 
         return $category;
     }
+
+    /**
+     * Возвращает массив ID для указанного full_path категории + всех ее детей
+     */
+    public function getDescendantsAndSelfIdsByFullPath(string $fullPath): array
+    {
+        return $this->query()->getDescendantsAndSelfIds(
+            $this->query()->getIdByFullPath($fullPath) ?? 0
+        );
+    }
 }

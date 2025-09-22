@@ -52,15 +52,4 @@ class CategoryQueryBuilder extends QueryBuilder
 
         return $this->descendantsAndSelf($id, ['id'])->pluck('id')->toArray();
     }
-
-    /**
-     * Возвращает коллекцию ID для указанного full_path категории + всех ее детей
-     * (!!!) Без Category::query() с прямым $this почему-то не работает, надо разобраться
-     */
-    public function getDescendantsAndSelfIdsByFullPath(string $fullPath): array
-    {
-        return $this->getDescendantsAndSelfIds(
-            Category::query()->getIdByFullPath($fullPath) ?? 0
-        );
-    }
 }
