@@ -86,9 +86,9 @@ class DatabaseSeeder extends Seeder
         }
 
         // Ставим весь список товаров в очередь, каждого по 2 вариации
-        foreach ($this->productList->all() as $data) {
+        foreach ($this->productList->raw() as $item) {
             for ($i = 0; $i < 2; ++$i) {
-                CreateSpecificProduct::dispatch($data);
+                CreateSpecificProduct::dispatch($this->productList->toData($item));
             }
         }
 
