@@ -3,37 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Data\Products\ProductForListingData;
-use App\Models\Category;
-use App\Models\Product;
+use App\Services\Category\CategoryQuery;
+use App\Services\Product\ProductQuery;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class IndexController extends Controller
 {
-    public function __invoke(): Response
-    {
-        $discounted = Product::query()
+    public function __invoke(
+        ProductQuery $productQuery,
+        CategoryQuery $categoryQuery,
+    ): Response {
+        $discounted = $productQuery->query()
             ->forListingPreset()
             ->latest()
             ->isDiscounted()
             ->take(12)
             ->get();
-        $games = Product::query()
+        $games = $productQuery->query()
             ->forListingPreset()
             ->latest()
-            ->whereCategories(Category::query()->getDescendantsAndSelfIdsByFullPath('keys/games'))
+            ->whereCategories($categoryQuery->getDescendantsAndSelfIdsByFullPath('keys/games'))
             ->take(12)
             ->get();
-        $certificates = Product::query()
+        $certificates = $productQuery->query()
             ->forListingPreset()
             ->latest()
-            ->whereCategories(Category::query()->getDescendantsAndSelfIdsByFullPath('certificates'))
+            ->whereCategories($categoryQuery->getDescendantsAndSelfIdsByFullPath('certificates'))
             ->take(12)
             ->get();
-        $subscriptions = Product::query()
+        $subscriptions = $productQuery->query()
             ->forListingPreset()
             ->latest()
-            ->whereCategories(Category::query()->getDescendantsAndSelfIdsByFullPath('subscriptions'))
+            ->whereCategories($categoryQuery->getDescendantsAndSelfIdsByFullPath('subscriptions'))
             ->take(12)
             ->get();
 
