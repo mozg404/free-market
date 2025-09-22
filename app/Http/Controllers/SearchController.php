@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SearchStoreRequest;
-use App\Models\Product;
+use App\Services\Product\ProductQuery;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,9 +18,9 @@ class SearchController extends Controller
         ]);
     }
 
-    public function store(SearchStoreRequest $request): Collection
+    public function store(SearchStoreRequest $request, ProductQuery $productQuery): Collection
     {
-        return Product::query()
+        return $productQuery->query()
             ->forListingPreset()
             ->searchAndSort($request->input('search'))
             ->take(20)
