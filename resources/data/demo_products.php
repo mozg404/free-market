@@ -16,7 +16,7 @@ return [
     ],
     [
         'name' => 'SpongeBob SquarePants: Titans of the Tide',
-        'image' => resource_path('demo/products_images/games/death-stranding-directors.jpg'),
+        'image' => resource_path('demo/products_images/games/spongebob-squarepants-titans-of-the-tide.jpg'),
         'category' => 'keys/games',
         'name_modifiers' => $nameModifiers['games'],
     ],
